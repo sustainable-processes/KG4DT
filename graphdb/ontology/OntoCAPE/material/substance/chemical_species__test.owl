@@ -1,0 +1,755 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY der_SI_units "&root;OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl">
+  <!ENTITY chemical_species "&root;OntoCAPE/material/substance/chemical_species.owl">
+  <!ENTITY substance    "&root;OntoCAPE/material/substance/substance.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns:substance="&substance;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:der_SI_units="&der_SI_units;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="&chemical_species;#"
+  xml:base="&chemical_species;">
+  <owl:Ontology rdf:about="&chemical_species;">
+  <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+  </terms:license>
+    <owl:imports rdf:resource="&der_SI_units;"/>
+    <owl:imports rdf:resource="&substance;"/>
+  </owl:Ontology>
+
+
+<substance:ChemicalSpecies rdf:ID="Hydrogen__peroxide">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7722-84-1</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/H2O2/c1-2/h1-2H</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">H2O2</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string">Hydrogen peroxide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Hydrogen Peroxide [Topical Solution]</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">H2O2</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Albone</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Albone DS</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Dihydrogen dioxide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Elawox</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Hydrogen dioxide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Hydrogen oxide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Hydrogen peroxide (H2O2)</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Inhibine</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Lensept</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Perhydrol</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Perossido di idrogeno</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Peroxaan</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Peroxyde d'hydrogene</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Superoxol</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">T-Stuff</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Wasserstoffperoxid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Waterstofperoxyde</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Albone 35</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Albone 50</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Albone 70</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Hydrogen peroxide solution</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Interox</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Kastone</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Perone 30</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Perone 35</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Perone 50</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">UN 2014</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">HOOH</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Dioxogen</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Genoxide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Glycozone</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">High-strength hydrogen peroxide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Hioxy</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Hioxyl</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Hydroperoxide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Hydrozone</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Lensan A</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Mirasept</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Oxogen</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Oxydol</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Oxysept</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Oxzone</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Pegasyl</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Percarbamid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Perone</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Peroxal</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Peroxan</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Peroxide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Peroxol</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Peroxyl</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Proxy</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Pyrozone</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Truzone</substance:name>
+    <system:hasProperty>
+        <substance:MolecularWeight rdf:ID="MolecularWeight_of_Hydrogen__peroxide">
+            <system:hasValue>
+                <system:ScalarQuantity rdf:ID="Value_of_MolecularWeight_of_Hydrogen__peroxide">
+                    <system:numericalValue rdf:datatype="&xsd;#string">34.01</system:numericalValue>
+                    <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+                    <system:isValueOf rdf:resource="#MolecularWeight_of_Hydrogen__peroxide"/>
+                </system:ScalarQuantity>
+            </system:hasValue>
+        </substance:MolecularWeight>
+    </system:hasProperty>
+  </substance:ChemicalSpecies> 
+ 
+ <substance:ChemicalSpecies rdf:ID="Mercuric__acetate">
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/2C2H4O2.Hg/c2*1-2(3)4;/h2*1H3,(H,3,4);/q;;+2/p-2</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">C4H6HgO4</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string">Mercuric acetate</substance:name>
+    <system:hasProperty>
+        <substance:MolecularWeight rdf:ID="MolecularWeight_of_Mercuric__acetate">
+            <system:hasValue>
+                <system:ScalarQuantity rdf:ID="Value_of_MolecularWeight_of_Mercuric__acetate">
+                    <system:numericalValue rdf:datatype="&xsd;#string">318.68 </system:numericalValue>
+                    <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+                    <system:is_value_of rdf:resource="&chemical_species;#Value_of_MolecularWeight_of_Mercuric__acetate"/>
+                </system:ScalarQuantity>
+            </system:hasValue>
+        </substance:MolecularWeight>
+    </system:hasProperty>
+  </substance:ChemicalSpecies>
+ 
+  <substance:ChemicalSpecies rdf:ID="Ethyl__acetate">
+    <substance:name rdf:datatype="&xsd;#string"
+    >Ethyle(acetate d')</substance:name>
+    <system:hasProperty>
+      <substance:MolecularWeight rdf:ID="MolecularWeight_of_Ethyl__acetate">
+        <system:hasValue>
+          <system:ScalarValue rdf:ID="Value_of_MolecularWeight_of_Ethyl__acetate">
+            <system:isValueOf rdf:resource="&chemical_species;#MolecularWeight_of_Ethyl__acetate"/>
+            <system:numericalValue rdf:datatype="&xsd;#float"
+            >88.11</system:numericalValue>
+            <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+          </system:ScalarValue>
+        </system:hasValue>
+      </substance:MolecularWeight>
+    </system:hasProperty>
+    <substance:name rdf:datatype="&xsd;#string">Ethylacetaat</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Acetoxyethane</substance:name>
+    <substance:molecularFormula rdf:datatype="&xsd;#string"
+    >C4H8O2</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Ethyl ethanoate</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >CH3COOC2H5</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 1173</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Acetidin</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Acetic ester</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Rcra waste number U112</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Essigester</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Ethyl acetate</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Ethylester kyseliny octove</substance:name>
+    <substance:InChI rdf:datatype="&xsd;#string"
+    >InChI=1/C4H8O2/c1-3-6-4(2)5/h3H2,1-2H3</substance:InChI>
+    <substance:name rdf:datatype="&xsd;#string"
+    >ac. acetic ethyl ester</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Ethyle</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Ethyl acetic ester</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Vinegar naphtha</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Ethyl ester of acetic acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >1-acetoxyethane</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Acetic acid, ethyl ester</substance:name>
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string"
+    >141-78-6</substance:CAS_RegistryNumber>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Aethylacetat</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Acetic ether</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Etile</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Etile(acetato di)</substance:name>
+  </substance:ChemicalSpecies>
+  <substance:MolecularWeight rdf:ID="MolecularWeight_of_Phosphoric__acid">
+    <system:hasValue>
+      <system:ScalarValue rdf:ID="Value_of_MolecularWeight_of_Phosphoric__acid">
+        <system:numericalValue rdf:datatype="&xsd;#float"
+        >98.0</system:numericalValue>
+        <system:isValueOf rdf:resource="&chemical_species;#MolecularWeight_of_Phosphoric__acid"/>
+        <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+      </system:ScalarValue>
+    </system:hasValue>
+  </substance:MolecularWeight>
+  <substance:ChemicalSpecies rdf:ID="Aluminum">
+    <substance:name rdf:datatype="&xsd;#string"
+    >Aluminum A00</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Aluminum pyro powders</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Aluminum</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >AA 1099</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Aluminium powder</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >AO A1</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >A 999</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >C.I. 77000</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Aluminium bronze</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >AV000</substance:name>
+    <substance:InChI rdf:datatype="&xsd;#string"
+    >InChI=1/Al</substance:InChI>
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string"
+    >7429-90-5</substance:CAS_RegistryNumber>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Alumina fibre</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 1309</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 1396</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Emanay atomized aluminum powder</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >AA1199</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Aluminium</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Alaun</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >JISC 3110</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 1383</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >AR2</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Al</substance:name>
+    <system:hasProperty>
+      <substance:MolecularWeight rdf:ID="MolecularWeight_of_Aluminum">
+        <system:hasValue>
+          <system:ScalarValue rdf:ID="Value_of_MolecularWeight_of_Aluminum">
+            <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+            <system:isValueOf rdf:resource="&chemical_species;#MolecularWeight_of_Aluminum"/>
+            <system:numericalValue rdf:datatype="&xsd;#float"
+            >26.98</system:numericalValue>
+          </system:ScalarValue>
+        </system:hasValue>
+      </substance:MolecularWeight>
+    </system:hasProperty>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Aluminum metal</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Metana</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >AD1M</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >AE</substance:name>
+    <substance:molecularFormula rdf:datatype="&xsd;#string"
+    >Al</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string"
+    >AD 1</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >A 00</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Metana aluminum paste</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >ADO</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >L16</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Aluminum powder</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Aluminum dehydrated</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >A 95</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >AV00</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Aluminium flake</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >JISC 3108</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Allbri aluminum paste and powder</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >A 99</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >A 995</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >PAP-1</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Aluminum 27</substance:name>
+  </substance:ChemicalSpecies>
+  <substance:ChemicalSpecies rdf:ID="Hydrogen__bromide">
+    <substance:name rdf:datatype="&xsd;#string"
+    >Bromowodor</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Broomwaterstof</substance:name>
+    <substance:molecularFormula rdf:datatype="&xsd;#string"
+    >HBr</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Acido bromidrico</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Acide bromhydrique</substance:name>
+    <system:hasProperty>
+      <substance:MolecularWeight rdf:ID="MolecularWeight_of_Hydrogen__bromide">
+        <system:hasValue>
+          <system:ScalarValue rdf:ID="Value_of_MolecularWeight_of_Hydrogen__bromide">
+            <system:numericalValue rdf:datatype="&xsd;#float"
+            >80.91</system:numericalValue>
+            <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+            <system:isValueOf rdf:resource="&chemical_species;#MolecularWeight_of_Hydrogen__bromide"/>
+          </system:ScalarValue>
+        </system:hasValue>
+      </substance:MolecularWeight>
+    </system:hasProperty>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 1788</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrogen-bromide-anhydrous-</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Bromwasserstoff</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrogen bromide</substance:name>
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string"
+    >10035-10-6</substance:CAS_RegistryNumber>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 1048</substance:name>
+    <substance:InChI rdf:datatype="&xsd;#string"
+    >InChI=1/BrH/h1H</substance:InChI>
+    <substance:name rdf:datatype="&xsd;#string"
+    >HBr</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Anhydrous hydrobromic acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrobromic acid</substance:name>
+  </substance:ChemicalSpecies>
+  <substance:MolecularWeight rdf:ID="MolecularWeight_of_Hydrogen__fluoride">
+    <system:hasValue>
+      <system:ScalarValue rdf:ID="Value_of_MolecularWeight_of_Hydrogen__fluoride">
+        <system:isValueOf rdf:resource="&chemical_species;#MolecularWeight_of_Hydrogen__fluoride"/>
+        <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+        <system:numericalValue rdf:datatype="&xsd;#float"
+        >120.04</system:numericalValue>
+      </system:ScalarValue>
+    </system:hasValue>
+  </substance:MolecularWeight>
+  <substance:MolecularWeight rdf:ID="MolecularWeight_of_Hydrogen__iodide">
+    <system:hasValue>
+      <system:ScalarValue rdf:ID="Value_of_MolecularWeight_of_Hydrogen__iodide">
+        <system:numericalValue rdf:datatype="&xsd;#float"
+        >127.91</system:numericalValue>
+        <system:isValueOf rdf:resource="&chemical_species;#MolecularWeight_of_Hydrogen__iodide"/>
+        <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+      </system:ScalarValue>
+    </system:hasValue>
+  </substance:MolecularWeight>
+  <substance:ChemicalSpecies rdf:ID="Water">
+    <substance:name rdf:datatype="&xsd;#string"
+    >Ice</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >steam</substance:name>
+    <substance:molecularFormula rdf:datatype="&xsd;#string"
+    >H2O</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Distilled water</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Water</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Dihydrogen oxide</substance:name>
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string"
+    >7732-18-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string"
+    >InChI=1/H2O/h1H2</substance:InChI>
+    <substance:name rdf:datatype="&xsd;#string"
+    >H2O</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Tritiotope</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Water vapor</substance:name>
+    <system:hasProperty>
+      <substance:MolecularWeight rdf:ID="MolecularWeight_of_Water">
+        <system:hasValue>
+          <system:ScalarValue rdf:ID="Value_of_MolecularWeight_of_Water">
+            <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+            <system:numericalValue rdf:datatype="&xsd;#float"
+            >18.02</system:numericalValue>
+            <system:isValueOf rdf:resource="&chemical_species;#MolecularWeight_of_Water"/>
+          </system:ScalarValue>
+        </system:hasValue>
+      </substance:MolecularWeight>
+    </system:hasProperty>
+  </substance:ChemicalSpecies>
+  <substance:MolecularWeight rdf:ID="MolecularWeight_of_Sulfuric__acid">
+    <system:hasValue>
+      <system:ScalarValue rdf:ID="Value_of_MolecularWeight_of_Sulfuric__acid">
+        <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+        <system:isValueOf rdf:resource="&chemical_species;#MolecularWeight_of_Sulfuric__acid"/>
+        <system:numericalValue rdf:datatype="&xsd;#float"
+        >98.08</system:numericalValue>
+      </system:ScalarValue>
+    </system:hasValue>
+  </substance:MolecularWeight>
+  <substance:ChemicalSpecies rdf:ID="Hydrogen__iodide">
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 2197</substance:name>
+    <substance:molecularFormula rdf:datatype="&xsd;#string"
+    >HI</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 1787</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrogen-iodide-anhydrous-</substance:name>
+    <system:hasProperty rdf:resource="&chemical_species;#MolecularWeight_of_Hydrogen__iodide"/>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Anhydrous hydriodic acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrogen iodide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydriodic acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >HI</substance:name>
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string"
+    >10034-85-2</substance:CAS_RegistryNumber>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydroiodic acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydri0dic acid</substance:name>
+    <substance:InChI rdf:datatype="&xsd;#string"
+    >InChI=1/HI/h1H</substance:InChI>
+  </substance:ChemicalSpecies>
+  <substance:ChemicalSpecies rdf:ID="Sulfuric__acid">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string"
+    >7664-93-9</substance:CAS_RegistryNumber>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Battery acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Sulfuric acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Spent sulfuric acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Sulfuric acid, spent</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Spirit of vitriol</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrogen sulfate</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 1830</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >H2SO4</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Zwavelzuuroplossingen</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >BOV</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >O2S(OH)2</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Inorganic acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Schwefelsaeureloesungen</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Acide sulfurique</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Oil of vitriol</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Matting acid</substance:name>
+    <substance:molecularFormula rdf:datatype="&xsd;#string"
+    >H2O4S</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Vitriol, oil of</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Spirit of alum</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Dipping acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Acido solforico</substance:name>
+    <system:hasProperty rdf:resource="&chemical_species;#MolecularWeight_of_Sulfuric__acid"/>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydgogen sulfate</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 1832</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Sulphuric acid</substance:name>
+    <substance:InChI rdf:datatype="&xsd;#string"
+    >InChI=1/H2O4S/c1-5(2,3)4/h(H2,1,2,3,4)</substance:InChI>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Nordhausen acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 2796</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Vitriol brown oil</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Electrolyte acid</substance:name>
+  </substance:ChemicalSpecies>
+  <substance:ChemicalSpecies rdf:ID="Phosphoric__acid">
+    <substance:name rdf:datatype="&xsd;#string"
+    >o-Phosphoric acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Phosphorsaeureloesungen</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Sonac</substance:name>
+    <substance:InChI rdf:datatype="&xsd;#string"
+    >InChI=1/H3O4P/c1-5(2,3)4/h(H3,1,2,3,4)</substance:InChI>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Fosforzuuroplossingen</substance:name>
+    <system:hasProperty rdf:resource="&chemical_species;#MolecularWeight_of_Phosphoric__acid"/>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Acide phosphorique</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Acido fosforico</substance:name>
+    <substance:molecularFormula rdf:datatype="&xsd;#string"
+    >H3O4P</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string"
+    >NFB</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >EVITs</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Phosphoric acid ortho</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >H3PO4</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Phosphoric acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 1805</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Orthophosphoric acid</substance:name>
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string"
+    >7664-38-2</substance:CAS_RegistryNumber>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Marphos</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >White phosphoric acid</substance:name>
+  </substance:ChemicalSpecies>
+  <system:ScalarValue rdf:ID="Value_of_MolecularWeight_of__1-Butanol">
+    <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+    <system:isValueOf>
+      <substance:MolecularWeight rdf:ID="MolecularWeight_of__1-Butanol">
+        <system:hasValue rdf:resource="&chemical_species;#Value_of_MolecularWeight_of__1-Butanol"/>
+      </substance:MolecularWeight>
+    </system:isValueOf>
+    <system:numericalValue rdf:datatype="&xsd;#float"
+    >74.12</system:numericalValue>
+  </system:ScalarValue>
+  <substance:ChemicalSpecies rdf:ID="Hydrogen__fluoride">
+    <substance:molecularFormula rdf:datatype="&xsd;#string"
+    >H6F6</substance:molecularFormula>
+    <substance:InChI rdf:datatype="&xsd;#string"
+    >InChI=1/6FH/h6*1H</substance:InChI>
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string"
+    >24993-08-6</substance:CAS_RegistryNumber>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrogen fluoride</substance:name>
+    <system:hasProperty rdf:resource="&chemical_species;#MolecularWeight_of_Hydrogen__fluoride"/>
+  </substance:ChemicalSpecies>
+  <system:ScalarValue rdf:ID="Value_of_MolecularWeight_of_Hydrogen__chloride">
+    <system:isValueOf>
+      <substance:MolecularWeight rdf:ID="MolecularWeight_of_Hydrogen__chloride">
+        <system:hasValue rdf:resource="&chemical_species;#Value_of_MolecularWeight_of_Hydrogen__chloride"/>
+      </substance:MolecularWeight>
+    </system:isValueOf>
+    <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+    <system:numericalValue rdf:datatype="&xsd;#float"
+    >36.46</system:numericalValue>
+  </system:ScalarValue>
+  <substance:ChemicalSpecies rdf:ID="Hydrogen__chloride">
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrogen-chloride-anhydrous-</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Marine acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Salzsaeure</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrochloric acid, anhydrous</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Chloorwaterstof</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >HCl</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrochloride</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Spirit of salt</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 1789</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Soldering acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrochloric Acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 1050</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Anhydrous hydrogen chloride</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Acido cloridrico</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Chlorwasserstoff</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Anhydrous hydrochloric acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Acide chlorhydrique</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Chlorohydric acid</substance:name>
+    <substance:molecularFormula rdf:datatype="&xsd;#string"
+    >HCl</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Muriatic acid</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >NA 1789</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Basilin</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrogen chloride (acid)</substance:name>
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string"
+    >7647-01-0</substance:CAS_RegistryNumber>
+    <system:hasProperty rdf:resource="&chemical_species;#MolecularWeight_of_Hydrogen__chloride"/>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Spirits of salt</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrochloric acid gas</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >UN 2186</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Spirits of salts</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Hydrogen chloride</substance:name>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Chlorowodor</substance:name>
+    <substance:InChI rdf:datatype="&xsd;#string"
+    >InChI=1/ClH/h1H</substance:InChI>
+  </substance:ChemicalSpecies>
+  
+  <substance:ChemicalSpecies rdf:ID="_1-Butanol">
+        <substance:name rdf:datatype="&xsd;#string"
+        >Butan-1-ol</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >1-Butanol</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Methylolpropane</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Butyric alcohol</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Tebol 88, 99</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >n-Butanol</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Propylcarbinol</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >n-Butyl alcohol</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Alcool butylique</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Propylmethanol</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >1-Butyl alcohol</substance:name>
+        <substance:InChI rdf:datatype="&xsd;#string"
+        >InChI=1/C4H10O/c1-2-3-4-5/h5H,2-4H2,1H3</substance:InChI>
+        <substance:name rdf:datatype="&xsd;#string"
+        >n-Butanolbutanolen</substance:name>
+        <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string"
+        >71-36-3</substance:CAS_RegistryNumber>
+        <substance:name rdf:datatype="&xsd;#string"
+        >1-Hydroxybutane</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Butanol</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >n-C4H9OH</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >NA 1120</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Butanolen</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Butyl hydroxide</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Hemostyp</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Butyl alcohol</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >NBA</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >UN 1120</substance:name>
+        <system:hasProperty rdf:resource="&chemical_species;#MolecularWeight_of__1-Butanol"/>
+        <substance:name rdf:datatype="&xsd;#string"
+        >CCS 203</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Butanol-1</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Butanolo</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Butylowy alkohol</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >Rcra waste number U031</substance:name>
+        <substance:name rdf:datatype="&xsd;#string"
+        >n-Butan-1-ol</substance:name>
+        <substance:molecularFormula rdf:datatype="&xsd;#string"
+        >C4H10O</substance:molecularFormula>
+      </substance:ChemicalSpecies>
+  
+  
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <system:ScalarValue rdf:about="&chemical_species;#Value_of_MolecularWeight_of_Hydrogen__fluoride"/>
+      <system:ScalarValue rdf:about="&chemical_species;#Value_of_MolecularWeight_of_Hydrogen__chloride"/>
+      <system:ScalarValue rdf:about="&chemical_species;#Value_of_MolecularWeight_of_Hydrogen__bromide"/>
+      <system:ScalarValue rdf:about="&chemical_species;#Value_of_MolecularWeight_of_Hydrogen__iodide"/>
+      <system:ScalarValue rdf:about="&chemical_species;#Value_of_MolecularWeight_of_Phosphoric__acid"/>
+      <system:ScalarValue rdf:about="&chemical_species;#Value_of_MolecularWeight_of_Ethyl__acetate"/>
+      <system:ScalarValue rdf:about="&chemical_species;#Value_of_MolecularWeight_of__1-Butanol"/>
+      <system:ScalarValue rdf:about="&chemical_species;#Value_of_MolecularWeight_of_Sulfuric__acid"/>
+      <system:ScalarValue rdf:about="&chemical_species;#Value_of_MolecularWeight_of_Water"/>
+      <system:ScalarValue rdf:about="&chemical_species;#Hydrogen__peroxide"/>
+      <system:ScalarValue rdf:about="&chemical_species;#Mercuric__acetate"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+ 
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <substance:ChemicalSpecies rdf:about="&chemical_species;#Hydrogen__fluoride"/>
+      <substance:ChemicalSpecies rdf:about="&chemical_species;#Hydrogen__chloride"/>
+      <substance:ChemicalSpecies rdf:about="&chemical_species;#Hydrogen__bromide"/>
+      <substance:ChemicalSpecies rdf:about="&chemical_species;#Hydrogen__iodide"/>
+      <substance:ChemicalSpecies rdf:about="&chemical_species;#Phosphoric__acid"/>
+      <substance:ChemicalSpecies rdf:about="&chemical_species;#Ethyl__acetate"/>
+      <substance:ChemicalSpecies rdf:about="&chemical_species;#_1-Butanol"/>
+      <substance:ChemicalSpecies rdf:about="&chemical_species;#Hydrogen__peroxide"/>
+      <substance:ChemicalSpecies rdf:about="&chemical_species;#Mercuric__acetate"/>
+      <substance:ChemicalSpecies rdf:about="&chemical_species;#Water"/>
+      <substance:ChemicalSpecies rdf:about="&chemical_species;#Sulfuric__acid"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+ 
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+       <substance:MolecularWeight rdf:about="&chemical_species;#MolecularWeight_of_Hydrogen__peroxide"/>
+       <substance:MolecularWeight rdf:about="&chemical_species;#MolecularWeight_of_Mercuric__acetate"/>
+       <substance:MolecularWeight rdf:about="&chemical_species;#MolecularWeight_of_Water"/>
+       <substance:MolecularWeight rdf:about="&chemical_species;#MolecularWeight_of_Hydrogen__fluoride"/>
+      <substance:MolecularWeight rdf:about="&chemical_species;#MolecularWeight_of_Hydrogen__chloride"/>
+      <substance:MolecularWeight rdf:about="&chemical_species;#MolecularWeight_of_Hydrogen__bromide"/>
+      <substance:MolecularWeight rdf:about="&chemical_species;#MolecularWeight_of_Hydrogen__iodide"/>
+      <substance:MolecularWeight rdf:about="&chemical_species;#MolecularWeight_of_Phosphoric__acid"/>
+      <substance:MolecularWeight rdf:about="&chemical_species;#MolecularWeight_of_Ethyl__acetate"/>
+      <substance:MolecularWeight rdf:about="&chemical_species;#MolecularWeight_of__1-Butanol"/>
+      <substance:MolecularWeight rdf:about="&chemical_species;#MolecularWeight_of_Sulfuric__acid"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+
+</rdf:RDF>

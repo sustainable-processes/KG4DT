@@ -1,0 +1,834 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY der_dim  "&root;OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl">
+  <!ENTITY geometry "&root;OntoCAPE/supporting_concepts/geometry/geometry.owl">
+  <!ENTITY phys_dim "&root;OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns:der_dim="&der_dim;#"
+    xmlns="&geometry;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+  xml:base="&geometry;">
+  <owl:Ontology rdf:about="&geometry;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'geometry' introduces some  geometric concpets for the representation of surfaces and geometric solids.
+The following classes, relations, and individuals from other ontology modules are used within 'geometry':
+
+&lt;owl:Class rdf:about="&system;#PhysicalQuantity"/&gt;
+&lt;owl:Class rdf:about="&system;#ScalarQuantity"/&gt;
+&lt;owl:Class rdf:about="&system;#System"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&system;#hasAspectSystem"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasDimension"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasProperty"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isPropertyOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#representsAspectOf"/&gt;
+
+&lt;der_dim:SpaceAndTime    rdf:about="&der_dim;#area"/&gt;
+&lt;der_dim:SpaceAndTime    rdf:about="&der_dim;#volume"/&gt;
+&lt;phys_dim:BaseDimension  rdf:about="&phys_dim;#length"/&gt;</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+    <owl:imports rdf:resource="&der_dim;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="RightCircularCone">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A RightCone with a base that is a circle.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="RightCone"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >2</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="has_area"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="Height"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="has_length"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Rectangle">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Disk"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A box shape on a plane. Formally, a rectangle is a quadrilateral with four congruent angles (all 90°). [http://www.mathwords.com/r/rectangle.htm]</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="EdgeLength"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&geometry;#EdgeLength"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >2</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Surface"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Solid">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Solid (aka Geometric Solid or Solid Geometric Figure) is a collective term for all bounded three-dimensional geometric figures. This includes polyhedra, pyramids, prisms, cylinders, cones, spheres, ellipsoids, etc. [http://www.mathwords.com/s/solid.htm]</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="SurfaceArea"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#System"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="has_volume"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="Volume"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_volume"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_volume"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&geometry;#Volume"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&geometry;#SurfaceArea"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#Volume">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The total amount of space enclosed in a Solid [http://www.mathwords.com/v/volume.htm]</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&system;#ScalarQuantity"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+        <owl:hasValue rdf:resource="&der_dim;#volume"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Radius"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#EdgeLength"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Diameter"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="TotalSurfaceArea"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#Height"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="SideArea">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&geometry;#SurfaceArea"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&geometry;#Solid"/>
+        <owl:onProperty rdf:resource="&system;#isPropertyOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The area of one particular exterior surface of a Solid. This concept should be applied only if the Solid has several distinguishable exterior surfaces. Otherwise (e.g., for a Sphere) use TotalSufaceArea
+A SideArea can either be a ScalarQuantity or a VectorQuantity. In case of the latter, the vector is perpendicular to the surface (i.e., it has the same orientation as the surface normal), and its Euclidean norm equals the area of the surface.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#TotalSurfaceArea"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="Cone">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:ID="BaseArea"/>
+              <owl:Class rdf:ID="LateralSurfaceArea"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&geometry;#Height"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A three dimensional figure with a single base tapering to an apex. The base can be any simple closed curve. [http://www.mathwords.com/c/cone.htm]</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&geometry;#LateralSurfaceArea"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Cylinder"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Cuboid"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&geometry;#Solid"/>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Sphere"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&geometry;#BaseArea"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="RightCylinder">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&geometry;#Cylinder"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Cylinder which has bases aligned one directly above the other [http://www.mathwords.com/r/right_cylinder.htm]</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#BaseArea">
+    <rdfs:subClassOf rdf:resource="&geometry;#SideArea"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The base is the bottom of a solid. If the top is parallel to the bottom (as in a trapezoid or prism), both the top and bottom are called bases. The BaseArea is the SurfaceArea of (one of) the base(s).</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#LateralSurfaceArea"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#Cylinder">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&geometry;#BaseArea"/>
+              <owl:Class rdf:about="&geometry;#LateralSurfaceArea"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&geometry;#BaseArea"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&geometry;#LateralSurfaceArea"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Solid with parallel congruent bases. The bases can be shaped like any closed plane figure (not necessarily a circle) and must be oriented identically. [http://www.mathwords.com/c/cylinder.htm]</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#Sphere"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&geometry;#Height"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&geometry;#Solid"/>
+    <owl:disjointWith rdf:resource="&geometry;#Cone"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >3</owl:minCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#Cuboid"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#EdgeLength">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+        <owl:hasValue rdf:resource="&phys_dim;#length"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#ScalarQuantity"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The length of a (straight) edge of a Surface or Solid</rdfs:comment>
+    <owl:disjointWith rdf:resource="&geometry;#Volume"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#Radius"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#TotalSurfaceArea"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#Diameter"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#Height"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#Diameter">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The length of a line segment between two points on a Disk or Sphere which passes through the center of the Disk or Sphere.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&system;#ScalarQuantity"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&phys_dim;#length"/>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&geometry;#EdgeLength"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#TotalSurfaceArea"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#Radius"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&geometry;#Volume"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#Height"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#Sphere">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Solid consisting of all points equidistant from a given point. This point is the center of the sphere. [http://www.mathwords.com/s/sphere.htm]</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&geometry;#Solid"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&geometry;#TotalSurfaceArea"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&geometry;#Cone"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&geometry;#Radius"/>
+              <owl:Class rdf:about="&geometry;#Diameter"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&geometry;#Cylinder"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&geometry;#Radius"/>
+              <owl:Class rdf:about="&geometry;#Diameter"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#Cuboid"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#Height">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The shortest distance between the base of a geometric figure and its top, whether that top is an opposite vertex, an apex, or another base.
+[http://www.mathwords.com/a/altitude.htm]</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&phys_dim;#length"/>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#ScalarQuantity"/>
+    <owl:disjointWith rdf:resource="&geometry;#Diameter"/>
+    <owl:disjointWith rdf:resource="&geometry;#EdgeLength"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#TotalSurfaceArea"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#Radius"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&geometry;#Volume"/>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#LateralSurfaceArea">
+    <rdfs:subClassOf rdf:resource="&geometry;#SideArea"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The SurfaceArea of a single lateral surface of a solid (i.e., any SideArea that is not a BaseArea).</rdfs:comment>
+    <owl:disjointWith rdf:resource="&geometry;#BaseArea"/>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#Surface">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&geometry;#SurfaceArea"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&geometry;#SurfaceArea"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#System"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >a two-dimensional submanifold of three-dimensional Euclidean space</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#RightCone">
+    <rdfs:subClassOf rdf:resource="&geometry;#Cone"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Cone that has its apex aligned directly above the center of its base [http://www.mathwords.com/r/right_cone.htm].</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#SurfaceArea">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&der_dim;#area"/>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#PhysicalQuantity"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&geometry;#SideArea"/>
+          <owl:Class rdf:about="&geometry;#TotalSurfaceArea"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#Radius"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&geometry;#EdgeLength"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The area of a Surface or of (one of) the exterior surface(s) of a Solid. 
+More precisely, the class alternatively denotes
+- the area of a Surface, or
+- the area of a single exterior surface of a Solid, or
+- the total area of the exterior surface(s) of a Solid.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#TotalSurfaceArea">
+    <owl:disjointWith rdf:resource="&geometry;#Height"/>
+    <owl:disjointWith rdf:resource="&geometry;#Diameter"/>
+    <rdfs:subClassOf rdf:resource="&geometry;#SurfaceArea"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The total area of a Surface or of (all) the exterior surface(s) of a Solid.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&geometry;#Radius"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&geometry;#SideArea"/>
+    <owl:disjointWith rdf:resource="&geometry;#Volume"/>
+    <rdfs:subClassOf rdf:resource="&system;#ScalarQuantity"/>
+    <owl:disjointWith rdf:resource="&geometry;#EdgeLength"/>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#Disk">
+    <rdfs:subClassOf rdf:resource="&geometry;#Surface"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&geometry;#Radius"/>
+              <owl:Class rdf:about="&geometry;#Diameter"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&geometry;#Radius"/>
+              <owl:Class rdf:about="&geometry;#Diameter"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&geometry;#Rectangle"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Disk is the union of a circle and its interior [http://www.mathwords.com/d/disk.htm]. A circle is given by the set of points in a plane that are equidistant from a given point.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#Radius">
+    <owl:disjointWith rdf:resource="&geometry;#Height"/>
+    <owl:disjointWith rdf:resource="&geometry;#Diameter"/>
+    <owl:disjointWith rdf:resource="&geometry;#TotalSurfaceArea"/>
+    <owl:disjointWith rdf:resource="&geometry;#EdgeLength"/>
+    <owl:disjointWith rdf:resource="&geometry;#Volume"/>
+    <rdfs:subClassOf rdf:resource="&system;#ScalarQuantity"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&phys_dim;#length"/>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The length of the line segment between the center and a point on a circle or Sphere.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&geometry;#SurfaceArea"/>
+  </owl:Class>
+  <owl:Class rdf:ID="RightCircularCylinder">
+    <rdfs:subClassOf rdf:resource="&geometry;#RightCylinder"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&geometry;#Radius"/>
+              <owl:Class rdf:about="&geometry;#Diameter"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >2</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >3</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&geometry;#Height"/>
+              <owl:Class rdf:about="&geometry;#Radius"/>
+              <owl:Class rdf:about="&geometry;#Diameter"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A RightCylinder with bases that are circles [http://www.mathwords.com/r/right_circular_cylinder.htm]</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&geometry;#Cuboid">
+    <owl:disjointWith rdf:resource="&geometry;#Cylinder"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&geometry;#SideArea"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A closed box composed of three pairs of rectangular faces placed opposite each other and joined at right angles to each other, also known as a rectangular parallelepiped. [Weisstein, Eric W. "Cuboid." From MathWorld--A Wolfram Web Resource. http://mathworld.wolfram.com/Cuboid.html]</rdfs:comment>
+    <owl:disjointWith rdf:resource="&geometry;#Sphere"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&geometry;#EdgeLength"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&geometry;#Cone"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&geometry;#EdgeLength"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >3</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_area"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&geometry;#SideArea"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&geometry;#Solid"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >3</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&geometry;#has_length"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&geometry;#has_area">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >workaround for QCR which is a feature of modeling currently not available from OWL.</rdfs:comment>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&geometry;#Surface"/>
+          <owl:Class rdf:about="&geometry;#Solid"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="&geometry;#SurfaceArea"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&geometry;#has_length">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >workaround for QCR which is a feature of modeling currently not available from OWL.</rdfs:comment>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&geometry;#EdgeLength"/>
+          <owl:Class rdf:about="&geometry;#Radius"/>
+          <owl:Class rdf:about="&geometry;#Diameter"/>
+          <owl:Class rdf:about="&geometry;#Height"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&geometry;#Surface"/>
+          <owl:Class rdf:about="&geometry;#Solid"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSurfaceGeometry">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="representsSurfaceGeometryOf"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasAspectSystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >points from a System to the Surface that represents its geometry</rdfs:comment>
+    <rdfs:range rdf:resource="&geometry;#Surface"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasShapeRepresentation">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="representsShapeOf"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="&geometry;#Solid"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasAspectSystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >points from a System to the Solid that represents its geometry</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&geometry;#representsSurfaceGeometryOf">
+    <rdfs:subPropertyOf rdf:resource="&system;#representsAspectOf"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >points from a Surface to the System whose geometry the Surface represents</rdfs:comment>
+    <rdfs:domain rdf:resource="&geometry;#Surface"/>
+    <owl:inverseOf rdf:resource="&geometry;#hasSurfaceGeometry"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&geometry;#representsShapeOf">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >points from a Solid to the System whose geometry the Solid represents</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&system;#representsAspectOf"/>
+    <owl:inverseOf rdf:resource="&geometry;#hasShapeRepresentation"/>
+    <rdfs:domain rdf:resource="&geometry;#Solid"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&geometry;#has_volume">
+    <rdfs:range rdf:resource="&geometry;#Volume"/>
+    <rdfs:domain rdf:resource="&geometry;#Solid"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >workaround for QCR which is a feature of modeling currently not available from OWL.</rdfs:comment>
+  </owl:ObjectProperty>
+</rdf:RDF>
+

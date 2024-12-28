@@ -1,0 +1,703 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY phase_system "&root;OntoCAPE/material/phase_system/phase_system.owl">
+  <!ENTITY mathematical_model   "&root;OntoCAPE/model/mathematical_model.owl">
+  <!ENTITY process_model    "&root;OntoCAPE/model/process_model.owl">
+  <!ENTITY property_models  "&root;OntoCAPE/model/property_models.owl">
+]>
+
+<rdf:RDF
+    xmlns:process_model="&process_model;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="&property_models;#"
+  xml:base="&property_models;">
+  <owl:Ontology rdf:about="&property_models;">
+    <owl:versionInfo rdf:datatype="&xsd;#string">2.0</owl:versionInfo>
+    <owl:imports rdf:resource="&process_model;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontolog module 'property_models' represents  mathematical correlations for the compuation of certain PhysicalQuantities, such as vapor pressure correlations or activity coefficient models.    
+The following classes and relations from other ontology modules are used within 'property_models':
+ 
+&lt;owl:Class rdf:about="&mathematical_model;#ModelVariable"/>
+&lt;owl:Class rdf:about="&phase_system;#ActivityCoefficient"/>
+&lt;owl:Class rdf:about="&phase_system;#Density"/>
+&lt;owl:Class rdf:about="&phase_system;#DiffusionCoefficient"/>
+&lt;owl:Class rdf:about="&phase_system;#DynamicViscosity"/>
+&lt;owl:Class rdf:about="&phase_system;#FugacityCoefficient"/>
+&lt;owl:Class rdf:about="&phase_system;#PartialMolarEnthalpy"/>
+&lt;owl:Class rdf:about="&phase_system;#PartialMolarVolume"/>
+&lt;owl:Class rdf:about="&phase_system;#PhaseEquilibriumRatio"/>
+&lt;owl:Class rdf:about="&phase_system;#PhaseSystemProperty"/>
+&lt;owl:Class rdf:about="&phase_system;#SpecificEnthalpy"/>
+&lt;owl:Class rdf:about="&phase_system;#ThermalConductivity"/>
+&lt;owl:Class rdf:about="&phase_system;#TransportPhenomenaProperty"/>
+&lt;owl:Class rdf:about="&phase_system;#IntensiveThermodynamicStateVariable"/>
+&lt;owl:Class rdf:about="&phase_system;#SurfaceTension"/>
+&lt;owl:Class rdf:about="&process_model;#PropertyModel"/>
+
+&lt;owl:ObjectProperty rdf:about="&mathematical_model;#correspondsToQuantity"/>
+&lt;owl:ObjectProperty rdf:about="&mathematical_model;#hasModelVariable"/>
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+  </owl:Ontology>
+  
+  <owl:Class rdf:ID="MassTransferCoefficientModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for a phase interface mass transfer coefficient.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="PhaseInterfaceTransportPropertyModel"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="HeatTransferCoefficientModel"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="IntensiveThermodynamicStateModel">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:someValuesFrom rdf:resource="&phase_system;#IntensiveThermodynamicStateVariable"/>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ThermoModel"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="SurfaceTensionModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="IntraPhaseTransportPropertyModel"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for an IntensiveThermodynamicStateVariable.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#IntraPhaseTransportPropertyModel">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#SurfaceTensionModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for a TransportPhenomenaProperty</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&property_models;#ThermoModel"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:someValuesFrom rdf:resource="&phase_system;#TransportPhenomenaProperty"/>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="HomogeneousReactionRateCoefficientModel">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="AdsorptionRateCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="HeterogeneousReactionRateCoefficientModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ChemicalKineticsPropertyModel"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for a chemical reaction rate coefficient</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="SpecificGibbsFreeEnergyModel">
+    <rdfs:subClassOf rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for the computation of the SpecificGibbsFreeEnergy.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="SpecificEnthalpyModel">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PartialMolarEnthalpyModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PartialMolarVolumeModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="AdsorptionEquilibriumConstantModel"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for the computation of the SpecificEnthalpy.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="ActivityCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="VapourPressureModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+                <owl:someValuesFrom rdf:resource="&phase_system;#SpecificEnthalpy"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="FugacityCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PhaseEquilibriumRatioModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="ReactionEquilibriumConstantModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="DensityModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="HeatCapacityModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#HeatTransferCoefficientModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for a heat transfer coefficient.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&property_models;#PhaseInterfaceTransportPropertyModel"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&property_models;#MassTransferCoefficientModel"/>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#DensityModel">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#VapourPressureModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PartialMolarEnthalpyModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#ReactionEquilibriumConstantModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PartialMolarVolumeModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#ActivityCoefficientModel"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for the computation of Density.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&property_models;#SpecificEnthalpyModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PhaseEquilibriumRatioModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#HeatCapacityModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#AdsorptionEquilibriumConstantModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:someValuesFrom rdf:resource="&phase_system;#Density"/>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#FugacityCoefficientModel"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#PhaseInterfaceTransportPropertyModel">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#ChemicalKineticsPropertyModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#ThermoModel"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for a phase interface transport coefficient.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&process_model;#PropertyModel"/>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#PartialMolarVolumeModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for the computation of the PartialMolarVolume.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&property_models;#DensityModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#FugacityCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#ReactionEquilibriumConstantModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#HeatCapacityModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PhaseEquilibriumRatioModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#ActivityCoefficientModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:someValuesFrom rdf:resource="&phase_system;#PartialMolarVolume"/>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PartialMolarEnthalpyModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#SpecificEnthalpyModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#AdsorptionEquilibriumConstantModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#VapourPressureModel"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="ViscosityModel">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="ThermalConductivityModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="MassDiffusionCoefficientModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntraPhaseTransportPropertyModel"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+                <owl:someValuesFrom rdf:resource="&phase_system;#DynamicViscosity"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for the DynamicViscosity.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#ReactionEquilibriumConstantModel">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PhaseEquilibriumRatioModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#HeatCapacityModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#FugacityCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#AdsorptionEquilibriumConstantModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#SpecificEnthalpyModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#PartialMolarVolumeModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#DensityModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for a reaction equilibrium constant.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PartialMolarEnthalpyModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#ActivityCoefficientModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#VapourPressureModel"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#AdsorptionEquilibriumConstantModel">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#HeatCapacityModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#ActivityCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#VapourPressureModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#FugacityCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#ReactionEquilibriumConstantModel"/>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PartialMolarEnthalpyModel"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for an adsorption equilibrium constant.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&property_models;#PartialMolarVolumeModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#SpecificEnthalpyModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PhaseEquilibriumRatioModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#DensityModel"/>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#HeatCapacityModel">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PhaseEquilibriumRatioModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PartialMolarEnthalpyModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#DensityModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#AdsorptionEquilibriumConstantModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#VapourPressureModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#SpecificEnthalpyModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#FugacityCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#ActivityCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#ReactionEquilibriumConstantModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for the computation of the heat capacity.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#PartialMolarVolumeModel"/>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#VapourPressureModel">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#FugacityCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#PartialMolarVolumeModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#SpecificEnthalpyModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PartialMolarEnthalpyModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#ActivityCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#DensityModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PhaseEquilibriumRatioModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#AdsorptionEquilibriumConstantModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#ReactionEquilibriumConstantModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#HeatCapacityModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for the computation of the vapor pressure.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#AdsorptionRateCoefficientModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for a surface reaction rate coefficient.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#HeterogeneousReactionRateCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#HomogeneousReactionRateCoefficientModel"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&property_models;#ChemicalKineticsPropertyModel"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#ThermalConductivityModel">
+    <owl:disjointWith rdf:resource="&property_models;#ViscosityModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#MassDiffusionCoefficientModel"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for the ThermalConductivity.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntraPhaseTransportPropertyModel"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+                <owl:someValuesFrom rdf:resource="&phase_system;#ThermalConductivity"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#ChemicalKineticsPropertyModel">
+    <owl:disjointWith rdf:resource="&property_models;#PhaseInterfaceTransportPropertyModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#ThermoModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&process_model;#PropertyModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for a chemical kinetics coefficient.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#FugacityCoefficientModel">
+    <owl:disjointWith rdf:resource="&property_models;#VapourPressureModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#DensityModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for the computation of FugacityCoefficient.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&property_models;#ReactionEquilibriumConstantModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#ActivityCoefficientModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#PartialMolarVolumeModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#SpecificEnthalpyModel"/>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#HeatCapacityModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#AdsorptionEquilibriumConstantModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PhaseEquilibriumRatioModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:someValuesFrom rdf:resource="&phase_system;#FugacityCoefficient"/>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PartialMolarEnthalpyModel"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#SurfaceTensionModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for computation of the SurfaceTension.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&property_models;#IntraPhaseTransportPropertyModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&property_models;#ThermoModel"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+                <owl:someValuesFrom rdf:resource="&phase_system;#SurfaceTension"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#MassDiffusionCoefficientModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for an intra-phase mass DiffusionCoefficient.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&property_models;#ViscosityModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#ThermalConductivityModel"/>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntraPhaseTransportPropertyModel"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:someValuesFrom rdf:resource="&phase_system;#DiffusionCoefficient"/>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#ActivityCoefficientModel">
+    <owl:disjointWith rdf:resource="&property_models;#ReactionEquilibriumConstantModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#FugacityCoefficientModel"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PhaseEquilibriumRatioModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#VapourPressureModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#SpecificEnthalpyModel"/>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#DensityModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for an ActivityCoefficient.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&property_models;#PartialMolarVolumeModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#AdsorptionEquilibriumConstantModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#HeatCapacityModel"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+                <owl:someValuesFrom rdf:resource="&phase_system;#ActivityCoefficient"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PartialMolarEnthalpyModel"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#PartialMolarEnthalpyModel">
+    <owl:disjointWith rdf:resource="&property_models;#FugacityCoefficientModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#ReactionEquilibriumConstantModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#SpecificEnthalpyModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#VapourPressureModel"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+                <owl:someValuesFrom rdf:resource="&phase_system;#PartialMolarEnthalpy"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&property_models;#PhaseEquilibriumRatioModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&property_models;#PartialMolarVolumeModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#DensityModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for the computation of the PartialMolarEnthalpy.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#AdsorptionEquilibriumConstantModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#HeatCapacityModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#ActivityCoefficientModel"/>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#HeterogeneousReactionRateCoefficientModel">
+    <rdfs:subClassOf rdf:resource="&property_models;#ChemicalKineticsPropertyModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for an adsorption equilibrium constant.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&property_models;#AdsorptionRateCoefficientModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#HomogeneousReactionRateCoefficientModel"/>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#ThermoModel">
+    <rdfs:subClassOf rdf:resource="&process_model;#PropertyModel"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+                <owl:someValuesFrom rdf:resource="&phase_system;#PhaseSystemProperty"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for a PhaseSystemProperty not relevant to rates.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&property_models;#ChemicalKineticsPropertyModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#PhaseInterfaceTransportPropertyModel"/>
+  </owl:Class>
+  <owl:Class rdf:about="&property_models;#PhaseEquilibriumRatioModel">
+    <owl:disjointWith rdf:resource="&property_models;#HeatCapacityModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#VapourPressureModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#PartialMolarVolumeModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#DensityModel"/>
+    <rdfs:subClassOf rdf:resource="&property_models;#IntensiveThermodynamicStateModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#ReactionEquilibriumConstantModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#ActivityCoefficientModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#PartialMolarEnthalpyModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#FugacityCoefficientModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel that provides a correlation for the computation of a PhaseEquilibriumRatio.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:someValuesFrom rdf:resource="&phase_system;#PhaseEquilibriumRatio"/>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&property_models;#AdsorptionEquilibriumConstantModel"/>
+    <owl:disjointWith rdf:resource="&property_models;#SpecificEnthalpyModel"/>
+  </owl:Class>
+  <ActivityCoefficientModel rdf:ID="NRTL"/>
+  <ActivityCoefficientModel rdf:ID="UNIFAC"/>
+  <VapourPressureModel rdf:ID="Antoine"/>
+  <ActivityCoefficientModel rdf:ID="WILSON"/>
+</rdf:RDF>

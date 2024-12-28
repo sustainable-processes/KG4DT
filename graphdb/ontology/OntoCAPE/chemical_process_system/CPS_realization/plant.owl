@@ -1,0 +1,728 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY multiset "&root;meta_model/data_structures/multiset.owl">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY geometry "&root;OntoCAPE/supporting_concepts/geometry/geometry.owl">
+  <!ENTITY substance    "&root;OntoCAPE/material/substance/substance.owl">
+  <!ENTITY plant    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns:geometry="&geometry;#"
+    xmlns:substance="&substance;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="&plant;#"
+  xml:base="&plant;">
+  <owl:Ontology rdf:about="&plant;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'plant' realizes a chemical process system in terms of technical equipment for production.
+The following classes and relations from other ontology modules are used within 'plant':
+
+&lt;owl:Class rdf:about="&substance;#Substance"/&gt;
+&lt;owl:Class rdf:about="&geometry;#Cylinder"/&gt;
+&lt;owl:Class rdf:about="&multiset;#Multiplicity"/&gt;
+&lt;owl:Class rdf:about="&geometry;#Diameter"/&gt;
+&lt;owl:Class rdf:about="&geometry;#Solid"/&gt;
+&lt;owl:Class rdf:about="&system;#System"/&gt;
+&lt;owl:Class rdf:about="&geometry;#EdgeLength"/&gt;
+&lt;owl:Class rdf:about="&system;#SystemInterface"/&gt;
+&lt;owl:Class rdf:about="&system;#Property"/&gt;
+&lt;owl:Class rdf:about="&geometry;#Height"/&gt;
+&lt;owl:Class rdf:about="&system;#QuantitativeValue"/&gt;
+
+&lt;owl:Class rdf:about="&geometry;#ShapeRepresentation"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasProperty"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isDirectlyConnectedTo"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasDirectSubsystem"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasSubsystem"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isExclusivelySubsystemOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasCharacteristic"/&gt;
+&lt;owl:ObjectProperty rdf:about="&multiset;#hasMultiplicity"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isComposedOfSubsystem"/&gt;
+
+The following classes and relations from the Meta Model are refined within 'plant':
+
+&lt;owl:ObjectProperty rdf:about="&fc;#isInvolvedInN-aryRelation"/&gt;
+&lt;owl:ObjectProperty rdf:about="&multiset;#indicatesMultiplicityOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#inter-objectRelation"/&gt;
+&lt;owl:ObjectProperty rdf:about="&multiset;#multiplicity"/&gt;
+
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <owl:imports rdf:resource="&substance;"/>
+    <owl:imports rdf:resource="&geometry;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Multiplicity">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="PlantItem"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="indicatesMultiplicityOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&plant;#indicatesMultiplicityOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&plant;#PlantItem"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&plant;#indicatesMultiplicityOf"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&multiset;#Multiplicity"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="multiplicity"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PipeSegmentEnd">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PipeSegmentEnd is an on or off-page Connector  to an other Pipe, PieceOfEquipment or Instrumentation.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Nozzle"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="InstrumentationConnection"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&plant;#PipeSegmentEnd"/>
+              <owl:Class rdf:about="&plant;#Nozzle"/>
+              <owl:Class rdf:about="&plant;#InstrumentationConnection"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="PlantItemInterface"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="HoleDiameter">
+    <rdfs:subClassOf rdf:resource="&geometry;#Diameter"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Piping">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Instrumentation"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Equipment"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Fixture"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Piping is a plant item which is used for fluid transport. It may connect Equipment or/and Instruments.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&plant;#PlantItem"/>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:ID="Pipe"/>
+          <owl:Class rdf:ID="PipeSegment"/>
+          <owl:Class rdf:ID="PipingNetwork"/>
+          <owl:Class rdf:ID="PipeFitting"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#InstrumentationConnection">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&plant;#Nozzle"/>
+              <owl:Class rdf:about="&plant;#PipeSegmentEnd"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&plant;#PlantItemInterface"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&plant;#Nozzle"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&plant;#PipeSegmentEnd"/>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#PlantItem">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PlantItem is an object which exists, in a material form, in a ChemicalProcessSystem and in which one or more ProcessSteps could be performed.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+        <owl:allValuesFrom rdf:resource="&plant;#PlantItem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#System"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasConstructionMaterial"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&substance;#Substance"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&geometry;#hasShapeRepresentation"/>
+        <owl:allValuesFrom rdf:resource="&geometry;#Solid"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#Pipe">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&plant;#Piping"/>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+                <owl:someValuesFrom>
+                  <owl:Class rdf:about="&plant;#PipeSegment"/>
+                </owl:someValuesFrom>
+              </owl:Restriction>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <owl:Restriction>
+                    <owl:someValuesFrom>
+                      <owl:Class rdf:about="&plant;#PipeSegment"/>
+                    </owl:someValuesFrom>
+                    <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+                  </owl:Restriction>
+                  <owl:Restriction>
+                    <owl:someValuesFrom>
+                      <owl:Class rdf:ID="Instrument"/>
+                    </owl:someValuesFrom>
+                    <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&plant;#PipeFitting"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&plant;#PipingNetwork"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&plant;#PipeSegment"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Pipe can be used to connect one PlantItem to another PlantItem or to the environment of a Plant.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="PieceOfEquipment">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="GroupOfEquipment"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&plant;#Equipment"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&plant;#Nozzle"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasConnector"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&plant;#Fixture"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasFixture"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PieceOfEquipment is an elementary unit in the sense that it does not include other Equipments or Pipes.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="HeatedLength">
+    <rdfs:subClassOf rdf:resource="&geometry;#EdgeLength"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Loop">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&plant;#Instrumentation"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&plant;#Instrumentation"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Loop, including instruments, is arranged in such a fashion as to try to regulate a variable of a certain controlled system.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#PipeSegment">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >2</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&plant;#hasConnector"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&plant;#Piping"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&plant;#PipeSegmentEnd"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&plant;#hasConnector"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PipeSegment is the elementary part of Piping. A Pipe is assembled of a number of PipeSegments.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&plant;#PipingNetwork"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&plant;#PipeFitting"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&plant;#Pipe"/>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#Fixture">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&plant;#Instrumentation"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&plant;#Equipment"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&plant;#Piping"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Fixture is a PlantItem that is part of Equipment and therefore not capable of independently realizing a ProcessStep. The function of a PlantItem essentially depends on the required Fixtures.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&plant;#PlantItem"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Plant">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&plant;#GroupOfEquipment"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isExclusivelySubsystemOf"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="&xsd;#string"
+    >Plant</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#PlantItemInterface">
+    <rdfs:subClassOf rdf:resource="&system;#SystemInterface"/>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#Instrument">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Instrument is a devices used to measure or control multiple or complex material Properties.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&plant;#Instrumentation"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&plant;#hasConnector"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&plant;#InstrumentationConnection"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >2</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&plant;#hasConnector"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="InsideDiameter">
+    <rdfs:subClassOf rdf:resource="&geometry;#Diameter"/>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="OutsideDiameter"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#GroupOfEquipment">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A GroupOfEquipment is a Supersystem of Equipment that comprises of a number of Equipment, Piping and Instrumentation that realizes one or more CompositeProcessSteps.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&plant;#Instrumentation"/>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&plant;#Equipment"/>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&plant;#Equipment"/>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&plant;#Piping"/>
+            <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&plant;#PieceOfEquipment"/>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#OutsideDiameter">
+    <rdfs:subClassOf rdf:resource="&geometry;#Diameter"/>
+    <owl:disjointWith rdf:resource="&plant;#InsideDiameter"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PlantItemProperty">
+    <rdfs:subClassOf rdf:resource="&system;#Property"/>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#PipeFitting">
+    <rdfs:subClassOf rdf:resource="&plant;#Piping"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Fittings are used in PipingNetworks to connect straight Pipe sections, to adapt to different sizes or shapes or forking of Piping.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&plant;#PipingNetwork"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&plant;#Pipe"/>
+    <owl:disjointWith rdf:resource="&plant;#PipeSegment"/>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#Nozzle">
+    <owl:disjointWith rdf:resource="&plant;#PipeSegmentEnd"/>
+    <owl:disjointWith rdf:resource="&plant;#InstrumentationConnection"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&plant;#InstrumentationConnection"/>
+              <owl:Class rdf:about="&plant;#PipeSegmentEnd"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&plant;#PlantItemInterface"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Nozzle represents the interface through which a plant item that owns it can be connected to another PlantItem or to the environment of a Plant.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Apparatus">
+    <rdfs:subClassOf rdf:resource="&plant;#PieceOfEquipment"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Apparatus is a PieceOfEquipment which mainly consists of non-moving parts and provides space for materials to be processed.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Machine"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="WeirHeight">
+    <rdfs:subClassOf rdf:resource="&geometry;#Height"/>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#Instrumentation">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Instrumentation is about measuring and control. Instrumentation may comprise instruments as well as loops.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&plant;#Fixture"/>
+    <owl:disjointWith rdf:resource="&plant;#Piping"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&plant;#Equipment"/>
+    </owl:disjointWith>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&plant;#Instrument"/>
+          <owl:Class rdf:about="&plant;#Loop"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="&plant;#PlantItem"/>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#Machine">
+    <rdfs:subClassOf rdf:resource="&plant;#PieceOfEquipment"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasEfficiency"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasPowerOutput"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&plant;#Apparatus"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Machine is any mechanical or electrical device that transmits or modifies energy to perform or assist in the desired performance</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#Equipment">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&plant;#PieceOfEquipment"/>
+          <owl:Class rdf:about="&plant;#GroupOfEquipment"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Equipment is a PlantIitem that is capable of independently realizing one or more Process Steps.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&plant;#Instrumentation"/>
+    <owl:disjointWith rdf:resource="&plant;#Fixture"/>
+    <owl:disjointWith rdf:resource="&plant;#Piping"/>
+    <rdfs:subClassOf rdf:resource="&plant;#PlantItem"/>
+  </owl:Class>
+  <owl:Class rdf:about="&plant;#PipingNetwork">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="&plant;#PipeFitting"/>
+                    <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+                  </owl:Restriction>
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="&plant;#Pipe"/>
+                    <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+                <owl:someValuesFrom rdf:resource="&plant;#Pipe"/>
+              </owl:Restriction>
+            </owl:unionOf>
+          </owl:Class>
+          <owl:Class rdf:about="&plant;#Piping"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&plant;#PipeFitting"/>
+    <owl:disjointWith rdf:resource="&plant;#Pipe"/>
+    <owl:disjointWith rdf:resource="&plant;#PipeSegment"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PipingNetwork is an agglomeration of Pipes and PipeFittings used to connect multiple PiecesOfEquipment.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&plant;#PipingNetwork"/>
+        <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&plant;#hasPowerOutput">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:domain rdf:resource="&plant;#Machine"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasPowerOutput indicates a machine’s magnitude of power output.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasMultiplicity">
+    <rdfs:range rdf:resource="&plant;#Multiplicity"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&plant;#indicatesMultiplicityOf"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="&multiset;#hasMultiplicity"/>
+    <rdfs:domain rdf:resource="&plant;#PlantItem"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasNumberOfPlantItems">
+    <rdfs:range rdf:resource="&plant;#Multiplicity"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#isInvolvedInN-aryRelation"/>
+    <rdfs:domain rdf:resource="&plant;#PlantItem"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasInsideDiameter">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasDiameter indicates an equipment’s inside diameter.</rdfs:comment>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&plant;#PieceOfEquipment"/>
+          <owl:Class rdf:about="&plant;#Instrument"/>
+          <owl:Class rdf:about="&plant;#Pipe"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTrayNumberingConvention">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTEMAClass">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasOutsideDiameter">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:domain rdf:resource="&plant;#PlantItem"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&plant;#hasConnector">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&plant;#Instrument"/>
+          <owl:Class rdf:about="&plant;#PieceOfEquipment"/>
+          <owl:Class rdf:about="&plant;#PipeSegment"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:subPropertyOf rdf:resource="&system;#isComposedOfSubsystem"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="isConnectorOf"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasConnector refers from a PieceOfEquipment or a PipeSegment or an Instrument to the corresponding PlantItemInterface.</rdfs:comment>
+    <rdfs:range rdf:resource="&plant;#PlantItemInterface"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasHeight">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasHeight refers the height of equipment.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:domain rdf:resource="&plant;#PieceOfEquipment"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&plant;#hasFixture">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasFixture refers from a Equipment to the corresponding Fixture.</rdfs:comment>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="isFixtureOf"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="&plant;#Equipment"/>
+    <rdfs:range rdf:resource="&plant;#Fixture"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#isComposedOfSubsystem"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&plant;#isConnectorOf">
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&plant;#PieceOfEquipment"/>
+          <owl:Class rdf:about="&plant;#Instrument"/>
+          <owl:Class rdf:about="&plant;#PipeSegment"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <owl:inverseOf rdf:resource="&plant;#hasConnector"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isConnectorOf refers from a PlantItemInterface to the corresponding piece of EquipmentOrPipeSegmentOrInstrument.</rdfs:comment>
+    <rdfs:domain rdf:resource="&plant;#PlantItemInterface"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#isExclusivelySubsystemOf"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&plant;#indicatesMultiplicityOf">
+    <rdfs:domain rdf:resource="&plant;#Multiplicity"/>
+    <owl:inverseOf rdf:resource="&plant;#hasMultiplicity"/>
+    <rdfs:subPropertyOf rdf:resource="&multiset;#indicatesMultiplicityOf"/>
+    <rdfs:range rdf:resource="&plant;#PlantItem"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCapacity">
+    <rdfs:domain rdf:resource="&plant;#Equipment"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasCapacity indicates equipment’s capacity.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&plant;#hasConstructionMaterial">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasConstructionMaterial refers to the Material chosen for construction of PlantItems.</rdfs:comment>
+    <rdfs:range rdf:resource="&substance;#Substance"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdfs:domain rdf:resource="&plant;#PlantItem"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&plant;#isFixtureOf">
+    <rdfs:subPropertyOf rdf:resource="&system;#isExclusivelySubsystemOf"/>
+    <rdfs:domain rdf:resource="&plant;#Fixture"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isFixtureOf refers from a Fixture to the corresponding Equipment.</rdfs:comment>
+    <rdfs:range rdf:resource="&plant;#Equipment"/>
+    <owl:inverseOf rdf:resource="&plant;#hasFixture"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&plant;#hasEfficiency">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:domain rdf:resource="&plant;#Equipment"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasPumpEfficiency indicates a machine’s efficiency</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="&plant;#multiplicity">
+    <rdfs:domain rdf:resource="&plant;#Multiplicity"/>
+    <rdfs:range rdf:resource="&xsd;#int"/>
+    <rdfs:subPropertyOf rdf:resource="&multiset;#multiplicity"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="has_number_of_tube_passes_per_shell">
+    <rdfs:range rdf:resource="&xsd;#int"/>
+  </owl:DatatypeProperty>
+  <owl:AllDifferent/>
+</rdf:RDF>

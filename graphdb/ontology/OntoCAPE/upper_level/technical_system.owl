@@ -1,0 +1,777 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY system "file:/ontology/OntoCAPE/upper_level/system.owl#" >
+    <!ENTITY technical_system "file:/ontology/OntoCAPE/upper_level/technical_system.owl#" >
+    <!ENTITY fundamental_concepts "file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#" >
+]>
+
+
+<rdf:RDF xmlns="file:/ontology/OntoCAPE/upper_level/technical_system.owl#"
+     xml:base="file:/ontology/OntoCAPE/upper_level/technical_system.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:system="file:/ontology/OntoCAPE/upper_level/system.owl#"
+     xmlns:fundamental_concepts="file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:terms="http://purl.org/dc/terms/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:technical_system="file:/ontology/OntoCAPE/upper_level/technical_system.owl#">
+    <owl:Ontology rdf:about="">
+        <owl:versionInfo rdf:datatype="&xsd;string">2.0</owl:versionInfo>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The ontology module &#39;technical_system&#39; introduces the class TechnicalSystem and its major AspectSystems. A TechnicalSystem is a special type of a system which has been developed through an engineering design process in order to fulfill some required function.
+The following classes and relations of other ontology modules are used within &#39;technical_system&#39;:
+
+&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#Aspect&quot;&gt;
+&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#AspectSystem&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#PhysicalDimension&quot;&gt;
+&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#Property&quot;&gt;
+&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#System&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#UnitOfMeasure&quot;&gt;
+
+&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#hasAspectSystem&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isConsideredUnderAspectOf&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isDirectlyRelatedTo&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#representsAspectOf&quot;/&gt;
+
+The following classes and relations of the Meta Model are used (i.e., refined) within &#39;technical_system&#39;:
+
+&lt;owl:Class rdf:about=&quot;file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#NonExhaustiveValueSet&quot;/&gt;
+
+&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#object-featureRelation&quot;/&gt;</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+        <owl:imports rdf:resource="file:/ontology/OntoCAPE/upper_level/system.owl"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#hasAspectSystem -->
+
+    <owl:ObjectProperty rdf:about="&system;hasAspectSystem"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isConsideredUnderAspectOf -->
+
+    <owl:ObjectProperty rdf:about="&system;isConsideredUnderAspectOf"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isDirectlyRelatedTo -->
+
+    <owl:ObjectProperty rdf:about="&system;isDirectlyRelatedTo"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#representsAspectOf -->
+
+    <owl:ObjectProperty rdf:about="&system;representsAspectOf"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#constrains -->
+
+    <owl:ObjectProperty rdf:about="#constrains">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The constrains relation indicates that a SystemRealization imposes constraints on the SystemBehavior.</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="&system;isDirectlyRelatedTo"/>
+        <rdfs:range rdf:resource="#SystemBehavior"/>
+        <rdfs:domain rdf:resource="#SystemRealization"/>
+        <owl:inverseOf rdf:resource="#isConstrainedBy"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#evaluates -->
+
+    <owl:ObjectProperty rdf:about="#evaluates">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation Evaluates refers from a performance measure to the AspectSystem the performance of which is evaluated.</rdfs:comment>
+        <rdfs:range rdf:resource="&system;AspectSystem"/>
+        <rdfs:subPropertyOf rdf:resource="&system;isDirectlyRelatedTo"/>
+        <rdfs:domain rdf:resource="#SystemPerformance"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#fulfills -->
+
+    <owl:ObjectProperty rdf:about="#fulfills">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The Fulfills relation states that a SystemFunction fulfills a particular SystemRequirement.</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="&system;isDirectlyRelatedTo"/>
+        <rdfs:domain rdf:resource="#SystemFunction"/>
+        <rdfs:range rdf:resource="#SystemRequirements"/>
+        <owl:inverseOf rdf:resource="#isAchievedThrough"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#hasBehavioralAspect -->
+
+    <owl:ObjectProperty rdf:about="#hasBehavioralAspect">
+        <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation points to the behavioral aspect of a TechnicalSystem.</rdfs:comment>
+        <rdfs:domain rdf:resource="&system;System"/>
+        <rdfs:subPropertyOf rdf:resource="&system;hasAspectSystem"/>
+        <rdfs:range rdf:resource="#SystemBehavior"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#hasFunctionalAspect -->
+
+    <owl:ObjectProperty rdf:about="#hasFunctionalAspect">
+        <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation points to the functional aspect of a TechnicalSystem.</rdfs:comment>
+        <rdfs:domain rdf:resource="&system;System"/>
+        <rdfs:subPropertyOf rdf:resource="&system;hasAspectSystem"/>
+        <rdfs:range rdf:resource="#SystemFunction"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#hasPerformanceAspect -->
+
+    <owl:ObjectProperty rdf:about="#hasPerformanceAspect">
+        <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation points to the performance aspect of a TechnicalSystem.</rdfs:comment>
+        <rdfs:domain rdf:resource="&system;System"/>
+        <rdfs:subPropertyOf rdf:resource="&system;hasAspectSystem"/>
+        <rdfs:range rdf:resource="#SystemPerformance"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#hasPerformanceMeasure -->
+
+    <owl:ObjectProperty rdf:about="#hasPerformanceMeasure">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation hasPerformance points from an AspectSystem, the performance of which is evaluated, to the performance measure.</rdfs:comment>
+        <rdfs:domain rdf:resource="&system;AspectSystem"/>
+        <rdfs:subPropertyOf rdf:resource="&system;isDirectlyRelatedTo"/>
+        <rdfs:range rdf:resource="#SystemPerformance"/>
+        <owl:inverseOf rdf:resource="#evaluates"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#hasPhenomenon -->
+
+    <owl:ObjectProperty rdf:about="#hasPhenomenon">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation hasPhenomenon assings a Phenomenon to a SystemBehavior.</rdfs:comment>
+        <rdfs:range rdf:resource="#Phenomenon"/>
+        <rdfs:domain rdf:resource="#SystemBehavior"/>
+        <rdfs:subPropertyOf rdf:resource="&fundamental_concepts;object-featureRelation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#hasRealizationAspect -->
+
+    <owl:ObjectProperty rdf:about="#hasRealizationAspect">
+        <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation points to the realization aspect of a TechnicalSystem.</rdfs:comment>
+        <rdfs:domain rdf:resource="&system;System"/>
+        <rdfs:subPropertyOf rdf:resource="&system;hasAspectSystem"/>
+        <rdfs:range rdf:resource="#SystemRealization"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#hasRequirementsAspect -->
+
+    <owl:ObjectProperty rdf:about="#hasRequirementsAspect">
+        <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation points to the requirements aspect of a TechnicalSystem.</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="&system;hasAspectSystem"/>
+        <rdfs:range rdf:resource="#SystemRequirements"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#isAchievedThrough -->
+
+    <owl:ObjectProperty rdf:about="#isAchievedThrough">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation isAchievedThrough states that a SystemRequirement can be achieved by means of a some SystemFunction.</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="&system;isDirectlyRelatedTo"/>
+        <rdfs:range rdf:resource="#SystemFunction"/>
+        <rdfs:domain rdf:resource="#SystemRequirements"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#isConstrainedBy -->
+
+    <owl:ObjectProperty rdf:about="#isConstrainedBy">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The constrains relation states that the SystemBehavior is limited by the constraints imposed by the SystemRealization.</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="&system;isDirectlyRelatedTo"/>
+        <rdfs:domain rdf:resource="#SystemBehavior"/>
+        <rdfs:range rdf:resource="#SystemRealization"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#isInfluencedBy -->
+
+    <owl:ObjectProperty rdf:about="#isInfluencedBy">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation indicates which Properties are influenced by a particular Phenomenon.</rdfs:comment>
+        <rdfs:domain rdf:resource="&system;Property"/>
+        <rdfs:range rdf:resource="#Phenomenon"/>
+        <rdfs:subPropertyOf rdf:resource="&fundamental_concepts;object-featureRelation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#isRealizedBy -->
+
+    <owl:ObjectProperty rdf:about="#isRealizedBy">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation isRealizedBy states that a SystemFunction is implemented by some SystemRealization.</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="&system;isDirectlyRelatedTo"/>
+        <rdfs:domain rdf:resource="#SystemFunction"/>
+        <rdfs:range rdf:resource="#SystemRealization"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#realizes -->
+
+    <owl:ObjectProperty rdf:about="#realizes">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation realizes states that a SystemRealization implements a particular SystemFunction.</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="&system;isDirectlyRelatedTo"/>
+        <rdfs:range rdf:resource="#SystemFunction"/>
+        <rdfs:domain rdf:resource="#SystemRealization"/>
+        <owl:inverseOf rdf:resource="#isRealizedBy"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#representsBehaviorOf -->
+
+    <owl:ObjectProperty rdf:about="#representsBehaviorOf">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation refers from a SystemBehavior to the overall TechnicalSystem.</rdfs:comment>
+        <rdfs:range rdf:resource="&system;System"/>
+        <rdfs:subPropertyOf rdf:resource="&system;representsAspectOf"/>
+        <rdfs:domain rdf:resource="#SystemBehavior"/>
+        <owl:inverseOf rdf:resource="#hasBehavioralAspect"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#representsFunctionOf -->
+
+    <owl:ObjectProperty rdf:about="#representsFunctionOf">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation refers from a SystemFunction to the overall TechnicalSystem.</rdfs:comment>
+        <rdfs:range rdf:resource="&system;System"/>
+        <rdfs:subPropertyOf rdf:resource="&system;representsAspectOf"/>
+        <rdfs:domain rdf:resource="#SystemFunction"/>
+        <owl:inverseOf rdf:resource="#hasFunctionalAspect"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#representsPerformanceOf -->
+
+    <owl:ObjectProperty rdf:about="#representsPerformanceOf">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation refers from a SystemPerformance to the overall TechnicalSystem.</rdfs:comment>
+        <rdfs:range rdf:resource="&system;System"/>
+        <rdfs:subPropertyOf rdf:resource="&system;representsAspectOf"/>
+        <rdfs:domain rdf:resource="#SystemPerformance"/>
+        <owl:inverseOf rdf:resource="#hasPerformanceAspect"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#representsRealizationOf -->
+
+    <owl:ObjectProperty rdf:about="#representsRealizationOf">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation refers from a SystemRealization to the overall TechnicalSystem.</rdfs:comment>
+        <rdfs:range rdf:resource="&system;System"/>
+        <rdfs:subPropertyOf rdf:resource="&system;representsAspectOf"/>
+        <rdfs:domain rdf:resource="#SystemRealization"/>
+        <owl:inverseOf rdf:resource="#hasRealizationAspect"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#representsRequirementsOf -->
+
+    <owl:ObjectProperty rdf:about="#representsRequirementsOf">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation refers from the SystemRequirements to the overall TechnicalSystem.</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="&system;representsAspectOf"/>
+        <rdfs:domain rdf:resource="#SystemRequirements"/>
+        <owl:inverseOf rdf:resource="#hasRequirementsAspect"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#object-featureRelation -->
+
+    <owl:ObjectProperty rdf:about="&fundamental_concepts;object-featureRelation"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#Aspect -->
+
+    <owl:Class rdf:about="&system;Aspect">
+        <owl:disjointWith rdf:resource="#Phenomenon"/>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#AspectSystem -->
+
+    <owl:Class rdf:about="&system;AspectSystem"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#PhysicalDimension -->
+
+    <owl:Class rdf:about="&system;PhysicalDimension">
+        <owl:disjointWith rdf:resource="#Phenomenon"/>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#Property -->
+
+    <owl:Class rdf:about="&system;Property">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#isInfluencedBy"/>
+                <owl:allValuesFrom rdf:resource="#Phenomenon"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#System -->
+
+    <owl:Class rdf:about="&system;System"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#UnitOfMeasure -->
+
+    <owl:Class rdf:about="&system;UnitOfMeasure">
+        <owl:disjointWith rdf:resource="#Phenomenon"/>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#Phenomenon -->
+
+    <owl:Class rdf:about="#Phenomenon">
+        <rdfs:subClassOf rdf:resource="&fundamental_concepts;NonExhaustiveValueSet"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A Phenomenon denotes a typical mode of behavior exhibited by a TechnicalSystem, thus providing a qualitative description of a recurring SystemBehavior.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#SystemBehavior -->
+
+    <owl:Class rdf:about="#SystemBehavior">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#representsBehaviorOf"/>
+                <owl:someValuesFrom rdf:resource="#TechnicalSystem"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="&system;AspectSystem"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;isConsideredUnderAspectOf"/>
+                <owl:hasValue rdf:resource="#behavior"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasPhenomenon"/>
+                <owl:allValuesFrom rdf:resource="#Phenomenon"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasPerformanceMeasure"/>
+                <owl:allValuesFrom rdf:resource="#SystemPerformance"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#isConstrainedBy"/>
+                <owl:allValuesFrom rdf:resource="#SystemRealization"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="#SystemFunction"/>
+        <owl:disjointWith rdf:resource="#SystemPerformance"/>
+        <owl:disjointWith rdf:resource="#SystemRealization"/>
+        <owl:disjointWith rdf:resource="#SystemRequirements"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The SystemBehavior describes how a TechnicalSystem operates under certain conditions; this description can be of qualitative or quantitative nature.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#SystemFunction -->
+
+    <owl:Class rdf:about="#SystemFunction">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#representsFunctionOf"/>
+                <owl:someValuesFrom rdf:resource="#TechnicalSystem"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="&system;AspectSystem"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasPerformanceMeasure"/>
+                <owl:allValuesFrom rdf:resource="#SystemPerformance"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#fulfills"/>
+                <owl:allValuesFrom rdf:resource="#SystemRequirements"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#isRealizedBy"/>
+                <owl:allValuesFrom rdf:resource="#SystemRealization"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;isConsideredUnderAspectOf"/>
+                <owl:hasValue rdf:resource="#function"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="#SystemPerformance"/>
+        <owl:disjointWith rdf:resource="#SystemRealization"/>
+        <owl:disjointWith rdf:resource="#SystemRequirements"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A system function describes the desired behavior of a technical system from a de-vice-centric perspective (cf. Chandrasekaran and Josephson 2000). To indicate the system function of a technical system, the conceptual design of the technical system must be specified in terms of the underlying physicochemical and/or technical principles. </rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#SystemPerformance -->
+
+    <owl:Class rdf:about="#SystemPerformance">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#representsPerformanceOf"/>
+                <owl:someValuesFrom rdf:resource="#TechnicalSystem"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="&system;AspectSystem"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;isConsideredUnderAspectOf"/>
+                <owl:hasValue rdf:resource="#performance"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#evaluates"/>
+                <owl:allValuesFrom rdf:resource="&system;AspectSystem"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="#SystemRealization"/>
+        <owl:disjointWith rdf:resource="#SystemRequirements"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The system performance concept constitutes a performance measure for the evalua-tion and benchmarking of technical systems. Different performance measures are possible, depending on the chosen evaluation criterion. Typical criteria would be safety, reliability, ecological performance, and economic performance. </rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#SystemRealization -->
+
+    <owl:Class rdf:about="#SystemRealization">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#representsRealizationOf"/>
+                <owl:someValuesFrom rdf:resource="#TechnicalSystem"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="&system;AspectSystem"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;isConsideredUnderAspectOf"/>
+                <owl:hasValue rdf:resource="#realization"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#realizes"/>
+                <owl:allValuesFrom rdf:resource="#SystemFunction"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasPerformanceMeasure"/>
+                <owl:allValuesFrom rdf:resource="#SystemPerformance"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#constrains"/>
+                <owl:allValuesFrom rdf:resource="#SystemBehavior"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="#SystemRequirements"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The SystemRealization represents the physical (or virtual) constitution of the TechnicalSystem. In case of a physical system, the SystemRealization describes the system&#8217;s physical structure, including its geometrical and mechanical properties. In case of a non-physical system, the SystemRealization reflects the logical or abstract structure of the system; moreover, it may describe the (physical) implementation of the non-physical system.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#SystemRequirements -->
+
+    <owl:Class rdf:about="#SystemRequirements">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#representsRequirementsOf"/>
+                <owl:someValuesFrom rdf:resource="#TechnicalSystem"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="&system;AspectSystem"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;isConsideredUnderAspectOf"/>
+                <owl:hasValue rdf:resource="#requirements"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#isAchievedThrough"/>
+                <owl:allValuesFrom rdf:resource="#SystemFunction"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasPerformanceMeasure"/>
+                <owl:allValuesFrom rdf:resource="#SystemPerformance"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The system requirements specify the desired behavior of a technical system from an environment-centric perspective (cf. Chandrasekaran and Josephson 2000). From the perspective of systems requirements, the technical system is viewed as a black box: Its structure and the underling physical and technical principles are not con-sidered; only the effect on the environment is specified. </rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#TechnicalSystem -->
+
+    <owl:Class rdf:about="#TechnicalSystem">
+        <rdfs:subClassOf rdf:resource="&system;System"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasRealizationAspect"/>
+                <owl:allValuesFrom rdf:resource="#SystemRealization"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasRealizationAspect"/>
+                <owl:maxCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasBehavioralAspect"/>
+                <owl:maxCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasFunctionalAspect"/>
+                <owl:maxCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasRequirementsAspect"/>
+                <owl:allValuesFrom rdf:resource="#SystemRequirements"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasRequirementsAspect"/>
+                <owl:maxCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasFunctionalAspect"/>
+                <owl:allValuesFrom rdf:resource="#SystemFunction"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasPerformanceAspect"/>
+                <owl:allValuesFrom rdf:resource="#SystemPerformance"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasPerformanceAspect"/>
+                <owl:maxCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasBehavioralAspect"/>
+                <owl:allValuesFrom rdf:resource="#SystemBehavior"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A TechnicalSystem is a System which has been developed in an engineering design process. The criterion to qualify as a TechnicalSystem is &#8220;to be designed in order to fulfill some required function&#8221; (Bayer, 2003). Thus, the TechnicalSystem concept may denote all kind of technical artifacts, such as chemical plants, cars, computer systems, or infrastructure systems like a sewage water system. But also non-technical artifacts like chemical products and even non-physical artifacts, such as software programs or mathematical models, can be considered as Technical Systems.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#NonExhaustiveValueSet -->
+
+    <owl:Class rdf:about="&fundamental_concepts;NonExhaustiveValueSet"/>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <owl:Class rdf:about="&owl;Thing"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#behavior -->
+
+    <system:Aspect rdf:about="#behavior">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >Explicitly designates a behavioral AspectSystem.</rdfs:comment>
+    </system:Aspect>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#function -->
+
+    <system:Aspect rdf:about="#function">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >Explicitly designates a functional AspectSystem.</rdfs:comment>
+    </system:Aspect>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#performance -->
+
+    <system:Aspect rdf:about="#performance">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >Explicitly designates an AspectSystem that represents the aspect of performance.</rdfs:comment>
+    </system:Aspect>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#realization -->
+
+    <system:Aspect rdf:about="#realization">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >Explicitly designates an AspectSystem that represents the aspect of realization.</rdfs:comment>
+    </system:Aspect>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#requirements -->
+
+    <system:Aspect rdf:about="#requirements">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >Explicitly designates an AspectSystem that represents the aspect of requirements.</rdfs:comment>
+    </system:Aspect>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDifferent"/>
+        <owl:distinctMembers rdf:parseType="Collection">
+            <rdf:Description rdf:about="#requirements"/>
+            <rdf:Description rdf:about="#performance"/>
+            <rdf:Description rdf:about="#behavior"/>
+            <rdf:Description rdf:about="#realization"/>
+            <rdf:Description rdf:about="#function"/>
+        </owl:distinctMembers>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.842) http://owlapi.sourceforge.net -->
+

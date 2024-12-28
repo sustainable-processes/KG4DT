@@ -1,0 +1,1816 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY material "file:/ontology/OntoCAPE/material/material.owl#" >
+    <!ENTITY system "file:/ontology/OntoCAPE/upper_level/system.owl#" >
+    <!ENTITY multiset "file:/ontology/meta_model/data_structures/multiset.owl#" >
+    <!ENTITY network_system "file:/ontology/OntoCAPE/upper_level/network_system.owl#" >
+    <!ENTITY technical_system "file:/ontology/OntoCAPE/upper_level/technical_system.owl#" >
+    <!ENTITY substance "file:/ontology/OntoCAPE/material/substance/substance.owl#" >
+    <!ENTITY coordinate_system "file:/ontology/OntoCAPE/upper_level/coordinate_system.owl#" >
+    <!ENTITY phase_system "file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#" >
+    <!ENTITY geometry "file:/ontology/OntoCAPE/supporting_concepts/geometry/geometry.owl#" >
+    <!ENTITY fundamental_concepts "file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#" >
+    <!ENTITY behavior "file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#" >
+    <!ENTITY space_time "file:/ontology/OntoCAPE/supporting_concepts/space_and_time/space_and_time.owl#" >
+]>
+
+
+<rdf:RDF xmlns="file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#"
+     xml:base="file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl"
+     xmlns:multiset="file:/ontology/meta_model/data_structures/multiset.owl#"
+     xmlns:coordinate_system="file:/ontology/OntoCAPE/upper_level/coordinate_system.owl#"
+     xmlns:behavior="file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#"
+     xmlns:technical_system="file:/ontology/OntoCAPE/upper_level/technical_system.owl#"
+     xmlns:phase_system="file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#"
+     xmlns:space_time="file:/ontology/OntoCAPE/supporting_concepts/space_and_time/space_and_time.owl#"
+     xmlns:material="file:/ontology/OntoCAPE/material/material.owl#"
+     xmlns:geometry="file:/ontology/OntoCAPE/supporting_concepts/geometry/geometry.owl#"
+     xmlns:substance="file:/ontology/OntoCAPE/material/substance/substance.owl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:fundamental_concepts="file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
+     xmlns:system="file:/ontology/OntoCAPE/upper_level/system.owl#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:network_system="file:/ontology/OntoCAPE/upper_level/network_system.owl#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:terms="http://purl.org/dc/terms/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="">
+        <owl:versionInfo rdf:datatype="&xsd;string">2.0</owl:versionInfo>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The ontology module &#39;behavior&#39; provides concepts for the phenomenological driven behavior of chemical process systems.
+The following classes and relations from other ontology modules are used within &#39;behavior&#39;:
+    
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/material/material.owl#Material&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/geometry/geometry.owl#Solid&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/geometry/geometry.owl#Surface&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ChemicalReaction&quot;/&gt;    
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/space_and_time/space_and_time.owl#SpatialCoordinateSystem&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/space_and_time/space_and_time.owl#SpatialCoordinateSystemAxis&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/material/substance/substance.owl#ChemicalComponent&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/material/substance/substance.owl#Substance&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/meta_model/data_structures/multiset.owl#Multiplicity&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#QuantitativeValue&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/technical_system.owl#Phenomenon&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/coordinate_system.owl#CoordinateValue&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/space_and_time/space_and_time.owl#SpatialCoordinate&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/geometry/geometry.owl#Surface&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/network_system.owl#Connection&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#PhysicalQuantity&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#IntensiveProperty&quot;/&gt;
+ &lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/network_system.owl#Device&quot;/&gt;
+ 
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/geometry/geometry.owl#hasShapeRepresentation&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/geometry/geometry.owl#hasSurfaceGeometry&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#hasProperty&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/technical_system.owl#hasPhenomenon&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isObservedAgainstBackdrop&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isValueOf&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#hasValue&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isDirectSubsystemOf&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#hasDirectSubsystem&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/network_system.owl#leaves&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/network_system.owl#enters&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isDirectlyConnectedTo&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#containsDirectly&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/network_system.owl#hasOutput&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/network_system.owl#hasInput&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/meta_model/data_structures/multiset.owl#refersToMultiset&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isDirectlyRelatedTo&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/meta_model/data_structures/multiset.owl#indicatesMultiplicityOf&quot;/&gt;
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/meta_model/data_structures/multiset.owl#hasMultiplicity&quot;/&gt;
+ 
+ 
+ The following classes and relations from the Meta Model are refined within &#39;mathematical_model&#39;:
+ 
+ &lt;owl:Class rdf:about=&quot;fc;#ValueSet&quot;/&gt;
+ 
+ &lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#object-featureRelation&quot;/&gt;</rdfs:comment>
+ <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+ </terms:license>
+        <owl:imports rdf:resource="file:/ontology/OntoCAPE/material/material.owl"/>
+        <owl:imports rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/geometry/geometry.owl"/>
+        <owl:imports rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/space_and_time/space_and_time.owl"/>
+        <owl:imports rdf:resource="file:/ontology/OntoCAPE/upper_level/technical_system.owl"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#hasFraction -->
+
+    <owl:ObjectProperty rdf:about="#hasFraction">
+        <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation hasFraction indicates the fractional amount a RepresentativeParticle may have in a DistributedMaterialAmount.</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="&multiset;hasMultiplicity"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#hasHeatDuty -->
+
+    <owl:ObjectProperty rdf:about="#hasHeatDuty">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation hasHeatDuty indicates the amount of heat absorbed by a ParticularSystem.</rdfs:comment>
+        <rdfs:range rdf:resource="#MassTransferCoefficient"/>
+        <rdfs:subPropertyOf rdf:resource="&system;hasProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#hasPermeability -->
+
+    <owl:ObjectProperty rdf:about="#hasPermeability">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation hasPermeability indicates whether or not a MaterialAmountConnection has a selectivity for certain ChemicalComponents.</rdfs:comment>
+        <rdfs:domain rdf:resource="#MaterialAmountConnection"/>
+        <rdfs:range rdf:resource="#Permeability"/>
+        <rdfs:subPropertyOf rdf:resource="&fundamental_concepts;object-featureRelation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#hasPermeableChemicalComponent -->
+
+    <owl:ObjectProperty rdf:about="#hasPermeableChemicalComponent">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation hasPermeableChemicalComponent indicates which ChemicalComponent may pass and diffuse through a certain MaterialAmountConnection.</rdfs:comment>
+        <rdfs:domain rdf:resource="#MaterialAmountConnection"/>
+        <rdfs:range rdf:resource="&substance;ChemicalComponent"/>
+        <rdfs:subPropertyOf rdf:resource="&system;isDirectlyRelatedTo"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#hasPressureDrop -->
+
+    <owl:ObjectProperty rdf:about="#hasPressureDrop">
+        <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation hasProperty assigns a particular PressureDrop to a chosen System.</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="&system;hasProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#hasRepresentativeParticle -->
+
+    <owl:ObjectProperty rdf:about="#hasRepresentativeParticle">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation hasRepresentativeParticle assigns a particular RepresentativeParticle to a DistributedMaterialAmount for a qualitative description of the System.</rdfs:comment>
+        <rdfs:domain rdf:resource="#ParticulateMaterialAmount"/>
+        <rdfs:subPropertyOf rdf:resource="&system;containsDirectly"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#indicatesFraction -->
+
+    <owl:ObjectProperty rdf:about="#indicatesFraction">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation indicatesFraction refers a certain fraction to the corresponding Member.</rdfs:comment>
+        <owl:inverseOf rdf:resource="#hasFraction"/>
+        <rdfs:subPropertyOf rdf:resource="&multiset;indicatesMultiplicityOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#isDispersedIn -->
+
+    <owl:ObjectProperty rdf:about="#isDispersedIn">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation isDispersedIn indicates that a quantity of particles, namely DispersedMaterialAmount, is partly or totally dispersed in a ContinuousMaterialAmount.</rdfs:comment>
+        <rdfs:range rdf:resource="#ContinuousMaterialAmount"/>
+        <rdfs:domain rdf:resource="#DispersedMaterialAmount"/>
+        <owl:inverseOf rdf:resource="#surrounds"/>
+        <rdfs:subPropertyOf rdf:resource="&system;isDirectlyRelatedTo"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#refersToDistributedMaterialAmount -->
+
+    <owl:ObjectProperty rdf:about="#refersToDistributedMaterialAmount">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation refersToDistributedMaterialAmount assigns a particular fractional amount for qualitative description reasons to a DistributedMaterialAmount.</rdfs:comment>
+        <rdfs:domain rdf:resource="#FractionalAmount"/>
+        <rdfs:range rdf:resource="#ParticulateMaterialAmount"/>
+        <rdfs:subPropertyOf rdf:resource="&multiset;refersToMultiset"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#refersToMaterial -->
+
+    <owl:ObjectProperty rdf:about="#refersToMaterial">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation refersToMaterial indicates the dependencies between MaterialAmount and MaterialAmountConnection respectively on the one hand and the according Material on the other hand.</rdfs:comment>
+        <rdfs:range rdf:resource="&material;Material"/>
+        <rdfs:subPropertyOf rdf:resource="&system;isDirectlyRelatedTo"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#MaterialAmount"/>
+                    <rdf:Description rdf:about="#MaterialAmountConnection"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#surrounds -->
+
+    <owl:ObjectProperty rdf:about="#surrounds">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation surrounds describes that a ContinuousMaterialAmount surrounds a DispersedMaterialAmount.</rdfs:comment>
+        <rdfs:domain rdf:resource="#ContinuousMaterialAmount"/>
+        <rdfs:range rdf:resource="#DispersedMaterialAmount"/>
+        <rdfs:subPropertyOf rdf:resource="&system;isDirectlyRelatedTo"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/geometry/geometry.owl#hasShapeRepresentation -->
+
+    <owl:ObjectProperty rdf:about="&geometry;hasShapeRepresentation"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/geometry/geometry.owl#hasSurfaceGeometry -->
+
+    <owl:ObjectProperty rdf:about="&geometry;hasSurfaceGeometry"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/network_system.owl#enters -->
+
+    <owl:ObjectProperty rdf:about="&network_system;enters"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/network_system.owl#hasInput -->
+
+    <owl:ObjectProperty rdf:about="&network_system;hasInput"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/network_system.owl#hasOutput -->
+
+    <owl:ObjectProperty rdf:about="&network_system;hasOutput"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/network_system.owl#leaves -->
+
+    <owl:ObjectProperty rdf:about="&network_system;leaves"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#containsDirectly -->
+
+    <owl:ObjectProperty rdf:about="&system;containsDirectly"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#hasDirectSubsystem -->
+
+    <owl:ObjectProperty rdf:about="&system;hasDirectSubsystem"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#hasProperty -->
+
+    <owl:ObjectProperty rdf:about="&system;hasProperty"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#hasSubsystem -->
+
+    <owl:ObjectProperty rdf:about="&system;hasSubsystem"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isDirectSubsystemOf -->
+
+    <owl:ObjectProperty rdf:about="&system;isDirectSubsystemOf"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isDirectlyConnectedTo -->
+
+    <owl:ObjectProperty rdf:about="&system;isDirectlyConnectedTo"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isDirectlyRelatedTo -->
+
+    <owl:ObjectProperty rdf:about="&system;isDirectlyRelatedTo"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#hasPhenomenon -->
+
+    <owl:ObjectProperty rdf:about="&technical_system;hasPhenomenon"/>
+    
+
+
+    <!-- file:/ontology/meta_model/data_structures/multiset.owl#hasMultiplicity -->
+
+    <owl:ObjectProperty rdf:about="&multiset;hasMultiplicity"/>
+    
+
+
+    <!-- file:/ontology/meta_model/data_structures/multiset.owl#indicatesMultiplicityOf -->
+
+    <owl:ObjectProperty rdf:about="&multiset;indicatesMultiplicityOf"/>
+    
+
+
+    <!-- file:/ontology/meta_model/data_structures/multiset.owl#refersToMultiset -->
+
+    <owl:ObjectProperty rdf:about="&multiset;refersToMultiset"/>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#object-featureRelation -->
+
+    <owl:ObjectProperty rdf:about="&fundamental_concepts;object-featureRelation"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#Accumulation -->
+
+    <owl:Class rdf:about="#Accumulation">
+        <rdfs:subClassOf rdf:resource="#MaterialAmountPhenomenon"/>
+        <owl:disjointWith rdf:resource="#ChemicalReactionPhenomenon"/>
+        <owl:disjointWith rdf:resource="#FlowPattern"/>
+        <owl:disjointWith rdf:resource="#MolecularTransportPhenomenon"/>
+        <owl:disjointWith rdf:resource="#ParticlePhenomenon"/>
+        <owl:disjointWith rdf:resource="#PhysicalEquilibriumPhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >Accumulation is a MaterialAmountPhenomenon which denotes the accumulation of a certain extensive properties of the MaterialAmount considered.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#AdsorptionPhenomenon -->
+
+    <owl:Class rdf:about="#AdsorptionPhenomenon">
+        <rdfs:subClassOf rdf:resource="#SurfacePhenomenon"/>
+        <owl:disjointWith rdf:resource="#SurfaceReactionPhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >An AdsorptionPhenomenon is an increase in the concentration of a dissolved sub-stance at the interface of a solid and a liquid phase due to the operation of surface forces. Adsorption can also occur at the interface of a solid and a gaseous phase (McNaught &amp; Wilkinson 1997).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ChemicalReactionPhenomenon -->
+
+    <owl:Class rdf:about="#ChemicalReactionPhenomenon">
+        <rdfs:subClassOf rdf:resource="#MaterialAmountPhenomenon"/>
+        <owl:disjointWith rdf:resource="#FlowPattern"/>
+        <owl:disjointWith rdf:resource="#MolecularTransportPhenomenon"/>
+        <owl:disjointWith rdf:resource="#ParticlePhenomenon"/>
+        <owl:disjointWith rdf:resource="#PhysicalEquilibriumPhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A ChemicalReactionPhenomenon is a MaterialAmountPhenomenon in which some ChemicalComponent(s) are converted into some other ChemicalComponent(s).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ConductiveTransportRate -->
+
+    <owl:Class rdf:about="#ConductiveTransportRate">
+        <rdfs:subClassOf rdf:resource="#IntraphaseTransport"/>
+        <rdfs:comment
+            >A ConductiveTransportRate is the transfer of heat by direct contact of particles of matter within a phase per unit time</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ContinuousMaterialAmount -->
+
+    <owl:Class rdf:about="#ContinuousMaterialAmount">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#MaterialAmount"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="#surrounds"/>
+                        <owl:someValuesFrom rdf:resource="#DispersedMaterialAmount"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#surrounds"/>
+                <owl:allValuesFrom rdf:resource="#DispersedMaterialAmount"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="#DispersedMaterialAmount"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A ContinuousMaterialAmount  in a HeterogeneousMaterialAmount is the MaterialAmount in which the disperse phase is distributed, corresponding to the solvent in a true solution.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ConvectiveExchange -->
+
+    <owl:Class rdf:about="#ConvectiveExchange">
+        <rdfs:subClassOf rdf:resource="#Exchange"/>
+        <rdfs:comment
+            >ConvectiveExchange in the most general terms refers to the movement of molecules across the boundary of fluid phases which is the sum of advective and diffusive transport. </rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ConvectiveTransportRate -->
+
+    <owl:Class rdf:about="#ConvectiveTransportRate">
+        <rdfs:subClassOf rdf:resource="#IntraphaseTransport"/>
+        <rdfs:comment
+            >A ConvectiveTransportRate in the most general terms refers to the movement of molecules within fluid phases which is the sum of advective and diffusive transport.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#DispersedMaterialAmount -->
+
+    <owl:Class rdf:about="#DispersedMaterialAmount">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#MaterialAmount"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="#isDispersedIn"/>
+                        <owl:someValuesFrom rdf:resource="#ContinuousMaterialAmount"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A DispersedMaterialAmount is a MaterialAmount which is dispersed in some ContinuousMaterialAmount(s).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#DynamicViscosityOfNonNewtonFluid -->
+
+    <owl:Class rdf:about="#DynamicViscosityOfNonNewtonFluid">
+        <rdfs:subClassOf rdf:resource="#PhenomenologicalCoefficient"/>
+        <owl:disjointWith rdf:resource="#InterphaseTransportCoefficient"/>
+        <owl:disjointWith rdf:resource="#ReactionRateCoefficient"/>
+        <rdfs:comment
+            >DynamicViscosityOfNonNewtonianFluid is a property of non-Newtonian fluids which relates shear stress to shear rate. For a non-Newtonian fluid, this property is not a constant and can be dependent on shear rate or even time.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#EnergyHoldUp -->
+
+    <owl:Class rdf:about="#EnergyHoldUp">
+        <rdfs:subClassOf rdf:resource="#HoldUpVariation"/>
+        <rdfs:comment
+            >EnergyHoldUp refers to the accumulation of the overall energy in a material amount.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#Exchange -->
+
+    <owl:Class rdf:about="#Exchange">
+        <rdfs:subClassOf rdf:resource="#GeneralizedFluxes"/>
+        <rdfs:comment
+            >Exchange represents the transport of matter or energy across a phase boundary.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ExtensiveProperty -->
+
+    <owl:Class rdf:about="#ExtensiveProperty">
+        <rdfs:subClassOf rdf:resource="&system;PhysicalQuantity"/>
+        <rdfs:comment
+            >An ExtensiveProperty of a system depends on system size or on the amount of material in the system.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#FilmConnection -->
+
+    <owl:Class rdf:about="#FilmConnection">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#MaterialAmountConnection"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&technical_system;hasPhenomenon"/>
+                        <owl:someValuesFrom rdf:resource="#InterfaceTransportPhenomenon"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasPermeability"/>
+                <owl:allValuesFrom rdf:resource="#Permeability"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;hasProperty"/>
+                <owl:someValuesFrom rdf:resource="#InterphaseTransportCoefficient"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasPermeableChemicalComponent"/>
+                <owl:allValuesFrom rdf:resource="&substance;ChemicalComponent"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="#HeatRadiationConnection"/>
+        <owl:disjointWith rdf:resource="#ValveConnection"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A FilmConnection is a MaterialAmountConnection dominated by an interface molecular transport phenomenon. It is used to describe molecular transport across the phase interface between two contiguous material amounts or molecular transport through some media with negligible capacity which separates two material amounts (e.g. a membrane between two fluids).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#FlowPattern -->
+
+    <owl:Class rdf:about="#FlowPattern">
+        <rdfs:subClassOf rdf:resource="#MaterialAmountPhenomenon"/>
+        <owl:disjointWith rdf:resource="#MolecularTransportPhenomenon"/>
+        <owl:disjointWith rdf:resource="#ParticlePhenomenon"/>
+        <owl:disjointWith rdf:resource="#PhysicalEquilibriumPhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >FlowPattern is a MaterialAmountPhenomenon which refers to the flow condition of a material amount.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#FluidFilm -->
+
+    <owl:Class rdf:about="#FluidFilm">
+        <rdfs:subClassOf rdf:resource="#SingleFilmConnection"/>
+        <rdfs:comment
+            >A FluidFilm represents a boundary layer occurring in a fluid phase which allows for conductive or diffusive transport.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#FractionalAmount -->
+
+    <owl:Class rdf:about="#FractionalAmount">
+        <rdfs:subClassOf rdf:resource="&multiset;Multiplicity"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#refersToDistributedMaterialAmount"/>
+                <owl:allValuesFrom rdf:resource="#ParticulateMaterialAmount"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#GeneralizedAmount -->
+
+    <owl:Class rdf:about="#GeneralizedAmount">
+        <rdfs:subClassOf rdf:resource="&system;System"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;hasSubsystem"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="#MaterialAmount"/>
+                            <rdf:Description rdf:about="#MaterialAmountConnection"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >GeneralizedAmount represents a generalization of MaterialAmount and MaterialAmountConnection, as it could be required for the definition of quantity-related properties at a stage of the functional description.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#GeneralizedFluxes -->
+
+    <owl:Class rdf:about="#GeneralizedFluxes">
+        <rdfs:subClassOf rdf:resource="&system;PhysicalQuantity"/>
+        <rdfs:comment
+            >GeneralizedFluxes  include the variation of holdup caused by the transport in a phase or across a phase boundary was well as sources of an extensive property caused by chemical reactios or some external potential field.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#HeatRadiationConnection -->
+
+    <owl:Class rdf:about="#HeatRadiationConnection">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#MaterialAmountConnection"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&technical_system;hasPhenomenon"/>
+                        <owl:hasValue rdf:resource="#heat_radiation"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;hasProperty"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="#DynamicViscosityOfNonNewtonFluid"/>
+                            <rdf:Description rdf:about="#ReactionRateCoefficient"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="#ValveConnection"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A HeatRadiationConnection is a MaterialAmountConnection whose dominating phenomenon is HeatRadiation.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#HeatTransferResistance -->
+
+    <owl:Class rdf:about="#HeatTransferResistance">
+        <rdfs:subClassOf rdf:resource="#InterphaseTransportCoefficient"/>
+        <owl:disjointWith rdf:resource="#MassTransferCoefficient"/>
+        <rdfs:comment
+            >A HeatTransferResistance is described by the ratio between the temperature difference and the average heat flow across the interface.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#HeterogeneousMaterialAmount -->
+
+    <owl:Class rdf:about="#HeterogeneousMaterialAmount">
+        <rdfs:subClassOf rdf:resource="#MaterialAmount"/>
+        <rdfs:comment
+            >A HeterogeneousMaterialAmount is a composite material amount that involves mate-rial amounts with different dispersion states due to phases or particle size.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#HoldUpVariation -->
+
+    <owl:Class rdf:about="#HoldUpVariation">
+        <rdfs:subClassOf rdf:resource="#GeneralizedFluxes"/>
+        <rdfs:comment
+            >HoldUpVariation refers to the accumulation of extensive properties over time and is influenced by accumulation phenomena.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#HomogeneousMaterialAmount -->
+
+    <owl:Class rdf:about="#HomogeneousMaterialAmount">
+        <rdfs:subClassOf rdf:resource="#MaterialAmount"/>
+        <rdfs:comment
+            >A HomogeneousMaterialAmount represents a MaterialAmount with a continuous, single phase which is not part of another more complex material amount.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#IdeallyMixedMaterialAmount -->
+
+    <owl:Class rdf:about="#IdeallyMixedMaterialAmount">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#MaterialAmount"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&technical_system;hasPhenomenon"/>
+                        <owl:hasValue rdf:resource="#ideal_mixing"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <owl:disjointWith rdf:resource="#MaterialAmountAxiom_SpatiallyDistributedIntensiveProperty"/>
+        <owl:disjointWith rdf:resource="#MaterialAmountWithMolecularTransportPhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A material amount which is ideally mixed cannot have
+- a molecular transport phenomenon 
+- an intensive material property which is distributed over a spatial domain</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ImpermeableValve -->
+
+    <owl:Class rdf:about="#ImpermeableValve">
+        <rdfs:subClassOf rdf:resource="#ValveConnection"/>
+        <owl:disjointWith rdf:resource="#PermeableValve"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >An ImpermeableValve refers to a convective mass transport where no material transport occurs at all due to a given local condition, e.g. a blockage in a pipeline.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#InterfaceHeatTransportPhenomenon -->
+
+    <owl:Class rdf:about="#InterfaceHeatTransportPhenomenon">
+        <rdfs:subClassOf rdf:resource="#InterfaceTransportPhenomenon"/>
+        <rdfs:comment
+            >An InterfaceHeatTransportPhenomenon is the transfer of thermal energy or simply heat from a hotter MaterialAmount to a cooler MaterialAmount driven by the temperature difference</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#InterfaceMassTransportPhenomenon -->
+
+    <owl:Class rdf:about="#InterfaceMassTransportPhenomenon">
+        <rdfs:subClassOf rdf:resource="#InterfaceTransportPhenomenon"/>
+        <rdfs:comment
+            >A InterfaceMassTransportPhenomenon is any mechanisms by which particles or quantities move from one MaterialAmounts to another. </rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#InterfaceTransportPhenomenon -->
+
+    <owl:Class rdf:about="#InterfaceTransportPhenomenon">
+        <rdfs:subClassOf rdf:resource="#MaterialAmountConnectionPhenomenon"/>
+        <owl:disjointWith rdf:resource="#SurfacePhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >InterfaceMolecularTransportPhenomenon subsumes transport phenomena that occur at the in-terface between two connected MaterialAmounts.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#InterphaseTransportCoefficient -->
+
+    <owl:Class rdf:about="#InterphaseTransportCoefficient">
+        <rdfs:subClassOf rdf:resource="#PhenomenologicalCoefficient"/>
+        <owl:disjointWith rdf:resource="#ReactionRateCoefficient"/>
+        <rdfs:comment
+            >An InterPhaseTransportCoefficient is any physical quantity that is forced by an interface transport phenomenon.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#IntraphaseTransport -->
+
+    <owl:Class rdf:about="#IntraphaseTransport">
+        <rdfs:subClassOf rdf:resource="#GeneralizedFluxes"/>
+        <rdfs:comment
+            >IntraphaseTransport considers all variants of heat and mass transfer that can occur with a particular phase</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#MassHoldUp -->
+
+    <owl:Class rdf:about="#MassHoldUp">
+        <rdfs:subClassOf rdf:resource="#HoldUpVariation"/>
+        <rdfs:comment
+            >MassHoldUp refers to the accumulation of the overall mass covered in a material amount.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#MassTransferCoefficient -->
+
+    <owl:Class rdf:about="#MassTransferCoefficient">
+        <rdfs:subClassOf rdf:resource="#InterphaseTransportCoefficient"/>
+        <rdfs:comment
+            >A MassTransferCoefficient is a constant that relates the mass transfer rate to the product of mass transfer area and an appropriate driving force such as the concen-tration gradient (Seader &amp; Henley 1998).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#MaterialAmount -->
+
+    <owl:Class rdf:about="#MaterialAmount">
+        <rdfs:subClassOf rdf:resource="&network_system;Device"/>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&system;hasDirectSubsystem"/>
+                        <owl:minCardinality rdf:datatype="&xsd;nonNegativeInteger">3</owl:minCardinality>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&system;hasDirectSubsystem"/>
+                        <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:cardinality>
+                    </owl:Restriction>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;hasDirectSubsystem"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="#MaterialAmount"/>
+                            <rdf:Description rdf:about="#MaterialAmountConnection"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;hasProperty"/>
+                <owl:someValuesFrom rdf:resource="#VelocityGradiant"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;isDirectlyConnectedTo"/>
+                <owl:allValuesFrom rdf:resource="#MaterialAmountConnection"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;isDirectSubsystemOf"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="#MaterialAmount"/>
+                            <rdf:Description rdf:about="#MaterialAmountConnection"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&technical_system;hasPhenomenon"/>
+                <owl:allValuesFrom rdf:resource="#MaterialAmountPhenomenon"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#refersToMaterial"/>
+                <owl:allValuesFrom rdf:resource="&material;Material"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&network_system;hasOutput"/>
+                <owl:allValuesFrom rdf:resource="#MaterialAmountConnection"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&geometry;hasShapeRepresentation"/>
+                <owl:allValuesFrom rdf:resource="&geometry;Solid"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&network_system;hasInput"/>
+                <owl:allValuesFrom rdf:resource="#MaterialAmountConnection"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#refersToMaterial"/>
+                <owl:someValuesFrom rdf:resource="&material;Material"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A MaterialAmount characterizes the time-variant behavior of a chunk of material.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#MaterialAmountAxiom_SpatiallyDistributedIntensiveProperty -->
+
+    <owl:Class rdf:about="#MaterialAmountAxiom_SpatiallyDistributedIntensiveProperty">
+        <rdfs:subClassOf rdf:resource="#MaterialAmount"/>
+        <owl:disjointWith rdf:resource="#MaterialAmountInPhaseEquilibrium"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A material amount whose intensive material amount properties are distributed on a certain spatial domain cannot be 
+- ideally mixed
+- at phase equilibrium</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#MaterialAmountConnection -->
+
+    <owl:Class rdf:about="#MaterialAmountConnection">
+        <rdfs:subClassOf rdf:resource="&network_system;Connection"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&geometry;hasSurfaceGeometry"/>
+                <owl:allValuesFrom rdf:resource="&geometry;Surface"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&geometry;hasSurfaceGeometry"/>
+                <owl:maxCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;isDirectlyConnectedTo"/>
+                <owl:allValuesFrom rdf:resource="#MaterialAmount"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&technical_system;hasPhenomenon"/>
+                <owl:allValuesFrom rdf:resource="#MaterialAmountConnectionPhenomenon"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;isDirectSubsystemOf"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="#MaterialAmount"/>
+                            <rdf:Description rdf:about="#MaterialAmountConnection"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&network_system;leaves"/>
+                <owl:allValuesFrom rdf:resource="#MaterialAmount"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;hasDirectSubsystem"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="#MaterialAmount"/>
+                            <rdf:Description rdf:about="#MaterialAmountConnection"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&system;hasDirectSubsystem"/>
+                        <owl:minCardinality rdf:datatype="&xsd;nonNegativeInteger">3</owl:minCardinality>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&system;hasDirectSubsystem"/>
+                        <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:cardinality>
+                    </owl:Restriction>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;hasProperty"/>
+                <owl:someValuesFrom rdf:resource="#PhenomenologicalCoefficient"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&network_system;enters"/>
+                <owl:allValuesFrom rdf:resource="#MaterialAmount"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A MaterialAmountConnection is a Connection that connects two MaterialAmounts or connects one MaterialAmount and one EnvironmentConnection.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#MaterialAmountConnectionPhenomenon -->
+
+    <owl:Class rdf:about="#MaterialAmountConnectionPhenomenon">
+        <rdfs:subClassOf rdf:resource="#PhysicochemicalPhenomenon"/>
+        <owl:disjointWith rdf:resource="#MaterialAmountPhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A MaterialAmountConnectionPhenomenon is a PhysicochemicalPhenomenon which occurs at a MaterialAmountConnection</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#MaterialAmountInPhaseEquilibrium -->
+
+    <owl:Class rdf:about="#MaterialAmountInPhaseEquilibrium">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#MaterialAmount"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&technical_system;hasPhenomenon"/>
+                        <owl:hasValue rdf:resource="#phase_equilibrium"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <owl:disjointWith rdf:resource="#MaterialAmountWithMolecularTransportPhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A material amount which is at phase equilibrium cannot have
+- a molecular transport phenomenon
+- an intensive material amount property which is distributed over a spatial domain.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#MaterialAmountPhenomenon -->
+
+    <owl:Class rdf:about="#MaterialAmountPhenomenon">
+        <rdfs:subClassOf rdf:resource="#PhysicochemicalPhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A MaterialAmountPhenomenon is a PhysicochemicalPhenomenon which occurs in a MaterialAmount.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#MaterialAmountWithMolecularTransportPhenomenon -->
+
+    <owl:Class rdf:about="#MaterialAmountWithMolecularTransportPhenomenon">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#MaterialAmount"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&technical_system;hasPhenomenon"/>
+                        <owl:someValuesFrom rdf:resource="#MolecularTransportPhenomenon"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A material amount which has a molecular transport phenomenon cannot be
+- ideally mixed
+- at phase equilibrium</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#MaterialAmountWithSpatiallyDistributedIntensiveProperties -->
+
+    <owl:Class rdf:about="#MaterialAmountWithSpatiallyDistributedIntensiveProperties">
+        <rdfs:subClassOf rdf:resource="#MaterialAmount"/>
+        <rdfs:comment
+            >A MaterialAmountWithSpatiallyDistributedIntensiveProperties may not have any properties indicating an ideal mixing.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#MolecularTransportPhenomenon -->
+
+    <owl:Class rdf:about="#MolecularTransportPhenomenon">
+        <rdfs:subClassOf rdf:resource="#MaterialAmountPhenomenon"/>
+        <owl:disjointWith rdf:resource="#ParticlePhenomenon"/>
+        <owl:disjointWith rdf:resource="#PhysicalEquilibriumPhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A MolecularTransportPhenomenon is a MaterialAmountPhenomenon in which physical quantities such as mass, energy, and momentum are transported among different locations through molecular motion in the MaterialAmount.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ParticlePhenomenon -->
+
+    <owl:Class rdf:about="#ParticlePhenomenon">
+        <rdfs:subClassOf rdf:resource="#MaterialAmountPhenomenon"/>
+        <owl:disjointWith rdf:resource="#PhysicalEquilibriumPhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A ParticlePhenomenon is a MaterialAmountPhenomenon which occurs with one or more Particles</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ParticlePopulation -->
+
+    <owl:Class rdf:about="#ParticlePopulation">
+        <rdfs:subClassOf rdf:resource="#MaterialAmount"/>
+        <rdfs:comment
+            >A ParticlePopulation consists of a (possibly uncounted) number of single particles, which are all present in the same state of aggregation and &#8211; in their entirety &#8211; can be characterized by means of distribution curves or population balances (Ramkrishna 1985).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ParticulateMaterialAmount -->
+
+    <owl:Class rdf:about="#ParticulateMaterialAmount">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#HeterogeneousMaterialAmount"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&system;containsDirectly"/>
+                        <owl:someValuesFrom rdf:resource="#SingleParticle"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="#MaterialAmount"/>
+        <owl:disjointWith rdf:resource="#QuasiHomogeneousMaterialAmount"/>
+        <owl:disjointWith rdf:resource="#SingleParticle"/>
+        <rdfs:comment
+            >A ParticulateMaterialAmount represents the dispersed material amount in a hetero-geneous system which is composed of single particles which typically hold uneven characteristics.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#Permeability -->
+
+    <owl:Class rdf:about="#Permeability">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:oneOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#impermeable"/>
+                    <rdf:Description rdf:about="#semi_permeable"/>
+                    <rdf:Description rdf:about="#permeable"/>
+                </owl:oneOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="&fundamental_concepts;ValueSet"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A Permeability denotes a set of chemical components which are permeable in a FilmConnection or a ValveConnection.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#PermeableValve -->
+
+    <owl:Class rdf:about="#PermeableValve">
+        <rdfs:subClassOf rdf:resource="#ValveConnection"/>
+        <rdfs:comment
+            >A PermeableValve represents convective transport of mass, where all material compounds, energy, and momentum are transported.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#PhenomenologicalCoefficient -->
+
+    <owl:Class rdf:about="#PhenomenologicalCoefficient">
+        <rdfs:subClassOf rdf:resource="&system;PhysicalQuantity"/>
+        <owl:disjointWith rdf:resource="#VelocityGradiant"/>
+        <rdfs:comment
+            >A PhenomenologicalCoefficient summarizes various coefficients employed to characterize fluxes.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#PhysicalEquilibriumPhenomenon -->
+
+    <owl:Class rdf:about="#PhysicalEquilibriumPhenomenon">
+        <rdfs:subClassOf rdf:resource="#MaterialAmountPhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A PhysicalEquilibriumPhenomenon is a MaterialAmountPhenomenon that denotes a certain equality of properties within the MaterialAmount considered, which does not involve chemical reactions.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#PhysicochemicalPhenomenon -->
+
+    <owl:Class rdf:about="#PhysicochemicalPhenomenon">
+        <rdfs:subClassOf rdf:resource="&technical_system;Phenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A PhysicochemicalPhenomenon is a Phenomenon that can be described by physics or chemistry.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#QuasiHomogeneousMaterialAmount -->
+
+    <owl:Class rdf:about="#QuasiHomogeneousMaterialAmount">
+        <rdfs:subClassOf rdf:resource="#HeterogeneousMaterialAmount"/>
+        <owl:disjointWith rdf:resource="#SingleParticle"/>
+        <rdfs:comment
+            >A QuasiHomogeneousMaterialAmount assumes at least two parts, a dispersed material amount and a continuous material amount, where one is dispersed in the other. It is characterized by average physical quantities of both parts.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#RadiationExchange -->
+
+    <owl:Class rdf:about="#RadiationExchange">
+        <rdfs:subClassOf rdf:resource="#Exchange"/>
+        <rdfs:comment
+            >RadiationExchange is defined as the emission of heat by one body which travels through a medium or through space and which is ultimately absorbed by another body.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#RateOfReaction -->
+
+    <owl:Class rdf:about="#RateOfReaction">
+        <rdfs:subClassOf rdf:resource="#Source"/>
+        <rdfs:comment
+            >The RateOfReaction of a general PhaseReaction aA + bB + &#8230; &#61664; pP + qQ + &#8230; is defined as
+ r = -1/a * d[A]/dt = -1/b * d[B]/dt =1/p * d[P]/dt  = 1/q * d[Q]/dt, 
+where symbols placed inside square brackets denote the concentrations of the species involved in the reaction. Thus, the RateOfReaction is defined as the change in concentration per unit time. Different measures of concentration may be chosen, such as  PhaseComponentFraction and Volume-BasedConcentrations.  When a catalyst is used, the reaction rate may also be stated on a catalyst weight (mol g&#8722;1 s&#8722;1) or surface area (mol m&#8722;2 s&#8722;1) basis.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ReactionRateCoefficient -->
+
+    <owl:Class rdf:about="#ReactionRateCoefficient">
+        <rdfs:subClassOf rdf:resource="#PhenomenologicalCoefficient"/>
+        <rdfs:comment
+            >A ReactionRateCoefficient of any reaction is a constant that relates the reaction rate to the concentration-dependent term in the reaction rate expression. This constant is thus independent of concentration and time (McNaught &amp; Wilkinson 1997).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#SemiPermeableFilmConnection -->
+
+    <owl:Class rdf:about="#SemiPermeableFilmConnection">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#ValveConnection"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="#hasPermeability"/>
+                        <owl:hasValue rdf:resource="#semi_permeable"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&technical_system;hasPhenomenon"/>
+                        <owl:hasValue rdf:resource="#interface_mass_diffusion"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasPermeableChemicalComponent"/>
+                <owl:someValuesFrom rdf:resource="&substance;ChemicalComponent"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment
+            >A SemiPermeableValve represents convective transport of mass in which only some selective species in a mixture are transported in addition to energy and momen-tum.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#SingleFilmConnection -->
+
+    <owl:Class rdf:about="#SingleFilmConnection">
+        <rdfs:subClassOf rdf:resource="#FilmConnection"/>
+        <rdfs:comment
+            >A SingleFilmConnection represents diffusive transport processes across a single boundary layer, e.g. fluid or solid. </rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#SingleParticle -->
+
+    <owl:Class rdf:about="#SingleParticle">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#MaterialAmount"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&technical_system;hasPhenomenon"/>
+                        <owl:someValuesFrom rdf:resource="#ParticlePhenomenon"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A Particle is a MaterialAmount that has some ParticlePhenomena. It is usually of a small size.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#SolidFilm -->
+
+    <owl:Class rdf:about="#SolidFilm">
+        <rdfs:subClassOf rdf:resource="#SingleFilmConnection"/>
+        <rdfs:comment
+            >A SolidFilm represents a boundary layer occurring in a solid phase which allows for diffusive transport.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#Source -->
+
+    <owl:Class rdf:about="#Source">
+        <rdfs:subClassOf rdf:resource="#GeneralizedFluxes"/>
+        <rdfs:comment
+            >A Source is caused by a chemical reaction or some external potential field within a MaterialAmount.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#StateVariableGradient -->
+
+    <owl:Class rdf:about="#StateVariableGradient">
+        <rdfs:subClassOf rdf:resource="&system;PhysicalQuantity"/>
+        <rdfs:comment
+            >A StateVariableGradient is the spatial gradient of an IntensiveThermodynamicStateVariable.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#SurfacePhenomenon -->
+
+    <owl:Class rdf:about="#SurfacePhenomenon">
+        <rdfs:subClassOf rdf:resource="#MaterialAmountConnectionPhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A SurfacePhenomenon is a MaterialAmountConnectionPhenomenon that occurs on a Surface.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#SurfaceReactionPhenomenon -->
+
+    <owl:Class rdf:about="#SurfaceReactionPhenomenon">
+        <rdfs:subClassOf rdf:resource="#SurfacePhenomenon"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A SurfaceReactionPhenomenon is a SurfacePhenomenon that denotes a chemical reaction process which takes place on a surface.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ThreeFilmConnection -->
+
+    <owl:Class rdf:about="#ThreeFilmConnection">
+        <rdfs:subClassOf rdf:resource="#FilmConnection"/>
+        <rdfs:comment
+            >A ThreeFilmConnection represents diffusive transport processes across a boundary layer in which three films are adjacent to each other, e.g. fluid-solid-fluid.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#TwoFilmConnection -->
+
+    <owl:Class rdf:about="#TwoFilmConnection">
+        <rdfs:subClassOf rdf:resource="#FilmConnection"/>
+        <rdfs:comment
+            >A TwoFilmConnection represents diffusive transport processes across a boundary layer in which two films are adjacent to each other, e.g. fluid-fluid. </rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ValveConnection -->
+
+    <owl:Class rdf:about="#ValveConnection">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#MaterialAmountConnection"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&technical_system;hasPhenomenon"/>
+                        <owl:hasValue rdf:resource="#convective_material_flow"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#refersToMaterial"/>
+                <owl:someValuesFrom rdf:resource="&material;Material"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#refersToMaterial"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#refersToMaterial"/>
+                <owl:allValuesFrom rdf:resource="&material;Material"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment
+            >A ValveConnection refers to convective mass transport which is governed by different states of permeability.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#VelocityGradiant -->
+
+    <owl:Class rdf:about="#VelocityGradiant">
+        <rdfs:subClassOf rdf:resource="&system;PhysicalQuantity"/>
+        <rdfs:comment
+            >A VelocityGradient is the partial derivatives of velocity with respect to the spatial coordinates.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/material/material.owl#Material -->
+
+    <owl:Class rdf:about="&material;Material"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/material/substance/substance.owl#ChemicalComponent -->
+
+    <owl:Class rdf:about="&substance;ChemicalComponent"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/geometry/geometry.owl#Solid -->
+
+    <owl:Class rdf:about="&geometry;Solid"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/geometry/geometry.owl#Surface -->
+
+    <owl:Class rdf:about="&geometry;Surface"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/network_system.owl#Connection -->
+
+    <owl:Class rdf:about="&network_system;Connection"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/network_system.owl#Device -->
+
+    <owl:Class rdf:about="&network_system;Device"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#PhysicalQuantity -->
+
+    <owl:Class rdf:about="&system;PhysicalQuantity"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#System -->
+
+    <owl:Class rdf:about="&system;System"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/upper_level/technical_system.owl#Phenomenon -->
+
+    <owl:Class rdf:about="&technical_system;Phenomenon"/>
+    
+
+
+    <!-- file:/ontology/meta_model/data_structures/multiset.owl#Multiplicity -->
+
+    <owl:Class rdf:about="&multiset;Multiplicity"/>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#ValueSet -->
+
+    <owl:Class rdf:about="&fundamental_concepts;ValueSet"/>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <owl:Class rdf:about="&owl;Thing"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#agglomeration -->
+
+    <ParticlePhenomenon rdf:about="#agglomeration">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >Agglomeration is a ParticlePhenomenon which denotes the agglomeration of Particles in a DispersiveMaterialAmount.</rdfs:comment>
+    </ParticlePhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#breakage -->
+
+    <ParticlePhenomenon rdf:about="#breakage">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >Breakage is a ParticlePhenomenon which denotes the breakage of Particles in a DispersiveMaterialAmount.</rdfs:comment>
+    </ParticlePhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#chemical_reaction_equilibrium -->
+
+    <ChemicalReactionPhenomenon rdf:about="#chemical_reaction_equilibrium">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >An EquilibriumChemicalReaction is a ChemicalReactionPhenomenon in which a ChemicalReaction reaches its maximum conversion.</rdfs:comment>
+    </ChemicalReactionPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#convective_material_flow -->
+
+    <MaterialAmountConnectionPhenomenon rdf:about="#convective_material_flow">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A ConvectiveMaterialFlow is a MaterialAmountConnectionPhenomenon that denotes the transport of material by convection.</rdfs:comment>
+    </MaterialAmountConnectionPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#energy_accumulation -->
+
+    <Accumulation rdf:about="#energy_accumulation">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >EnergyAccumulation is Accumulation of energy.</rdfs:comment>
+    </Accumulation>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#equilibrium_adsorption -->
+
+    <AdsorptionPhenomenon rdf:about="#equilibrium_adsorption">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >An EquilibriumAdsorption is an AdsorptionPhenomenon that denotes the equilibrium of an adsorption process.</rdfs:comment>
+    </AdsorptionPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#equilibrium_surface_reaction -->
+
+    <SurfaceReactionPhenomenon rdf:about="#equilibrium_surface_reaction">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >An EquilibriumSurfaceReaction is a SurfaceReactionPhenomenon that denotes an equilibrium surface reaction process.</rdfs:comment>
+    </SurfaceReactionPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#growth -->
+
+    <ParticlePhenomenon rdf:about="#growth">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >Growth is a ParticlePhenomenon which denotes the growth of Particles.</rdfs:comment>
+    </ParticlePhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#heat_conduction -->
+
+    <MolecularTransportPhenomenon rdf:about="#heat_conduction">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >HeatConduction is a MolecularTransportPhenomenon in which heat is transported among different locations in a material amount.</rdfs:comment>
+    </MolecularTransportPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#heat_radiation -->
+
+    <MaterialAmountConnectionPhenomenon rdf:about="#heat_radiation">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A HeatRadiation is a MaterialAmountConnectionPhenomenon that denotes the radiation of heat.</rdfs:comment>
+    </MaterialAmountConnectionPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#ideal_mixing -->
+
+    <FlowPattern rdf:about="#ideal_mixing">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >An IdealMixing flow pattern a FlowPattern which results in a static MaterialAmount with uniform properties.</rdfs:comment>
+    </FlowPattern>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#impermeable -->
+
+    <Permeability rdf:about="#impermeable"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#interface_heat_conduction -->
+
+    <InterfaceTransportPhenomenon rdf:about="#interface_heat_conduction">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >InterfaceHeatConduction is an InterfaceMolecularTransportPhenomenon that denotes heat conduction across some interface.</rdfs:comment>
+    </InterfaceTransportPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#interface_mass_diffusion -->
+
+    <InterfaceTransportPhenomenon rdf:about="#interface_mass_diffusion">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >InterfaceMassDiffusion is an InterfaceMolecularTransportPhenomenon that denotes mass diffusion across some interface.</rdfs:comment>
+    </InterfaceTransportPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#laminar_flow -->
+
+    <FlowPattern rdf:about="#laminar_flow">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A LaminarFlow is a non-turbulent streamline flow in parallel layers with regular, smooth fluid motion that occurs when the Reynolds is smaller than the critical Reynolds number.</rdfs:comment>
+    </FlowPattern>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#mass_accumulation -->
+
+    <Accumulation rdf:about="#mass_accumulation">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >MassAccumulation is Accumulation of mass.</rdfs:comment>
+    </Accumulation>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#mass_diffusion -->
+
+    <MolecularTransportPhenomenon rdf:about="#mass_diffusion">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A MassDiffusion is a MolecularTransportPhenomenon in which mass of certain ChemicalComponent(s) is transported among different locations in a MaterialAmount.</rdfs:comment>
+    </MolecularTransportPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#mechanical_equilibrium -->
+
+    <PhysicalEquilibriumPhenomenon rdf:about="#mechanical_equilibrium">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A MechanicalEquilibrium is a PhysicalEquilibriumPhenomenon that denotes equality of pressure within the material amount considered.</rdfs:comment>
+    </PhysicalEquilibriumPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#momentum_accumulation -->
+
+    <Accumulation rdf:about="#momentum_accumulation">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >MomentumAccumulation is Accumulation of momentum.</rdfs:comment>
+    </Accumulation>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#non-equilibrium_adsorption -->
+
+    <AdsorptionPhenomenon rdf:about="#non-equilibrium_adsorption">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A NonEquilibriumAdsorption is an AdsorptionPhenomenon that denotes a non-equilibrium adsorption process.</rdfs:comment>
+    </AdsorptionPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#non-equilibrium_chemical_reaction -->
+
+    <ChemicalReactionPhenomenon rdf:about="#non-equilibrium_chemical_reaction">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A NonChemicalReactionEquilibrium is a ChemicalReactionPhenomenon in which a ChemicalReaction occurs and has not reached its equilibrium.</rdfs:comment>
+    </ChemicalReactionPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#non-equilibrium_surface_reaction -->
+
+    <SurfaceReactionPhenomenon rdf:about="#non-equilibrium_surface_reaction">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A NonEquilibriumSurfaceReaction is a SurfaceReactionPhenomenon that denotes a non-equilibrium surface reaction process.</rdfs:comment>
+    </SurfaceReactionPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#nucleation -->
+
+    <ParticlePhenomenon rdf:about="#nucleation">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >Nucleation is a ParticlePhenomenon which denotes the nucleation of Particles in a DispersiveMaterialAmount.</rdfs:comment>
+    </ParticlePhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#particle_population_accumulation -->
+
+    <Accumulation rdf:about="#particle_population_accumulation">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A ParticlePopulationAccumulation is an AccumulationPhenomenon which causes the variation of the ParticleNumber in a DispersedMaterialAmount.</rdfs:comment>
+    </Accumulation>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#permeable -->
+
+    <Permeability rdf:about="#permeable"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#phase_equilibrium -->
+
+    <PhysicalEquilibriumPhenomenon rdf:about="#phase_equilibrium">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A PhaseEquilibrium is a PhysicalEquilibriumPhenomena that denotes the MaterialAmount considered is in phase equilibrium.</rdfs:comment>
+    </PhysicalEquilibriumPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#phase_interface_equilibrium -->
+
+    <MaterialAmountConnectionPhenomenon rdf:about="#phase_interface_equilibrium">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A PhaseEquilibrium is a MaterialAmountConnectionPhenomenon which denotes that the mass transfer resistance vanishes at the phase interface between two parities connected by the MaterialAmountConnection considered.</rdfs:comment>
+    </MaterialAmountConnectionPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#phase_interface_viscous_momentum_transport -->
+
+    <InterfaceTransportPhenomenon rdf:about="#phase_interface_viscous_momentum_transport">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A PhaseInterfaceViscousMomentumTransport is an InterfaceMolecularTransportPhenomenon that denotes a viscous momentum transport across a phase interface.</rdfs:comment>
+    </InterfaceTransportPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#semi_permeable -->
+
+    <Permeability rdf:about="#semi_permeable"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#surface_mass_diffusion -->
+
+    <SurfacePhenomenon rdf:about="#surface_mass_diffusion">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >SurfaceMassDiffusion is a SurfacePhenomenon that denotes diffusive mass transport along a surface.</rdfs:comment>
+    </SurfacePhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#thermal_equilibrium -->
+
+    <PhysicalEquilibriumPhenomenon rdf:about="#thermal_equilibrium">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A ThermalEquilibrium is a PhysicalEquilibriumPhenomenon that denotes equality of temperature within the MaterialAmount considered.</rdfs:comment>
+    </PhysicalEquilibriumPhenomenon>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#turbulent_flow -->
+
+    <FlowPattern rdf:about="#turbulent_flow">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A TurbulentFlow is a flow in which velocity at any point varies erratically.</rdfs:comment>
+    </FlowPattern>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#viscous_momentum_transport -->
+
+    <MolecularTransportPhenomenon rdf:about="#viscous_momentum_transport">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A ViscousMomentumTransport is a MolecularTransportPhenomenon in which momentum is transported among different locations in a material amount.</rdfs:comment>
+    </MolecularTransportPhenomenon>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.842) http://owlapi.sourceforge.net -->
+
+

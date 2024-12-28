@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY technical_system "&root;OntoCAPE/upper_level/technical_system.owl">
+  <!ENTITY behavior "&root;OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl">
+  <!ENTITY chemical_process_system  "&root;OntoCAPE/chemical_process_system/chemical_process_system.owl">
+  <!ENTITY plant    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant.owl">
+  <!ENTITY process  "&root;OntoCAPE/chemical_process_system/CPS_function/process.owl">
+  <!ENTITY chemical_reactor "&root;OntoCAPE/chemical_process_system/process_units/chemical_reactor.owl">
+]>
+
+
+<rdf:RDF
+    xmlns:behavior="&behavior;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:chemical_process_system="&chemical_process_system;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:process="&process;#"
+    xmlns:plant="&plant;#"
+    xmlns="&chemical_reactor;#"
+  xml:base="&chemical_reactor;">
+  <owl:Ontology rdf:about="&chemical_reactor;">
+    <owl:imports rdf:resource="&chemical_process_system;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'chemical_reactor' provides concepts for the detailed description of a chemical reactor applicable in a chemical process system.
+The following classes and relations from other ontology modules are used within 'chemical_reactor':
+
+&lt;owl:Class rdf:about="&behavior;#MaterialAmount"/>
+&lt;owl:Class rdf:about="&behavior;#MaterialAmountConnection"/>
+&lt;owl:Class rdf:about="&chemical_process_system;#ProcessUnit"/>
+&lt;owl:Class rdf:about="&plant;#Apparatus"/>
+&lt;owl:Class rdf:about="&process;#Reaction"/>
+&lt;owl:Class rdf:about="&behavior;#SurfaceReactionPhenomenon"/>
+&lt;owl:Class rdf:about="&behavior;#ChemicalReactionPhenomenon"/>
+
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasPhenomenon"/>
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasRealizationAspect"/>
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasFunctionalAspect"/>
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasBehavioralAspect"/>
+&lt;owl:ObjectProperty rdf:about="&system;#hasDirectSubsystem"/>
+     </rdfs:comment>
+     <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+     </terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="ChemicalReactor">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ChemicalReactor represents a process unit that has a Reaction function and follows the assumption of either ChemicalReactionPhenomenon of SurfaceReactionPhenomenon.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&chemical_process_system;#ProcessUnit"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasBehavioralAspect"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="ChemicalReactorBehavior"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&chemical_reactor;#ChemicalReactorBehavior"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&technical_system;#hasBehavioralAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+        <owl:someValuesFrom rdf:resource="&process;#Reaction"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasRealizationAspect"/>
+        <owl:allValuesFrom rdf:resource="&plant;#Apparatus"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&chemical_reactor;#ChemicalReactorBehavior">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ChemicalReactorBehavior is particularly defined to characterize the behavior aspect of ChemicalReactor according to the principles defined in MaterialAmount.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&behavior;#MaterialAmount"/>
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&behavior;#ChemicalReactionPhenomenon"/>
+            <owl:onProperty rdf:resource="&technical_system;#hasPhenomenon"/>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <rdf:Description rdf:about="&behavior;#MaterialAmount"/>
+                  <owl:Restriction>
+                    <owl:onProperty rdf:resource="&technical_system;#hasPhenomenon"/>
+                    <owl:someValuesFrom rdf:resource="&behavior;#ChemicalReactionPhenomenon"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <rdf:Description rdf:about="&behavior;#MaterialAmountConnection"/>
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="&behavior;#SurfaceReactionPhenomenon"/>
+                    <owl:onProperty rdf:resource="&technical_system;#hasPhenomenon"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+          </owl:Restriction>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+  </owl:Class>
+</rdf:RDF>

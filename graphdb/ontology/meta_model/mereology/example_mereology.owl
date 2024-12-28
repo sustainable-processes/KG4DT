@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/I:/OntoCape/OWL/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+]>
+
+<rdf:RDF
+    xmlns:fc="file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:mereology="file:/ontology/meta_model/mereology/mereology.owl#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="file:/ontology/meta_model/mereology/example_mereology.owl#"
+  xml:base="file:/ontology/meta_model/mereology/example_mereology.owl">
+  <owl:Ontology rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'example_mereology' provides some application examples of the ontology module 'mereology'.</rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:imports rdf:resource="file:/ontology/meta_model/mereology/mereology.owl"/>
+  </owl:Ontology>
+  <fc:Object rdf:ID="SecondLevelPart_A">
+    <mereology:isDirectPartOf>
+      <fc:Object rdf:ID="FirstLevelPart_A">
+        <mereology:isDirectPartOf>
+          <fc:Object rdf:ID="AggregateOnly_A"/>
+        </mereology:isDirectPartOf>
+      </fc:Object>
+    </mereology:isDirectPartOf>
+  </fc:Object>
+  <rdf:Description rdf:about="file:/ontology/meta_model/mereology/mereology.owl#SecondLevelPart">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Part at the second level of decomposition.</rdfs:comment>
+  </rdf:Description>
+  <mereology:AggregateOnly rdf:ID="AggregateOnly_B"/>
+  <rdf:Description rdf:about="file:/ontology/meta_model/mereology/mereology.owl#PartOnly">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Object that is part of another Object and has no Parts of its own.</rdfs:comment>
+  </rdf:Description>
+  <fc:Object rdf:ID="FirstLevelPart_B">
+    <mereology:isDirectPartOf rdf:resource="file:/ontology/meta_model/mereology/example_mereology.owl#AggregateOnly_B"/>
+  </fc:Object>
+  <fc:Object rdf:ID="PartOnly_B">
+    <mereology:isDirectPartOf>
+      <fc:Object rdf:ID="SecondLevelPart_B">
+        <mereology:isDirectPartOf rdf:resource="file:/ontology/meta_model/mereology/example_mereology.owl#FirstLevelPart_B"/>
+      </fc:Object>
+    </mereology:isDirectPartOf>
+  </fc:Object>
+  <fc:Object rdf:ID="PartOnly_A">
+    <mereology:isDirectPartOf rdf:resource="file:/ontology/meta_model/mereology/example_mereology.owl#SecondLevelPart_A"/>
+  </fc:Object>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#AggregateOnly_A"/>
+      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#FirstLevelPart_A"/>
+      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#FirstLevelPart_B"/>
+      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#SecondLevelPart_A"/>
+      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#SecondLevelPart_B"/>
+      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#PartOnly_A"/>
+      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#PartOnly_B"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>
+

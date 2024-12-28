@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY macromolecules   "&root;OntoCAPE/material/substance/macromolecules.owl">
+  <!ENTITY polymers "&root;OntoCAPE/material/substance/polymers.owl">
+  <!ENTITY substance    "&root;OntoCAPE/material/substance/substance.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns:substance="&substance;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:polymers="&polymers;#"
+    xmlns="&macromolecules;#"
+  xml:base="&macromolecules;">
+  <owl:Ontology rdf:about="&macromolecules;">
+    <owl:imports rdf:resource="&polymers;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string">2.0</owl:versionInfo>
+    
+ <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'macromolecules' provides a few examples of macromolecules in order to demonstrate the usage of the module 'polymers'.
+The following classes and relations are instantiated within 'macromolecules':  
+&lt;owl:Class rdf:about="&polymers;#End-Group"/>
+&lt;owl:Class rdf:about="&polymers;#Macromolecule"/>
+&lt;owl:Class rdf:about="&polymers;#RepeatingUnit"/>
+&lt;owl:ObjectProperty rdf:about="&substance;#CAS_RegistryNumber"/>
+&lt;owl:ObjectProperty rdf:about="&substance;#molecularFormula"/>
+&lt;owl:ObjectProperty rdf:about="&substance;#name"/>
+&lt;owl:ObjectProperty rdf:about="&system;#containsDirectly"/>
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+  </owl:Ontology>
+
+  <polymers:End-Group rdf:ID="End-Group_of_Polyethylene__glycol">
+    <substance:molecularFormula rdf:datatype="&xsd;#string"
+    >·CH2-OH</substance:molecularFormula>
+  </polymers:End-Group>
+  <polymers:Macromolecule rdf:ID="Polyethylene__glycol">
+    <substance:name rdf:datatype="&xsd;#string"
+    >PEO</substance:name>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >44.05          C2H4O</rdfs:comment>
+    <substance:name rdf:datatype="&xsd;#string"
+    >PEG</substance:name>
+    <system:containsDirectly rdf:resource="&macromolecules;#End-Group_of_Polyethylene__glycol"/>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Polyethylene glycol</substance:name>
+    <substance:molecularFormula rdf:datatype="&xsd;#string"
+    >HO-(CH2-CH2-O)n-H</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string"
+    >Polyethylene oxide</substance:name>
+    <system:containsDirectly>
+      <polymers:RepeatingUnit rdf:ID="RepeatingUnit_of_Polyethylene__glycol">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        ></rdfs:comment>
+        <substance:molecularFormula rdf:datatype="&xsd;#string"
+        >·CH2-O-CH2·</substance:molecularFormula>
+      </polymers:RepeatingUnit>
+    </system:containsDirectly>
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string"
+    >25322-68-3</substance:CAS_RegistryNumber>
+  </polymers:Macromolecule>
+</rdf:RDF>

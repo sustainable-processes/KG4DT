@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY pro_con_sys  "&root;OntoCAPE/chemical_process_system/CPS_realization/process_control_system.owl">
+]>
+
+
+<rdf:RDF
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#"
+    xmlns:pro_con_sys="&pro_con_sys;#"
+  xml:base="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl">
+  <owl:Ontology rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl">
+    <owl:imports rdf:resource="&pro_con_sys;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'measuring_instrument' provides specializations for measuring instruments that are applicable to chemical process systems.
+The following classes and relations from other ontology modules are used within 'measuring_instrument':
+
+&lt;owl:Class rdf:about="&pro_con_sys;#MeasuringInstrument"/>
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Thermocouple">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Thermocouple is a specific type of temperature measuring sensor.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="T-Sensor"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="SegerCone">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >SegerCone is a specific type of temperature measuring sensor.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Pt100">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Pt100 is a specific type of temperature measuring sensor.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="BimetalT-Sensor">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >BimetalT-sensor is a specific type of temperature measuring sensor.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="L-Sensor">
+    <rdfs:subClassOf rdf:resource="&pro_con_sys;#MeasuringInstrument"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >L-sensor is applied for level measuring.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QuartzCristalT-Sensor">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >QuartzCrystalT-sensor is a specific type of temperature measuring sensor.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Q-Sensor">
+    <rdfs:subClassOf rdf:resource="&pro_con_sys;#MeasuringInstrument"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Q-sensor is applied for quality measuring (quality quantity, like concentration, conductivity).</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Pyrometer">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Pyrometer is a specific type of temperature measuring sensor.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="P-Sensor">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >P-sensor is applied for preasure measuring.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&pro_con_sys;#MeasuringInstrument"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ExpansionT-Sensor">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ExpansionT-sensor is a specific type of temperature measuring sensor.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="F-Sensor">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >F-sensor is applied for flow measuring.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&pro_con_sys;#MeasuringInstrument"/>
+  </owl:Class>
+  <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >T-sensor is applied for temperature measuring.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&pro_con_sys;#MeasuringInstrument"/>
+  </owl:Class>
+</rdf:RDF>

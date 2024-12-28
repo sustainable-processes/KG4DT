@@ -1,0 +1,765 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY der_dim  "&root;OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl">
+  <!ENTITY phys_dim "&root;OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl">
+  <!ENTITY substance    "&root;OntoCAPE/material/substance/substance.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns:der_dim="&der_dim;#"
+    xmlns:rdf="&rdf;#"
+    xmlns="&substance;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:phys_dim="&phys_dim;#"
+  xml:base="&substance;">
+  <owl:Ontology rdf:about="&substance;">
+    <owl:imports rdf:resource="&der_dim;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'substance'provides essential concepts for the description of pure substances and mixtures, primarily at the macroscopic scale.
+The following classes, relations, individuals from other ontology modules are used within 'substance':
+
+&lt;owl:Class rdf:about="&system;#ScalarQuantity"/&gt;
+&lt;owl:Class rdf:about="&system;#ScalarValue"/&gt;
+&lt;owl:Class rdf:about="&system;#System"/&gt;
+&lt;owl:Class rdf:about="&system;#UnitOfMeasure"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&system;#containsDirectly"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasDimension"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasProperty"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasUnitOfMeasure"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasValue"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isDirectlyRelatedTo"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isPropertyOf"/&gt;
+
+&lt;der_dim:Mechanics           rdf:about="&der_dim;#pressure"/&gt;
+&lt;phys_dim:DerivedDimension   rdf:about="&der_dim;#molar_volume"/&gt;
+&lt;phys_dim:DerivedDimension   rdf:about="&der_dim;#molecular_mass"/&gt;
+&lt;phys_dim:BaseDimension      rdf:about="&phys_dim;#thermodynamic_temperature"/&gt;
+
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+  </owl:Ontology>
+      
+  <owl:Class rdf:ID="ChemicalComponent">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:ID="PseudoComponent"/>
+          <owl:Class rdf:ID="ChemicalSpecies"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="ChemicalComponentConstant"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasProperty"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Substance"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The class ChemicalComponent subsumes ChemicalSpecies and PseudoComponents.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="MolecularEntity"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Mixture"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="CriticalPressure">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="TriplePointPressure"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="CriticalMolarVolume"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The minimum pressure which would suffice to liquefy a Substance at its CriticalTemperature. Above the CriticalPressure, increasing the temperature will not cause a fluid to vaporize to give a two-phase system (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&der_dim;#pressure"/>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&system;#ScalarValue"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;#hasUnitOfMeasure"/>
+                <owl:allValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&system;#UnitOfMeasure"/>
+                      <owl:Restriction>
+                        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+                        <owl:hasValue rdf:resource="&der_dim;#pressure"/>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:allValuesFrom>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="CriticalTemperature"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="MolecularWeight"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="TriplePointTemperature"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&substance;#ChemicalComponentConstant"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&substance;#CriticalTemperature">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&system;#ScalarValue"/>
+              <owl:Restriction>
+                <owl:allValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&system;#UnitOfMeasure"/>
+                      <owl:Restriction>
+                        <owl:hasValue rdf:resource="&phys_dim;#thermodynamic_temperature"/>
+                        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:allValuesFrom>
+                <owl:onProperty rdf:resource="&system;#hasUnitOfMeasure"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&substance;#CriticalPressure"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >That temperature, characteristic of each gas, above which it is not possible to liquefy a given gas (McNaught &amp; Wilkinson, 1997). 
+The CriticalTemperature of a material is the temperature above which distinct liquid and gas phases do not exist. As the CriticalTemperature is approached, the properties of the gas and liquid phases become the same. Above the CriticalTemperature, there is only one phase. [Wikipedia, 2006]</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&substance;#TriplePointPressure"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&substance;#ChemicalComponentConstant"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&substance;#CriticalMolarVolume"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+        <owl:hasValue rdf:resource="&phys_dim;#thermodynamic_temperature"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&substance;#TriplePointTemperature"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&substance;#MolecularWeight"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&substance;#TriplePointTemperature">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&substance;#TriplePointPressure"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+        <owl:hasValue rdf:resource="&phys_dim;#thermodynamic_temperature"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The triple point of a Substance is given by the temperature and pressure at which three phases (gas, liquid, and solid) of that Substance coexist in thermodynamic equilibrium.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&substance;#CriticalPressure"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&substance;#ChemicalComponentConstant"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&substance;#CriticalMolarVolume"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&substance;#MolecularWeight"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&system;#ScalarValue"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;#hasUnitOfMeasure"/>
+                <owl:allValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&system;#UnitOfMeasure"/>
+                      <owl:Restriction>
+                        <owl:hasValue rdf:resource="&phys_dim;#thermodynamic_temperature"/>
+                        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:allValuesFrom>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&substance;#CriticalTemperature"/>
+  </owl:Class>
+  <owl:Class rdf:about="&substance;#Substance">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >1</owl:minCardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="substanceID"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="CAS_RegistryNumber"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#System"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    ></rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&substance;#MolecularWeight">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&system;#ScalarValue"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;#hasUnitOfMeasure"/>
+                <owl:allValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&system;#UnitOfMeasure"/>
+                      <owl:Restriction>
+                        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+                        <owl:hasValue rdf:resource="&der_dim;#molecular_mass"/>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:allValuesFrom>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&substance;#TriplePointPressure"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+        <owl:hasValue rdf:resource="&der_dim;#molecular_mass"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&substance;#CriticalTemperature"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&substance;#CriticalMolarVolume"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Ratio of the mass of one molecule of a Substance, relative to the unified atomic mass unit (which is equal to 1/12 the mass of one atom of carbon-12). Also known as (relative) molar mass or (relative) molecular mass.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&substance;#ChemicalComponentConstant"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&substance;#TriplePointTemperature"/>
+    <owl:disjointWith rdf:resource="&substance;#CriticalPressure"/>
+  </owl:Class>
+  <owl:Class rdf:about="&substance;#CriticalMolarVolume">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&substance;#TriplePointPressure"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&substance;#MolecularWeight"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&substance;#ChemicalComponentConstant"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+        <owl:hasValue rdf:resource="&der_dim;#molar_volume"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The CriticalMolarVolume is the volume of one mole of a substance at the CriticalTemperature and CriticalPressure.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&substance;#TriplePointTemperature"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&system;#ScalarValue"/>
+              <owl:Restriction>
+                <owl:allValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&system;#UnitOfMeasure"/>
+                      <owl:Restriction>
+                        <owl:hasValue rdf:resource="&der_dim;#molar_volume"/>
+                        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:allValuesFrom>
+                <owl:onProperty rdf:resource="&system;#hasUnitOfMeasure"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&substance;#CriticalPressure"/>
+    <owl:disjointWith rdf:resource="&substance;#CriticalTemperature"/>
+  </owl:Class>
+  <owl:Class rdf:about="&substance;#Mixture">
+    <rdfs:subClassOf rdf:resource="&substance;#Substance"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#containsDirectly"/>
+        <owl:allValuesFrom rdf:resource="&substance;#ChemicalComponent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="chemicalFormula"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Mixture is a Substance that contains two or more ChemicalComponents. The mixture class can represent two different things: 
+(a) a loose collection of segregate chemical components, or 
+(b) a compound material formed by several blended chemical components. 
+The composition of a Mixture is not fixed.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&substance;#MolecularEntity"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&substance;#ChemicalComponent"/>
+  </owl:Class>
+  <owl:Class rdf:about="&substance;#PseudoComponent">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PseudoComponent is an auxiliary concept, which represents the averaged properties of a number of ChemicalSpecies. PseudoComponents are often assumed to exist in the context of physical property calculations of complex multicomponent mixtures, such as petroleum, fatty alcohols, or polymers.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&substance;#ChemicalSpecies"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="&substance;#chemicalFormula"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&substance;#ChemicalComponent"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="isomericStructuralFormula"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&substance;#MolecularEntity">
+    <rdfs:subClassOf rdf:resource="&substance;#Substance"/>
+    <owl:disjointWith rdf:resource="&substance;#ChemicalComponent"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="molecularFormula"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="SMILES"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="WLN"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&substance;#Mixture"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="InChI"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="empiricalFormula"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasMacroscopicAppearance"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&substance;#ChemicalSpecies"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The class MolecularEntity characterizes Substances at the atomic scale. It represents “any constitutionally or isotopically distinct atom, molecule, ion, ion pair, radical, radical ion, complex, conformer etc., identifiable as a separately distinguishable entity. MolecularEntity is used […] as a general term for singular entities, irrespective of their nature” (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >1</owl:minCardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="&substance;#chemicalFormula"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&substance;#ChemicalSpecies">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&substance;#empiricalFormula"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&substance;#SMILES"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&substance;#PseudoComponent"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&substance;#molecularFormula"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasMolecularStructure"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&substance;#MolecularEntity"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ChemicalSpecies represents pure Substances at the macroscopic scale. It consists of an “ensemble of chemically identical molecular entities […]. The term is applied equally to a set of chemically identical atomic or molecular structural units in a solid array. […] The wording of the definition […] is intended to embrace both cases such as graphite, sodium chloride or a surface oxide, where the basic structural units may not be capable of isolated existence, as well as those cases where they are.” (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&substance;#hasMolecularStructure"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&substance;#ChemicalComponent"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&substance;#WLN"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&substance;#InChI"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&substance;#ChemicalComponentConstant">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&substance;#ChemicalComponent"/>
+        <owl:onProperty rdf:resource="&system;#isPropertyOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#ScalarQuantity"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ChemicalComponentConstant is a constant Property of a ChemicalComponent.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&substance;#TriplePointPressure">
+    <owl:disjointWith rdf:resource="&substance;#CriticalTemperature"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&der_dim;#pressure"/>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&system;#ScalarValue"/>
+              <owl:Restriction>
+                <owl:allValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&system;#UnitOfMeasure"/>
+                      <owl:Restriction>
+                        <owl:hasValue rdf:resource="&der_dim;#pressure"/>
+                        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:allValuesFrom>
+                <owl:onProperty rdf:resource="&system;#hasUnitOfMeasure"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&substance;#ChemicalComponentConstant"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The triple point of a Substance is given by the temperature and pressure at which three phases (gas, liquid, and solid) of that Substance coexist in thermodynamic equilibrium.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&substance;#CriticalPressure"/>
+    <owl:disjointWith rdf:resource="&substance;#CriticalMolarVolume"/>
+    <owl:disjointWith rdf:resource="&substance;#TriplePointTemperature"/>
+    <owl:disjointWith rdf:resource="&substance;#MolecularWeight"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&substance;#hasMolecularStructure">
+    <rdfs:domain rdf:resource="&substance;#ChemicalSpecies"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&substance;#hasMacroscopicAppearance"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="&system;#isDirectlyRelatedTo"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasMolecularStructure points from a ChemicalSpecies (describing a substance form a  macroscopic perspective) to the corresponding MolecularEntity (describing the same pure substance from a molecular perspective).</rdfs:comment>
+    <rdfs:range rdf:resource="&substance;#MolecularEntity"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&substance;#hasMacroscopicAppearance">
+    <rdfs:range rdf:resource="&substance;#ChemicalSpecies"/>
+    <owl:inverseOf rdf:resource="&substance;#hasMolecularStructure"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#isDirectlyRelatedTo"/>
+    <rdfs:domain rdf:resource="&substance;#MolecularEntity"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="canonicalStructuralFormula">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A canonicalStructuralFomula is a structuralFormula that is generated  by means of canonicalization algorithms to obtain a unique representation of a MolecularEntity.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:FunctionalProperty rdf:ID="structuralFormula"/>
+    </rdfs:subPropertyOf>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&substance;#chemicalFormula">
+    <rdfs:range rdf:resource="&xsd;#string"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&substance;#ChemicalSpecies"/>
+          <owl:Class rdf:about="&substance;#MolecularEntity"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A chemicalFormula is a substanceID that can only be assigned to ChemicalSpecies and/or MolecularEntities. It gives information about the Atoms that constitute a particular MolecularEntity. The attribute chemicalFormula subsumes all types of formulas, such as empiricalFormula, molecularFormula, structuralFormula, etc.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:FunctionalProperty rdf:ID="isomericSMILES">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >isomericSMILES is the version of the SMILES specification that includes extensions to support the specification of isotopes, chirality, and configuration about double bonds.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:FunctionalProperty rdf:about="&substance;#isomericStructuralFormula"/>
+    </rdfs:subPropertyOf>
+    <rdfs:subPropertyOf>
+      <owl:FunctionalProperty rdf:about="&substance;#SMILES"/>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&substance;#InChI">
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+    <rdfs:range rdf:resource="&xsd;#string"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The IUPAC International Chemical Identifier (InChI) is a non-proprietary identifier for chemical substances that can be used in printed and electronic data sources thus enabling easier linking of diverse data and information compilations (Stein et al., 2003). InChI does not require the establishment of a registry system. Unlike the CAS Registry System, it does not depend on the existence of a database of unique substance records to establish the next number for any new MolecularEntity being assigned an InChI. It uses a set of IUPAC structure conventions, and rules for normalization and canonicalization of the structure representation to establish a unique label for a MolecularEntity.
+For reference, see http://www.iupac.org/inchi/</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:FunctionalProperty rdf:about="&substance;#isomericStructuralFormula"/>
+    </rdfs:subPropertyOf>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&substance;#isomericStructuralFormula">
+    <rdfs:subPropertyOf>
+      <owl:FunctionalProperty rdf:about="&substance;#structuralFormula"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An isomericStructuralFormula is a structuralFormula that allows to distinguish the different isomers of a MolecularEntity.</rdfs:comment>
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&substance;#SMILES">
+    <rdfs:subPropertyOf>
+      <owl:FunctionalProperty rdf:about="&substance;#structuralFormula"/>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >SMILES (Simplified Molecular Input Line Entry System) is a line notation for unambiguously describing the structure of chemical molecules using ASCII strings.</rdfs:comment>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&substance;#molecularFormula">
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+    <rdfs:range rdf:resource="&xsd;#string"/>
+    <rdfs:subPropertyOf rdf:resource="&substance;#chemicalFormula"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A molecularFormula is a chemicalFormula that specifies the (absolute) number of constituting atoms of a MolecularEntity, without indicating how they are linked. 
+In a molecularFormula, the letters representing the chemical elements are listed according to the following convention: In organic compounds, C is always cited first, H second and then the rest, in alphabetical order. In non-carbon-containing compounds, strict alphabetical order is adhered to.
+For polymers and other macromelocules, parentheses are placed around the repeating unit. For example, a hydrocarbon molecule that is described as: CH3(CH2)50CH3, is a molecule with 50 repeating units. If the number of repeating units is unknown or variable, the letter n may be used to indicate this: CH3(CH2)nCH3.
+For ions, the charge on a particular atom may be denoted with a right-hand '+' or '-', e.g., 'Na+' or 'Cu,2+'. The total charge on a charged molecule or a polyatomic ion may also be shown in this way, e.g., 'H3O+' or 'SO4,2-'.</rdfs:comment>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:ID="canonicalSMILES">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >canonicalSMILES is the version of the SMILES specification that applies canonicalization rules to ensure that each ChemicalSpecies has a single, unique SMILES representation.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&substance;#canonicalStructuralFormula"/>
+    <rdfs:subPropertyOf rdf:resource="&substance;#SMILES"/>
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&substance;#empiricalFormula">
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&substance;#chemicalFormula"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An empiricalFormula is a chemicalFormula that indicates the relative number of each constituting chemical element of a MolecularEntity.
+In an empiricalFormula, the letters representing the chemical elements are listed according to the following convention: In organic compounds, C is always cited first, H second and then the rest, in alphabetical order. In non-carbon-containing compounds, strict alphabetical order is adhered to.</rdfs:comment>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&substance;#structuralFormula">
+    <rdfs:subPropertyOf rdf:resource="&substance;#chemicalFormula"/>
+    <rdfs:range rdf:resource="&xsd;#string"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A structuralFormula is a chemicalFormula that supplies information about the types of bonds and the spatial arrangement of the atoms of a MolecularEntity using a linear string notation.</rdfs:comment>
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&substance;#WLN">
+    <rdfs:range rdf:resource="&xsd;#string"/>
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&substance;#structuralFormula"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The Wiswesser line notation (WLN), also known as Wiswesser line formula, is a precise and concise means of expressing structural formulas as character strings. The basic idea is to use letter symbols to denote functional groups and numbers to express the lengths of chains and the sizes of rings. For details, refer to Smith (1968).</rdfs:comment>
+  </owl:FunctionalProperty>
+    
+    <!-- break    -->
+  
+  <owl:DatatypeProperty rdf:about="&substance;#substanceID">
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="&substance;#Substance"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A substanceID is a precise identifier for a Substance. A substanceID must be unambiguous, but it is not necessarily unique.</rdfs:comment>
+  </owl:DatatypeProperty>
+    
+    <!-- break    -->
+
+  
+  <owl:DatatypeProperty rdf:ID="name">
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The different names of a Substance. Both trivial and systematic names can be indicated here.</rdfs:comment>
+    <rdfs:range rdf:resource="&xsd;#string"/>
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:about="&substance;#substanceID"/>
+    </rdfs:subPropertyOf>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="uniqueSubstanceID">
+    <rdf:type rdf:resource="&owl;#FunctionalProperty"/>
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&substance;#substanceID"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A uniqueSubstanceID is a unique identifier for a Substance.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&substance;#CAS_RegistryNumber">
+    <rdfs:range rdf:resource="&xsd;#string"/>
+    <rdf:type rdf:resource="&owl;#FunctionalProperty"/>
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A CAS_RegistryNumber is a uniqueSubstanceID issued by the Chemical Abstracts Service (CAS) a division of the American Chemical Society. A CAS_RegistryNumber can be assigned to ChemicalSpecies as well as to some Mixtures. A CAS_RegistryNumber includes up to 9 digits, which are separated into 3 groups by hyphens (xxxxxx-xx-x). The first part of the number, starting from the left, has up to 6 digits; the second part has 2 digits. The final part consists of a single check digit or checksum that makes it easy to determine whether a CAS number is valid or not. 
+See http://www.cas.org/EO/regsys.html for details.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&substance;#uniqueSubstanceID"/>
+  </owl:DatatypeProperty>
+</rdf:RDF>

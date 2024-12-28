@@ -1,0 +1,138 @@
+{
+    "basic": {
+        "reactions": [
+            "H<sup>+</sup> + H<sub>2</sub>BO<sub>3</sub><sup>-</sup> > H<sub>3</sub>BO<sub>3</sub>",
+            "6 H<sup>+</sup> + 5 I<sup>-</sup> + IO<sub>3</sub><sup>-</sup> > 3 I<sub>2</sub>",
+            "I<sup>-</sup> + I<sub>2</sub> > I<sub>3</sub><sup>-</sup>",
+            "I<sub>3</sub><sup>-</sup> > I<sup>-</sup> + I<sub>2</sub>"
+        ],
+        "solvents": [
+            "Water"
+        ],
+        "species": [
+            "H<sup>+</sup>",
+            "I<sup>-</sup>",
+            "I<sub>2</sub>",
+            "I<sub>3</sub><sup>-</sup>",
+            "IO<sub>3</sub><sup>-</sup>",
+            "H<sub>2</sub>BO<sub>3</sub><sup>-</sup>",
+            "H<sub>3</sub>BO<sub>3</sub>"
+        ],
+        "streams": [
+            "Liquid stream 1",
+            "Liquid stream 2",
+            "Gas stream"
+        ],
+        "catalysts": []
+    },
+    "description": {
+        "accumulation": "Continuous",
+        "flow_pattern": "Annular_Microflow",
+        "molecular_transport": [
+            "Engulfment"
+        ],
+        "parameter_law": {
+            "Film_Thickness": "Film_Thickness_Law_with_Annular_Microflow_by_Youngbae_et_al.",
+            "Mixing_Time": "Mixing_Time_Law_with_Annular_Microflow_by_Youngbae_et_al."
+        },
+        "reaction": {
+            "6 H<sup>+</sup> + 5 I<sup>-</sup> + IO<sub>3</sub><sup>-</sup> > 3 I<sub>2</sub>": [
+                "Exponential_Concentration",
+                "Ionicity-Related_Rate_Constant"
+            ],
+            "H<sup>+</sup> + H<sub>2</sub>BO<sub>3</sub><sup>-</sup> > H<sub>3</sub>BO<sub>3</sub>": [
+                "Instantaneous"
+            ],
+            "I<sub>3</sub><sup>-</sup> > I<sup>-</sup> + I<sub>2</sub>": [
+                "Exponential_Concentration",
+                "Plain_Rate_Constant"
+            ],
+            "I<sup>-</sup> + I<sub>2</sub> > I<sub>3</sub><sup>-</sup>": [
+                "Exponential_Concentration",
+                "Plain_Rate_Constant"
+            ]
+        }
+    },
+    "information": {
+        "molecular_transport": {
+            "Mixing_Time_Slope": 0.0075
+        },
+        "reactions": {
+            "6 H<sup>+</sup> + 5 I<sup>-</sup> + IO<sub>3</sub><sup>-</sup> > 3 I<sub>2</sub>": {
+                "Ionicity-Related_Rate_Constant": "if I < 0.16:\n    10 ** (9.28 - 3.66 * I ** 0.5)\nelse:\n    10 ** (8.38 - 1.51 * I ** 0.5 + 0.23 * I)",
+                "Partial_Order": {
+                    "H<sup>+</sup>": 2,
+                    "I<sup>-</sup>": 2,
+                    "IO<sub>3</sub><sup>-</sup>": 1
+                }
+            },
+            "H<sup>+</sup> + H<sub>2</sub>BO<sub>3</sub><sup>-</sup> > H<sub>3</sub>BO<sub>3</sub>": {},
+            "I<sub>3</sub><sup>-</sup> > I<sup>-</sup> + I<sub>2</sub>": {
+                "Partial_Order": {
+                    "I<sub>3</sub><sup>-</sup>": 1
+                },
+                "Rate_Constant": {
+                    "Water": 7500000
+                }
+            },
+            "I<sup>-</sup> + I<sub>2</sub> > I<sub>3</sub><sup>-</sup>": {
+                "Partial_Order": {
+                    "I<sub>2</sub>": 1,
+                    "I<sup>-</sup>": 1
+                },
+                "Rate_Constant": {
+                    "Water": 5600000000
+                }
+            }
+        },
+        "reactor": {
+            "Reactor_Length": 0.05,
+            "Reactor_Radius": 0.0005
+        },
+        "species": {
+            "Species_Charge": {
+                "H<sub>2</sub>BO<sub>3</sub><sup>-</sup>": -1,
+                "H<sub>3</sub>BO<sub>3</sub>": 0,
+                "H<sup>+</sup>": 1,
+                "I<sub>2</sub>": 0,
+                "I<sub>3</sub><sup>-</sup>": -1,
+                "I<sup>-</sup>": -1,
+                "IO<sub>3</sub><sup>-</sup>": -1
+            }
+        },
+        "streams": {
+            "Gas stream": {
+                "Density_Gas": 1.183,
+                "reactions": [],
+                "solvent": null,
+                "state": "gaseous",
+                "Viscosity_Gas": 0.0000181
+            },
+            "Liquid stream 1": {
+                "Density": 998,
+                "reactions": [
+                    "H<sup>+</sup> + H<sub>2</sub>BO<sub>3</sub><sup>-</sup> > H<sub>3</sub>BO<sub>3</sub>",
+                    "6 H<sup>+</sup> + 5 I<sup>-</sup> + IO<sub>3</sub><sup>-</sup> > 3 I<sub>2</sub>",
+                    "I<sup>-</sup> + I<sub>2</sub> > I<sub>3</sub><sup>-</sup>",
+                    "I<sub>3</sub><sup>-</sup> > I<sup>-</sup> + I<sub>2</sub>"
+                ],
+                "solvent": "Water",
+                "state": "liquid",
+                "Viscosity": 0.00089
+            },
+            "Liquid stream 2": {
+                "Density": 998,
+                "reactions": [
+                    "H<sup>+</sup> + H<sub>2</sub>BO<sub>3</sub><sup>-</sup> > H<sub>3</sub>BO<sub>3</sub>",
+                    "6 H<sup>+</sup> + 5 I<sup>-</sup> + IO<sub>3</sub><sup>-</sup> > 3 I<sub>2</sub>",
+                    "I<sup>-</sup> + I<sub>2</sub> > I<sub>3</sub><sup>-</sup>",
+                    "I<sub>3</sub><sup>-</sup> > I<sup>-</sup> + I<sub>2</sub>"
+                ],
+                "solvent": "Water",
+                "state": "liquid",
+                "Viscosity": 0.00089
+            }
+        }
+    },
+    "type": "bottom-up"
+}

@@ -1,0 +1,988 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY binary_tree  "&root;meta_model/data_structures/binary_tree.owl">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY maths    "&root;OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl">
+]>
+
+<rdf:RDF
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns="&maths;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:binary_tree="&binary_tree;#"
+  xml:base="&maths;">
+  <owl:Ontology rdf:about="&maths;">
+    <owl:imports rdf:resource="&binary_tree;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'mathematical_relation' introduces concepts to represent mathematical expressions. However, it is not the objective of this module to describe mathematical models. Rather, this module provides auxiliary concepts, which are utilized by other ontology modules. 
+Mathematical relations and expressions are represented by means of binary trees. The nodes of the tree represent the operands and the operators, and the structure of the tree specifies the order of evaluation.
+The following classes and relations of the Meta Model are used (i.e., refined) within 'mathematical_realtion':
+
+&lt;owl:Class rdf:about="&binary_tree;#Node"/&gt;
+&lt;owl:Class rdf:about="&fc;#NonExhaustiveValueSet"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&binary_tree;#hasAncestor"/&gt;
+&lt;owl:ObjectProperty rdf:about="&binary_tree;#hasDescendent"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#object-featureRelation"/&gt;
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="FunctionalOperator">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="RelationalOperator"/>
+    </owl:disjointWith>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:ID="UnaryOperator"/>
+          <owl:Class rdf:ID="BinaryOperator"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A FunctionalOperator denotes a mathematical function.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Operator"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="InternalNode">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&maths;#FunctionalOperator"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasNodeValue"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:someValuesFrom>
+                  <owl:Class rdf:about="&maths;#UnaryOperator"/>
+                </owl:someValuesFrom>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&maths;#hasNodeValue"/>
+                </owl:onProperty>
+              </owl:Restriction>
+              <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <owl:Restriction>
+                        <owl:cardinality rdf:datatype="&xsd;#int"
+                        >1</owl:cardinality>
+                        <owl:onProperty>
+                          <owl:ObjectProperty rdf:ID="hasChild"/>
+                        </owl:onProperty>
+                      </owl:Restriction>
+                      <owl:Restriction>
+                        <owl:onProperty>
+                          <owl:DatatypeProperty rdf:ID="leftChildNodeValue"/>
+                        </owl:onProperty>
+                        <owl:cardinality rdf:datatype="&xsd;#int"
+                        >0</owl:cardinality>
+                      </owl:Restriction>
+                      <owl:Restriction>
+                        <owl:onProperty>
+                          <owl:DatatypeProperty rdf:ID="rightChildNodeValue"/>
+                        </owl:onProperty>
+                        <owl:cardinality rdf:datatype="&xsd;#int"
+                        >0</owl:cardinality>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <owl:Restriction>
+                        <owl:onProperty>
+                          <owl:DatatypeProperty rdf:about="&maths;#leftChildNodeValue"/>
+                        </owl:onProperty>
+                        <owl:cardinality rdf:datatype="&xsd;#int"
+                        >1</owl:cardinality>
+                      </owl:Restriction>
+                      <owl:Restriction>
+                        <owl:onProperty>
+                          <owl:DatatypeProperty rdf:about="&maths;#rightChildNodeValue"/>
+                        </owl:onProperty>
+                        <owl:cardinality rdf:datatype="&xsd;#int"
+                        >0</owl:cardinality>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <owl:Restriction>
+                        <owl:onProperty>
+                          <owl:DatatypeProperty rdf:about="&maths;#rightChildNodeValue"/>
+                        </owl:onProperty>
+                        <owl:cardinality rdf:datatype="&xsd;#int"
+                        >1</owl:cardinality>
+                      </owl:Restriction>
+                      <owl:Restriction>
+                        <owl:onProperty>
+                          <owl:DatatypeProperty rdf:about="&maths;#leftChildNodeValue"/>
+                        </owl:onProperty>
+                        <owl:cardinality rdf:datatype="&xsd;#int"
+                        >0</owl:cardinality>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:unionOf>
+              </owl:Class>
+            </owl:intersectionOf>
+          </owl:Class>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:someValuesFrom>
+                  <owl:Class rdf:about="&maths;#BinaryOperator"/>
+                </owl:someValuesFrom>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&maths;#hasNodeValue"/>
+                </owl:onProperty>
+              </owl:Restriction>
+              <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                  <owl:Restriction>
+                    <owl:cardinality rdf:datatype="&xsd;#int"
+                    >2</owl:cardinality>
+                    <owl:onProperty>
+                      <owl:ObjectProperty rdf:about="&maths;#hasChild"/>
+                    </owl:onProperty>
+                  </owl:Restriction>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <owl:Restriction>
+                        <owl:onProperty>
+                          <owl:DatatypeProperty rdf:about="&maths;#leftChildNodeValue"/>
+                        </owl:onProperty>
+                        <owl:cardinality rdf:datatype="&xsd;#int"
+                        >1</owl:cardinality>
+                      </owl:Restriction>
+                      <owl:Restriction>
+                        <owl:onProperty>
+                          <owl:DatatypeProperty rdf:about="&maths;#rightChildNodeValue"/>
+                        </owl:onProperty>
+                        <owl:cardinality rdf:datatype="&xsd;#int"
+                        >1</owl:cardinality>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:unionOf>
+              </owl:Class>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Leaf"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="RootNode"/>
+    </owl:disjointWith>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&maths;#hasChild"/>
+                </owl:onProperty>
+                <owl:someValuesFrom>
+                  <owl:Class rdf:ID="Node"/>
+                </owl:someValuesFrom>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:about="&maths;#rightChildNodeValue"/>
+                </owl:onProperty>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:about="&maths;#leftChildNodeValue"/>
+                </owl:onProperty>
+              </owl:Restriction>
+            </owl:unionOf>
+          </owl:Class>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="hasParent"/>
+            </owl:onProperty>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&maths;#Node"/>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+          <owl:Class rdf:about="&maths;#Node"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A node that has a parent node as well as a child. The child may be represented either as a node or through the attribute leftChildNodeValue or rightChildNodeValue.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&maths;#Node">
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&maths;#hasNodeValue"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:ID="nodeValue"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >0</owl:cardinality>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >0</owl:cardinality>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&maths;#hasNodeValue"/>
+                </owl:onProperty>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:about="&maths;#nodeValue"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Binary trees can be used to represent mathematical expressions: specifically the 
+combinations of operators, operands, and order of evaluation. The leaves of such an expression tree are operands in the expression, and the internal nodes are the operators.  For example, the relation  (1+2)*3 &lt; 4 can be represented by the following tree:
+
+            &lt;
+          /    \
+       *        4
+     /    \
+   +       3
+ /   \     
+1     2</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasRightChild"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&maths;#Node"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&maths;#Node"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&maths;#hasParent"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasLeftChild"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&maths;#hasNodeValue"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="NodeValue"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&maths;#hasNodeValue"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&binary_tree;#Node"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="&maths;#rightChildNodeValue"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&maths;#NodeValue"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&maths;#hasLeftChild"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&maths;#Node"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="&maths;#leftChildNodeValue"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&maths;#RootNode"/>
+          <owl:Class rdf:about="&maths;#Leaf"/>
+          <owl:Class rdf:about="&maths;#InternalNode"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:about="&maths;#leftChildNodeValue"/>
+                </owl:onProperty>
+                <owl:maxCardinality rdf:datatype="&xsd;#int"
+                >1</owl:maxCardinality>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&maths;#hasLeftChild"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >0</owl:cardinality>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:about="&maths;#leftChildNodeValue"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >0</owl:cardinality>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:maxCardinality rdf:datatype="&xsd;#int"
+                >1</owl:maxCardinality>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&maths;#hasLeftChild"/>
+                </owl:onProperty>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:maxCardinality rdf:datatype="&xsd;#int"
+                >1</owl:maxCardinality>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:about="&maths;#rightChildNodeValue"/>
+                </owl:onProperty>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&maths;#hasRightChild"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >0</owl:cardinality>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:about="&maths;#rightChildNodeValue"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >0</owl:cardinality>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&maths;#hasRightChild"/>
+                </owl:onProperty>
+                <owl:maxCardinality rdf:datatype="&xsd;#int"
+                >1</owl:maxCardinality>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&maths;#hasRightChild"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="&maths;#nodeValue"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Operand">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&maths;#Operator"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Operand is one of the inputs of an Operator.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&maths;#NodeValue"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&maths;#BinaryOperator">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&maths;#UnaryOperator"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&maths;#FunctionalOperator"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A BinaryOperator denotes a binary operation between two expression. Typical binary operations are addition, subtraction, multiplication, division, and exponentiation. 
+Labels and definitions of binary operators are taken from Appendix C "Content Markup Definition" of MathML v2.0, http://www.w3.org/TR/MathML2/appendixc.html</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&maths;#RootNode">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&maths;#hasParent"/>
+            </owl:onProperty>
+            <owl:cardinality rdf:datatype="&xsd;#int"
+            >0</owl:cardinality>
+          </owl:Restriction>
+          <owl:Class rdf:about="&maths;#Node"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A RootNode is the root element of a binary tree. All other Nodes are descendents of the RootNode.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&maths;#Leaf"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&maths;#InternalNode"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&maths;#hasNodeValue"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&maths;#Operator"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:someValuesFrom>
+                  <owl:Class rdf:about="&maths;#UnaryOperator"/>
+                </owl:someValuesFrom>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&maths;#hasNodeValue"/>
+                </owl:onProperty>
+              </owl:Restriction>
+              <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                  <owl:Restriction>
+                    <owl:cardinality rdf:datatype="&xsd;#int"
+                    >1</owl:cardinality>
+                    <owl:onProperty>
+                      <owl:ObjectProperty rdf:about="&maths;#hasChild"/>
+                    </owl:onProperty>
+                  </owl:Restriction>
+                  <owl:Restriction>
+                    <owl:cardinality rdf:datatype="&xsd;#int"
+                    >1</owl:cardinality>
+                    <owl:onProperty>
+                      <owl:DatatypeProperty rdf:about="&maths;#leftChildNodeValue"/>
+                    </owl:onProperty>
+                  </owl:Restriction>
+                  <owl:Restriction>
+                    <owl:onProperty>
+                      <owl:DatatypeProperty rdf:about="&maths;#rightChildNodeValue"/>
+                    </owl:onProperty>
+                    <owl:cardinality rdf:datatype="&xsd;#int"
+                    >1</owl:cardinality>
+                  </owl:Restriction>
+                </owl:unionOf>
+              </owl:Class>
+            </owl:intersectionOf>
+          </owl:Class>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&maths;#hasNodeValue"/>
+                </owl:onProperty>
+                <owl:someValuesFrom>
+                  <owl:Class>
+                    <owl:unionOf rdf:parseType="Collection">
+                      <owl:Class rdf:about="&maths;#BinaryOperator"/>
+                      <owl:Class rdf:about="&maths;#RelationalOperator"/>
+                    </owl:unionOf>
+                  </owl:Class>
+                </owl:someValuesFrom>
+              </owl:Restriction>
+              <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                  <owl:Restriction>
+                    <owl:cardinality rdf:datatype="&xsd;#int"
+                    >2</owl:cardinality>
+                    <owl:onProperty>
+                      <owl:ObjectProperty rdf:about="&maths;#hasChild"/>
+                    </owl:onProperty>
+                  </owl:Restriction>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <owl:Restriction>
+                        <owl:cardinality rdf:datatype="&xsd;#int"
+                        >1</owl:cardinality>
+                        <owl:onProperty>
+                          <owl:DatatypeProperty rdf:about="&maths;#leftChildNodeValue"/>
+                        </owl:onProperty>
+                      </owl:Restriction>
+                      <owl:Restriction>
+                        <owl:onProperty>
+                          <owl:DatatypeProperty rdf:about="&maths;#rightChildNodeValue"/>
+                        </owl:onProperty>
+                        <owl:cardinality rdf:datatype="&xsd;#int"
+                        >1</owl:cardinality>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:unionOf>
+              </owl:Class>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&maths;#Operator">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&maths;#RelationalOperator"/>
+          <owl:Class rdf:about="&maths;#FunctionalOperator"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&maths;#NodeValue"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&maths;#Operand"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Operator is either a RelationalOperator or a FunctionalOperator.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&maths;#NodeValue">
+    <rdfs:subClassOf rdf:resource="&fc;#NonExhaustiveValueSet"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A NodeValue represents a component part of mathematical expression. It can be either an Operator or an Operand.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&maths;#Operand"/>
+          <owl:Class rdf:about="&maths;#Operator"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&maths;#Node"/>
+  </owl:Class>
+  <owl:Class rdf:about="&maths;#UnaryOperator">
+    <owl:disjointWith rdf:resource="&maths;#BinaryOperator"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A UnaryOperator denotes a mathematical operation which takes a single argument. Typical binary operations are 
+squaring, root extraction, or factorial.
+Labels and definitions of unary operators are taken from Appendix C "Content Markup Definition" of MathML v2.0, http://www.w3.org/TR/MathML2/appendixc.html</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&maths;#FunctionalOperator"/>
+  </owl:Class>
+  <owl:Class rdf:about="&maths;#Leaf">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&maths;#Operand"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&maths;#hasNodeValue"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&maths;#hasChild"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&maths;#Node"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="&maths;#leftChildNodeValue"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="&maths;#rightChildNodeValue"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Leaf is a Node without any children.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&maths;#InternalNode"/>
+    <owl:disjointWith rdf:resource="&maths;#RootNode"/>
+  </owl:Class>
+  <owl:Class rdf:about="&maths;#RelationalOperator">
+    <owl:disjointWith rdf:resource="&maths;#FunctionalOperator"/>
+    <rdfs:subClassOf rdf:resource="&maths;#Operator"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A RelationalOperator denotes a mathematical relation, such as equality or greater than, between two expressions.
+Labels and definitions of relational operators are taken from Appendix C "Content Markup Definition" of MathML v2.0, http://www.w3.org/TR/MathML2/appendixc.html</rdfs:comment>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&maths;#hasChild">
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:ID="hasDescendent"/>
+    </rdfs:subPropertyOf>
+    <rdfs:range rdf:resource="&maths;#Node"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&maths;#hasParent"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasChild points to the children of a Node; it subsumes the relations hasLeftChild and hasRightChild.</rdfs:comment>
+    <rdfs:domain rdf:resource="&maths;#Node"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isLeftChildOf">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isLeftChildOf points from the left child Node to its parent Node.</rdfs:comment>
+    <rdfs:domain rdf:resource="&maths;#Node"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="&maths;#hasParent"/>
+    </rdfs:subPropertyOf>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&maths;#hasLeftChild"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="&maths;#Node"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&maths;#hasRightChild">
+    <rdfs:subPropertyOf rdf:resource="&maths;#hasChild"/>
+    <rdfs:range rdf:resource="&maths;#Node"/>
+    <rdfs:domain rdf:resource="&maths;#Node"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasRightChild links a parent Node to its right child Node.</rdfs:comment>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="isRightChildOf"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&maths;#hasLeftChild">
+    <rdfs:domain rdf:resource="&maths;#Node"/>
+    <rdfs:subPropertyOf rdf:resource="&maths;#hasChild"/>
+    <rdfs:range rdf:resource="&maths;#Node"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasLeftChild links a parent Node to its left child Node.</rdfs:comment>
+    <owl:inverseOf rdf:resource="&maths;#isLeftChildOf"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&maths;#hasNodeValue">
+    <rdfs:domain rdf:resource="&maths;#Node"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#object-featureRelation"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasNodeValue links a NodeValue to a Node.</rdfs:comment>
+    <rdfs:range rdf:resource="&maths;#NodeValue"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&maths;#hasParent">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasParent points to the parent of a Node.</rdfs:comment>
+    <rdfs:domain rdf:resource="&maths;#Node"/>
+    <owl:inverseOf rdf:resource="&maths;#hasChild"/>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:ID="hasAncestor"/>
+    </rdfs:subPropertyOf>
+    <rdfs:range rdf:resource="&maths;#Node"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&maths;#isRightChildOf">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isRightChildOf points from the right child Node to its parent Node.</rdfs:comment>
+    <rdfs:domain rdf:resource="&maths;#Node"/>
+    <owl:inverseOf rdf:resource="&maths;#hasRightChild"/>
+    <rdfs:range rdf:resource="&maths;#Node"/>
+    <rdfs:subPropertyOf rdf:resource="&maths;#hasParent"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="&maths;#nodeValue">
+    <rdfs:domain rdf:resource="&maths;#Node"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The attribute nodeValue indicates an operand (usually a number) in a mathematical expression.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&maths;#leftChildNodeValue">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The attribute 'leftChildNodeValue' can be used as a shorthand to substitute a left child Node, the NodeValue of which is represented through the attribute 'nodeValue'.</rdfs:comment>
+    <rdfs:domain rdf:resource="&maths;#Node"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&maths;#rightChildNodeValue">
+    <rdfs:domain rdf:resource="&maths;#Node"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The attribute 'rightChildNodeValue' can be used as a shorthand to substitute a right child Node, the NodeValue of which is represented through the attribute 'nodeValue'.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:TransitiveProperty rdf:about="&maths;#hasAncestor">
+    <owl:inverseOf>
+      <owl:TransitiveProperty rdf:about="&maths;#hasDescendent"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="&maths;#Node"/>
+    <rdfs:subPropertyOf rdf:resource="&binary_tree;#hasAncestor"/>
+    <rdfs:domain rdf:resource="&maths;#Node"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ancestors of a Node are the Nodes that precede the current Node in the tree (i.e., the Node’s parent, grandparent, etc.).</rdfs:comment>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+  </owl:TransitiveProperty>
+  <owl:TransitiveProperty rdf:about="&maths;#hasDescendent">
+    <rdfs:domain rdf:resource="&maths;#Node"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The descendents of a Node are the Nodes that succeed the current Node in the tree (i.e., the Node’s children, grandchildren, etc.).</rdfs:comment>
+    <owl:inverseOf rdf:resource="&maths;#hasAncestor"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:range rdf:resource="&maths;#Node"/>
+    <rdfs:subPropertyOf rdf:resource="&binary_tree;#hasDescendent"/>
+  </owl:TransitiveProperty>
+  <BinaryOperator rdf:ID="times">
+    <owl:differentFrom>
+      <BinaryOperator rdf:ID="root">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >This is the binary operator used to construct the nth root of an expression. The first argument "a" is the expression and the second object "n" denotes the root, as in ( a ) ^ (1/n) 
+http://www.w3.org/TR/MathML2/appendixc.html#cedef.root</rdfs:comment>
+        <owl:differentFrom rdf:resource="&maths;#times"/>
+        <owl:differentFrom>
+          <BinaryOperator rdf:ID="divide">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >Binary division operator that is used indicate the mathematical operation A "divided by" B.</rdfs:comment>
+            <owl:differentFrom>
+              <BinaryOperator rdf:ID="power">
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >This is the binary powering operator that is used to construct expressions such as A "to the power of" B. In particular, it is the operation for which A "to the power of" 2 is equivalent to A*A.
+http://www.w3.org/TR/MathML2/appendixc.html#cedef.power.</rdfs:comment>
+                <owl:differentFrom rdf:resource="&maths;#times"/>
+                <owl:differentFrom rdf:resource="&maths;#divide"/>
+                <owl:differentFrom>
+                  <BinaryOperator rdf:ID="plus">
+                    <rdfs:comment rdf:datatype="&xsd;#string"
+                    >Binary addition operator 
+http://www.w3.org/TR/MathML2/appendixc.html#cedef.plus</rdfs:comment>
+                    <owl:differentFrom>
+                      <BinaryOperator rdf:ID="minus">
+                        <owl:differentFrom rdf:resource="&maths;#root"/>
+                        <owl:differentFrom rdf:resource="&maths;#power"/>
+                        <owl:differentFrom rdf:resource="&maths;#plus"/>
+                        <owl:differentFrom rdf:resource="&maths;#times"/>
+                        <owl:differentFrom rdf:resource="&maths;#divide"/>
+                        <rdfs:comment rdf:datatype="&xsd;#string"
+                        >This is the binary subtraction operator. It constructs the mathematical operation A "minus" B.</rdfs:comment>
+                      </BinaryOperator>
+                    </owl:differentFrom>
+                    <owl:differentFrom rdf:resource="&maths;#times"/>
+                    <owl:differentFrom rdf:resource="&maths;#root"/>
+                    <owl:differentFrom rdf:resource="&maths;#divide"/>
+                    <owl:differentFrom rdf:resource="&maths;#power"/>
+                  </BinaryOperator>
+                </owl:differentFrom>
+                <owl:differentFrom rdf:resource="&maths;#root"/>
+                <owl:differentFrom rdf:resource="&maths;#minus"/>
+              </BinaryOperator>
+            </owl:differentFrom>
+            <owl:differentFrom rdf:resource="&maths;#minus"/>
+            <owl:differentFrom rdf:resource="&maths;#root"/>
+            <owl:differentFrom rdf:resource="&maths;#plus"/>
+            <owl:differentFrom rdf:resource="&maths;#times"/>
+          </BinaryOperator>
+        </owl:differentFrom>
+        <owl:differentFrom rdf:resource="&maths;#plus"/>
+        <owl:differentFrom rdf:resource="&maths;#minus"/>
+        <owl:differentFrom rdf:resource="&maths;#power"/>
+      </BinaryOperator>
+    </owl:differentFrom>
+    <owl:differentFrom rdf:resource="&maths;#plus"/>
+    <owl:differentFrom rdf:resource="&maths;#power"/>
+    <owl:differentFrom rdf:resource="&maths;#minus"/>
+    <owl:differentFrom rdf:resource="&maths;#divide"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Binary multiplication operator
+http://www.w3.org/TR/MathML2/appendixc.html#cedef.times</rdfs:comment>
+  </BinaryOperator>
+  <UnaryOperator rdf:ID="exp">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Unary operator that represents the exponentiation function.</rdfs:comment>
+  </UnaryOperator>
+  <RelationalOperator rdf:ID="neq">
+    <owl:differentFrom>
+      <RelationalOperator rdf:ID="eq">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >the relational operator "equals"</rdfs:comment>
+        <owl:differentFrom rdf:resource="&maths;#neq"/>
+        <owl:differentFrom>
+          <RelationalOperator rdf:ID="gt">
+            <owl:differentFrom>
+              <RelationalOperator rdf:ID="leq">
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >the relational operator "lesser than or equal"</rdfs:comment>
+                <owl:differentFrom rdf:resource="&maths;#gt"/>
+              </RelationalOperator>
+            </owl:differentFrom>
+            <owl:differentFrom>
+              <RelationalOperator rdf:ID="lt">
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >the relational operator "less than"</rdfs:comment>
+                <owl:differentFrom>
+                  <RelationalOperator rdf:ID="geq">
+                    <owl:differentFrom rdf:resource="&maths;#lt"/>
+                    <rdfs:comment rdf:datatype="&xsd;#string"
+                    >the relational operator "greater than or equal"</rdfs:comment>
+                  </RelationalOperator>
+                </owl:differentFrom>
+                <owl:differentFrom rdf:resource="&maths;#gt"/>
+                <owl:differentFrom rdf:resource="&maths;#eq"/>
+              </RelationalOperator>
+            </owl:differentFrom>
+            <owl:differentFrom rdf:resource="&maths;#eq"/>
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >the relational operator "greater than"</rdfs:comment>
+          </RelationalOperator>
+        </owl:differentFrom>
+        <owl:differentFrom rdf:resource="&maths;#lt"/>
+      </RelationalOperator>
+    </owl:differentFrom>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >the relational operator "equals"</rdfs:comment>
+  </RelationalOperator>
+  <UnaryOperator rdf:ID="ln">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Unary operator that represents the ln function (natural logarithm)</rdfs:comment>
+  </UnaryOperator>
+  <UnaryOperator rdf:ID="sin">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Unary operator that represents the sin function.</rdfs:comment>
+  </UnaryOperator>
+  <UnaryOperator rdf:ID="factorial">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Unary operator used to construct factorials. Factorials are defined by n! = n*(n-1)* ... * 1</rdfs:comment>
+  </UnaryOperator>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Resource">
+      <rdf:first rdf:resource="&maths;#geq"/>
+      <rdf:rest rdf:parseType="Resource">
+        <rdf:first rdf:resource="&maths;#lt"/>
+        <rdf:rest rdf:parseType="Resource">
+          <rdf:rest rdf:parseType="Resource">
+            <rdf:first rdf:resource="&maths;#leq"/>
+            <rdf:rest rdf:parseType="Resource">
+              <rdf:first rdf:resource="&maths;#eq"/>
+              <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="&maths;#neq"/>
+              </rdf:rest>
+            </rdf:rest>
+          </rdf:rest>
+          <rdf:first rdf:resource="&maths;#gt"/>
+        </rdf:rest>
+      </rdf:rest>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <UnaryOperator rdf:about="&maths;#factorial"/>
+      <UnaryOperator rdf:about="&maths;#exp"/>
+      <UnaryOperator rdf:about="&maths;#sin"/>
+      <UnaryOperator rdf:ID="cos">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >Unary operator that represents the cos function.</rdfs:comment>
+      </UnaryOperator>
+      <UnaryOperator rdf:about="&maths;#ln"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Resource">
+      <rdf:first rdf:resource="&maths;#times"/>
+      <rdf:rest rdf:parseType="Resource">
+        <rdf:first rdf:resource="&maths;#root"/>
+        <rdf:rest rdf:parseType="Resource">
+          <rdf:first rdf:resource="&maths;#divide"/>
+          <rdf:rest rdf:parseType="Resource">
+            <rdf:first rdf:resource="&maths;#power"/>
+            <rdf:rest rdf:parseType="Resource">
+              <rdf:first rdf:resource="&maths;#plus"/>
+              <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="&maths;#minus"/>
+              </rdf:rest>
+            </rdf:rest>
+          </rdf:rest>
+        </rdf:rest>
+      </rdf:rest>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>

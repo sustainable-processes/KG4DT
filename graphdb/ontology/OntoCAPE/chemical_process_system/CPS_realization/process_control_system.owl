@@ -1,0 +1,301 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY network_system   "&root;OntoCAPE/upper_level/network_system.owl">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY plant    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant.owl">
+  <!ENTITY pro_con_sys  "&root;OntoCAPE/chemical_process_system/CPS_realization/process_control_system.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:plant="&plant;#"
+    xmlns="&pro_con_sys;#"
+    xmlns:network_system="&network_system;#"
+  xml:base="&pro_con_sys;">
+  <owl:Ontology rdf:about="&pro_con_sys;">
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'process_control_system' realizes a chemical process system in terms of technical equipment for operation.
+The following classes and relations from other ontology modules are used within 'process_control_system':
+
+&lt;owl:Class rdf:about="&network_system;#Device"/&gt;
+&lt;owl:Class rdf:about="&network_system;#Connection"/&gt;
+&lt;owl:Class rdf:about="&plant;#Instrument"/&gt;
+&lt;owl:Class rdf:about="&system;#System"/&gt;
+&lt;owl:Class rdf:about="&system;#Supersystem"/&gt;
+&lt;owl:Class rdf:about="&plant;#Plant"&gt;
+
+&lt;owl:ObjectProperty rdf:about="&system;#isDirectlyConnectedTo"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#hasOutput"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#hasInput"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isDirectSubsystemOf"&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasSubsystem"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasDirectSubsystem"&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#leaves"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#enters"/&gt;
+  
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:imports rdf:resource="&plant;"/>
+    <owl:imports rdf:resource="&network_system;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Human-ProcessCommunicationDevice">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Human-ProcessCommunicationDevice is a direct subsystem of ProcessControlDevice and descibes the human-machine interface by means of hardware</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ProcessControlDevice"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&pro_con_sys;#ProcessControlDevice">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <rdf:Description rdf:about="&system;#isDirectSubsystemOf">
+            <owl:versionInfo rdf:datatype="&xsd;#string"
+            >TODO: definition eintragen</owl:versionInfo>
+          </rdf:Description>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&pro_con_sys;#ProcessControlDevice"/>
+              <owl:Class rdf:ID="InformationProcessing"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="DirectedInformationProcessing"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ProcessControlSystem is a constitutional subsystem of the OperationSystem and describes the realization of the operating subsystem.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&pro_con_sys;#DirectedInformationProcessing"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&pro_con_sys;#ProcessControlDevice"/>
+              <owl:Class rdf:about="&pro_con_sys;#InformationProcessing"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&network_system;#Device"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&pro_con_sys;#InformationProcessing"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <rdf:Description rdf:about="&system;#hasDirectSubsystem">
+            <owl:versionInfo rdf:datatype="&xsd;#string"
+            >TODO: definfion eintragen</owl:versionInfo>
+          </rdf:Description>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&pro_con_sys;#ProcessControlDevice"/>
+              <owl:Class rdf:about="&pro_con_sys;#InformationProcessing"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&pro_con_sys;#Human-ProcessCommunicationDevice"/>
+          <owl:Class rdf:ID="MeasuringInstrument"/>
+          <owl:Class rdf:ID="ControllingInstrument"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&pro_con_sys;#InformationProcessing">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >InformationProcessingDevice is a direct subsystem of ProcessControlSystem and describes the processing by means of hardware components</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&pro_con_sys;#Human-ProcessCommunicationDevice"/>
+              <owl:Class rdf:about="&pro_con_sys;#MeasuringInstrument"/>
+              <owl:Class rdf:about="&pro_con_sys;#ControllingInstrument"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectSubsystemOf"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&pro_con_sys;#InformationProcessing"/>
+              <owl:Class rdf:about="&pro_con_sys;#ProcessControlDevice"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&pro_con_sys;#InformationProcessing"/>
+              <owl:Class rdf:about="&pro_con_sys;#ProcessControlDevice"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&pro_con_sys;#InformationProcessing"/>
+              <owl:Class rdf:about="&pro_con_sys;#ProcessControlDevice"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >2</owl:maxCardinality>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&network_system;#Connection"/>
+  </owl:Class>
+  <owl:Class rdf:about="&pro_con_sys;#DirectedInformationProcessing">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#leaves"/>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&pro_con_sys;#ProcessControlDevice"/>
+        <owl:onProperty rdf:resource="&network_system;#leaves"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#enters"/>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&pro_con_sys;#ProcessControlDevice"/>
+        <owl:onProperty rdf:resource="&network_system;#enters"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&pro_con_sys;#InformationProcessing"/>
+  </owl:Class>
+  <owl:Class rdf:about="&pro_con_sys;#MeasuringInstrument">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >MeasuringDevice is a direct subsystem of ProcessControlSystem and represents all measuring units in the process required</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&pro_con_sys;#ProcessControlDevice"/>
+    <rdfs:subClassOf rdf:resource="&plant;#Instrument"/>
+  </owl:Class>
+  <owl:Class rdf:about="&pro_con_sys;#ControllingInstrument">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ControllingDevice is a direct subsystem of ProcessControlSystem and represents all controlling units in the process required</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&pro_con_sys;#ProcessControlDevice"/>
+    <rdfs:subClassOf rdf:resource="&plant;#Instrument"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ProcessControlSystem">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ProcessControlSystem is a constitutional subsystem of the OperationSystem and describes the realization of the operating subsystem.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&system;#Supersystem"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&system;#System"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&pro_con_sys;#ControllingInstrument"/>
+            <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+            <owl:someValuesFrom rdf:resource="&pro_con_sys;#MeasuringInstrument"/>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&pro_con_sys;#InformationProcessing"/>
+            <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+            <owl:someValuesFrom rdf:resource="&pro_con_sys;#Human-ProcessCommunicationDevice"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <rdf:Description rdf:about="&plant;#Plant">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&pro_con_sys;#ProcessControlSystem"/>
+        <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </rdf:Description>
+</rdf:RDF>

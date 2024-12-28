@@ -1,0 +1,264 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY binary_tree  "&root;meta_model/data_structures/binary_tree.owl">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+]>
+
+<rdf:RDF
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="&binary_tree;#"
+  xml:base="&binary_tree;">
+  <owl:Ontology rdf:about="&binary_tree;">
+    <owl:imports rdf:resource="&fc;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'binary_tree' defines a design pattern for the implementation of binary trees.
+The following classes and relations from other ontology modules are used within 'array':
+ 
+&lt;owl:Class rdf:about="&fc;#Object"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&fc;#inter-objectRelation"/&gt;
+    
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Leaf">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="RootNode"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="InternalNode"/>
+    </owl:disjointWith>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="hasChild"/>
+            </owl:onProperty>
+            <owl:cardinality rdf:datatype="&xsd;#int"
+            >0</owl:cardinality>
+          </owl:Restriction>
+          <owl:Class rdf:ID="Node"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&binary_tree;#Node"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasParent"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Leaf is a Node without any children.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&binary_tree;#Node">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Node is the basic element of a binary tree. It can be linked to up to two child Nodes.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasLeftChild"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&binary_tree;#Node"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&binary_tree;#hasLeftChild"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasRightChild"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&binary_tree;#Node"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&fc;#Object"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&binary_tree;#hasRightChild"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&binary_tree;#hasParent"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&binary_tree;#Node"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&binary_tree;#InternalNode"/>
+          <owl:Class rdf:about="&binary_tree;#Leaf"/>
+          <owl:Class rdf:about="&binary_tree;#RootNode"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&binary_tree;#InternalNode">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An InternalNode is a Node that has one parent and at least one child.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&binary_tree;#Node"/>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&binary_tree;#hasParent"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&binary_tree;#hasChild"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="&binary_tree;#Node"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&binary_tree;#Node"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&binary_tree;#Leaf"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&binary_tree;#RootNode"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >1</owl:minCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&binary_tree;#hasChild"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&binary_tree;#RootNode">
+    <owl:disjointWith rdf:resource="&binary_tree;#InternalNode"/>
+    <owl:disjointWith rdf:resource="&binary_tree;#Leaf"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&binary_tree;#hasChild"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&binary_tree;#Node"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:cardinality rdf:datatype="&xsd;#int"
+            >0</owl:cardinality>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&binary_tree;#hasParent"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:about="&binary_tree;#Node"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A RootNode is the root element of a binary tree. All other Nodes are descendents of the RootNode.</rdfs:comment>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&binary_tree;#hasRightChild">
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="&binary_tree;#hasChild"/>
+    </rdfs:subPropertyOf>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="isRightChildOf"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="&binary_tree;#Node"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasRightChild links a parent Node to its right child Node.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&binary_tree;#hasParent">
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:ID="hasAncestor"/>
+    </rdfs:subPropertyOf>
+    <rdfs:domain rdf:resource="&binary_tree;#Node"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasParent denotes the parent of a Node.</rdfs:comment>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&binary_tree;#hasChild"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&binary_tree;#isRightChildOf">
+    <owl:inverseOf rdf:resource="&binary_tree;#hasRightChild"/>
+    <rdfs:subPropertyOf rdf:resource="&binary_tree;#hasParent"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isRightChildOf points from the right child Node to its parent Node.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&binary_tree;#hasChild">
+    <owl:inverseOf rdf:resource="&binary_tree;#hasParent"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasChild points to the children of a Node; it subsumes the relations hasLeftChild and hasRightChild.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:ID="hasDescendent"/>
+    </rdfs:subPropertyOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&binary_tree;#hasLeftChild">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="isLeftChildOf"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="&binary_tree;#hasChild"/>
+    <rdfs:domain rdf:resource="&binary_tree;#Node"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasLeftChild links a parent Node to its left child Node.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&binary_tree;#isLeftChildOf">
+    <owl:inverseOf rdf:resource="&binary_tree;#hasLeftChild"/>
+    <rdfs:subPropertyOf rdf:resource="&binary_tree;#hasParent"/>
+  </owl:ObjectProperty>
+  <owl:TransitiveProperty rdf:about="&binary_tree;#hasDescendent">
+    <rdfs:range rdf:resource="&binary_tree;#Node"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The descendents of a Node are the Nodes that are traversed when moving down the tree (i.e., the Node’s children, grandchildren, etc.).</rdfs:comment>
+    <rdfs:domain rdf:resource="&binary_tree;#Node"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <owl:inverseOf>
+      <owl:TransitiveProperty rdf:about="&binary_tree;#hasAncestor"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+  </owl:TransitiveProperty>
+  <owl:TransitiveProperty rdf:about="&binary_tree;#hasAncestor">
+    <owl:inverseOf rdf:resource="&binary_tree;#hasDescendent"/>
+    <rdfs:domain rdf:resource="&binary_tree;#Node"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ancestors of a Node are the Nodes that are traversed when moving up the tree (i.e., the Node’s parent, grandparent, etc.).</rdfs:comment>
+    <rdfs:range rdf:resource="&binary_tree;#Node"/>
+  </owl:TransitiveProperty>
+  <owl:AllDifferent/>
+</rdf:RDF>

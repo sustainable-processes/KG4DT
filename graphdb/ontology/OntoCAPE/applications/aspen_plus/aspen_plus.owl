@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY substance    "&root;OntoCAPE/material/substance/substance.owl">
+]>
+
+<rdf:RDF
+    xmlns="file:/ontology/OntoCAPE/applications/aspen_plus/aspen_plus.owl#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:substance="&substance;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+  xml:base="file:/ontology/OntoCAPE/applications/aspen_plus/aspen_plus.owl">
+  <owl:Ontology rdf:about="file:/ontology/OntoCAPE/applications/aspen_plus/aspen_plus.owl">
+  <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+  </terms:license>
+    <owl:imports rdf:resource="&substance;"/>
+  </owl:Ontology>
+  <owl:FunctionalProperty rdf:ID="formula">
+    <rdfs:subPropertyOf rdf:resource="&substance;#substance_identifier"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Component formula used in the property database of the process simulator Aspen Plus. For reference, see Aspen Physical Property System 12.1 manual.</rdfs:comment>
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:ID="name">
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&substance;#substance_identifier"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Component name used in the property database of the process simulator Aspen Plus. For reference, see Aspen Physical Property System 12.1 manual.
+</rdfs:comment>
+  </owl:FunctionalProperty>
+  <rdf:Description rdf:about="&substance;#MolecularSpecies">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="file:/ontology/OntoCAPE/applications/aspen_plus/aspen_plus.owl#name"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty rdf:resource="file:/ontology/OntoCAPE/applications/aspen_plus/aspen_plus.owl#formula"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </rdf:Description>
+</rdf:RDF>

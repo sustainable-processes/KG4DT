@@ -1,0 +1,952 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY network_system   "&root;OntoCAPE/upper_level/network_system.owl">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY technical_system "&root;OntoCAPE/upper_level/technical_system.owl">
+  <!ENTITY geometry "&root;OntoCAPE/supporting_concepts/geometry/geometry.owl">
+  <!ENTITY phase_system "&root;OntoCAPE/material/phase_system/phase_system.owl">
+  <!ENTITY behavior "&root;OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl">
+  <!ENTITY chemical_process_system  "&root;OntoCAPE/chemical_process_system/chemical_process_system.owl">
+  <!ENTITY plant    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant.owl">
+  <!ENTITY process  "&root;OntoCAPE/chemical_process_system/CPS_function/process.owl">
+  <!ENTITY apparatus    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant_equipment/apparatus.owl">
+  <!ENTITY heat_transfer_unit   "&root;OntoCAPE/chemical_process_system/process_units/heat_transfer_unit.owl">
+]>
+
+<rdf:RDF
+    xmlns:behavior="&behavior;#"
+    xmlns="&heat_transfer_unit;#"
+    xmlns:geometry="&geometry;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:chemical_process_system="&chemical_process_system;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:phase_system="&phase_system;#"
+    xmlns:process="&process;#"
+    xmlns:plant="&plant;#"
+    xmlns:apparatus="&apparatus;#"
+  xml:base="&heat_transfer_unit;">
+  <owl:Ontology rdf:about="&heat_transfer_unit;">
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'heat_transfer_unit' provides concepts for the detailed description of a heat transfer unit applicable in a chemical process system.
+The following classes and relations from other ontology modules are used within 'heat_transfer_unit':
+
+&lt;owl:Class rdf:about="&behavior;#MaterialAmount"/&gt;
+&lt;owl:Class rdf:about="&chemical_process_system;#ProcessUnit"/&gt;
+&lt;owl:Class rdf:about="&plant;#Apparatus"/&gt;
+&lt;owl:Class rdf:about="&apparatus;#ShellTubeApparatus"/&gt;
+&lt;owl:Class rdf:about="&process;#TemperatureChange"/&gt;
+&lt;owl:Class rdf:about="&behavior;#HeatTransferRate"&gt;
+&lt;owl:Class rdf:about="&behavior;#HeatTransferRate"/&gt;
+&lt;owl:Class rdf:about="&behavior;#HeatConductionConnection"/&gt;
+&lt;owl:Class rdf:about="&behavior;#PhaseInterfaceTransportProperty"/&gt;
+&lt;owl:Class rdf:about="&process;#ProcessState"/&gt;
+&lt;owl:Class rdf:about="&behavior;#MaterialStream"/&gt;
+&lt;owl:Class rdf:about="&behavior;#MaterialAmount"/&gt;
+&lt;owl:Class rdf:about="&behavior;#PhaseInterfaceTransportFlux"/&gt;
+&lt;owl:Class rdf:about="&behavior;#PressureDrop"/&gt;
+&lt;owl:Class rdf:about="&geometry;#SurfaceArea"/&gt;
+&lt;owl:Class rdf:about="&process;#ProcessStep"/&gt;
+&lt;owl:Class rdf:about="&network_system;#EnvironmentConnection"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&geometry;#has_area"/&gt;
+&lt;owl:ObjectProperty rdf:about="&geometry;#hasSurfaceGeometry"/&gt;
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasBehavioralAspect"/&gt;
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasRealizationAspect"/&gt;
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasFunctionalAspect"/&gt;
+&lt;owl:ObjectProperty rdf:about="&technical_system;#isInfluencedBy"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasProperty"/&gt;
+&lt;owl:ObjectProperty rdf:about="&chemical_process_system;#refersToGeneralizedAmount"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasDirectSubsystem"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isDirectlyConnectedTo"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#hasInput"/&gt;
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasPhenomenon"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#hasOutput"/&gt;
+&lt;owl:ObjectProperty rdf:about="&behavior;#hasPressureDrop"/&gt;
+
+&lt;behavior:InterfaceMolecularTransportPhenomenon rdf:about="&behavior;#interface_heat_conduction"/&gt;
+&lt;behavior:MolecularTransportPhenomenon rdf:about="&behavior;#viscous_momentum_transport"/&gt;
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:imports rdf:resource="&behavior;"/>
+    <owl:imports rdf:resource="&apparatus;"/>
+    <owl:imports rdf:resource="&chemical_process_system;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="HeatTransferCoefficientTimesArea">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A HeatTransferCoefficientTimesArea is a PhaseInterfaceTransportProperty denoting the multiplication of a HeatTransferCoefficient and a heat transfer Area.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&behavior;#PhaseInterfaceTransportProperty"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Axiom_HeatLeak">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="hasHeatLeak"/>
+            </owl:onProperty>
+            <owl:someValuesFrom>
+              <rdf:Description rdf:about="&behavior;#HeatTransferRate">
+                <rdfs:subClassOf>
+                  <owl:Restriction>
+                    <owl:hasValue rdf:resource="&behavior;#interface_heat_conduction"/>
+                    <owl:onProperty rdf:resource="&technical_system;#isInfluencedBy"/>
+                  </owl:Restriction>
+                </rdfs:subClassOf>
+              </rdf:Description>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+          <owl:Class rdf:ID="HeatEnvironmentConnection"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Axiom_HeatLoss"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="TubeSideMaterialAmount">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A TubeSideMaterialAmount corresponds to the MaterialAmount which resides in the tube side of a ShellTubeHeatExchanger.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="ShellSideMaterialAmount"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ShellOrTubeMaterialAmount"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ColdSideMaterialAmount">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="HeatTransferMaterialAmount"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ColdSideMaterialAmount of a ShellTubeHeatExchanger absorbs the heat of the HotSideMaterialAmount by means of heat conduction.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="ShellTubeHeatConnection">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasShellSideFoulingResistance"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                  <owl:Class rdf:about="&heat_transfer_unit;#ShellSideMaterialAmount"/>
+                  <owl:Class rdf:about="&heat_transfer_unit;#TubeSideMaterialAmount"/>
+                </owl:unionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+          <owl:Class rdf:ID="HeatTransferConnection"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasTubeSideFoulingResistance"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="HeatTransferResistance"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasTubeSideFoulingResistance"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="HeatTransferCoefficient"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasTubeSideWallFilmCoefficient"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasShellSideThermalResistance"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&heat_transfer_unit;#ShellSideMaterialAmount"/>
+              <owl:Class rdf:about="&heat_transfer_unit;#TubeSideMaterialAmount"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferResistance"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasShellSideFoulingResistance"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasTubeSideWallFilmCoefficient"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasShellSideWallFilmCoeffficient"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferCoefficient"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferResistance"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasTubeSideThermalResistance"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasShellSideThermalResistance"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferResistance"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasTubeSideThermalResistance"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ShellTubeHeatConnection is a HeatTransferConnection occurring between a ShellSideMaterialAmount and a TubeSideMaterialAmount.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferCoefficient"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasOverallHeatTransferCoefficient"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasTubeSideBulkFilmCoefficient"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferCoefficient"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasShellSideBulkFilmCoefficient"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasShellSideWallFilmCoeffficient"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasShellSideBulkFilmCoefficient"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferCoefficient"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasOverallHeatTransferCoefficient"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasTubeSideBulkFilmCoefficient"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#ShellSideMaterialAmount">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ShellSideMaterialAmount corresponds to the MaterialAmount which resides in the shell side of a ShellTubeHeatExchanger.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&heat_transfer_unit;#TubeSideMaterialAmount"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&heat_transfer_unit;#ShellOrTubeMaterialAmount"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PhaseInterfaceHeatConductionFlux">
+    <rdfs:subClassOf rdf:resource="&behavior;#PhaseInterfaceTransportFlux"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Reboiler">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Reboiler is a ProcessUnit which provides heat to vaporize fluids from a liquid into vapor state of aggregation.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+        <owl:allValuesFrom rdf:resource="&process;#PhaseChange"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&process;#PhaseChange"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="HeatTransferUnit"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ShellTubeHeatExchangerBehavior">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="HeatTransferUnitBehavior"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&heat_transfer_unit;#ShellSideMaterialAmount"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:someValuesFrom rdf:resource="&heat_transfer_unit;#TubeSideMaterialAmount"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:someValuesFrom rdf:resource="&heat_transfer_unit;#ShellTubeHeatConnection"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ShellTubeHeatExchangerBehavior is a HeatTransferUnitBehavior which is composed of one or more ShellSideMaterialAmounts, one or more TubeSideMaterialAmounts and the connecting ShellTubeConnection.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="PhaseInterfaceTransportCoefficient">
+    <rdfs:subClassOf rdf:resource="&behavior;#PhaseInterfaceTransportProperty"/>
+  </owl:Class>
+  <owl:Class rdf:ID="HeatTransferSurface">
+    <rdfs:subClassOf rdf:resource="&geometry;#SurfaceArea"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasEffectiveArea"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A HeatTransferSurface is a surface of a HeatTransferFilmConnection.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#HeatEnvironmentConnection">
+    <rdfs:subClassOf rdf:resource="&network_system;#EnvironmentConnection"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasHeatLoss"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&behavior;#HeatTransferRate"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasHeatLeak"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&behavior;#HeatTransferRate"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasHeatLoss"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasHeatLeak"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A HeatEnvironment connection refers to the heat transfer between a heat exchanger and its environment.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Condenser">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Condenser is a ProcessUnit used to condense fluids from a vapor into liquid state of aggregation.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+        <owl:allValuesFrom rdf:resource="&process;#PhaseChange"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+        <owl:someValuesFrom rdf:resource="&process;#PhaseChange"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferUnit"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferUnit">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&process;#EnthalpyChange"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&process;#EnthalpyChange"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasBehavioralAspect"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferUnitBehavior"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&plant;#Apparatus"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasRealizationAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasRealizationAspect"/>
+        <owl:someValuesFrom rdf:resource="&plant;#Apparatus"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasBehavioralAspect"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferUnitBehavior"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&chemical_process_system;#ProcessUnit"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A heat transfer unit is a device built for efficient heat transfer from one medium to another, whether the media are separated by a solid wall so that they never mix, or the media are in direct contact.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferCoefficient">
+    <rdfs:subClassOf rdf:resource="&heat_transfer_unit;#PhaseInterfaceTransportCoefficient"/>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferConnection">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A HeatTransferConnection is a HeatConductionConnection which has additional relations and attributes to further characterize the heat transfer.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasProperty"/>
+        <owl:someValuesFrom rdf:resource="&heat_transfer_unit;#HeatTransferCoefficientTimesArea"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasProperty"/>
+        <owl:someValuesFrom rdf:resource="&heat_transfer_unit;#PhaseInterfaceHeatConductionFlux"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&behavior;#HeatConductionConnection"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&heat_transfer_unit;#HeatTransferSurface"/>
+        <owl:onProperty rdf:resource="&geometry;#hasSurfaceGeometry"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&behavior;#HeatTransferRate"/>
+        <owl:onProperty rdf:resource="&system;#hasProperty"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferUnitBehavior">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A HeatTransferUnitBehavior is a MaterialAmount that describes the behavioral aspect of a HeatTransferUnit. It is composed of two (or more) material amounts that are connected via (a) HeatTransferConnection(s).</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:someValuesFrom rdf:resource="&heat_transfer_unit;#HeatTransferConnection"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >2</owl:minCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >2</owl:minCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&behavior;#MaterialStream"/>
+              <rdf:Description rdf:about="&behavior;#EnergyStream"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&behavior;#MaterialStream"/>
+              <rdf:Description rdf:about="&behavior;#EnergyStream"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&heat_transfer_unit;#ColdSideMaterialAmount"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&behavior;#MaterialAmount"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="HotSideMaterialAmount"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&behavior;#MaterialStream"/>
+              <rdf:Description rdf:about="&behavior;#EnergyStream"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&behavior;#MaterialStream"/>
+              <rdf:Description rdf:about="&behavior;#EnergyStream"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:ID="HeatLeak"/>
+              <owl:Class rdf:ID="HeatLoss"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferMaterialAmount"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#Axiom_HeatLoss">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasHeatLoss"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="&behavior;#HeatTransferRate"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&heat_transfer_unit;#HeatEnvironmentConnection"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&heat_transfer_unit;#Axiom_HeatLeak"/>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#HeatLeak">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&heat_transfer_unit;#HeatLoss"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&heat_transfer_unit;#HeatEnvironmentConnection"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&behavior;#MaterialAmount"/>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A HeatLeak indicates an EnvironmentConnection and it links a ShellTubeHeatExchangerMaterialAmount to a environmental heat source.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#HotSideMaterialAmount">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The HotSideMaterialAmount of a ShellTubeHeatExchanger releases heat which is then transferred of the ColdSideMaterialAmount by means of heat conduction.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferMaterialAmount"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferMaterialAmount">
+    <rdfs:subClassOf rdf:resource="&behavior;#MaterialAmount"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A HeatTransferMaterialAmount gives an overall presentation of the material amount that may be considered in a heat transfer unit. This may be beneficial to the assignment of general applicable properties.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#HeatTransferResistance">
+    <rdfs:subClassOf rdf:resource="&heat_transfer_unit;#PhaseInterfaceTransportCoefficient"/>
+  </owl:Class>
+  <owl:Class rdf:ID="HeatExchanger">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A heat exchanger is a device that performs a temperature change for a certain fluid.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+        <owl:allValuesFrom rdf:resource="&process;#TemperatureChange"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&process;#TemperatureChange"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&heat_transfer_unit;#HeatTransferUnit"/>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#HeatLoss">
+    <rdfs:subClassOf rdf:resource="&heat_transfer_unit;#HeatEnvironmentConnection"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+        <owl:someValuesFrom rdf:resource="&behavior;#MaterialAmount"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&heat_transfer_unit;#HeatLeak"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A HeatLoss indicates an EnvironmentConnection and it links a ShellTubeHeatExchangerMaterialAmount to a environmental heat source.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&heat_transfer_unit;#ShellOrTubeMaterialAmount">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&behavior;#hasPressureDrop"/>
+        <owl:allValuesFrom rdf:resource="&behavior;#PressureDrop"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&behavior;#hasPressureDrop"/>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&behavior;#MaterialStream"/>
+              <rdf:Description rdf:about="&behavior;#EnergyStream"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&behavior;#MaterialStream"/>
+              <rdf:Description rdf:about="&behavior;#EnergyStream"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&behavior;#MaterialStream"/>
+              <rdf:Description rdf:about="&behavior;#EnergyStream"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&behavior;#viscous_momentum_transport"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasPhenomenon"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&heat_transfer_unit;#HeatTransferMaterialAmount"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&behavior;#MaterialStream"/>
+              <rdf:Description rdf:about="&behavior;#EnergyStream"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ShellTubeHeatExchanger">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&heat_transfer_unit;#HeatExchanger"/>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&technical_system;#hasRealizationAspect"/>
+            <owl:someValuesFrom rdf:resource="&apparatus;#ShellTubeApparatus"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasBehavioralAspect"/>
+        <owl:someValuesFrom rdf:resource="&heat_transfer_unit;#ShellTubeHeatExchangerBehavior"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&heat_transfer_unit;#ShellTubeHeatExchangerBehavior"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasBehavioralAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasRealizationAspect"/>
+        <owl:allValuesFrom rdf:resource="&apparatus;#ShellTubeApparatus"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ShellTubeHeatExchanger is a HeatExchanger realized in a ShellTubeApparatus.</rdfs:comment>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasTubeSideThermalResistance">
+    <rdfs:range rdf:resource="&heat_transfer_unit;#HeatTransferResistance"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasTubeSideThermalResistance refers to the ability of the ShellTubeHeatConnection to be resistant against thermal transmittance on the tube side.</rdfs:comment>
+    <rdfs:domain rdf:resource="&heat_transfer_unit;#ShellTubeHeatConnection"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasShellSideWallFilmCoeffficient">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:domain rdf:resource="&heat_transfer_unit;#ShellTubeHeatConnection"/>
+    <rdfs:range rdf:resource="&heat_transfer_unit;#HeatTransferCoefficient"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasOverallHeatTransferCoefficient">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasOverallHeatTransferCoefficient refers to a HeatTransferCoefficient referencing the entire system.</rdfs:comment>
+    <rdfs:range rdf:resource="&heat_transfer_unit;#HeatTransferCoefficient"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasShellSideBulkFilmCoefficient">
+    <rdfs:domain rdf:resource="&heat_transfer_unit;#ShellTubeHeatConnection"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasShellSideBulkFilmCoefficient refers to a HeatTransferCoefficient referencing the heat conduction initiated by the shell side bulk film.</rdfs:comment>
+    <rdfs:range rdf:resource="&heat_transfer_unit;#HeatTransferCoefficient"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasTubeSideWallFilmCoefficient">
+    <rdfs:domain rdf:resource="&heat_transfer_unit;#ShellTubeHeatConnection"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:range rdf:resource="&heat_transfer_unit;#HeatTransferCoefficient"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasTubeSideWallFilmCoefficient refers to a HeatTransferCoefficient referencing the heat conduction initiated by the tube side wall film.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasHeatLoss">
+    <rdfs:range rdf:resource="&behavior;#HeatTransferRate"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasHeatLoss indicates that a system has a heat sink in the closer environment.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasTubeSideFoulingResistance">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasTubeSideFoulingResistance refers to the ability of the ShellTubeHeatConnection to avoid fouling on the tube side.</rdfs:comment>
+    <rdfs:domain rdf:resource="&heat_transfer_unit;#ShellTubeHeatConnection"/>
+    <rdfs:range rdf:resource="&heat_transfer_unit;#HeatTransferResistance"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasEffectiveArea">
+    <rdfs:range rdf:resource="&geometry;#SurfaceArea"/>
+    <rdfs:domain rdf:resource="&heat_transfer_unit;#HeatTransferSurface"/>
+    <rdfs:subPropertyOf rdf:resource="&geometry;#has_area"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasEffectiveArea refers to the effective HeatTransferArea of the HeatTransferSurface.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasTubeSideBulkFilmCoefficient">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasTubeSideBulkFilmCoefficient refers to a HeatTransferCoefficient referencing the heat conduction initiated by the tube side bulk film.</rdfs:comment>
+    <rdfs:domain rdf:resource="&heat_transfer_unit;#ShellTubeHeatConnection"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:range rdf:resource="&heat_transfer_unit;#HeatTransferCoefficient"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasHeatLeak">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasHeatLeak indicates that a system has a heat source in the closer environment.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:range rdf:resource="&behavior;#HeatTransferRate"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasShellSideThermalResistance">
+    <rdfs:range rdf:resource="&heat_transfer_unit;#HeatTransferResistance"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:domain rdf:resource="&heat_transfer_unit;#ShellTubeHeatConnection"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasShellSideThermalResistance refers to the ability of the ShellTubeHeatConnection to be resistant against thermal transmittance on the shell side.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&heat_transfer_unit;#hasShellSideFoulingResistance">
+    <rdfs:range rdf:resource="&heat_transfer_unit;#HeatTransferResistance"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:domain rdf:resource="&heat_transfer_unit;#ShellTubeHeatConnection"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasShellSideFoulingResistance refers to the ability of the ShellTubeHeatConnection to avoid fouling on the shell side.</rdfs:comment>
+  </owl:ObjectProperty>
+</rdf:RDF>

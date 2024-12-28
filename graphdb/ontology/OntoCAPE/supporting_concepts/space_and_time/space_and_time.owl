@@ -1,0 +1,846 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY coordinate_system    "&root;OntoCAPE/upper_level/coordinate_system.owl">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY phys_dim "&root;OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl">
+  <!ENTITY der_dim "&root;OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl">  
+  <!ENTITY space_time   "&root;OntoCAPE/supporting_concepts/space_and_time/space_and_time.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns="&space_time;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:phys_dim="&phys_dim;#"
+    xmlns:der_dim="&der_dim;#"  
+    xmlns:coordinate_system="&coordinate_system;#"
+  xml:base="&space_time;">
+  <owl:Ontology rdf:about="&space_time;">
+    <owl:imports rdf:resource="&phys_dim;"/>
+    <owl:imports rdf:resource="&coordinate_system;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'space_and_time' introduces spatial and temporal coordinate systems and provides concepts for the representation of spatial and temporal points as well as periods of time.
+The following classes, relations, and individuals from other ontology modules are used within 'space_and_time':
+
+&lt;owl:Class rdf:about="&coordinate_system;#Coordinate"/>
+&lt;owl:Class rdf:about="&coordinate_system;#CoordinateSet"/>
+&lt;owl:Class rdf:about="&coordinate_system;#CoordinateSystem"/>
+&lt;owl:Class rdf:about="&coordinate_system;#CoordinateValue"/>
+&lt;owl:Class rdf:about="&coordinate_system;#CoordinateSystemAxis"/>
+&lt;owl:Class rdf:about="&system;#ScalarQuantity"/>
+&lt;owl:Class rdf:about="&system;#ScalarValue"/>
+
+&lt;owl:ObjectProperty rdf:about="&coordinate_system;#hasAxis"/>
+&lt;owl:ObjectProperty rdf:about="&coordinate_system;#hasCoordinate"/>
+&lt;owl:ObjectProperty rdf:about="&coordinate_system;#refersToAxis"/>
+&lt;owl:ObjectProperty rdf:about="&der_dim;#plane_angle"/>
+&lt;owl:ObjectProperty rdf:about="&system;#comprisesDirectly"/>
+&lt;owl:ObjectProperty rdf:about="&system;#hasDimension"/>
+&lt;owl:ObjectProperty rdf:about="&system;#hasValue"/>
+&lt;owl:ObjectProperty rdf:about="&system;#isObservedAgainstBackdrop"/>
+&lt;owl:ObjectProperty rdf:about="&system;#isValueOf"/>
+
+&lt;phys_dim:BaseDimension rdf:about="&phys_dim;#length"/>
+&lt;phys_dim:BaseDimension rdf:about="&phys_dim;#time"/>
+
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="CartesianCoordinateSystem">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="CurvilinearCoordinateSystem"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A CartesianCoordinateSystem is a SpatialCoordinateSystem, the coordinate surfaces of which are planes (in 3D) or straight lines (in 2D).</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="SpatialCoordinateSystem"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <rdf:Property rdf:about="&coordinate_system;#hasCoordinate"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="StraightCoordinate"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&space_time;#StraightCoordinate"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="CartesianCoordinateSystemAxis"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&space_time;#CartesianCoordinateSystemAxis"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="AngularCoordinate">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&der_dim;#plane_angle"/>
+            <owl:onProperty rdf:resource="&system;#hasDimension"/>
+          </owl:Restriction>
+          <owl:Class rdf:ID="SpatialCoordinate"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&space_time;#StraightCoordinate"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An AngularCoordinate is an angle that acts as a SpatialCoordinate.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#refersToAxis"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="CurvilinearCoordinateSystemAxis"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#CurvilinearCoordinateSystem">
+    <owl:disjointWith rdf:resource="&space_time;#CartesianCoordinateSystem"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&space_time;#AngularCoordinate"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&space_time;#StraightCoordinate"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A CurvilinearCoordinateSystem is a SpatialCoordinateSystem the coordinate surfaces of which are curved surfaces (in 3D) or curved lines (in 2D).</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&space_time;#CurvilinearCoordinateSystemAxis"/>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&space_time;#SpatialCoordinateSystem"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="SpatialCoordinateSystemAxis">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="TemporalCoordinateSystemAxis"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&coordinate_system;#CoordinateSystemAxis"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A SpatialCoordinateSystemAxis is the CoordinateSystemAxis of some SpatialCoordinateSystem.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="TemporalCoordinateSystem">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Spatio-TemporalCoordinateSystem"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&space_time;#SpatialCoordinateSystem"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&space_time;#TemporalCoordinateSystemAxis"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A TemporalCoordinateSystem is a CoordinateSystem for describing temporal positions.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="TemporalCoordinate"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&space_time;#TemporalCoordinate"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&space_time;#TemporalCoordinateSystemAxis"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&coordinate_system;#CoordinateSystem"/>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#TemporalCoordinate">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A TemporalCoordinate is a Coordinate that denotes a temporal position.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&space_time;#SpatialCoordinate"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&space_time;#TemporalCoordinateSystemAxis"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&coordinate_system;#refersToAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+        <owl:hasValue rdf:resource="&phys_dim;#time"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&coordinate_system;#Coordinate"/>
+  </owl:Class>
+  <owl:Class rdf:ID="_2DCartesianCoordinateSystem">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A 2DCartesianCoordinateSystem is an orthogonal PlanarCoordinateSystem that has two straight, perpendicular Axes: the x-axis (aka abscissa) and the y-axis (aka ordinate). A 2DCartesianCoordinateSystem has a positive orientation (i.e., the x-axis points right and the y-axis points up).</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PolarCoordinateSystem"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&space_time;#CartesianCoordinateSystem"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue>
+          <CartesianCoordinateSystemAxis rdf:ID="y-axis">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The individual denotes the y-axis of a positive CartesianCoordinateSystem.</rdfs:comment>
+          </CartesianCoordinateSystemAxis>
+        </owl:hasValue>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:hasValue>
+          <CartesianCoordinateSystemAxis rdf:ID="x-axis">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The individual denotes the x-axis of a positive CartesianCoordinateSystem.</rdfs:comment>
+          </CartesianCoordinateSystemAxis>
+        </owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="PlanarCoordinateSystem"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&space_time;#CartesianCoordinateSystemAxis"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&space_time;#CartesianCoordinateSystemAxis"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#CartesianCoordinateSystemAxis">
+    <rdfs:subClassOf rdf:resource="&space_time;#SpatialCoordinateSystemAxis"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&space_time;#CurvilinearCoordinateSystemAxis"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A CartesianCoordinateSystemAxis is an axis of a CartesianCoordinateSystem.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#CurvilinearCoordinateSystemAxis">
+    <owl:disjointWith rdf:resource="&space_time;#CartesianCoordinateSystemAxis"/>
+    <rdfs:subClassOf rdf:resource="&space_time;#SpatialCoordinateSystemAxis"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A CurvilinearCoordinateSystemAxis is an axis of a CurvilinearCoordinateSystem.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#SpatialCoordinate">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A SpatialCoordinate is a Coordinate that denotes a spatial position.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&coordinate_system;#Coordinate"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&space_time;#SpatialCoordinateSystemAxis"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#refersToAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&space_time;#TemporalCoordinate"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&space_time;#StraightCoordinate"/>
+          <owl:Class rdf:about="&space_time;#AngularCoordinate"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#SpatialCoordinateSystem">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >3</owl:maxCardinality>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >3</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&space_time;#Spatio-TemporalCoordinateSystem"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&space_time;#SpatialCoordinateSystemAxis"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+        <owl:allValuesFrom rdf:resource="&space_time;#SpatialCoordinate"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&space_time;#SpatialCoordinateSystemAxis"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A SpatialCoordinateSystem is a CoordinateSystem for describing spatial positions.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+        <owl:someValuesFrom rdf:resource="&space_time;#SpatialCoordinate"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&space_time;#TemporalCoordinateSystem"/>
+    <rdfs:subClassOf rdf:resource="&coordinate_system;#CoordinateSystem"/>
+  </owl:Class>
+  <owl:Class rdf:ID="_3DSpatialCoordinateSystem">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&space_time;#PlanarCoordinateSystem"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A 3DSpatialCoordinateSystem is a SpatialCoordinateSystem for describing positions in 3D space.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >3</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&space_time;#SpatialCoordinateSystem"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >3</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#Spatio-TemporalCoordinateSystem">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >4</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&space_time;#TemporalCoordinateSystemAxis"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&space_time;#SpatialCoordinateSystemAxis"/>
+              <owl:Class rdf:about="&space_time;#TemporalCoordinateSystemAxis"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Spatio-temporalCoordinateSystem denotes positions in space and time.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:someValuesFrom rdf:resource="&space_time;#SpatialCoordinateSystemAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&space_time;#TemporalCoordinateSystem"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&space_time;#SpatialCoordinate"/>
+              <owl:Class rdf:about="&space_time;#TemporalCoordinate"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+        <owl:someValuesFrom rdf:resource="&space_time;#TemporalCoordinate"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&space_time;#SpatialCoordinateSystem"/>
+    <rdfs:subClassOf rdf:resource="&coordinate_system;#CoordinateSystem"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&space_time;#SpatialCoordinate"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >4</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="TimePeriod">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A TimePeriod is a ScalarQuantity that denotes the temporal duration of a period of time. Optionally, the starting time of the TimePeriod can be indicated.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="SpatialPoint"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&system;#ScalarValue"/>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:FunctionalProperty rdf:ID="hasStartingTime"/>
+                </owl:onProperty>
+                <owl:allValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&coordinate_system;#CoordinateValue"/>
+                      <owl:Restriction>
+                        <owl:onProperty rdf:resource="&system;#isValueOf"/>
+                        <owl:someValuesFrom rdf:resource="&space_time;#TemporalCoordinate"/>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:allValuesFrom>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&system;#ScalarValue"/>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:FunctionalProperty rdf:about="&space_time;#hasStartingTime"/>
+                </owl:onProperty>
+                <owl:maxCardinality rdf:datatype="&xsd;#int"
+                >1</owl:maxCardinality>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#ScalarQuantity"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&phys_dim;#time"/>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="SphericalCoordinateSystem">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&space_time;#CurvilinearCoordinateSystemAxis"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="CylindricalCoordinateSystem"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="_3DCartesianCoordinateSystem"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A SphericalCoordinateSystem is an orthogonal 3DSpatialCoordinateSystem that has spherical coordinates (i.e., radius, azimuth angle, and zenith angle). It is especially suited for describing positions on a sphere or spheroid.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue>
+          <CurvilinearCoordinateSystemAxis rdf:ID="theta-axis">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The individual denotes the theta-axis of a polar coordinate system, spherical coordinate system, or cylindrical coordinate system. Theta is the azimuth or polar angle located in the xy-plane of a positive CartesianCoordinateSystem; it is defined as the angle between the polar axis (which is equivalent to the x-axis of a CartesianCoordinateSystem) and the projection of the r-axis onto the xy-plane. The value range of theta lies between 0 and .</rdfs:comment>
+          </CurvilinearCoordinateSystemAxis>
+        </owl:hasValue>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue>
+          <CurvilinearCoordinateSystemAxis rdf:ID="r-axis">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The r-axis corresponds to the radial coordinate, which denotes the distance (i.e., radius) between a point and the origin of a SpatialCoordinateSystem.</rdfs:comment>
+          </CurvilinearCoordinateSystemAxis>
+        </owl:hasValue>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&space_time;#_3DSpatialCoordinateSystem"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:hasValue>
+          <CurvilinearCoordinateSystemAxis rdf:ID="phi-axis">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The individual denotes the phi-axis of a spherical coordinate system. Phi is the zenith angle between the z-axis and the r-axis. Its value range lies between 0 and .</rdfs:comment>
+          </CurvilinearCoordinateSystemAxis>
+        </owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&space_time;#CurvilinearCoordinateSystemAxis"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#StraightCoordinate">
+    <owl:disjointWith rdf:resource="&space_time;#AngularCoordinate"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#hasDimension"/>
+            <owl:hasValue rdf:resource="&phys_dim;#length"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&space_time;#SpatialCoordinate"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A StraightCoordinate is a distance that acts as a SpatialCoordinate.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#_3DCartesianCoordinateSystem">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&space_time;#CylindricalCoordinateSystem"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A 3DCartesianCoordinateSystem is an orthogonal 3DSpatialCoordinateSystem that has three straight, perpendicular axes: the x-axis, the y-axis, and the z-axis. A 3DCartesianCoordinateSystem has a positive (right-handed) orientation; that is, the xy-plane is horizontal, the z-axis points up, and the x-axis and the y-axis form a positively oriented 2DCartesianCoordinateSystem in the xy-plane if observed from above the xy-plane.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&space_time;#x-axis"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&space_time;#CartesianCoordinateSystem"/>
+    <owl:disjointWith rdf:resource="&space_time;#SphericalCoordinateSystem"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&space_time;#CartesianCoordinateSystemAxis"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&space_time;#y-axis"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:hasValue>
+          <CartesianCoordinateSystemAxis rdf:ID="z-axis">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The individual denotes the z-axis of a positive CartesianCoordinateSystem or CylindricalCoordinateSystem.</rdfs:comment>
+          </CartesianCoordinateSystemAxis>
+        </owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&space_time;#_3DSpatialCoordinateSystem"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&space_time;#CartesianCoordinateSystemAxis"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#PolarCoordinateSystem">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:hasValue rdf:resource="&space_time;#theta-axis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:hasValue rdf:resource="&space_time;#r-axis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&space_time;#PlanarCoordinateSystem"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:someValuesFrom rdf:resource="&space_time;#CurvilinearCoordinateSystemAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:allValuesFrom rdf:resource="&space_time;#CurvilinearCoordinateSystemAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&space_time;#_2DCartesianCoordinateSystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PolarCoordinateSystem is a PlanarCoordinateSystem that has polar coordinates (i.e., radius and polar angle). It is especially suited for describing positions on a circle or ellipse.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#TemporalCoordinateSystemAxis">
+    <rdfs:subClassOf rdf:resource="&coordinate_system;#CoordinateSystemAxis"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A TemporalCoordinateSystemAxis is the CoordinateSystemAxis of some TemporalCoordinateSystem.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&space_time;#SpatialCoordinateSystemAxis"/>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#CylindricalCoordinateSystem">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&space_time;#CartesianCoordinateSystemAxis"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&space_time;#SphericalCoordinateSystem"/>
+    <rdfs:subClassOf rdf:resource="&space_time;#_3DSpatialCoordinateSystem"/>
+    <owl:disjointWith rdf:resource="&space_time;#_3DCartesianCoordinateSystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A CylindricalCoordinateSystem is an orthogonal 3DSpatialCoordinateSystem that has cylindrical coordinates (i.e., radius, height, and azimuth angle). It is especially suited to describe positions on rotationally symmetrical shapes like cylinders or cones.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:hasValue rdf:resource="&space_time;#r-axis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+        <owl:hasValue rdf:resource="&space_time;#z-axis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&space_time;#theta-axis"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&space_time;#CurvilinearCoordinateSystemAxis"/>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#SpatialPoint">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >3</owl:maxCardinality>
+        <owl:onProperty rdf:resource="&system;#comprisesDirectly"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#comprisesDirectly"/>
+        <owl:someValuesFrom rdf:resource="&space_time;#SpatialCoordinate"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#comprisesDirectly"/>
+        <owl:allValuesFrom rdf:resource="&space_time;#SpatialCoordinate"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&coordinate_system;#CoordinateSet"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A SpatialPoint is a point in space; it is represented through a CoordinateSet comprising up to 3 SpatialCoordinates.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&space_time;#TimePeriod"/>
+  </owl:Class>
+  <owl:Class rdf:about="&space_time;#PlanarCoordinateSystem">
+    <owl:disjointWith rdf:resource="&space_time;#_3DSpatialCoordinateSystem"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >2</owl:cardinality>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasCoordinate"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&space_time;#SpatialCoordinateSystem"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >2</owl:cardinality>
+        <owl:onProperty rdf:resource="&coordinate_system;#hasAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PlanarCoordinateSystem is a SspatialCoordinateSystem for describing positions located on a two-dimensional plane.</rdfs:comment>
+  </owl:Class>
+  <owl:FunctionalProperty rdf:about="&space_time;#hasStartingTime">
+    <rdfs:domain rdf:resource="&system;#ScalarValue"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&coordinate_system;#CoordinateValue"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&space_time;#TemporalCoordinate"/>
+            <owl:onProperty rdf:resource="&system;#isValueOf"/>
+          </owl:Restriction>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:subPropertyOf rdf:resource="&system;#isObservedAgainstBackdrop"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Indicates the starting time of a TimePeriod.</rdfs:comment>
+  </owl:FunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:ID="has_axis_2">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Workaround for QCR</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&coordinate_system;#hasAxis"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+  </owl:InverseFunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:ID="has_axis_3">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Workaround for QCR</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&coordinate_system;#hasAxis"/>
+  </owl:InverseFunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:ID="has_axis_1">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Workaround for QCR</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&coordinate_system;#hasAxis"/>
+  </owl:InverseFunctionalProperty>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <CurvilinearCoordinateSystemAxis rdf:about="&space_time;#phi-axis"/>
+      <CurvilinearCoordinateSystemAxis rdf:about="&space_time;#theta-axis"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <TemporalCoordinateSystem rdf:ID="UTC-System">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The UTC-System is a TemporalCoordinateSystem that measures the date-time according to the international time standard UTC (Coordinated Universal Time), disseminated by the International Bureau of Weights and Measures (BIPM, 2007).</rdfs:comment>
+    <coordinate_system:hasCoordinate>
+      <TemporalCoordinate rdf:ID="CoordinatedUniversalTime">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >A CoordinatedUniversalTime is a TemporalCoordinate of an UTC-System; it measures the date-time according to the international time standard UTC.</rdfs:comment>
+        <coordinate_system:refersToAxis>
+          <TemporalCoordinateSystemAxis rdf:ID="t-axis">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The default axis of a TemporalCoordinateSystem.</rdfs:comment>
+          </TemporalCoordinateSystemAxis>
+        </coordinate_system:refersToAxis>
+      </TemporalCoordinate>
+    </coordinate_system:hasCoordinate>
+    <coordinate_system:hasAxis rdf:resource="&space_time;#t-axis"/>
+  </TemporalCoordinateSystem>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <CartesianCoordinateSystemAxis rdf:about="&space_time;#x-axis"/>
+      <CartesianCoordinateSystemAxis rdf:about="&space_time;#y-axis"/>
+      <CartesianCoordinateSystemAxis rdf:about="&space_time;#z-axis"/>
+      <CurvilinearCoordinateSystemAxis rdf:about="&space_time;#r-axis"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>
+

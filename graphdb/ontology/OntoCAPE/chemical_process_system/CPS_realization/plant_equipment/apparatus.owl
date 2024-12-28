@@ -1,0 +1,321 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY geometry "&root;OntoCAPE/supporting_concepts/geometry/geometry.owl">
+  <!ENTITY plant    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant.owl">
+  <!ENTITY apparatus    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant_equipment/apparatus.owl">
+  <!ENTITY fixture  "&root;OntoCAPE/chemical_process_system/CPS_realization/plant_equipment/fixture.owl">
+]>
+
+<rdf:RDF
+    xmlns:fixture="&fixture;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:plant="&plant;#"
+    xmlns="&apparatus;#"
+  xml:base="&apparatus;">
+  <owl:Ontology rdf:about="&apparatus;">
+    <owl:imports rdf:resource="&fixture;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'apparatus' provides some specializations of the apparatuses applicable to a chemical process system.
+The following classes and relations from other ontology modules are used within 'apparatus':
+
+&lt;owl:Class rdf:about="&geometry;#Cylinder"/&gt;
+&lt;owl:Class rdf:about="&plant;#Apparatus"/&gt;
+&lt;owl:Class rdf:about="&system;#QuantitativeValue"/&gt;
+&lt;owl:Class rdf:about="&fixture;#Jacket"/&gt;
+&lt;owl:Class rdf:about="&fixture;#Stirrer"/&gt;
+&lt;owl:Class rdf:about="&plant;#Multiplicity"/&gt;
+&lt;owl:Class rdf:about="&fixture;#Tray"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&geometry;#hasShapeRepresentation"/&gt;
+&lt;owl:ObjectProperty rdf:about="&plant;#hasHeight"/&gt;
+&lt;owl:ObjectProperty rdf:about="&plant;#hasInsideDiameter"/&gt;
+&lt;owl:ObjectProperty rdf:about="&plant;#hasOutsideDiameter"/&gt;
+&lt;owl:ObjectProperty rdf:about="&plant;#hasFixture"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#FixedValueSet"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasCharacteristic"/&gt;
+&lt;owl:ObjectProperty rdf:about="&plant;#hasNumberOfPlantItems"/&gt;
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="HeatedTank">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A HeatedTank is a vessel with a heating Jacket.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Vessel"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&plant;#hasFixture"/>
+        <owl:allValuesFrom rdf:resource="&fixture;#Jacket"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PackedColumn">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PackedColumn is a column which is filled out with some packing material.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="TrayColumn"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Column"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&apparatus;#Column">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&plant;#hasInsideDiameter"/>
+        <owl:someValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&plant;#hasOutsideDiameter"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&plant;#hasHeight"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&plant;#hasInsideDiameter"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&apparatus;#Vessel"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+        <owl:onProperty rdf:resource="&plant;#hasOutsideDiameter"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&geometry;#Cylinder"/>
+        <owl:onProperty rdf:resource="&geometry;#hasShapeRepresentation"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Column is an Apparatus for the separation of fluid mixtures by the physical phenomenon of fugacity. It is basically a vessel with special fixtures, trays or packings, which usually has a cylindrical shape with a large ratio of height to diameter, and is vertically installed.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+        <owl:onProperty rdf:resource="&plant;#hasHeight"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&apparatus;#Vessel">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&plant;#hasInsideDiameter"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+        <owl:onProperty rdf:resource="&plant;#hasInsideDiameter"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&plant;#hasHeight"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&plant;#hasHeight"/>
+        <owl:someValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&plant;#Apparatus"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&geometry;#hasShapeRepresentation"/>
+        <owl:someValuesFrom rdf:resource="&geometry;#Cylinder"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Vessel is an apparatus with a cylindrical shape which usually has a hollow structure to hold materials being processed.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="TEMAClass">
+    <rdfs:subClassOf rdf:resource="&system;#FixedValueSet"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ShellTubeApparatus">
+    <rdfs:subClassOf rdf:resource="&plant;#Apparatus"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasNumberOfShellsInParallel"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasTEMAClass"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&apparatus;#TEMAClass"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&apparatus;#hasTEMAClass"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&plant;#Multiplicity"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasNumberOfShellsInSeries"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&apparatus;#TEMAClass"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&apparatus;#hasTEMAClass"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&plant;#Multiplicity"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&apparatus;#hasNumberOfShellsInParallel"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&apparatus;#hasNumberOfShellsInSeries"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Shell-tubeApparatus is an apparatus which is composed of one or more shell-tube units, each of which has a Shell and a TubeBundle comprising of a number of tubes.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="TrayNumberingConvention">
+    <rdfs:subClassOf rdf:resource="&system;#FixedValueSet"/>
+  </owl:Class>
+  <owl:Class rdf:about="&apparatus;#TrayColumn">
+    <owl:disjointWith rdf:resource="&apparatus;#PackedColumn"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A TrayColumn is a column which internally has a number of Trays installed along the vertical dimension of the column.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasTrayNumberingConvention"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&apparatus;#TrayNumberingConvention"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasNumberOfTrays"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&plant;#Multiplicity"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&plant;#hasFixture"/>
+        <owl:someValuesFrom rdf:resource="&fixture;#Tray"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&apparatus;#Column"/>
+  </owl:Class>
+  <owl:Class rdf:ID="StirredTank">
+    <rdfs:subClassOf rdf:resource="&apparatus;#Vessel"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&plant;#hasFixture"/>
+        <owl:someValuesFrom rdf:resource="&fixture;#Stirrer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A StirredTank is a Vessel with a stirrer inside.</rdfs:comment>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&apparatus;#hasTrayNumberingConvention">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:domain rdf:resource="&apparatus;#TrayColumn"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&apparatus;#TrayNumberingConvention"/>
+          <rdf:Description rdf:about="&system;#QuantitativeValue"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasTrayNumberingConvention defines in which order the trays are number for identification.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&apparatus;#hasNumberOfShellsInSeries">
+    <rdfs:subPropertyOf rdf:resource="&plant;#hasNumberOfPlantItems"/>
+    <rdfs:domain rdf:resource="&apparatus;#ShellTubeApparatus"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&apparatus;#hasNumberOfShellsInParallel">
+    <rdfs:subPropertyOf rdf:resource="&plant;#hasNumberOfPlantItems"/>
+    <rdfs:domain rdf:resource="&apparatus;#ShellTubeApparatus"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&apparatus;#hasTEMAClass">
+    <rdfs:domain rdf:resource="&apparatus;#ShellTubeApparatus"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&apparatus;#TEMAClass"/>
+          <rdf:Description rdf:about="&system;#QuantitativeValue"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&apparatus;#hasNumberOfTrays">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasNumberOfTrays refers to the quantity of trays installed in a column.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&plant;#hasNumberOfPlantItems"/>
+    <rdfs:domain rdf:resource="&apparatus;#TrayColumn"/>
+  </owl:ObjectProperty>
+  <TrayNumberingConvention rdf:ID="bottom-up"/>
+  <TrayNumberingConvention rdf:ID="top-down"/>
+</rdf:RDF>

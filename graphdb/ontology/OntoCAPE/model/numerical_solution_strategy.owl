@@ -1,0 +1,381 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY equation_system  "&root;OntoCAPE/model/equation_system.owl">
+  <!ENTITY mathematical_model   "&root;OntoCAPE/model/mathematical_model.owl">
+  <!ENTITY numerical_solution_strategy  "&root;OntoCAPE/model/numerical_solution_strategy.owl">
+]>
+
+<rdf:RDF
+    xmlns:xsd="http://www.w3.org/2000/10/XMLSchema#"
+    xmlns:rdf="&rdf;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="&numerical_solution_strategy;#"
+    xmlns:equation_system="&equation_system;#"
+  xml:base="&numerical_solution_strategy;">
+  <owl:Ontology rdf:about="&numerical_solution_strategy;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'numerical_solution_strategy' gives a classification of numerical solution strategies and specifies the ability of those strategy to solve a particular type of mathematical model.    
+The follwoing classes and relations from other ontology modules are used within 'numerical_solution_strategy':
+
+&lt;owl:Class rdf:about="&equation_system;#AlgebraicEquationSystem"/&gt;
+&lt;owl:Class rdf:about="&equation_system;#DifferentialAlgebraicEquationSystem"/&gt;
+&lt;owl:Class rdf:about="&equation_system;#LinearAlgebraicSystem"/&gt;
+&lt;owl:Class rdf:about="&equation_system;#NonlinearAlgebraicSystem"/&gt;mathematical_model;#MathematicalModel"/&gt;
+&lt;owl:Class rdf:about="&equation_system;#OrdinaryDifferentialEquationSystem"/&gt;
+&lt;owl:Class rdf:about="&equation_system;#PartialDifferentialAlgebraicSystem"/&gt;
+&lt;owl:Class rdf:about="&system;#System"/&gt;
+&lt;owl:Class rdf:about="&system;#FixedValueSet"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&equation_system;#hasODE_explicitness"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#containsDirectly"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasCharacteristic"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isRelatedTo"/&gt;
+
+&lt;equation_system:ODE_Explicitness rdf:about="&equation_system;#explicit_formulation"/&gt;
+&lt;equation_system:ODE_Explicitness rdf:about="&equation_system;#implicit_formulation"/&gt;
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <owl:imports rdf:resource="&equation_system;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="SolutionStrategyForImplicitODEs">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="SolutionStrategyForExplixcitODEs"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A SolutionStrategyForIImplicitODEs is used to solve OrdinaryDifferentialEquationSystems that are given in an implicit_formulation. Examples are implicit Euler, implicit Runge-Kutta, etc.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ODE_SolutionStrategy"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&equation_system;#OrdinaryDifferentialEquationSystem"/>
+              <owl:Restriction>
+                <owl:hasValue rdf:resource="&equation_system;#implicit_formulation"/>
+                <owl:onProperty rdf:resource="&equation_system;#hasODE_explicitness"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="solves"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="AlgebraicModelSolutionStrategy">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An AlgebraicModelSolutionStrategy is a ModelSolutionStrategy for solving AlgebraicEquationSystems.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PartialDifferentialAlgebraicModelSolutionStrategy"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&numerical_solution_strategy;#ODE_SolutionStrategy"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="DAE_SolutionStrategy"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#solves"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&equation_system;#AlgebraicEquationSystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ModelSolutionStrategy"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&numerical_solution_strategy;#PartialDifferentialAlgebraicModelSolutionStrategy">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PartialDifferentialAlgebraicModelSolutionStrategy is a ModelSolutionStrategy for solving PartialDifferentialAlgebraicSystems.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&numerical_solution_strategy;#ODE_SolutionStrategy"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&numerical_solution_strategy;#DAE_SolutionStrategy"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&numerical_solution_strategy;#AlgebraicModelSolutionStrategy"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&equation_system;#PartialDifferentialAlgebraicSystem"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#solves"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&numerical_solution_strategy;#ModelSolutionStrategy"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&numerical_solution_strategy;#ModelSolutionStrategy">
+    <rdfs:subClassOf rdf:resource="&system;#System"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&mathematical_model;#MathematicalModel"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#solves"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#solves"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&mathematical_model;#MathematicalModel"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="applies"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&numerical_solution_strategy;#ModelSolutionStrategy"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ModelSolutionStrategy is a (typcially numerical) algorithm that can be used to solve mathematical models.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="TypeOfInvolvedSteps">
+    <rdfs:subClassOf rdf:resource="&system;#FixedValueSet"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A type of involved step denotes whether an ordinary differential equation solution strategy is of one-step nature or multi-step nature.
+- A one-step_method characterizes an ODESolutionStrategy that uses information of one integration step. Examples are various Runge-Kutta methods.
+- A multi-step_method characterizes an ODESolutionStrategy that uses information of multiple integration steps. Examples are Adams, BDF, etc.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <TypeOfInvolvedSteps rdf:ID="one-step_method">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >A one-step_method characterizes an ODE_SolutionStrategy that uses information of one integration step. Examples are various Runge-Kutta methods.</rdfs:comment>
+          </TypeOfInvolvedSteps>
+          <TypeOfInvolvedSteps rdf:ID="multi-step_method">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >A multi-step_method characterizes an ODE_SolutionStrategy that uses information of multiple integration steps. Examples are Adams, BDF, etc.</rdfs:comment>
+          </TypeOfInvolvedSteps>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&numerical_solution_strategy;#DAE_SolutionStrategy">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&numerical_solution_strategy;#ODE_SolutionStrategy"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#applies"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="handlesDifferentialIndexUpTo"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#applies"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >2</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&numerical_solution_strategy;#ODE_SolutionStrategy"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&numerical_solution_strategy;#ModelSolutionStrategy"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#applies"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&numerical_solution_strategy;#AlgebraicModelSolutionStrategy"/>
+              <owl:Class rdf:about="&numerical_solution_strategy;#ODE_SolutionStrategy"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#applies"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&numerical_solution_strategy;#AlgebraicModelSolutionStrategy"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A DAE_SolutionStrategy is a ModelSolutionStrategy for solving DifferentialAlgebraicEquationSystems. Examples are implicit Runge-Kutta, BDF, etc.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&numerical_solution_strategy;#PartialDifferentialAlgebraicModelSolutionStrategy"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&equation_system;#DifferentialAlgebraicEquationSystem"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#solves"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&numerical_solution_strategy;#AlgebraicModelSolutionStrategy"/>
+  </owl:Class>
+  <owl:Class rdf:ID="LinearAlgebraicModelSolutionStrategy">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A LinearAlgebraicModelSolutionStrategy is ModelSolutionStrategy for solving LinearAlgebraicSystems. An example is Gauss-elimination.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="NonlinearAlgebraicModelSolutionStrategy"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&equation_system;#LinearAlgebraicSystem"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#solves"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&numerical_solution_strategy;#AlgebraicModelSolutionStrategy"/>
+  </owl:Class>
+  <owl:Class rdf:about="&numerical_solution_strategy;#SolutionStrategyForExplixcitODEs">
+    <owl:disjointWith rdf:resource="&numerical_solution_strategy;#SolutionStrategyForImplicitODEs"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A SolutionStrategyForExplixcitODEs is used to solve ordinary differential equation systems that are given in an explicit_formulation. Examples are explicit Euler, explicit Runge-Kutta, etc.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&equation_system;#OrdinaryDifferentialEquationSystem"/>
+              <owl:Restriction>
+                <owl:hasValue rdf:resource="&equation_system;#explicit_formulation"/>
+                <owl:onProperty rdf:resource="&equation_system;#hasODE_explicitness"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#solves"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&numerical_solution_strategy;#ODE_SolutionStrategy"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&numerical_solution_strategy;#NonlinearAlgebraicModelSolutionStrategy">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A NonlinearAlgebraicModelSolutionStrategy is a ModelSolutionStrategy for solving NonlinearAlgebraicSystem. An example is the Newton's method.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&numerical_solution_strategy;#LinearAlgebraicModelSolutionStrategy"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&equation_system;#NonlinearAlgebraicSystem"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#solves"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&numerical_solution_strategy;#AlgebraicModelSolutionStrategy"/>
+  </owl:Class>
+  <owl:Class rdf:about="&numerical_solution_strategy;#ODE_SolutionStrategy">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="hasTypeOfInvolvedSteps"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&numerical_solution_strategy;#TypeOfInvolvedSteps"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&numerical_solution_strategy;#PartialDifferentialAlgebraicModelSolutionStrategy"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&numerical_solution_strategy;#hasTypeOfInvolvedSteps"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&numerical_solution_strategy;#TypeOfInvolvedSteps"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&numerical_solution_strategy;#DAE_SolutionStrategy"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An ODE_SolutionStrategy is a ModelSolutionStrategy for solving OrdinaryDifferentialEquationSystems.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&numerical_solution_strategy;#ModelSolutionStrategy"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&numerical_solution_strategy;#hasTypeOfInvolvedSteps"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#nonNegativeInteger"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&numerical_solution_strategy;#AlgebraicModelSolutionStrategy"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#solves"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&equation_system;#OrdinaryDifferentialEquationSystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#applies">
+    <rdfs:subPropertyOf rdf:resource="&system;#containsDirectly"/>
+    <rdfs:domain rdf:resource="&numerical_solution_strategy;#ModelSolutionStrategy"/>
+    <rdfs:range rdf:resource="&numerical_solution_strategy;#ModelSolutionStrategy"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ModelSolutionStrategy may apply some other, specialized ModelSolutionStrategy (e.g., for initialization, solving corrector equation, solution of a subproblem, etc.).</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&numerical_solution_strategy;#solves">
+    <rdfs:range rdf:resource="&mathematical_model;#MathematicalModel"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#isDirectlyRelatedTo"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation indicates the type of MathematicalModel, for the solution of which a particular ModelSolutionStrategy is designated</rdfs:comment>
+    <rdfs:domain rdf:resource="&numerical_solution_strategy;#ModelSolutionStrategy"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="&numerical_solution_strategy;#handlesDifferentialIndexUpTo">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A DAE_SolutionStrategy can only solve DifferentialAlgebraicEquationSystems up to a certain differentialIndex. This restriction is specified through the attribute handlesDifferentialIndexUpTo.</rdfs:comment>
+    <rdfs:range rdf:resource="&xsd;#int"/>
+    <rdfs:domain rdf:resource="&numerical_solution_strategy;#DAE_SolutionStrategy"/>
+  </owl:DatatypeProperty>
+  <owl:FunctionalProperty rdf:about="&numerical_solution_strategy;#hasTypeOfInvolvedSteps">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Indicates the TypeOfInvolvedSteps of an ODE_SolutionStrategy.</rdfs:comment>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:range rdf:resource="&numerical_solution_strategy;#TypeOfInvolvedSteps"/>
+    <rdfs:domain rdf:resource="&numerical_solution_strategy;#ODE_SolutionStrategy"/>
+  </owl:FunctionalProperty>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <TypeOfInvolvedSteps rdf:about="&numerical_solution_strategy;#one-step_method"/>
+      <TypeOfInvolvedSteps rdf:about="&numerical_solution_strategy;#multi-step_method"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>
+

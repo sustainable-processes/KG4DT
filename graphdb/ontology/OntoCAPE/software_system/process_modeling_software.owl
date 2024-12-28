@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY material "&root;OntoCAPE/material/material.owl">
+  <!ENTITY mathematical_model   "&root;OntoCAPE/model/mathematical_model.owl">
+  <!ENTITY numerical_solution_strategy  "&root;OntoCAPE/model/numerical_solution_strategy.owl">
+  <!ENTITY process_model    "&root;OntoCAPE/model/process_model.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns:process_model="&process_model;#"
+    xmlns:software_system="file:/ontology/OntoCAPE/software_system/software_system.owl#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:mathematical_model="&mathematical_model;#"
+    xmlns:numerical_solution_strategy="&numerical_solution_strategy;#"
+  xml:base="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl">
+  <owl:Ontology rdf:about="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl">
+  <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+  </terms:license>
+    <owl:imports rdf:resource="&numerical_solution_strategy;"/>
+    <owl:imports rdf:resource="file:/ontology/OntoCAPE/software_system/software_system.owl"/>
+    <owl:imports rdf:resource="&process_model;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="PMC">
+    <rdfs:subClassOf rdf:resource="file:/ontology/OntoCAPE/software_system/software_system.owl#SoftwareSystem"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ChemicalReactionPackage">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="MaterialModelComponent"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="NumericsComponent">
+    <rdfs:subClassOf rdf:resource="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#PMC"/>
+  </owl:Class>
+  <owl:Class rdf:about="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#MaterialModelComponent">
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:allValuesFrom>
+              <owl:Restriction>
+                <owl:allValuesFrom>
+                  <owl:Class>
+                    <owl:unionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&material;#Material"/>
+                      <owl:Restriction>
+                        <owl:someValuesFrom rdf:resource="&material;#Material"/>
+                        <owl:onProperty rdf:resource="&system;#isSubsystemOf"/>
+                      </owl:Restriction>
+                    </owl:unionOf>
+                  </owl:Class>
+                </owl:allValuesFrom>
+                <owl:onProperty rdf:resource="&system;#models"/>
+              </owl:Restriction>
+            </owl:allValuesFrom>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="implements_process_model"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&process_model;#ProcessModel"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ModelComponent"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ThermoComponent">
+    <rdfs:subClassOf rdf:resource="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#MaterialModelComponent"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PME">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#PMC"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="accomodates_pmc"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="file:/ontology/OntoCAPE/software_system/software_system.owl#SoftwareSystem"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SolverComponent">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="implements_model_solution_strategy"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#NumericsComponent"/>
+  </owl:Class>
+  <owl:Class rdf:about="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#ModelComponent">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#implements_process_model"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#PMC"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#implements_process_model">
+    <rdfs:range rdf:resource="&process_model;#ProcessModel"/>
+    <rdfs:domain rdf:resource="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#ModelComponent"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#isDirectlyRelatedTo"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#implements_model_solution_strategy">
+    <rdfs:subPropertyOf rdf:resource="&system;#isDirectlyRelatedTo"/>
+    <rdfs:domain rdf:resource="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#SolverComponent"/>
+    <rdfs:range rdf:resource="&numerical_solution_strategy;#ModelSolutionStrategy"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#accomodates_pmc">
+    <rdfs:subPropertyOf rdf:resource="&system;#isDirectlyRelatedTo"/>
+    <rdfs:domain rdf:resource="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#PME"/>
+    <rdfs:range rdf:resource="file:/ontology/OntoCAPE/software_system/process_modeling_software.owl#PMC"/>
+  </owl:ObjectProperty>
+</rdf:RDF>

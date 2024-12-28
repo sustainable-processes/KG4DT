@@ -1,0 +1,290 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY loop "&root;meta_model/data_structures/loop.owl">
+]>
+
+<rdf:RDF
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns="&loop;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+  xml:base="&loop;">
+  <owl:Ontology rdf:about="&loop;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'loop'  introduces a shorthand for representing structures that consist of repetitive, interlinked Objects
+The following classes and relations from other ontology modules are used within 'loop':
+   
+&lt;owl:Class rdf:about="&fc;#CoequalN-aryRelation"/&gt;
+&lt;owl:Class rdf:about="&fc;#Object"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&fc;#inter-objectRelation"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#involvesObject"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#isInvolvedInN-aryRelation"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#relationAttribute"/&gt;
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+    <owl:imports rdf:resource="&fc;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="ForLoop">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="statementFor_i"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&fc;#Object"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&fc;#Object"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&loop;#statementFor_i"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&fc;#CoequalN-aryRelation"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >1</owl:minCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&loop;#statementFor_i"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&fc;#Object"/>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:SymmetricProperty rdf:ID="sameObject"/>
+                </owl:onProperty>
+                <owl:someValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&fc;#Object"/>
+                      <owl:Restriction>
+                        <owl:someValuesFrom rdf:resource="&loop;#ForLoop"/>
+                        <owl:onProperty>
+                          <owl:ObjectProperty rdf:ID="isStatementFor_iOf"/>
+                        </owl:onProperty>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:someValuesFrom>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="initialStatement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&fc;#Object"/>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:SymmetricProperty rdf:about="&loop;#sameObject"/>
+                </owl:onProperty>
+                <owl:someValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&fc;#Object"/>
+                      <owl:Restriction>
+                        <owl:someValuesFrom rdf:resource="&loop;#ForLoop"/>
+                        <owl:onProperty>
+                          <owl:ObjectProperty rdf:about="&loop;#isStatementFor_iOf"/>
+                        </owl:onProperty>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:someValuesFrom>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="statementFor_iPlus1"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&fc;#Object"/>
+              <owl:Restriction>
+                <owl:someValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&fc;#Object"/>
+                      <owl:Restriction>
+                        <owl:someValuesFrom rdf:resource="&loop;#ForLoop"/>
+                        <owl:onProperty>
+                          <owl:ObjectProperty rdf:about="&loop;#isStatementFor_iOf"/>
+                        </owl:onProperty>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:someValuesFrom>
+                <owl:onProperty>
+                  <owl:SymmetricProperty rdf:about="&loop;#sameObject"/>
+                </owl:onProperty>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="finalStatement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ForLoop is used to represent structures that consist of repetitive, interlinked objects.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="numberOfIterations"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="isFinalStatementOf">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&loop;#finalStatement"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="&loop;#ForLoop"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >denotes the final statement in a ForLoop</rdfs:comment>
+    <rdfs:domain rdf:resource="&fc;#Object"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:ID="isStatementOfLoop"/>
+    </rdfs:subPropertyOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&loop;#statementFor_iPlus1">
+    <rdfs:range rdf:resource="&fc;#Object"/>
+    <rdfs:domain rdf:resource="&loop;#ForLoop"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="isStatementFor_iPlus1Of"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >denotes the objects that in the next iteration of a ForLoop</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:ID="hasLoopStatement"/>
+    </rdfs:subPropertyOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&loop;#hasLoopStatement">
+    <rdfs:subPropertyOf rdf:resource="&fc;#involvesObject"/>
+    <rdfs:domain rdf:resource="&loop;#ForLoop"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&loop;#isStatementOfLoop"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="&fc;#Object"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >subsumes the different statements of a ForLoop</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&loop;#isStatementFor_iOf">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&loop;#statementFor_i"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >denotes the Objects that appear in each iteration of a ForLoop</rdfs:comment>
+    <rdfs:range rdf:resource="&loop;#ForLoop"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="&loop;#isStatementOfLoop"/>
+    </rdfs:subPropertyOf>
+    <rdfs:domain rdf:resource="&fc;#Object"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&loop;#statementFor_i">
+    <rdfs:subPropertyOf rdf:resource="&loop;#hasLoopStatement"/>
+    <owl:inverseOf rdf:resource="&loop;#isStatementFor_iOf"/>
+    <rdfs:domain rdf:resource="&loop;#ForLoop"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >denotes the objects that appear in each iteration of a ForLoop</rdfs:comment>
+    <rdfs:range rdf:resource="&fc;#Object"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&loop;#finalStatement">
+    <rdfs:domain rdf:resource="&loop;#ForLoop"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >denotes the final statement in a ForLoop</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&loop;#hasLoopStatement"/>
+    <rdfs:range rdf:resource="&fc;#Object"/>
+    <owl:inverseOf rdf:resource="&loop;#isFinalStatementOf"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&loop;#initialStatement">
+    <rdfs:domain rdf:resource="&loop;#ForLoop"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="isInitialStatementOf"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="&loop;#hasLoopStatement"/>
+    <rdfs:range rdf:resource="&fc;#Object"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >denotes the initial statement in a ForLoop</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&loop;#isStatementOfLoop">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >subsumes all the individuals that represent statements in a ForLoop</rdfs:comment>
+    <rdfs:domain rdf:resource="&fc;#Object"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#isInvolvedInN-aryRelation"/>
+    <owl:inverseOf rdf:resource="&loop;#hasLoopStatement"/>
+    <rdfs:range rdf:resource="&loop;#ForLoop"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&loop;#isInitialStatementOf">
+    <rdfs:domain rdf:resource="&fc;#Object"/>
+    <rdfs:subPropertyOf rdf:resource="&loop;#isStatementOfLoop"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >denotes the initial statement in a ForLoop</rdfs:comment>
+    <rdfs:range rdf:resource="&loop;#ForLoop"/>
+    <owl:inverseOf rdf:resource="&loop;#initialStatement"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&loop;#isStatementFor_iPlus1Of">
+    <owl:inverseOf rdf:resource="&loop;#statementFor_iPlus1"/>
+    <rdfs:subPropertyOf rdf:resource="&loop;#isStatementOfLoop"/>
+    <rdfs:domain rdf:resource="&fc;#Object"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >denotes the objects that in the next iteration of a ForLoop</rdfs:comment>
+    <rdfs:range rdf:resource="&loop;#ForLoop"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="&loop;#numberOfIterations">
+    <rdfs:subPropertyOf rdf:resource="&fc;#relationAttribute"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >indicates the number of iterations of a particular ForLoop</rdfs:comment>
+    <rdfs:range rdf:resource="&xsd;#int"/>
+    <rdfs:domain rdf:resource="&loop;#ForLoop"/>
+  </owl:DatatypeProperty>
+  <owl:SymmetricProperty rdf:about="&loop;#sameObject">
+    <owl:inverseOf rdf:resource="&loop;#sameObject"/>
+    <rdfs:domain rdf:resource="&fc;#Object"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Identity relation between an Object involved in a in a statementFor_i and an Object that appears in an ininitalStatement, a finalStatement, or a statementFor_iPlus1.</rdfs:comment>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:range rdf:resource="&fc;#Object"/>
+  </owl:SymmetricProperty>
+</rdf:RDF>

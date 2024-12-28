@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY plant    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant.owl">
+  <!ENTITY fixture  "&root;OntoCAPE/chemical_process_system/CPS_realization/plant_equipment/fixture.owl">
+  <!ENTITY machine  "&root;OntoCAPE/chemical_process_system/CPS_realization/plant_equipment/machine.owl">
+]>
+
+
+<rdf:RDF
+    xmlns:p1="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/apparatus/machine.owl#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns="&machine;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:plant="&plant;#"
+  xml:base="&machine;">
+  <owl:Ontology rdf:about="&machine;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'machine' provides specializations of machines applicable to a chemical process system.
+The following classes and relations from other ontology modules are used within 'machine':
+
+&lt;owl:Class rdf:about="&system;#QuantitativeValue"/>
+&lt;owl:Class rdf:about="&plant;#Machine"/>
+
+&lt;owl:ObjectProperty rdf:about="&system;#hasCharacteristic"/>
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <owl:imports rdf:resource="&fixture;"/>
+  </owl:Ontology>
+  <rdfs:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/apparatus/machine.owl#Pump"/>
+  <owl:Class rdf:ID="Pump">
+    <rdfs:subClassOf rdf:resource="&plant;#Machine"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasPumpHead"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/apparatus/machine.owl#hasPumpHead">
+    <rdfs:domain rdf:resource="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/apparatus/machine.owl#Pump"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&machine;#hasPumpHead">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasPumpHead refers the pump head a pump is design for.</rdfs:comment>
+  </owl:ObjectProperty>
+  <rdf:Description rdf:about="&owl;#Thing">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Pump is a Machine which is used to compress or move fluid materials. 
+A further classification of pumps is beyond the current scope of OntoCAPE.</rdfs:comment>
+  </rdf:Description>
+</rdf:RDF>

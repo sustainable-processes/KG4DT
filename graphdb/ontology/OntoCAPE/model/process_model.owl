@@ -1,0 +1,293 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc                       "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY system                   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY material                 "&root;OntoCAPE/material/material.owl">
+  <!ENTITY phase_system             "&root;OntoCAPE/material/phase_system/phase_system.owl">
+  <!ENTITY behavior                 "&root;OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl">
+  <!ENTITY chemical_process_system  "&root;OntoCAPE/chemical_process_system/chemical_process_system.owl">
+  <!ENTITY mathematical_model       "&root;OntoCAPE/model/mathematical_model.owl">
+  <!ENTITY process_model            "&root;OntoCAPE/model/process_model.owl">
+]>
+
+<rdf:RDF
+    xmlns="&process_model;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:behavior="&behavior;#"
+    xmlns:chemical_process_system="&chemical_process_system;#"
+    xmlns:material="&material;#"       
+    xmlns:mathematical_model="&mathematical_model;#"
+  xml:base="&process_model;">
+  
+  <owl:Ontology rdf:about="&process_model;">
+    <owl:imports rdf:resource="&mathematical_model;"/>
+    <owl:imports rdf:resource="&chemical_process_system;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string">2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontolog module 'process_model' supports the definition of specialized mathematical models for the domain of chemical engineering.
+The following classes and relations from other ontology modules are used within 'process_model':
+ 
+&lt;owl:Class rdf:about="&behavior;#PhysicochemicalPhenomenon"/>
+&lt;owl:Class rdf:about="&chemical_process_system;#ProcessUnit"/>
+&lt;owl:Class rdf:about="&material;#Material"/>
+&lt;owl:Class rdf:about="&mathematical_model;#MathematicalModel"/>
+&lt;owl:Class rdf:about="&mathematical_model;#ModelVariable"/>
+&lt;owl:Class rdf:about="&system;#FixedValueSet"/>
+&lt;owl:Class rdf:about="&system;#PhysicalQuantity"/>
+
+&lt;owl:ObjectProperty rdf:about="&mathematical_model;#correspondsToQuantity"/>
+&lt;owl:ObjectProperty rdf:about="&mathematical_model;#hasModelVariable"/>
+&lt;owl:ObjectProperty rdf:about="&system;#hasCharacteristic"/>
+&lt;owl:ObjectProperty rdf:about="&system;#models"/>
+&lt;owl:ObjectProperty rdf:about="&system;#isDirectSubsystemOf"/>
+&lt;owl:ObjectProperty rdf:about="&system;#isPropertyOf"/>
+&lt;owl:ObjectProperty rdf:about="&system;#isSubsystemOf"/>
+
+The following relation from the Meta Model is refined within 'process_model':
+&lt;owl:ObjectProperty rdf:about="&fc;#object-featureRelation"/>
+   </rdfs:comment>
+   <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+   </terms:license>
+  </owl:Ontology>
+  
+  <owl:Class rdf:ID="PropertyModel">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="ProcessModel"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&system;#isDirectSubsystemOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&process_model;#ProcessModel"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#isDirectSubsystemOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&process_model;#ProcessModel"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Law"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PropertyModel forms part of an overall ProcessModel. It represents a mathematical correlation for the computation of one designated ModelVariable, which corresponds to one specific PhysicalQuantity. Examples are vapor pressure correlations or activity coefficient models.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="ModelingPrinciple">
+    <rdfs:subClassOf rdf:resource="&system;#FixedValueSet"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <ModelingPrinciple rdf:ID="data_driven">
+            <owl:differentFrom>
+              <ModelingPrinciple rdf:ID="first-principles">
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >Following the first-principles ModelingPrinciple, the ProcessModel is based on established physical laws and mechanisms..</rdfs:comment>
+                <owl:differentFrom rdf:resource="&process_model;#data_driven"/>
+              </ModelingPrinciple>
+            </owl:differentFrom>
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >Following the data_driven ModelingPrinciple, a ProcessModel is derived from the Values of the Properties of a ModeledObject. Examples of this type of models are neural network models.</rdfs:comment>
+          </ModelingPrinciple>
+          <ModelingPrinciple rdf:about="&process_model;#first-principles"/>
+          <ModelingPrinciple rdf:ID="hybrid">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >A hybrid ModelingPrinciple applies both the first-principles and the data_driven approach</rdfs:comment>
+          </ModelingPrinciple>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ModelingPrinciple represents the principle following which the ProcessModel is developed.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&process_model;#Law">
+    <owl:disjointWith rdf:resource="&process_model;#PropertyModel"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&process_model;#ProcessModel"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#isDirectSubsystemOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&behavior;#PhysicochemicalPhenomenon"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isAssociatedWith"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&process_model;#ProcessModel"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&behavior;#PhysicochemicalPhenomenon"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&process_model;#isAssociatedWith"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&process_model;#isAssociatedWith"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Law constitutes the mathematical representation of a scientific law. It usually forms part of an overall ProcessModel.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&process_model;#ProcessModel">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+                <owl:someValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&system;#PhysicalQuantity"/>
+                      <owl:Restriction>
+                        <owl:onProperty rdf:resource="&system;#isPropertyOf"/>
+                        <owl:someValuesFrom>
+                          <owl:Class>
+                            <owl:unionOf rdf:parseType="Collection">
+                              <rdf:Description rdf:about="&material;#Material"/>
+                              <owl:Restriction>
+                                <owl:onProperty rdf:resource="&system;#isSubsystemOf"/>
+                                <owl:someValuesFrom rdf:resource="&material;#Material"/>
+                              </owl:Restriction>
+                              <rdf:Description rdf:about="&chemical_process_system;#ProcessUnit"/>
+                              <owl:Restriction>
+                                <owl:someValuesFrom rdf:resource="&chemical_process_system;#ProcessUnit"/>
+                                <owl:onProperty rdf:resource="&system;#isSubsystemOf"/>
+                              </owl:Restriction>
+                            </owl:unionOf>
+                          </owl:Class>
+                        </owl:someValuesFrom>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:someValuesFrom>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#models"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&material;#Material"/>
+              <owl:Restriction>
+                <owl:someValuesFrom rdf:resource="&material;#Material"/>
+                <owl:onProperty rdf:resource="&system;#isSubsystemOf"/>
+              </owl:Restriction>
+              <rdf:Description rdf:about="&chemical_process_system;#ProcessUnit"/>
+              <owl:Restriction>
+                <owl:someValuesFrom rdf:resource="&chemical_process_system;#ProcessUnit"/>
+                <owl:onProperty rdf:resource="&system;#isSubsystemOf"/>
+              </owl:Restriction>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="hasModelingPrinciple"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&process_model;#hasModelingPrinciple"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&process_model;#ModelingPrinciple"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&process_model;#hasModelingPrinciple"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&process_model;#ModelingPrinciple"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ProcessModel is a MathematicalModel that models a ProcessUnit or a Material, or subsystems of these.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                  <rdf:Description rdf:about="&material;#Material"/>
+                  <owl:Restriction>
+                    <owl:onProperty rdf:resource="&system;#isSubsystemOf"/>
+                    <owl:someValuesFrom rdf:resource="&material;#Material"/>
+                  </owl:Restriction>
+                  <rdf:Description rdf:about="&chemical_process_system;#ProcessUnit"/>
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="&chemical_process_system;#ProcessUnit"/>
+                    <owl:onProperty rdf:resource="&system;#isSubsystemOf"/>
+                  </owl:Restriction>
+                </owl:unionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="&system;#models"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&mathematical_model;#MathematicalModel"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&process_model;#isAssociatedWith">
+    <rdfs:subPropertyOf rdf:resource="&fc;#object-featureRelation"/>
+    <rdfs:domain rdf:resource="&process_model;#Law"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation denotes a correspondence between a law and a PhysicochemicalPhenomenon. The former gives a quantitative, the latter a qualitative description of a certain physical behavior.</rdfs:comment>
+    <rdfs:range rdf:resource="&behavior;#PhysicochemicalPhenomenon"/>
+  </owl:ObjectProperty>
+  <owl:FunctionalProperty rdf:about="&process_model;#hasModelingPrinciple">
+    <rdfs:domain rdf:resource="&process_model;#ProcessModel"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:range rdf:resource="&process_model;#ModelingPrinciple"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Indicates the ModelingPrinciple on which a ProcessModel is based.</rdfs:comment>
+  </owl:FunctionalProperty>
+</rdf:RDF>

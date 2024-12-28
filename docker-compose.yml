@@ -1,0 +1,23 @@
+services:
+  flask:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    volumes:
+      - ./app:/ontomo/app:ro
+      - ./run.py:/ontomo/run.py:ro
+    depends_on:
+      - graphdb
+    restart: unless-stopped
+  graphdb:
+    build:
+      context: ./graphdb
+      dockerfile: Dockerfile
+      args:
+        GDB_VERSION: 10.6.3
+    ports:
+      - 7200:7200
+    volumes:
+      - ./graphdb/ontology:/ontology:ro

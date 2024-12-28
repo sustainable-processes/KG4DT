@@ -1,0 +1,506 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY terms "http://purl.org/dc/terms/" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY fundamental_concepts "file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#" >
+]>
+
+
+<rdf:RDF xmlns="file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
+     xml:base="file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:fundamental_concepts="file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:terms="http://purl.org/dc/terms/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The ontology module &#39;fundamental_concepts&#39; defines the root terms and fundamental concepts of the Meta Model</rdfs:comment>
+        <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+        </terms:license>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <owl:AnnotationProperty rdf:about="&terms;license"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasOrigin -->
+
+    <owl:ObjectProperty rdf:about="#hasOrigin">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation identifies the Object that is the origin of a DirectedN-aryRelation</rdfs:comment>
+        <rdfs:domain rdf:resource="#DirectedN-aryRelation"/>
+        <rdfs:subPropertyOf rdf:resource="#involvesObject"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasTarget -->
+
+    <owl:ObjectProperty rdf:about="#hasTarget">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation hasTarget identifies the Objects or feature values (i.e., instances of FeatureSpace) that are the targets of a DirectedN-aryRelation.</rdfs:comment>
+        <rdfs:domain rdf:resource="#DirectedN-aryRelation"/>
+        <rdfs:subPropertyOf rdf:resource="#involves"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasTargetObject -->
+
+    <owl:ObjectProperty rdf:about="#hasTargetObject">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation identifies the Objects or feature values (i.e., instances of FeatureSpace) that are the targets of a DirectedN-aryRelation.</rdfs:comment>
+        <rdfs:range rdf:resource="#Object"/>
+        <rdfs:subPropertyOf rdf:resource="#hasTarget"/>
+        <rdfs:subPropertyOf rdf:resource="#involvesObject"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#inter-objectRelation -->
+
+    <owl:ObjectProperty rdf:about="#inter-objectRelation">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >subsumes all types of binary relations between Objects</rdfs:comment>
+        <rdfs:domain rdf:resource="#Object"/>
+        <rdfs:range rdf:resource="#Object"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#involves -->
+
+    <owl:ObjectProperty rdf:about="#involves">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >identifies the Objects or feature values (i.e., instnace of FeatureSpace) that are involved in an n-ary relation</rdfs:comment>
+        <rdfs:domain rdf:resource="#RelationClass"/>
+        <rdfs:range>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#FeatureSpace"/>
+                    <rdf:Description rdf:about="#Object"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:range>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#involvesObject -->
+
+    <owl:ObjectProperty rdf:about="#involvesObject">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >identifies the Objects involved in an n-ary relation</rdfs:comment>
+        <rdfs:range rdf:resource="#Object"/>
+        <rdfs:domain rdf:resource="#RelationClass"/>
+        <rdfs:subPropertyOf rdf:resource="#involves"/>
+        <owl:inverseOf rdf:resource="#isInvolvedInN-aryRelation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isInvolvedInN-aryRelation -->
+
+    <owl:ObjectProperty rdf:about="#isInvolvedInN-aryRelation">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >denotes the relation between an Object and a RelationClass</rdfs:comment>
+        <rdfs:domain rdf:resource="#Object"/>
+        <rdfs:range rdf:resource="#RelationClass"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isOfType -->
+
+    <owl:ObjectProperty rdf:about="#isOfType">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation isOfType assigns value types to Objects. Based on this characteristics, a reasoner can infer if an Object belongs to a predefined ontology view.</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="#object-featureRelation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isOriginOf -->
+
+    <owl:ObjectProperty rdf:about="#isOriginOf">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >denotes the relation between the originating Object and a DirectedN-aryRelation</rdfs:comment>
+        <rdfs:range rdf:resource="#DirectedN-aryRelation"/>
+        <owl:inverseOf rdf:resource="#hasOrigin"/>
+        <rdfs:subPropertyOf rdf:resource="#isInvolvedInN-aryRelation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isTargetOf -->
+
+    <owl:ObjectProperty rdf:about="#isTargetOf">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >denotes the relation between the target Object and a DirectedN-aryRelation</rdfs:comment>
+        <rdfs:domain rdf:resource="#Object"/>
+        <owl:inverseOf rdf:resource="#hasTargetObject"/>
+        <rdfs:subPropertyOf rdf:resource="#isInvolvedInN-aryRelation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#object-featureRelation -->
+
+    <owl:ObjectProperty rdf:about="#object-featureRelation">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The relation object-featureRelation denotes the relation between an Object and its feature values (i.e., instances of FeatureSpace).</rdfs:comment>
+        <rdfs:range rdf:resource="#FeatureSpace"/>
+        <rdfs:domain rdf:resource="#Object"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#relationAttribute -->
+
+    <owl:DatatypeProperty rdf:about="#relationAttribute">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >relationAttribute identifies the datatype value that characterizes a relation class</rdfs:comment>
+        <rdfs:domain rdf:resource="#RelationClass"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#CoequalN-aryRelation -->
+
+    <owl:Class rdf:about="#CoequalN-aryRelation">
+        <rdfs:subClassOf rdf:resource="#RelationClass"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasOrigin"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasTarget"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">0</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="#DirectedN-aryRelation"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >CoequalN-aryRelation describes an n-ary relation among three or more individuals or dataype values. None of the individuals involved in the relation stands out as the origins (or owner) of the relation.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#DirectedN-aryRelation -->
+
+    <owl:Class rdf:about="#DirectedN-aryRelation">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#RelationClass"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="#hasOrigin"/>
+                        <owl:someValuesFrom rdf:resource="#Object"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasTarget"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="#FeatureSpace"/>
+                            <rdf:Description rdf:about="#Object"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasOrigin"/>
+                <owl:allValuesFrom rdf:resource="#Object"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="#hasTarget"/>
+                                <owl:minCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:minCardinality>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="#relationAttribute"/>
+                                <owl:minCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:minCardinality>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="#hasTarget"/>
+                        <owl:minCardinality rdf:datatype="&xsd;nonNegativeInteger">2</owl:minCardinality>
+                    </owl:Restriction>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasTarget"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="#FeatureSpace"/>
+                            <rdf:Description rdf:about="#Object"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasTargetObject"/>
+                <owl:allValuesFrom rdf:resource="#Object"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >DirectedN-aryRelation describes an n-ary relation among three or more individuals or datatype values. Some of the individuals involved in the n-ary relation are distinguished from the others in that they are origins of the relation.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#FeatureSpace -->
+
+    <owl:Class rdf:about="#FeatureSpace">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#NonExhaustiveValueSet"/>
+                    <rdf:Description rdf:about="#ValuePartition"/>
+                    <rdf:Description rdf:about="#ValueSet"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <owl:disjointWith rdf:resource="#Object"/>
+        <owl:disjointWith rdf:resource="#RelationClass"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >An entity can be characterized by means of descriptive features (qualities, characteristics). There are various ways how to model the values of such features, for example by representing the values as partitions of a classes or as enumerations of individuals (cf. http://www.w3.org/TR/swbp-specified-values/ for a detailed discussion of this issue).  A feature space defines the range of values that a particular feature can take, and the class FeatureSpace subsumes the different ways to define such a feature space.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#NonExhaustiveValueSet -->
+
+    <owl:Class rdf:about="#NonExhaustiveValueSet">
+        <rdfs:subClassOf rdf:resource="#FeatureSpace"/>
+        <owl:disjointWith rdf:resource="#ValuePartition"/>
+        <owl:disjointWith rdf:resource="#ValueSet"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A NonExhaustiveValueSet is a FeatureSpace that represents its possible values through individuals. These individuals, which are typically declared to be all different from each other, are instances of the NonExhaustiveValueSet. Note that, in contrast to a ValueSet, this class is not defined by an (exhaustive) enumeration of its instances. Thus, the number of individuals may change at run time.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#Object -->
+
+    <owl:Class rdf:about="#Object">
+        <rdfs:subClassOf rdf:resource="&owl;Thing"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#isTargetOf"/>
+                <owl:allValuesFrom rdf:resource="#RelationClass"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#isInvolvedInN-aryRelation"/>
+                <owl:allValuesFrom rdf:resource="#RelationClass"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#isOriginOf"/>
+                <owl:allValuesFrom rdf:resource="#DirectedN-aryRelation"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#inter-objectRelation"/>
+                <owl:allValuesFrom rdf:resource="#Object"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="#RelationClass"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >Object is a generic concept that subsumes all the (physical and abstract) entities that exist in an application domain.</rdfs:comment>
+        <owl:versionInfo rdf:datatype="&xsd;string"
+            >TODO: Check if Object and RelationClass can be made disjoint</owl:versionInfo>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#RelationClass -->
+
+    <owl:Class rdf:about="#RelationClass">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#CoequalN-aryRelation"/>
+                    <rdf:Description rdf:about="#DirectedN-aryRelation"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="&owl;Thing"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#involves"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="#FeatureSpace"/>
+                            <rdf:Description rdf:about="#Object"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#involvesObject"/>
+                <owl:someValuesFrom rdf:resource="#Object"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="#involves"/>
+                                <owl:minCardinality rdf:datatype="&xsd;nonNegativeInteger">2</owl:minCardinality>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="#relationAttribute"/>
+                                <owl:minCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:minCardinality>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="#involves"/>
+                        <owl:minCardinality rdf:datatype="&xsd;nonNegativeInteger">3</owl:minCardinality>
+                    </owl:Restriction>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#involvesObject"/>
+                <owl:allValuesFrom rdf:resource="#Object"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The OWL language merely provides language primitives to establish binary relations between two individuals or between an individual and a datatype value. To create an n-ary relation that links three or more individuals or datatype values, an auxiliary RelationClass needs to be introduced, which acts as an intermediate node. RelationClass is a generic concept that subsumes the different types of n-ary relations that can be defined (cf. http://www.w3.org/TR/swbp-n-aryRelations/).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#UniqueOriginN-aryRelation -->
+
+    <owl:Class rdf:about="#UniqueOriginN-aryRelation">
+        <rdfs:subClassOf rdf:resource="#DirectedN-aryRelation"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasOrigin"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >An UniqueOriginN-aryRelation is a relation among three or more individuals or datatype values. Exactly one of the individuals involved in the relation is distinguished from the others in that it is the origin of the relation.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#ValuePartition -->
+
+    <owl:Class rdf:about="#ValuePartition">
+        <rdfs:subClassOf rdf:resource="#FeatureSpace"/>
+        <owl:disjointWith rdf:resource="#ValueSet"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A ValuePartition is a FeatureSpace that represents its possible values through disjoint subclasses. These subclasses exhaustively partition the feature space and can in turn be further subpartitioned. It is possible to define alternative partitionings of the same feature space. Further details about this particular type of feature space can be found on  http://www.w3.org/TR/swbp-specified-values/ (&quot;Pattern 2: Values as subclasses partitioning a feature&quot;).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#ValueSet -->
+
+    <owl:Class rdf:about="#ValueSet">
+        <rdfs:subClassOf rdf:resource="#FeatureSpace"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >A ValueSet is a FeatureSpace that represents its possible values through individuals. These individuals, which are typically declared to be all different from each other, are instances of the ValueSet. The ValueSet is sufficiently defined by an exhaustive enumeration of its instances.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <owl:Class rdf:about="&owl;Thing"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.842) http://owlapi.sourceforge.net -->
+

@@ -1,0 +1,11 @@
+bs4==0.0.2
+ChemSpiPy==2.0.0
+Flask==2.2.5
+lxml==5.2.2
+numpy==1.26.4
+PubChemPy==1.0.4
+pygraphdb==2.0.1
+Pyomo==6.8.0
+requests==2.32.3
+scipy==1.13.1
+openai==1.52.2

@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY mereology    "&root;meta_model/mereology/mereology.owl">
+  <!ENTITY multiset "&root;meta_model/data_structures/multiset.owl">
+  <!ENTITY example_multiset "&root;meta_model/data_structures/example_multiset.owl">
+]>
+
+<rdf:RDF
+    xmlns="&example_multiset;#"
+    xmlns:multiset="&multiset;#"
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:mereology="&mereology;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+  xml:base="&example_multiset;">
+  
+  <owl:Ontology rdf:about="&example_multiset;">
+    <owl:imports rdf:resource="&multiset;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Application example that illustrates the usage of the design pattern 'multiset'</rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>  
+  </owl:Ontology>
+  
+  <owl:Class rdf:ID="QueryFor_MultiplicityOf_a_in_Multiset_1">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&multiset;#indicatesMultiplicityOf"/>
+            <owl:hasValue>
+              <multiset:Member rdf:ID="a">
+                <mereology:isDirectPartOf>
+                  <multiset:Multiset rdf:ID="Multiset_2">
+                    <mereology:hasDirectPart>
+                      <multiset:Member rdf:ID="c">
+                        <multiset:hasMultiplicity>
+                          <multiset:Multiplicity rdf:ID="Multiplicity_1_of_c">
+                            <multiset:indicatesMultiplicityOf rdf:resource="&example_multiset;#c"/>
+                            <multiset:refersToMultiset rdf:resource="&example_multiset;#Multiset_2"/>
+                            <multiset:multiplicity rdf:datatype=
+                            "&xsd;#int"
+                            >2</multiset:multiplicity>
+                          </multiset:Multiplicity>
+                        </multiset:hasMultiplicity>
+                      </multiset:Member>
+                    </mereology:hasDirectPart>
+                    <rdfs:comment rdf:datatype="&xsd;#string"
+                    >Multiset_2 = {a, a, a, c, c}</rdfs:comment>
+                  </multiset:Multiset>
+                </mereology:isDirectPartOf>
+                <multiset:hasMultiplicity>
+                  <multiset:Multiplicity rdf:ID="Multiplicity_1_of_a">
+                    <multiset:multiplicity rdf:datatype="&xsd;#int"
+                    >2</multiset:multiplicity>
+                    <multiset:indicatesMultiplicityOf rdf:resource="&example_multiset;#a"/>
+                    <multiset:refersToMultiset>
+                      <multiset:Multiset rdf:ID="Multiset_1">
+                        <mereology:hasDirectPart rdf:resource="&example_multiset;#a"/>
+                        <mereology:hasDirectPart>
+                          <multiset:Member rdf:ID="b">
+                            <multiset:hasMultiplicity>
+                              <multiset:Multiplicity rdf:ID="Multiplicity_1_of_b">
+                                <multiset:refersToMultiset rdf:resource="&example_multiset;#Multiset_1"/>
+                                <multiset:indicatesMultiplicityOf rdf:resource="&example_multiset;#b"/>
+                                <multiset:multiplicity rdf:datatype=
+                                "&xsd;#int"
+                                >3</multiset:multiplicity>
+                              </multiset:Multiplicity>
+                            </multiset:hasMultiplicity>
+                          </multiset:Member>
+                        </mereology:hasDirectPart>
+                        <rdfs:comment rdf:datatype="&xsd;#string"
+                        >Multiset_1 = {a, a, b, b, b}</rdfs:comment>
+                      </multiset:Multiset>
+                    </multiset:refersToMultiset>
+                  </multiset:Multiplicity>
+                </multiset:hasMultiplicity>
+                <multiset:hasMultiplicity>
+                  <multiset:Multiplicity rdf:ID="Multiplicity_2_of_a">
+                    <multiset:multiplicity rdf:datatype="&xsd;#int"
+                    >3</multiset:multiplicity>
+                    <multiset:indicatesMultiplicityOf rdf:resource="&example_multiset;#a"/>
+                    <multiset:refersToMultiset rdf:resource="&example_multiset;#Multiset_2"/>
+                  </multiset:Multiplicity>
+                </multiset:hasMultiplicity>
+              </multiset:Member>
+            </owl:hasValue>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&multiset;#refersToMultiset"/>
+            <owl:hasValue rdf:resource="&example_multiset;#Multiset_1"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for the multiplicity of Member a in Multiset_1.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_allMembersOf_Multiset_1">
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&multiset;#Member"/>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&mereology;#isDirectPartOf"/>
+            <owl:hasValue rdf:resource="&example_multiset;#Multiset_1"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for the Members of Multiset_1.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_MultisetOf_a">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&multiset;#Multiset"/>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&mereology;#hasDirectPart"/>
+            <owl:hasValue rdf:resource="&example_multiset;#a"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for the multiplicity of Member a in Multiset_1.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_allMembersOf_Multiset_2">
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&multiset;#Member"/>
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_multiset;#Multiset_2"/>
+            <owl:onProperty rdf:resource="&mereology;#isDirectPartOf"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for the Members of Multiset_2.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_MultiplicityOf_a_in_Multiset_2">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for the multiplicity of Member a in Multiset_.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_multiset;#a"/>
+            <owl:onProperty rdf:resource="&multiset;#indicatesMultiplicityOf"/>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&multiset;#refersToMultiset"/>
+            <owl:hasValue rdf:resource="&example_multiset;#Multiset_2"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <multiset:Multiset rdf:about="&example_multiset;#Multiset_1"/>
+      <multiset:Multiset rdf:about="&example_multiset;#Multiset_2"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>

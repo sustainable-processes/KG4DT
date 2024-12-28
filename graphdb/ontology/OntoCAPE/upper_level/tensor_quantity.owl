@@ -1,0 +1,1110 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY array    "&root;meta_model/data_structures/array.owl">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY mereology    "&root;meta_model/mereology/mereology.owl">
+  <!ENTITY coordinate_system    "&root;OntoCAPE/upper_level/coordinate_system.owl">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY tensor_quantity  "&root;OntoCAPE/upper_level/tensor_quantity.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns="&tensor_quantity;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:coordinate_system="&coordinate_system;#"
+  xml:base="&tensor_quantity;">
+  <owl:Ontology rdf:about="&tensor_quantity;">
+    <owl:imports rdf:resource="&coordinate_system;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string">This ontology module introduces tensor quantities of first and second order (i.e., vectors and matrices). Tensors of higher order can be defined in analoguous mannner.
+The following classes and relations from other ontology modules are used within 'tensor_quantity':
+
+&lt;owl:Class rdf:about="&coordinate_system;#CoordinateSystemAxis"/>
+&lt;owl:Class rdf:about="&system;#PhysicalQuantity"/>
+&lt;owl:Class rdf:about="&system;#QuantitativeValue"/>
+&lt;owl:Class rdf:about="&system;#ScalarQuantity">
+&lt;owl:Class rdf:about="&system;#ScalarValue"/>
+
+&lt;owl:ObjectProperty rdf:about="&system;#hasValue"/>
+&lt;owl:ObjectProperty rdf:about="&system;#isValueOf"/>
+
+The following classes and relations of the Meta Model are used (i.e., refined) within 'tensor_quantity':
+
+array;#Index"/>
+
+&lt;owl:ObjectProperty rdf:about="&array;#determinesPositionOf"/>
+&lt;owl:ObjectProperty rdf:about="&array;#hasIndex"/>
+&lt;owl:ObjectProperty rdf:about="&array;#index"/>
+&lt;owl:ObjectProperty rdf:about="&array;#isIndexOfArray"/>
+&lt;owl:ObjectProperty rdf:about="&array;#isOrderedBy"/>
+&lt;owl:ObjectProperty rdf:about="&fc;#object-featureRelation"/>
+&lt;owl:ObjectProperty rdf:about="&mereology;#isComposedOf"/>
+&lt;owl:ObjectProperty rdf:about="&mereology;#isExclusivelyPartOf"/>
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string">2.0</owl:versionInfo>
+  </owl:Ontology>
+  
+    <owl:Class rdf:ID="ColumnIndex">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="RowIndex"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ColumnIndex denotes the position of a column vector within a matrix.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="determinesPositionOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:ID="ColumnVectorQuantity"/>
+              <owl:Class rdf:ID="ColumnVectorValue"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isIndexOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:ID="MatrixQuantity"/>
+              <owl:Class rdf:ID="MatrixValue"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isIndexOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&tensor_quantity;#MatrixQuantity"/>
+              <owl:Class rdf:about="&tensor_quantity;#MatrixValue"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Index"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&tensor_quantity;#determinesPositionOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&tensor_quantity;#ColumnVectorQuantity"/>
+              <owl:Class rdf:about="&tensor_quantity;#ColumnVectorValue"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&tensor_quantity;#MatrixQuantity">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasElement"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#ColumnVectorQuantity"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:datatype="&xsd;#int"
+        >2</owl:hasValue>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="hasTensorOrder"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="VectorQuantity"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="TensorQuantity"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:ID="isOrderedBy"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#ColumnIndex"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#MatrixValue"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&tensor_quantity;#ColumnIndex"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#ColumnVectorQuantity"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A MatrixQuantity is a second order TensorQuantity.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="VectorElement">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A VectorElement is a ScalarQuantity that is an element of a VectorQuantity</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="isElementOf"/>
+            </owl:onProperty>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&tensor_quantity;#VectorQuantity"/>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&system;#ScalarQuantity">
+            <owl:disjointWith>
+              <owl:Class rdf:about="&tensor_quantity;#TensorQuantity"/>
+            </owl:disjointWith>
+          </rdf:Description>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="hasOrientation"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&coordinate_system;#CoordinateSystemAxis"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#VectorQuantity"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&tensor_quantity;#hasOrientation"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:ID="hasIndex"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#Index"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#Index"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="VectorElementValue"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&tensor_quantity;#RowIndex">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&tensor_quantity;#VectorElement"/>
+              <owl:Class rdf:about="&tensor_quantity;#VectorElementValue"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&tensor_quantity;#determinesPositionOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isIndexOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&tensor_quantity;#ColumnVectorQuantity"/>
+              <owl:Class rdf:about="&tensor_quantity;#ColumnVectorValue"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isIndexOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&tensor_quantity;#ColumnVectorQuantity"/>
+              <owl:Class rdf:about="&tensor_quantity;#ColumnVectorValue"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&tensor_quantity;#Index"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&tensor_quantity;#VectorElement"/>
+              <owl:Class rdf:about="&tensor_quantity;#VectorElementValue"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&tensor_quantity;#determinesPositionOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A RowIndex denotes the position of a scalar element within a column vector.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&tensor_quantity;#ColumnIndex"/>
+  </owl:Class>
+  <owl:Class rdf:about="&tensor_quantity;#VectorQuantity">
+    <owl:disjointWith rdf:resource="&tensor_quantity;#MatrixQuantity"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:datatype="&xsd;#int"
+        >1</owl:hasValue>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="&tensor_quantity;#hasTensorOrder"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="VectorValue"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&tensor_quantity;#TensorQuantity"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#ScalarQuantity"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&tensor_quantity;#VectorElement"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A VectorQuantity is a first order TensorQuantity.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&tensor_quantity;#VectorValue">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A VectorValue is a first order TensorValue.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&tensor_quantity;#MatrixValue"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isValueOf"/>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#VectorQuantity"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#VectorElementValue"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="TensorValue"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <rdf:Description rdf:about="&system;#ScalarValue">
+            <owl:disjointWith>
+              <owl:Class rdf:about="&tensor_quantity;#TensorValue"/>
+            </owl:disjointWith>
+          </rdf:Description>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&tensor_quantity;#ColumnVectorQuantity">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ColumnVectorQuantity represents a column vector of a MatrixQuantity.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#RowIndex"/>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&tensor_quantity;#RowIndex"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#MatrixQuantity"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&tensor_quantity;#ColumnIndex"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="&tensor_quantity;#MatrixQuantity"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&tensor_quantity;#VectorQuantity"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#ColumnVectorValue"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#ColumnIndex"/>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&tensor_quantity;#TensorValue">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&system;#ScalarValue"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#Index"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#TensorQuantity"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#isValueOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="&tensor_quantity;#hasTensorOrder"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#QuantitativeValue"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >2</owl:minCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A TensorValue is non-scalar QuantitativeValue of a TensorQuantity.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >2</owl:minCardinality>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#Index"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&tensor_quantity;#TensorQuantity">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&system;#PhysicalQuantity"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#Index"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#PhysicalQuantity"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >2</owl:minCardinality>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&system;#ScalarQuantity"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A TensorQuantity is a non-scalar PhysicalQuantity, such as a velocity vector or a stress tensor.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#Index"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#TensorValue"/>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >2</owl:minCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="&tensor_quantity;#hasTensorOrder"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#PhysicalQuantity"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&tensor_quantity;#Index">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isIndexOf"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isIndexOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&tensor_quantity;#TensorQuantity"/>
+              <owl:Class rdf:about="&tensor_quantity;#TensorValue"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&tensor_quantity;#determinesPositionOf"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&system;#PhysicalQuantity"/>
+              <rdf:Description rdf:about="&system;#QuantitativeValue"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&tensor_quantity;#determinesPositionOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&tensor_quantity;#determinesPositionOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&system;#PhysicalQuantity"/>
+              <rdf:Description rdf:about="&system;#QuantitativeValue"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&tensor_quantity;#TensorQuantity"/>
+              <owl:Class rdf:about="&tensor_quantity;#TensorValue"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isIndexOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Index represents the n-ary relation between a tensor, one of its elements, and the 'index' attribute that denotes the position of the tensor element.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&array;#Index"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="index"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&tensor_quantity;#VectorElementValue">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="&tensor_quantity;#VectorValue"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&system;#ScalarValue"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#VectorValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&tensor_quantity;#Index"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#Index"/>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isValueOf"/>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#VectorElement"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A VectorElementValue is a ScalarValue that is an element of a VectorValue</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&tensor_quantity;#MatrixValue">
+    <owl:disjointWith rdf:resource="&tensor_quantity;#VectorValue"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="&tensor_quantity;#hasTensorOrder"/>
+        </owl:onProperty>
+        <owl:hasValue rdf:datatype="&xsd;#int"
+        >2</owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#ColumnVectorValue"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isValueOf"/>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#MatrixQuantity"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&tensor_quantity;#ColumnVectorValue"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&tensor_quantity;#TensorValue"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&tensor_quantity;#ColumnIndex"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#ColumnIndex"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&tensor_quantity;#ColumnVectorValue">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&tensor_quantity;#ColumnIndex"/>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&tensor_quantity;#MatrixValue"/>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:about="&tensor_quantity;#VectorValue"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isValueOf"/>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#ColumnVectorQuantity"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#MatrixValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ColumnVectorValue represents a column vector of a MatrixValue.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&tensor_quantity;#RowIndex"/>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#RowIndex"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&tensor_quantity;#ColumnIndex"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&tensor_quantity;#isIndexOf">
+    <rdfs:domain rdf:resource="&tensor_quantity;#Index"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&tensor_quantity;#TensorQuantity"/>
+          <owl:Class rdf:about="&tensor_quantity;#TensorValue"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:subPropertyOf rdf:resource="&array;#isIndexOfArray"/>
+    <owl:inverseOf>
+      <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isIndexOf points from an Index to the associated tensor.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&tensor_quantity;#hasElement">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&tensor_quantity;#TensorQuantity"/>
+          <owl:Class rdf:about="&tensor_quantity;#TensorValue"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasElement identifies the elements of a tensor.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&mereology;#isComposedOf"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf"/>
+    </owl:inverseOf>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&system;#PhysicalQuantity"/>
+          <rdf:Description rdf:about="&system;#QuantitativeValue"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&tensor_quantity;#isElementOf">
+    <rdfs:subPropertyOf rdf:resource="&mereology;#isExclusivelyPartOf"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&system;#QuantitativeValue"/>
+          <rdf:Description rdf:about="&system;#PhysicalQuantity"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isElementOf denotes the affiliation of a tensor element to a tensor.</rdfs:comment>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&tensor_quantity;#TensorQuantity"/>
+          <owl:Class rdf:about="&tensor_quantity;#TensorValue"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <owl:inverseOf rdf:resource="&tensor_quantity;#hasElement"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="&tensor_quantity;#index">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The attribute indicates the numerical value of an Index.</rdfs:comment>
+    <rdfs:range rdf:resource="&xsd;#int"/>
+    <rdfs:domain rdf:resource="&tensor_quantity;#Index"/>
+    <rdfs:subPropertyOf rdf:resource="&array;#index"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&tensor_quantity;#hasTensorOrder">
+    <rdfs:range rdf:resource="&xsd;#int"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&tensor_quantity;#TensorQuantity"/>
+          <owl:Class rdf:about="&tensor_quantity;#TensorValue"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The attribute denotes the order (or rank) of a tensor. Scalars are of order 0, vectors of order 1.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:FunctionalProperty rdf:about="&tensor_quantity;#hasOrientation">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation specifies the orientation of a tensor element by referring to the corresponding CoordinateSystemAxis.</rdfs:comment>
+    <rdfs:range rdf:resource="&coordinate_system;#CoordinateSystemAxis"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:domain rdf:resource="&tensor_quantity;#VectorElement"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#object-featureRelation"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&tensor_quantity;#determinesPositionOf">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation determinesPositionOf refers from an Index to the associated tensor element.</rdfs:comment>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&system;#PhysicalQuantity"/>
+          <rdf:Description rdf:about="&system;#QuantitativeValue"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <owl:inverseOf>
+      <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="&tensor_quantity;#Index"/>
+    <rdfs:subPropertyOf rdf:resource="&array;#determinesPositionOf"/>
+  </owl:FunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#isOrderedBy">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isOrderedBy identifies the Index of a tensor.</rdfs:comment>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:range rdf:resource="&tensor_quantity;#Index"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&tensor_quantity;#TensorQuantity"/>
+          <owl:Class rdf:about="&tensor_quantity;#TensorValue"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:subPropertyOf rdf:resource="&array;#isOrderedBy"/>
+    <owl:inverseOf rdf:resource="&tensor_quantity;#isIndexOf"/>
+  </owl:InverseFunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:about="&tensor_quantity;#hasIndex">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasIndex refers from a tensor element to its Index.</rdfs:comment>
+    <rdfs:range rdf:resource="&tensor_quantity;#Index"/>
+    <rdfs:subPropertyOf rdf:resource="&array;#hasIndex"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&system;#QuantitativeValue"/>
+          <rdf:Description rdf:about="&system;#PhysicalQuantity"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <owl:inverseOf rdf:resource="&tensor_quantity;#determinesPositionOf"/>
+  </owl:InverseFunctionalProperty>
+</rdf:RDF>

@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY linked_list  "&root;meta_model/data_structures/linked_list.owl">
+  <!ENTITY mereology    "&root;meta_model/mereology/mereology.owl">
+  <!ENTITY example_linked_list  "&root;meta_model/data_structures/example_linked_list.owl">
+]>
+
+<rdf:RDF
+    xmlns="&example_linked_list;#"
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:mereology="&mereology;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:linked_list="&linked_list;#"
+  xml:base="&example_linked_list;">
+  
+  <owl:Ontology rdf:about="&example_linked_list;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Application example that illustrates the usage of the design pattern 'linked list'</rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:imports rdf:resource="&linked_list;"/>
+  </owl:Ontology>
+  
+  <owl:Class rdf:ID="QueryFor_lastElementOf_myList">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&mereology;#isExclusivelyPartOf"/>
+            <owl:hasValue>
+              <linked_list:LinkedList rdf:ID="myList">
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                ></rdfs:comment>
+                <mereology:isComposedOf>
+                  <linked_list:ListElement rdf:ID="ListElement_2">
+                    <linked_list:previousElement>
+                      <linked_list:FirstElement rdf:ID="ListElement_1">
+                        <linked_list:nextElement rdf:resource="&example_linked_list;#ListElement_2"/>
+                      </linked_list:FirstElement>
+                    </linked_list:previousElement>
+                    <linked_list:nextElement>
+                      <linked_list:ListElement rdf:ID="ListElement_3">
+                        <linked_list:nextElement>
+                          <linked_list:ListElement rdf:ID="ListElement_4">
+                            <linked_list:nextElement>
+                              <linked_list:LastElement rdf:ID="ListElement_5">
+                                <linked_list:previousElement rdf:resource="&example_linked_list;#ListElement_4"/>
+                              </linked_list:LastElement>
+                            </linked_list:nextElement>
+                            <linked_list:previousElement rdf:resource="&example_linked_list;#ListElement_3"/>
+                          </linked_list:ListElement>
+                        </linked_list:nextElement>
+                        <linked_list:previousElement rdf:resource="&example_linked_list;#ListElement_2"/>
+                      </linked_list:ListElement>
+                    </linked_list:nextElement>
+                  </linked_list:ListElement>
+                </mereology:isComposedOf>
+                <mereology:isComposedOf rdf:resource="&example_linked_list;#ListElement_4"/>
+                <mereology:isComposedOf rdf:resource="&example_linked_list;#ListElement_1"/>
+                <mereology:isComposedOf rdf:resource="&example_linked_list;#ListElement_3"/>
+                <mereology:isComposedOf rdf:resource="&example_linked_list;#ListElement_5"/>
+              </linked_list:LinkedList>
+            </owl:hasValue>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&linked_list;#LastElement"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="QueryFor_allElementsOf_myList"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Get the last ListElement of 'myList'</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&example_linked_list;#QueryFor_allElementsOf_myList">
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Find all Element of 'myList'.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_linked_list;#myList"/>
+            <owl:onProperty rdf:resource="&mereology;#isExclusivelyPartOf"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&linked_list;#ListElement"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_ListElementSucceeding_ListElement_3">
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&linked_list;#ListElement"/>
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_linked_list;#ListElement_3"/>
+            <owl:onProperty rdf:resource="&linked_list;#previousElement"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Get the ListElement that succeeds 'ListElement_3'</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_thirdElementOf_myList">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&mereology;#isExclusivelyPartOf"/>
+            <owl:hasValue rdf:resource="&example_linked_list;#myList"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&linked_list;#ListElement"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Restriction>
+                <owl:someValuesFrom rdf:resource="&linked_list;#FirstElement"/>
+                <owl:onProperty rdf:resource="&linked_list;#previousElement"/>
+              </owl:Restriction>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="&linked_list;#previousElement"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="&example_linked_list;#QueryFor_allElementsOf_myList"/>
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Get the second ListElement of 'myList'</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_ListElementPreceding_ListElement_3">
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Get the ListElement that precedes 'ListElement_3'</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&linked_list;#ListElement"/>
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_linked_list;#ListElement_3"/>
+            <owl:onProperty rdf:resource="&linked_list;#nextElement"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_firstlElementOf_myList">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&mereology;#isExclusivelyPartOf"/>
+            <owl:hasValue rdf:resource="&example_linked_list;#myList"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&linked_list;#FirstElement"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <rdfs:subClassOf rdf:resource="&example_linked_list;#QueryFor_allElementsOf_myList"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Get the first ListElement of 'myList'</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_secondElementOf_myList">
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Get the second ListElement of 'myList'</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&example_linked_list;#QueryFor_allElementsOf_myList"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&mereology;#isExclusivelyPartOf"/>
+            <owl:hasValue rdf:resource="&example_linked_list;#myList"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&linked_list;#ListElement"/>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&linked_list;#previousElement"/>
+            <owl:someValuesFrom rdf:resource="&linked_list;#FirstElement"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <linked_list:FirstElement rdf:ID="FirstElement_1">
+    <linked_list:nextElement>
+      <linked_list:InternalElement rdf:ID="InternalElement_1">
+        <linked_list:previousElement rdf:resource="&example_linked_list;#FirstElement_1"/>
+        <linked_list:nextElement>
+          <linked_list:LastElement rdf:ID="LastElement_1">
+            <linked_list:previousElement rdf:resource="&example_linked_list;#InternalElement_1"/>
+          </linked_list:LastElement>
+        </linked_list:nextElement>
+      </linked_list:InternalElement>
+    </linked_list:nextElement>
+  </linked_list:FirstElement>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <linked_list:FirstElement rdf:about="&example_linked_list;#ListElement_1"/>
+      <linked_list:ListElement rdf:about="&example_linked_list;#ListElement_2"/>
+      <linked_list:ListElement rdf:about="&example_linked_list;#ListElement_3"/>
+      <linked_list:ListElement rdf:about="&example_linked_list;#ListElement_4"/>
+      <linked_list:LastElement rdf:about="&example_linked_list;#ListElement_5"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <linked_list:LinkedList rdf:ID="LinkedList_1">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    ></rdfs:comment>
+    <mereology:isComposedOf rdf:resource="&example_linked_list;#LastElement_1"/>
+    <mereology:isComposedOf rdf:resource="&example_linked_list;#InternalElement_1"/>
+    <mereology:isComposedOf rdf:resource="&example_linked_list;#FirstElement_1"/>
+  </linked_list:LinkedList>
+  <owl:AllDifferent/>
+</rdf:RDF>

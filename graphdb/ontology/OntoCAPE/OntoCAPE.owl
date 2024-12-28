@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY technical_system "&root;OntoCAPE/upper_level/technical_system.owl">
+  <!ENTITY phase_system "&root;OntoCAPE/material/phase_system/phase_system.owl">
+  <!ENTITY behavior "&root;OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl">
+  <!ENTITY chemical_process_system  "&root;OntoCAPE/chemical_process_system/chemical_process_system.owl">
+  <!ENTITY plant    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant.owl">
+  <!ENTITY process  "&root;OntoCAPE/chemical_process_system/CPS_function/process.owl">
+  <!ENTITY numerical_solution_strategy   "&root;OntoCAPE/model/numerical_solution_strategy.owl">
+  <!ENTITY mathematical_model   "&root;OntoCAPE/model/mathematical_model.owl">
+  <!ENTITY process_model        "&root;OntoCAPE/model/process_model.owl">
+  <!ENTITY derived_SI_units     "&root;OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl">
+  <!ENTITY polymers             "&root;OntoCAPE/material/substance/polymers.owl">
+  <!ENTITY cost_model           "&root;OntoCAPE/model/cost_model.owl">
+  <!ENTITY space_and_time       "&root;OntoCAPE/supporting_concepts/space_and_time/space_and_time.owl">
+  <!ENTITY OntoCAPE             "&root;OntoCAPE/OntoCAPE.owl">
+
+
+]>
+
+<rdf:RDF
+    xmlns:xsd="&xsd;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:derived_SI_units="&derived_SI_units;#"
+    xmlns:chemical_process_system="&chemical_process_system;#"
+    xmlns:phase_system="&phase_system;#"
+    xmlns:plant="&plant;#"
+    xmlns:process="&process;#"
+    xmlns:mathematical_model="&mathematical_model;#"
+    xmlns:system="&system;#"
+    xmlns:process_model="&process_model;#"
+    xmlns:polymers="&polymers;#"
+    xmlns:cost_model="&cost_model;#"
+    xmlns:space_time="&space_and_time;#"
+    xmlns:numerical_solution_strategy="&numerical_solution_strategy;#"
+    xmlns="&OntoCAPE;#"
+    xml:base="&OntoCAPE;">   
+  
+  <owl:Ontology rdf:about="&OntoCAPE;">
+    <owl:imports rdf:resource="&process_model;"/>
+    <owl:imports rdf:resource="&numerical_solution_strategy;"/>
+    <owl:imports rdf:resource="&derived_SI_units;"/>
+    <owl:imports rdf:resource="&polymers;"/>
+    <owl:imports rdf:resource="&space_and_time;"/>
+    <owl:imports rdf:resource="&cost_model;"/>
+    
+    <owl:versionInfo rdf:datatype="&xsd;#string">2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The module imports all ontology modules up to and inluding the conceptual layer.</rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+  </owl:Ontology>
+ 
+ </rdf:RDF>

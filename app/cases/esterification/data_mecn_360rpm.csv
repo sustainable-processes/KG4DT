@@ -1,0 +1,9 @@
+﻿ω (rad/s),q (mL/min),c<sub>0</sub> (mol/L),,,c (mol/L),,
+-,Liquid stream,Liquid stream,,,Outlet stream,,
+-,-,2-Bromobenzyl Alcohol,Acetic Anhydride,2-Bromobenzyl Acetate,2-Bromobenzyl Alcohol,Acetic Anhydride,2-Bromobenzyl Acetate
+37.68,17,0.1,0.1,0,,,0.027087
+37.68,8.5,0.1,0.1,0,,,0.039758
+37.68,4.26,0.1,0.1,0,,,0.056667
+37.68,2.84,0.1,0.1,0,,,0.064721
+37.68,2,0.1,0.1,0,,,0.071459
+37.68,1.7,0.1,0.1,0,,,0.070934

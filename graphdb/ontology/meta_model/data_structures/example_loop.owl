@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY loop "&root;meta_model/data_structures/loop.owl">
+  <!ENTITY example_loop "&root;meta_model/data_structures/example_loop.owl">
+]>
+
+<rdf:RDF
+    xmlns="&example_loop;#"
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:loop="&loop;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+  xml:base="&example_loop;">
+ 
+  <owl:Ontology rdf:about="&example_loop;">
+    <owl:imports rdf:resource="&loop;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >This ontology module provides some application examples that illustrate the usage of the ontology module 'loop'</rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+  </owl:Ontology>
+ 
+  <owl:ObjectProperty rdf:ID="r">
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="a">
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="x">
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="s">
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="o">
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+  </owl:ObjectProperty>
+  <fc:Object rdf:ID="S"/>
+  <fc:Object rdf:ID="O_iPlus1">
+    <loop:isStatementFor_iPlus1>
+      <loop:ForLoop rdf:ID="For_iEq1To5">
+        <loop:statementFor_iPlus1 rdf:resource="&example_loop;#O_iPlus1"/>
+        <loop:numberOfIterations rdf:datatype="&xsd;#int"
+        >5</loop:numberOfIterations>
+        <loop:initialStatement>
+          <fc:Object rdf:ID="O_1">
+            <loop:isInitialStatementOf rdf:resource="&example_loop;#For_iEq1To5"/>
+            <loop:sameObject>
+              <fc:Object rdf:ID="O_i">
+                <loop:isStatementFor_i rdf:resource="&example_loop;#For_iEq1To5"/>
+                <o rdf:resource="&example_loop;#O_iPlus1"/>
+                <a>
+                  <fc:Object rdf:ID="A_i">
+                    <loop:isStatementFor_i rdf:resource="&example_loop;#For_iEq1To5"/>
+                  </fc:Object>
+                </a>
+                <loop:sameObject rdf:resource="&example_loop;#O_iPlus1"/>
+                <loop:sameObject>
+                  <fc:Object rdf:ID="O_N">
+                    <s rdf:resource="&example_loop;#S"/>
+                    <loop:isFinalStatementOf rdf:resource="&example_loop;#For_iEq1To5"/>
+                    <loop:sameObject rdf:resource="&example_loop;#O_i"/>
+                  </fc:Object>
+                </loop:sameObject>
+                <x>
+                  <fc:Object rdf:ID="X"/>
+                </x>
+              </fc:Object>
+            </loop:sameObject>
+          </fc:Object>
+        </loop:initialStatement>
+        <loop:finalStatement rdf:resource="&example_loop;#O_N"/>
+        <loop:statementFor_i rdf:resource="&example_loop;#O_i"/>
+        <loop:statementFor_i rdf:resource="&example_loop;#A_i"/>
+      </loop:ForLoop>
+    </loop:isStatementFor_iPlus1>
+    <loop:sameObject rdf:resource="&example_loop;#O_i"/>
+  </fc:Object>
+  <fc:Object rdf:ID="R">
+    <r rdf:resource="&example_loop;#O_1"/>
+  </fc:Object>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <fc:Object rdf:about="&example_loop;#O_1"/>
+      <fc:Object rdf:about="&example_loop;#O_i"/>
+      <fc:Object rdf:about="&example_loop;#O_iPlus1"/>
+      <fc:Object rdf:about="&example_loop;#O_N"/>
+      <fc:Object rdf:about="&example_loop;#A_i"/>
+      <fc:Object rdf:about="&example_loop;#X"/>
+      <fc:Object rdf:about="&example_loop;#R"/>
+      <fc:Object rdf:about="&example_loop;#S"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>

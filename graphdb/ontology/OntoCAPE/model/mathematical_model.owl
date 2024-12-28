@@ -1,0 +1,523 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY array    "&root;meta_model/data_structures/array.owl">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY mathematical_model   "&root;OntoCAPE/model/mathematical_model.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="&mathematical_model;#"
+  xml:base="&mathematical_model;">
+  <owl:Ontology rdf:about="&mathematical_model;">
+    <owl:imports rdf:resource="&system;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'mathematical_model' provides concepts for a specification of mathematical models.
+The following classes and relations from other ontology modules are used within 'mathematical_model':
+
+&lt;owl:Class rdf:about="&system;#Model"/&gt;
+&lt;owl:Class rdf:about="&system;#PhysicalQuantity"/&gt;
+&lt;owl:Class rdf:about="&system;#PropertySet"/&gt;
+&lt;owl:Class rdf:about="&system;#QuantitativeValue"/&gt;
+&lt;owl:Class rdf:about="&system;#System"/&gt;
+&lt;owl:Class rdf:about="&system;#UnitOfMeasure"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&system;#comprisesDirectly"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasProperty"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasUnitOfMeasure"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasValue"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isDirectSubsystemOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isModeledBy"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isPropertyOf"/&gt;
+&lt;owl:DatatypeProperty rdf:about="&system;#numericalValue"/&gt;
+
+The following classes and relations from the Meta Model are refined within 'mathematical_model':
+
+&lt;owl:Class rdf:about="&array;#Index"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&array;#determinesPositionOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&array;#isIndexOfArray"/&gt;
+&lt;owl:ObjectProperty rdf:about="&array;#isOrderedBy"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#inter-objectRelation"/&gt;
+&lt;owl:DatatypeProperty rdf:about="&array;#index"/&gt;
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="ModelVariableSpecification">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ModelVariableSpecification specifies a ModelVariable in terms of its numerical value (or limits of its numeric value) and its unit of measurement.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#numericalValue"/>
+            <owl:cardinality rdf:datatype="&xsd;#int"
+            >1</owl:cardinality>
+          </owl:Restriction>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:ID="lowerLimit"/>
+                </owl:onProperty>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:ID="upperLimit"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasUnitOfMeasure"/>
+        <owl:allValuesFrom rdf:resource="&system;#UnitOfMeasure"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#QuantitativeValue"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty rdf:resource="&system;#hasUnitOfMeasure"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ModeledObject">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#isModeledBy"/>
+            <owl:someValuesFrom rdf:resource="&system;#Model"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&system;#System"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A System that is modeled by means of a MathematicalModel is denoted as a ModeledObject.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="PortIndex">
+    <rdfs:subClassOf rdf:resource="&array;#Index"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="ModelVariable"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="determinesPositionOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&mathematical_model;#ModelVariable"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&mathematical_model;#determinesPositionOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="ModelPort"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isIndexOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&mathematical_model;#ModelPort"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&mathematical_model;#isIndexOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&mathematical_model;#isIndexOf"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="indexValue"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PortIndex orders the ModelVariables comprised in a ModelPort by assigning each of them an indexValue. In a Coupling, ModelVariables with the same indexValue are coupled to each other.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Constant">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Constant is a specified ModelVariable (i.e., an input variable), the ModelVariableSpecification of which has a constant numericalValue in all simulation runs.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&mathematical_model;#ModelVariable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&mathematical_model;#ModelVariableSpecification"/>
+              <owl:Restriction>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+                <owl:onProperty rdf:resource="&system;#numericalValue"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="StateVariable"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Parameter"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="MathematicalModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A MathematicalModel is a Model that uses mathematical language to describe the modeled System.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasCoupling"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="Coupling"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&mathematical_model;#ModelPort"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasModelPort"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&mathematical_model;#ModelVariable"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasModelVariable"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&mathematical_model;#hasModelVariable"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&mathematical_model;#ModelVariable"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#Model"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Submodel">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&mathematical_model;#MathematicalModel"/>
+            <owl:onProperty rdf:resource="&system;#isDirectSubsystemOf"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&mathematical_model;#MathematicalModel"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A MathematicalModel can be decomposed into Submodels.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectSubsystemOf"/>
+        <owl:allValuesFrom rdf:resource="&mathematical_model;#MathematicalModel"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&mathematical_model;#StateVariable">
+    <owl:disjointWith rdf:resource="&mathematical_model;#Constant"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&mathematical_model;#Parameter"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A StateVariable is an unspecified ModelVariable. Its ModelVariableSpecification either indicates the upperLimit and lowerLimit of the ModelVariable (before solving the model) or its numericalValue (after solving the model).</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&mathematical_model;#ModelVariableSpecification"/>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:about="&mathematical_model;#lowerLimit"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:about="&mathematical_model;#upperLimit"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&mathematical_model;#ModelVariable"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&mathematical_model;#Parameter">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Parameter is a specified ModelVariable (i.e., an input variable), the ModelVariableSpecification of which has may take different numericalValue in different simulation runs.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&mathematical_model;#StateVariable"/>
+    <owl:disjointWith rdf:resource="&mathematical_model;#Constant"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&mathematical_model;#ModelVariable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&mathematical_model;#ModelVariableSpecification"/>
+              <owl:Restriction>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+                <owl:onProperty rdf:resource="&system;#numericalValue"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&mathematical_model;#Coupling">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Coupling connects two ModelPorts of different Submodels, thereby defining equality equations between the ModelVariables comprised in the two ModelPorts.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&mathematical_model;#ModelPort"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >2</owl:cardinality>
+        <owl:onProperty rdf:resource="&system;#comprisesDirectly"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#comprisesDirectly"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&mathematical_model;#ModelPort"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&mathematical_model;#ModelPort"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#comprisesDirectly"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#PropertySet"/>
+  </owl:Class>
+  <owl:Class rdf:about="&mathematical_model;#ModelVariable">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&mathematical_model;#StateVariable"/>
+          <owl:Class rdf:about="&mathematical_model;#Parameter"/>
+          <owl:Class rdf:about="&mathematical_model;#Constant"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&mathematical_model;#ModelVariableSpecification"/>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasValue"/>
+        <owl:someValuesFrom rdf:resource="&mathematical_model;#ModelVariableSpecification"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#PhysicalQuantity"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ModelVariable represents a PhysicalQuantity involved in a MathematicalModel, the Value of which can be either supplied or solved by an evaluation of the MathematicalModel.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&mathematical_model;#ModelPort">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ModelPort is a collection of ModelVariables that can participate in a connection with another MathematicalModel. Thus, a model port has the function to identify and to bundle the 'public' variables of a MathematicalModel. Optionally, a ModelPort can be ordered by a PortIndex.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#comprisesDirectly"/>
+        <owl:someValuesFrom rdf:resource="&mathematical_model;#ModelVariable"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&mathematical_model;#ModelVariable"/>
+        <owl:onProperty rdf:resource="&system;#comprisesDirectly"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#PropertySet"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isOrderedBy"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&mathematical_model;#PortIndex"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&mathematical_model;#Coupling"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&mathematical_model;#hasModelVariable">
+    <rdfs:domain rdf:resource="&mathematical_model;#MathematicalModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation indicates the ModelVariables of a MathematicalModel.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:range rdf:resource="&mathematical_model;#ModelVariable"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&mathematical_model;#isIndexOf">
+    <rdfs:domain rdf:resource="&mathematical_model;#PortIndex"/>
+    <rdfs:subPropertyOf rdf:resource="&array;#isIndexOfArray"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isIndexOf points form a PortIndex to the associated ModelPort.</rdfs:comment>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&mathematical_model;#isOrderedBy"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="&mathematical_model;#ModelPort"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&mathematical_model;#determinesPositionOf">
+    <rdfs:range rdf:resource="&mathematical_model;#ModelVariable"/>
+    <rdfs:domain rdf:resource="&mathematical_model;#PortIndex"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The one-to-one relation between a PortIndex and the corresponding ModelVariable.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&array;#determinesPositionOf"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&mathematical_model;#hasCoupling">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:range rdf:resource="&mathematical_model;#Coupling"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation indicates a Coupling between two Submodels of a MathematicalModel.</rdfs:comment>
+    <rdfs:domain rdf:resource="&mathematical_model;#MathematicalModel"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&mathematical_model;#hasModelPort">
+    <rdfs:range rdf:resource="&mathematical_model;#ModelPort"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation identifies the ModelPort of a MathematicalModel.</rdfs:comment>
+    <rdfs:domain rdf:resource="&mathematical_model;#MathematicalModel"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&mathematical_model;#isOrderedBy">
+    <rdfs:range rdf:resource="&mathematical_model;#PortIndex"/>
+    <rdfs:subPropertyOf rdf:resource="&array;#isOrderedBy"/>
+    <owl:inverseOf rdf:resource="&mathematical_model;#isIndexOf"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isOrderedBy points from an ModelPort  to its sorting PortIndex.</rdfs:comment>
+    <rdfs:domain rdf:resource="&mathematical_model;#ModelPort"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="&mathematical_model;#upperLimit">
+    <rdfs:domain rdf:resource="&mathematical_model;#ModelVariableSpecification"/>
+    <rdfs:range rdf:resource="&xsd;#float"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#numericalValue"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The attribute upperLimit defines an upper bound for the numericalValue of a ModelVariableSpecification.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&mathematical_model;#indexValue">
+    <rdfs:subPropertyOf rdf:resource="&array;#index"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The attribute indexValue indicates the numerical value of an PortIndex.</rdfs:comment>
+    <rdfs:range rdf:resource="&xsd;#positiveInteger"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&mathematical_model;#lowerLimit">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The attribute lowerLimit defines a lower bound for the numericalValue of a ModelVariableSpecification.</rdfs:comment>
+    <rdfs:domain rdf:resource="&mathematical_model;#ModelVariableSpecification"/>
+    <rdfs:range rdf:resource="&xsd;#float"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#numericalValue"/>
+  </owl:DatatypeProperty>
+  <owl:FunctionalProperty rdf:ID="correspondsToQuantity">
+    <rdfs:range>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&system;#PhysicalQuantity"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&mathematical_model;#ModeledObject"/>
+            <owl:onProperty rdf:resource="&system;#isPropertyOf"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="&mathematical_model;#ModelVariable"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation denotes an one-to-one correspondence between a ModelVariable and a PhysicalQuantity of the ModeledObject.</rdfs:comment>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+  </owl:FunctionalProperty>
+</rdf:RDF>

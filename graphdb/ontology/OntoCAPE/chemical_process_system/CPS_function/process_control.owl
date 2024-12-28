@@ -1,0 +1,539 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY network_system   "&root;OntoCAPE/upper_level/network_system.owl">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY process  "&root;OntoCAPE/chemical_process_system/CPS_function/process.owl">
+  <!ENTITY process_control  "&root;OntoCAPE/chemical_process_system/CPS_function/process_control.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="&process_control;#"
+    xmlns:process="&process;#"
+    xmlns:network_system="&network_system;#"
+  xml:base="&process_control;">
+  <owl:Ontology rdf:about="&process_control;">
+    <owl:imports rdf:resource="&process;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'process_control' provides concepts based on control theory for process control architectures for a chemical process system.
+The following classes and relations from other ontology modules are used within 'process_control':
+
+&lt;owl:Class rdf:about="&system;#System"/&gt;
+&lt;owl:Class rdf:about="&network_system;#Device"/&gt;
+&lt;owl:Class rdf:about="&network_system;#Connection"/&gt;
+&lt;owl:Class rdf:about="&process;#ProcessStep"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&system;#hasSubsystem"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isDirectlyConnectedTo"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#hasOutput"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#hasInput"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isDirectSubsystemOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasDirectSubsystem"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#enters"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#leaves"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isRelatedTo"/&gt;
+
+The following classes and relations from the Meta Model are refined within 'process_control':
+
+&lt;owl:Class rdf:about="&fc;#ValueSet"/&gt;
+&lt;owl:Class rdf:about="&fc;#NonExhaustiveValueSet"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&fc;#isOfType"/&gt;
+
+   </rdfs:comment>
+   <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+   </terms:license>
+  </owl:Ontology>
+  <owl:Class rdf:ID="FunctionBlockLinearType">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:ID="hasLinearity"/>
+            </owl:onProperty>
+            <owl:hasValue>
+              <LinearityVT rdf:ID="linear">
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >Linear refers to the behavior of the ControlledSystem.</rdfs:comment>
+              </LinearityVT>
+            </owl:hasValue>
+          </owl:Restriction>
+          <owl:Class rdf:ID="FunctionBlock"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="ControlLoop">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ControlSystem is a functional subsystem of ProcessControlSystem and deals with functional describtion of the control system</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:ID="ControlComponent"/>
+              <owl:Class rdf:ID="Actionline"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&process_control;#Actionline"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&process_control;#ControlComponent"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="hasControlLoopArchitecture"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="ControlLoopArchitectureVT"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&process_control;#hasControlLoopArchitecture"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&process_control;#hasControlLoopArchitecture"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&process_control;#ControlLoopArchitectureVT"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#System"/>
+  </owl:Class>
+  <owl:Class rdf:ID="LinearityVT">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&process_control;#ControlLoopArchitectureVT"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="ResponseCharacteristicsVT"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&fc;#ValueSet"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Linearity is an enumeration of its instances linear and Non-linear.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <LinearityVT rdf:about="&process_control;#linear"/>
+          <LinearityVT rdf:ID="nonlinear">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >Nonlinear refers to the behavior of the ControlledSystem which cannot be described as a linear function of the state of that system.</rdfs:comment>
+          </LinearityVT>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&process_control;#FunctionBlock">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >FunctionBlock have a distinct transfer function, which can be used to characterize them.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="hasResponseCharacteristics"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&process_control;#ResponseCharacteristicsVT"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&process_control;#ResponseCharacteristicsVT"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&process_control;#hasResponseCharacteristics"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&process_control;#hasLinearity"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&process_control;#hasLinearity"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&process_control;#LinearityVT"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&process_control;#hasLinearity"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&process_control;#LinearityVT"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&process_control;#ControlComponent"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="BranchingPoint">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&process_control;#ControlComponent"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >BranchingPoint describes the splitting of a controlled system.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="LinearControlLoop">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&process_control;#FunctionBlockLinearType"/>
+            <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&process_control;#ControlLoop"/>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+            <owl:allValuesFrom>
+              <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                  <owl:Class rdf:about="&process_control;#FunctionBlockLinearType"/>
+                  <owl:Class rdf:about="&process_control;#Actionline"/>
+                </owl:unionOf>
+              </owl:Class>
+            </owl:allValuesFrom>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&process_control;#ControlComponent">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&process_control;#Actionline"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="DirectedActionline"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&process_control;#DirectedActionline"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectSubsystemOf"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&process_control;#ControlComponent"/>
+              <owl:Class rdf:about="&process_control;#Actionline"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&process_control;#ControlComponent"/>
+              <owl:Class rdf:about="&process_control;#Actionline"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&process_control;#ControlComponent"/>
+              <owl:Class rdf:about="&process_control;#Actionline"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&network_system;#Device"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ControlComponent comprises the different features required for describing control.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="ActuatorFunction">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ActuatorFunction transforms the output of the Controller into the input of the ControlledSystem.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&process_control;#FunctionBlock"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ComparingElement">
+    <rdfs:subClassOf rdf:resource="&process_control;#ControlComponent"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ComparingElement indicates whether a action line influence as a feed back or directly.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&process_control;#ControlLoopArchitectureVT">
+    <rdfs:subClassOf rdf:resource="&fc;#NonExhaustiveValueSet"/>
+    <owl:disjointWith rdf:resource="&process_control;#LinearityVT"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&process_control;#ResponseCharacteristicsVT"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ControlLoopArchitectureValue type comprises the different types of control loop structures. ControlLoopType  is an enumeration of its instances OpenLoopControl, FeedForwardControl, StateFeedbackControl, OutputFeedbackControl and ComplexControlLoop.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="ReversingElement">
+    <rdfs:subClassOf rdf:resource="&process_control;#ControlComponent"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ReversingElement describes the functionality of lead.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&process_control;#Actionline">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&process_control;#ControlComponent"/>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&process_control;#ControlComponent"/>
+              <owl:Class rdf:about="&process_control;#Actionline"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#isDirectSubsystemOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&process_control;#ControlComponent"/>
+              <owl:Class rdf:about="&process_control;#Actionline"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasSubsystem"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&process_control;#ControlComponent"/>
+              <owl:Class rdf:about="&process_control;#Actionline"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&network_system;#Connection"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >2</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Control Components are connected by actionlines, which represents a specific type of information collection. Actionlines are treated analogous to topological arcs.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="ControlledSystem">
+    <rdfs:subClassOf rdf:resource="&process_control;#FunctionBlock"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ControlledSystem describes the functionality of the system to be controlled.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&process_control;#DirectedActionline">
+    <rdfs:subClassOf rdf:resource="&process_control;#Actionline"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty rdf:resource="&network_system;#enters"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#leaves"/>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#isDirectlyConnectedTo"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >DirectedActionline is a specialization of Actionline and likewise the connecting element between ControlComponents. However, the usage of DirectedActionline implies the indication of a directed connection.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="SensorFunction">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The SensorFunction comprises the entire function of recording, relaying, and writing out ProcessQuantities within other ControlComponents.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&process_control;#FunctionBlock"/>
+  </owl:Class>
+  <owl:Class rdf:about="&process_control;#ResponseCharacteristicsVT">
+    <owl:disjointWith rdf:resource="&process_control;#ControlLoopArchitectureVT"/>
+    <owl:disjointWith rdf:resource="&process_control;#LinearityVT"/>
+    <rdfs:subClassOf rdf:resource="&fc;#NonExhaustiveValueSet"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ResponseCharacteristics describe the several characteristics how a controlled system may react on a manipulation.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Controller">
+    <rdfs:subClassOf rdf:resource="&process_control;#FunctionBlock"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Controller represents the different types of controller.</rdfs:comment>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="refersToProcessStep">
+    <rdfs:subPropertyOf rdf:resource="&system;#isRelatedTo"/>
+    <rdfs:range rdf:resource="&process;#ProcessStep"/>
+    <rdfs:domain rdf:resource="&process_control;#ControlledSystem"/>
+  </owl:ObjectProperty>
+  <owl:FunctionalProperty rdf:about="&process_control;#hasControlLoopArchitecture">
+    <rdfs:subPropertyOf rdf:resource="&fc;#isOfType"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasControlLoopArchitecture refers from a equipment to the corresponding fixture.</rdfs:comment>
+    <rdfs:domain rdf:resource="&process_control;#ControlLoop"/>
+    <rdfs:range rdf:resource="&process_control;#ControlLoopArchitectureVT"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&process_control;#hasLinearity">
+    <rdfs:domain rdf:resource="&process_control;#FunctionBlock"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#isOfType"/>
+    <rdfs:range rdf:resource="&process_control;#LinearityVT"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasLinearity refers from a FunctionBlock to its LinearityValueType.</rdfs:comment>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&process_control;#hasResponseCharacteristics">
+    <rdfs:domain rdf:resource="&process_control;#FunctionBlock"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasResponseCharacteristics refers from the function block to its ResponseCharacteristicsValueType.</rdfs:comment>
+    <rdfs:range rdf:resource="&process_control;#ResponseCharacteristicsVT"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#isOfType"/>
+  </owl:FunctionalProperty>
+  <ControlLoopArchitectureVT rdf:ID="OutputFeedbackControl">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >OutputFeedbackControl is applied when the output of the system is fed back into the system as part of its input.</rdfs:comment>
+  </ControlLoopArchitectureVT>
+  <ResponseCharacteristicsVT rdf:ID="P-Element">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >P-Element is a proportional part of a controller which responds to a change in the process variable proportional to the current measured error value.</rdfs:comment>
+  </ResponseCharacteristicsVT>
+  <ResponseCharacteristicsVT rdf:ID="I-Element">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >I-Element is a integrative part of a controller which force the signal to approach the setpoint quicker than a proportional controller alone and eliminate steady state error.</rdfs:comment>
+  </ResponseCharacteristicsVT>
+  <ResponseCharacteristicsVT rdf:ID="PID-Element">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >PID-Element combines all features provided by the P-, I- and D-Element of a controller.</rdfs:comment>
+  </ResponseCharacteristicsVT>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <ResponseCharacteristicsVT rdf:ID="D-Element">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >D-Element is a derivative part of a controller which is applied for smoother control trajectories since it reduces the magnitude of the overshoot produced by the integral component.</rdfs:comment>
+      </ResponseCharacteristicsVT>
+      <ResponseCharacteristicsVT rdf:ID="PT1-Element">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >PT1-Element deals with time-delay in controlled system to avoid instability.</rdfs:comment>
+      </ResponseCharacteristicsVT>
+      <ResponseCharacteristicsVT rdf:about="&process_control;#PID-Element"/>
+      <ResponseCharacteristicsVT rdf:about="&process_control;#P-Element"/>
+      <ResponseCharacteristicsVT rdf:about="&process_control;#I-Element"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <ControlLoopArchitectureVT rdf:ID="OpenLoopControl">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >OpenLoopControl is a type of architecture which computes its input into a system using only the current state and its model of the system.</rdfs:comment>
+  </ControlLoopArchitectureVT>
+  <ControlLoopArchitectureVT rdf:ID="FeedForwardControl">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A system which exhibits FeedForwardControl responds to a measured disturbance in a pre-defined way before the disturbance effects the control variable.</rdfs:comment>
+  </ControlLoopArchitectureVT>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <ControlLoopArchitectureVT rdf:about="&process_control;#OpenLoopControl"/>
+      <ControlLoopArchitectureVT rdf:about="&process_control;#FeedForwardControl"/>
+      <ControlLoopArchitectureVT rdf:ID="StateFeedbackControl">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >StateFeedbackControl is a method employed in feedback control.</rdfs:comment>
+      </ControlLoopArchitectureVT>
+      <ControlLoopArchitectureVT rdf:about="&process_control;#OutputFeedbackControl"/>
+      <ControlLoopArchitectureVT rdf:ID="ComplexControlLoop">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >ComplexControlLoop is not yet specifically defined control loop which may be composed of other control loop elements.</rdfs:comment>
+      </ControlLoopArchitectureVT>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <LinearityVT rdf:about="&process_control;#linear"/>
+      <LinearityVT rdf:about="&process_control;#nonlinear"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>

@@ -1,0 +1,346 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root             "file:/ontology/">
+  <!ENTITY owl              "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd              "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf              "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs             "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc               "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY mereology        "&root;meta_model/mereology/mereology.owl">
+  <!ENTITY topology         "&root;meta_model/topology/topology.owl">
+  <!ENTITY example_topology "&root;meta_model/topology/example_topology.owl">
+]>
+
+<rdf:RDF
+    xmlns="&example_topology;#"
+    xmlns:topology="&topology;#"
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:mereology="&mereology;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+  xml:base="&example_topology;">
+  <owl:Ontology rdf:about="&example_topology;">
+    <owl:imports rdf:resource="&topology;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >This ontology module provides some application examples that illustrate the usage of the ontology module 'topology'.
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>    
+
+  </owl:Ontology>
+  <owl:Class rdf:ID="Query_entersNode_X">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:hasValue>
+          <topology:Node rdf:ID="X">
+            <topology:hasOutput>
+              <topology:DirectedArc rdf:ID="X-Y">
+                <topology:leaves rdf:resource="&example_topology;#X"/>
+                <topology:enters>
+                  <topology:Node rdf:ID="Y">
+                    <hasOutput>
+                      <topology:DirectedArc rdf:ID="Y-Z">
+                        <topology:leaves rdf:resource="&example_topology;#Y"/>
+                        <topology:enters>
+                          <topology:Node rdf:ID="Z">
+                            <topology:hasInput rdf:resource="&example_topology;#Y-Z"/>
+                            <topology:hasOutput>
+                              <topology:DirectedArc rdf:ID="Z-X">
+                                <topology:enters rdf:resource="&example_topology;#X"/>
+                                <topology:leaves rdf:resource="&example_topology;#Z"/>
+                              </topology:DirectedArc>
+                            </topology:hasOutput>
+                            <topology:hasOutput>
+                              <topology:DirectedArc rdf:ID="Z-A">
+                                <topology:enters>
+                                  <topology:Node rdf:ID="A">
+                                    <mereology:hasPart>
+                                      <topology:Port rdf:ID="Port_1A">
+                                        <topology:isDirectlyConnectedTo>
+                                          <topology:ConnectionPoint rdf:ID="ConnectionPoint_1A-B">
+                                            <topology:isDirectlyConnectedTo rdf:resource="&example_topology;#Port_1A"/>
+                                            <mereology:isPartOf>
+                                              <topology:DirectedArc rdf:ID="A-B">
+                                                <topology:enters>
+                                                  <topology:Node rdf:ID="B">
+                                                    <mereology:hasPart>
+                                                      <topology:Port rdf:ID="Port_1B">
+                                                        <mereology:isPartOf rdf:resource="&example_topology;#B"/>
+                                                        <topology:isDirectlyConnectedTo>
+                                                          <topology:ConnectionPoint rdf:ID="ConnectionPoint_2A-B">
+                                                            <topology:isDirectlyConnectedTo rdf:resource="&example_topology;#Port_1B"/>
+                                                            <mereology:isPartOf rdf:resource="&example_topology;#A-B"/>
+                                                          </topology:ConnectionPoint>
+                                                        </topology:isDirectlyConnectedTo>
+                                                      </topology:Port>
+                                                    </mereology:hasPart>
+                                                    <topology:hasInput rdf:resource="&example_topology;#A-B"/>
+                                                    <topology:hasOutput>
+                                                      <topology:DirectedArc rdf:ID="B-D">
+                                                        <topology:leaves rdf:resource="&example_topology;#B"/>
+                                                        <topology:enters>
+                                                          <topology:Node rdf:ID="D">
+                                                            <topology:hasInput>
+                                                              <topology:DirectedArc rdf:ID="C-D">
+    <topology:leaves>
+      <topology:Node rdf:ID="C">
+        <topology:hasOutput rdf:resource="&example_topology;#C-D"/>
+        <topology:hasInput>
+          <topology:DirectedArc rdf:ID="A-C">
+            <topology:enters rdf:resource="&example_topology;#C"/>
+            <mereology:hasPart>
+              <topology:ConnectionPoint rdf:ID="ConnectionPoint_2A-C">
+                <topology:isDirectlyConnectedTo>
+                  <topology:Port rdf:ID="Port_1C">
+                    <topology:isDirectlyConnectedTo rdf:resource="&example_topology;#ConnectionPoint_2A-C"/>
+                    <mereology:isPartOf rdf:resource="&example_topology;#C"/>
+                  </topology:Port>
+                </topology:isDirectlyConnectedTo>
+                <mereology:isPartOf rdf:resource="&example_topology;#A-C"/>
+              </topology:ConnectionPoint>
+            </mereology:hasPart>
+            <mereology:hasPart>
+              <topology:ConnectionPoint rdf:ID="ConnectionPoint_1A-C">
+                <topology:isDirectlyConnectedTo>
+                  <topology:Port rdf:ID="Port_2A">
+                    <topology:isDirectlyConnectedTo rdf:resource="&example_topology;#ConnectionPoint_1A-C"/>
+                    <mereology:isPartOf rdf:resource="&example_topology;#A"/>
+                  </topology:Port>
+                </topology:isDirectlyConnectedTo>
+                <mereology:isPartOf rdf:resource="&example_topology;#A-C"/>
+              </topology:ConnectionPoint>
+            </mereology:hasPart>
+            <topology:leaves rdf:resource="&example_topology;#A"/>
+          </topology:DirectedArc>
+        </topology:hasInput>
+        <mereology:hasPart rdf:resource="&example_topology;#Port_1C"/>
+      </topology:Node>
+    </topology:leaves>
+    <topology:enters rdf:resource="&example_topology;#D"/>
+                                                              </topology:DirectedArc>
+                                                            </topology:hasInput>
+                                                            <topology:hasInput rdf:resource="&example_topology;#B-D"/>
+                                                          </topology:Node>
+                                                        </topology:enters>
+                                                      </topology:DirectedArc>
+                                                    </topology:hasOutput>
+                                                  </topology:Node>
+                                                </topology:enters>
+                                                <mereology:hasPart rdf:resource="&example_topology;#ConnectionPoint_1A-B"/>
+                                                <mereology:hasPart rdf:resource="&example_topology;#ConnectionPoint_2A-B"/>
+                                                <topology:leaves rdf:resource="&example_topology;#A"/>
+                                              </topology:DirectedArc>
+                                            </mereology:isPartOf>
+                                          </topology:ConnectionPoint>
+                                        </topology:isDirectlyConnectedTo>
+                                        <mereology:isPartOf rdf:resource="&example_topology;#A"/>
+                                      </topology:Port>
+                                    </mereology:hasPart>
+                                    <mereology:hasPart rdf:resource="&example_topology;#Port_2A"/>
+                                    <topology:hasInput rdf:resource="&example_topology;#Z-A"/>
+                                    <topology:hasOutput rdf:resource="&example_topology;#A-C"/>
+                                    <topology:hasOutput rdf:resource="&example_topology;#A-B"/>
+                                  </topology:Node>
+                                </topology:enters>
+                                <topology:leaves rdf:resource="&example_topology;#Z"/>
+                              </topology:DirectedArc>
+                            </topology:hasOutput>
+                          </topology:Node>
+                        </topology:enters>
+                      </topology:DirectedArc>
+                    </hasOutput>
+                    <topology:hasInput rdf:resource="&example_topology;#X-Y"/>
+                  </topology:Node>
+                </topology:enters>
+              </topology:DirectedArc>
+            </topology:hasOutput>
+            <topology:hasInput rdf:resource="&example_topology;#Z-X"/>
+            <topology:hasInput>
+              <topology:DirectedArc rdf:ID="W-X">
+                <topology:enters rdf:resource="&example_topology;#X"/>
+                <topology:leaves>
+                  <topology:Node rdf:ID="W">
+                    <topology:hasOutput rdf:resource="&example_topology;#W-X"/>
+                  </topology:Node>
+                </topology:leaves>
+              </topology:DirectedArc>
+            </topology:hasInput>
+          </topology:Node>
+        </owl:hasValue>
+        <owl:onProperty rdf:resource="&topology;#enters"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="Query_ConnectedArcs_X">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_topology;#X"/>
+            <owl:onProperty rdf:resource="&topology;#isConnectedTo"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&topology;#Arc"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="Query_ConnectedNodes_X">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_topology;#X"/>
+            <owl:onProperty rdf:resource="&topology;#isConnectedTo"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&topology;#Node"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="Query_leavesNode_X">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&topology;#leaves"/>
+        <owl:hasValue rdf:resource="&example_topology;#X"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="Query_SuccessorNodesOf_W">
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_topology;#W"/>
+            <owl:onProperty rdf:resource="&topology;#isSuccessorOf"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&topology;#Node"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="Query_ArcsConnectedTo_A_Via_Port_1A">
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Restriction>
+                <owl:hasValue rdf:resource="&example_topology;#Port_1A"/>
+                <owl:onProperty rdf:resource="&topology;#isDirectlyConnectedTo"/>
+              </owl:Restriction>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="&mereology;#hasPart"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&topology;#Arc"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="Query_hasOutputToDirectedArc_Z-X">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&example_topology;#Z-X"/>
+        <owl:onProperty rdf:resource="&topology;#hasOutput"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="Query_PredecessorNodesOf_X">
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_topology;#X"/>
+            <owl:onProperty rdf:resource="&topology;#isPredecessorOf"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&topology;#Node"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="Query_ArcsConnectedTo_A_Via_Port_2A">
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Restriction>
+                <owl:hasValue rdf:resource="&example_topology;#Port_2A"/>
+                <owl:onProperty rdf:resource="&topology;#isDirectlyConnectedTo"/>
+              </owl:Restriction>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="&mereology;#hasPart"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&topology;#Arc"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="Query_hasInputToDirectedArc_Z-X">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&example_topology;#Z-X"/>
+        <owl:onProperty rdf:resource="&topology;#hasInput"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="Query_ConnectedObjects_X">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&topology;#isConnectedTo"/>
+            <owl:hasValue rdf:resource="&example_topology;#X"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&fc;#Object"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <rdf:Property rdf:ID="hasOutput"/>
+  <owl:SymmetricProperty rdf:ID="isDirectlyConnectedTo">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+  </owl:SymmetricProperty>
+  <mereology:AggregateOnly rdf:ID="AggregateOnly_2"/>
+  <fc:Object rdf:ID="FirstLevel_2.1">
+    <mereology:isDirectPartOf rdf:resource="&example_topology;#AggregateOnly_2"/>
+  </fc:Object>
+  <fc:Object rdf:ID="FirstLevel_1.1">
+    <mereology:isDirectPartOf>
+      <mereology:AggregateOnly rdf:ID="AggregateOnly_1"/>
+    </mereology:isDirectPartOf>
+  </fc:Object>
+  <fc:Object rdf:ID="SecondLevel_2.1">
+    <mereology:isDirectPartOf rdf:resource="&example_topology;#FirstLevel_2.1"/>
+  </fc:Object>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <topology:Node rdf:about="&example_topology;#A"/>
+      <topology:Node rdf:about="&example_topology;#B"/>
+      <topology:Node rdf:about="&example_topology;#D"/>
+      <topology:Node rdf:about="&example_topology;#Z"/>
+      <topology:Node rdf:about="&example_topology;#X"/>
+      <topology:Node rdf:about="&example_topology;#W"/>
+      <topology:Node rdf:about="&example_topology;#Y"/>
+      <topology:Node rdf:about="&example_topology;#C"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent/>
+  <fc:Object rdf:ID="FirstLevel_1.2">
+    <mereology:isDirectPartOf rdf:resource="&example_topology;#AggregateOnly_1"/>
+  </fc:Object>
+  <fc:Object rdf:ID="SecondLevel_1.1">
+    <mereology:isDirectPartOf rdf:resource="&example_topology;#FirstLevel_1.1"/>
+  </fc:Object>
+</rdf:RDF>

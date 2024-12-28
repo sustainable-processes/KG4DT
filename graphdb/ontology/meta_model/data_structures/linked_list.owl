@@ -1,0 +1,229 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY linked_list  "&root;meta_model/data_structures/linked_list.owl">
+  <!ENTITY mereology    "&root;meta_model/mereology/mereology.owl">
+]>
+
+<rdf:RDF
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:mereology="&mereology;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="&linked_list;#"
+  xml:base="&linked_list;">
+  <owl:Ontology rdf:about="&linked_list;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'linked_list' defines a design pattern for the implementation of a linked list.
+The following classes and relations from other ontology modules are used within 'linked_list':
+   
+&lt;owl:Class rdf:about="&mereology;#CompositeObject"/&gt;
+&lt;owl:Class rdf:about="&mereology;#PartOfCompositeObject"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&fc;#inter-objectRelation"/&gt;
+&lt;owl:ObjectProperty rdf:about="&mereology;#isComposedOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&mereology;#isExclusivelyPartOf"/&gt;
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+    <owl:imports rdf:resource="&mereology;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="FirstElement">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="LastElement"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="InternalElement"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The first ListElement of a LinkedList.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="ListElement"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="nextElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="previousElement"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&linked_list;#ListElement"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&linked_list;#InternalElement">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&linked_list;#previousElement"/>
+            </owl:onProperty>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&linked_list;#ListElement"/>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&linked_list;#nextElement"/>
+            </owl:onProperty>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&linked_list;#ListElement"/>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&linked_list;#ListElement"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&linked_list;#FirstElement"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&linked_list;#LastElement"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ListElement that is neither the first nor the last element of a LinkedList.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&linked_list;#LastElement">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The last ListElement of a LinkedList.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&linked_list;#FirstElement"/>
+    <owl:disjointWith rdf:resource="&linked_list;#InternalElement"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&linked_list;#ListElement"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&linked_list;#ListElement"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&linked_list;#previousElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&linked_list;#nextElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="LinkedList">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mereology;#isComposedOf"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&linked_list;#ListElement"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mereology;#isComposedOf"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&linked_list;#ListElement"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&mereology;#CompositeObject"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A LinkedList is formed by a sequence of ListElements, each pointing to the next as well as to the previous ListElement.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&linked_list;#ListElement">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&linked_list;#previousElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&linked_list;#nextElement"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&linked_list;#previousElement"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&linked_list;#ListElement"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&linked_list;#nextElement"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&linked_list;#ListElement"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mereology;#isExclusivelyPartOf"/>
+        <owl:someValuesFrom rdf:resource="&linked_list;#LinkedList"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&linked_list;#LinkedList"/>
+        <owl:onProperty rdf:resource="&mereology;#isExclusivelyPartOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&mereology;#PartOfCompositeObject"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ListElement is an element of a LinkedList; it may point to a next as well as to a previous ListElement.</rdfs:comment>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&linked_list;#previousElement">
+    <rdfs:range rdf:resource="&linked_list;#ListElement"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&linked_list;#nextElement"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdfs:domain rdf:resource="&linked_list;#ListElement"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >points from a ListElement to the previous ListElement</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&linked_list;#nextElement">
+    <owl:inverseOf rdf:resource="&linked_list;#previousElement"/>
+    <rdfs:range rdf:resource="&linked_list;#ListElement"/>
+    <rdfs:domain rdf:resource="&linked_list;#ListElement"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >points from a ListElement to the next ListElement</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:AllDifferent/>
+  <owl:AllDifferent/>
+</rdf:RDF>

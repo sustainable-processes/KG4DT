@@ -1,0 +1,492 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY mereology    "&root;meta_model/mereology/mereology.owl">
+  <!ENTITY topology "&root;meta_model/topology/topology.owl">
+]>
+
+<rdf:RDF
+    xmlns="&topology;#"
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:mereology="&mereology;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+  xml:base="&topology;">
+  <owl:Ontology rdf:about="&topology;">
+    <owl:imports rdf:resource="&fc;"/>
+    <owl:imports rdf:resource="&mereology;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'topology' extends the mereological therory defined in the ontology module 'mereology' to a theory of mereotopology. It provides concepts for describing topological relations between objects.   
+The following classes and relations from other ontology modules are used within 'topology':
+   
+&lt;owl:Class rdf:about="&fc;#Object"/&gt;
+&lt;owl:Class rdf:about="&mereology;#AggregateOnly"/&gt;
+&lt;owl:Class rdf:about="&mereology;#FirstLevelPart"/&gt;
+&lt;owl:Class rdf:about="&mereology;#Part"/&gt;
+&lt;owl:Class rdf:about="&mereology;#PartOnly"&gt;
+&lt;owl:Class rdf:about="&mereology;#SecondLevelPart"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&fc;#inter-objectRelation"/&gt;
+&lt;owl:ObjectProperty rdf:about="&mereology;#hasDirectPart"/&gt;
+&lt;owl:ObjectProperty rdf:about="&mereology;#hasPart"/&gt;
+&lt;owl:ObjectProperty rdf:about="&mereology;#isDirectPartOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&mereology;#isPartOf"/&gt;
+</rdfs:comment>
+  <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+  </terms:license>
+  </owl:Ontology>
+  <owl:Class rdf:ID="DirectedArc">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >DirectedArc is a specialization of Arc and represents likewise the connecting element between Nodes. However, the usage of DirectedArc implies the indication of a direction.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Arc"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="Node"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="enters"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&topology;#enters"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="leaves"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&topology;#Node"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&topology;#leaves"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:ID="isDirectlyConnectedTo"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Port">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="ConnectionPoint"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Ports represents the interface of nodes to connection points and are parts of the corresponding node</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&topology;#Node"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&mereology;#isDirectPartOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&topology;#Node"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&mereology;#isPartOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&topology;#ConnectionPoint"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:about="&topology;#isDirectlyConnectedTo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Connector"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&topology;#Connector">
+    <rdfs:subClassOf rdf:resource="&mereology;#Part"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&topology;#Connector"/>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:about="&topology;#isDirectlyConnectedTo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:about="&topology;#isDirectlyConnectedTo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Connector represent the interface through which an Object can be connected to another. Typically, the possible connections of the Connector are further restrained, for instance by postulating that certain properties of the connected Connectors need to match for a feasible connection.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&topology;#Arc">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Arc is a specialization of Object and represents the connecting element between Nodes.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >2</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:about="&topology;#isDirectlyConnectedTo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mereology;#hasDirectPart"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&topology;#ConnectionPoint"/>
+              <owl:Class rdf:about="&topology;#Arc"/>
+              <owl:Class rdf:about="&topology;#Node"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&topology;#ConnectionPoint"/>
+              <owl:Class rdf:about="&topology;#Arc"/>
+              <owl:Class rdf:about="&topology;#Node"/>
+              <owl:Class rdf:about="&topology;#Port"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&mereology;#hasPart"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:about="&topology;#isDirectlyConnectedTo"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&topology;#Node"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&fc;#Object"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&topology;#Node"/>
+              <owl:Class rdf:about="&topology;#Arc"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&mereology;#isDirectPartOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&topology;#Node"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&topology;#Node">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&topology;#Port"/>
+              <owl:Class rdf:about="&topology;#Node"/>
+              <owl:Class rdf:about="&topology;#Arc"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&mereology;#hasDirectPart"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mereology;#isDirectPartOf"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&topology;#Node"/>
+              <owl:Class rdf:about="&topology;#Arc"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&topology;#Port"/>
+              <owl:Class rdf:about="&topology;#Node"/>
+              <owl:Class rdf:about="&topology;#Arc"/>
+              <owl:Class rdf:about="&topology;#ConnectionPoint"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&mereology;#hasPart"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasInput"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&topology;#DirectedArc"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Node is a specialization of object and is used to model the crucial elements (joints) which are connected by arcs.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&topology;#Arc"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&topology;#DirectedArc"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasOutput"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&fc;#Object"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&topology;#Arc"/>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:about="&topology;#isDirectlyConnectedTo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&topology;#ConnectionPoint">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&topology;#Arc"/>
+        <owl:onProperty rdf:resource="&mereology;#isDirectPartOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:about="&topology;#isDirectlyConnectedTo"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&topology;#Port"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mereology;#isPartOf"/>
+        <owl:someValuesFrom rdf:resource="&topology;#Arc"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&topology;#Connector"/>
+    <owl:disjointWith rdf:resource="&topology;#Port"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >ConnectionPoint represents the interface through which an Arc can be connected to the Port of a Node. ConnectionPoints may have certain attributes that further specify the type of connection. ConnectionPoints are Parts of the corresponding Arc.</rdfs:comment>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&topology;#hasInput">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&topology;#enters"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="&topology;#Node"/>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:ID="isSuccessorOf"/>
+    </rdfs:subPropertyOf>
+    <rdfs:range rdf:resource="&topology;#DirectedArc"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation 'hasInput' connects a Node to an incoming DirectedArc.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&topology;#hasOutput">
+    <rdfs:range rdf:resource="&topology;#DirectedArc"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation 'hasOutput' connects a Node to an outgoing DirectedArc.</rdfs:comment>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&topology;#leaves"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="&topology;#Node"/>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:ID="isPredecessorOf"/>
+    </rdfs:subPropertyOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&topology;#leaves">
+    <owl:inverseOf rdf:resource="&topology;#hasOutput"/>
+    <rdfs:range rdf:resource="&topology;#Node"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation 'leaves' connects an outgoing DirectedArc to its source Node.</rdfs:comment>
+    <rdfs:domain rdf:resource="&topology;#DirectedArc"/>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:about="&topology;#isSuccessorOf"/>
+    </rdfs:subPropertyOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&topology;#enters">
+    <rdfs:range rdf:resource="&topology;#Node"/>
+    <rdfs:domain rdf:resource="&topology;#DirectedArc"/>
+    <owl:inverseOf rdf:resource="&topology;#hasInput"/>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:about="&topology;#isPredecessorOf"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation 'enters' connects an ingoing DirectedArc to its target Node.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:TransitiveProperty rdf:ID="isConnectedTo">
+    <owl:inverseOf rdf:resource="&topology;#isConnectedTo"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdf:type rdf:resource="&owl;#SymmetricProperty"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The topological relation 'isConnectedTo' represents connectedness between Objects.</rdfs:comment>
+  </owl:TransitiveProperty>
+  <owl:TransitiveProperty rdf:about="&topology;#isPredecessorOf">
+    <owl:inverseOf>
+      <owl:TransitiveProperty rdf:about="&topology;#isSuccessorOf"/>
+    </owl:inverseOf>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&topology;#Node"/>
+          <owl:Class rdf:about="&topology;#DirectedArc"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:subPropertyOf rdf:resource="&topology;#isConnectedTo"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&topology;#Node"/>
+          <owl:Class rdf:about="&topology;#DirectedArc"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation 'isPredecessorOf' identifies all Nodes and DirectedArcs that are predecessors of the considered one.</rdfs:comment>
+  </owl:TransitiveProperty>
+  <owl:TransitiveProperty rdf:about="&topology;#isSuccessorOf">
+    <owl:inverseOf rdf:resource="&topology;#isPredecessorOf"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&topology;#Node"/>
+          <owl:Class rdf:about="&topology;#DirectedArc"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation 'isSuccessorOf' identifies all Nodes and DirectedArcs that are successors of the considered one.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&topology;#isConnectedTo"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&topology;#Node"/>
+          <owl:Class rdf:about="&topology;#DirectedArc"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+  </owl:TransitiveProperty>
+  <owl:SymmetricProperty rdf:about="&topology;#isDirectlyConnectedTo">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&topology;#isConnectedTo"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The topological relation isDirectlyConnectedTo represents the direct connectedness of two objects.</rdfs:comment>
+  </owl:SymmetricProperty>
+  <owl:SymmetricProperty rdf:ID="sameAs">
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&topology;#Arc"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&topology;#Node"/>
+            <owl:onProperty rdf:resource="&topology;#isDirectlyConnectedTo"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation denotes a correspondence between an Arc and its placeholder in a decomposition hierarchy.</rdfs:comment>
+    <owl:inverseOf rdf:resource="&topology;#sameAs"/>
+    <rdfs:domain rdf:resource="&topology;#Arc"/>
+  </owl:SymmetricProperty>
+  <rdf:Description rdf:about="&mereology;#FirstLevelPart">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&topology;#isDirectlyConnectedTo"/>
+        <owl:allValuesFrom rdf:resource="&mereology;#FirstLevelPart"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </rdf:Description>
+  <owl:AllDifferent/>
+  <owl:AllDifferent/>
+  <owl:AllDifferent/>
+  <rdf:Description rdf:about="&mereology;#SecondLevelPart">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&mereology;#SecondLevelPart"/>
+        <owl:onProperty rdf:resource="&topology;#isDirectlyConnectedTo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </rdf:Description>
+  <rdf:Description rdf:about="&mereology;#AggregateOnly">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&mereology;#AggregateOnly"/>
+        <owl:onProperty rdf:resource="&topology;#isDirectlyConnectedTo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </rdf:Description>
+  <owl:AllDifferent/>
+  <rdf:Description rdf:about="&mereology;#PartOnly">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&topology;#isDirectlyConnectedTo"/>
+        <owl:allValuesFrom rdf:resource="&mereology;#PartOnly"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </rdf:Description>
+  <owl:AllDifferent/>
+</rdf:RDF>

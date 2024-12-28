@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY binary_tree  "&root;meta_model/data_structures/binary_tree.owl">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY mereology    "&root;meta_model/mereology/mereology.owl">
+  <!ENTITY example_binary_tree  "&root;meta_model/data_structures/example_binary_tree.owl">
+]>
+
+<rdf:RDF
+    xmlns="&example_binary_tree;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:fc="&fc;#"
+    xmlns:mereology="&mereology;#"
+    xmlns:binary_tree="&binary_tree;#"
+  xml:base="&example_binary_tree;">
+  
+  <owl:Ontology rdf:about="&example_binary_tree;">
+    <owl:imports rdf:resource="&binary_tree;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Application example that illustrates the usage of the design pattern 'binary tree'</rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>  
+  </owl:Ontology>
+  
+  <owl:Class rdf:ID="QueryFor_LeftChildOf_C">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:hasValue>
+          <binary_tree:Node rdf:ID="C">
+            <binary_tree:hasRightChild>
+              <binary_tree:Node rdf:ID="E">
+                <binary_tree:hasRightChild>
+                  <binary_tree:Leaf rdf:ID="F"/>
+                </binary_tree:hasRightChild>
+              </binary_tree:Node>
+            </binary_tree:hasRightChild>
+            <binary_tree:hasLeftChild>
+              <binary_tree:Leaf rdf:ID="D"/>
+            </binary_tree:hasLeftChild>
+          </binary_tree:Node>
+        </owl:hasValue>
+        <owl:onProperty rdf:resource="&binary_tree;#isLeftChildOf"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_DescendentsOf_C">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&example_binary_tree;#C"/>
+        <owl:onProperty rdf:resource="&binary_tree;#hasAncestor"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for all descendents of Node C</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_ChildrenOf_C">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for the direct children of Node C</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&example_binary_tree;#C"/>
+        <owl:onProperty rdf:resource="&binary_tree;#hasParent"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_AncestorsOf_F">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for all ancestors of Node F</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&binary_tree;#hasDescendent"/>
+        <owl:hasValue rdf:resource="&example_binary_tree;#F"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_Parent_D">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&binary_tree;#hasChild"/>
+        <owl:hasValue rdf:resource="&example_binary_tree;#D"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for the parent Node of Node D</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_AllLeaves">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&binary_tree;#Leaf"/>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&binary_tree;#hasAncestor"/>
+            <owl:hasValue>
+              <binary_tree:RootNode rdf:ID="A">
+                <binary_tree:hasLeftChild>
+                  <binary_tree:Leaf rdf:ID="B"/>
+                </binary_tree:hasLeftChild>
+                <binary_tree:hasRightChild rdf:resource="&example_binary_tree;#C"/>
+              </binary_tree:RootNode>
+            </owl:hasValue>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for all Leaves of a particular tree (identified through its RootNode)</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_AllNodes">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_binary_tree;#A"/>
+            <owl:onProperty rdf:resource="&binary_tree;#hasAncestor"/>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Restriction>
+                <owl:hasValue rdf:resource="&example_binary_tree;#A"/>
+                <owl:onProperty rdf:resource="&binary_tree;#hasParent"/>
+              </owl:Restriction>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="&binary_tree;#hasChild"/>
+          </owl:Restriction>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for all Nodes of a particular tree (identified through its RootNode)</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_RootNodeOf_F">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&binary_tree;#RootNode"/>
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_binary_tree;#F"/>
+            <owl:onProperty rdf:resource="&binary_tree;#hasDescendent"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for the RootNode of Node F</rdfs:comment>
+  </owl:Class>
+  <owl:AllDifferent/>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <binary_tree:RootNode rdf:about="&example_binary_tree;#A"/>
+      <binary_tree:Leaf rdf:about="&example_binary_tree;#B"/>
+      <binary_tree:Node rdf:about="&example_binary_tree;#C"/>
+      <binary_tree:Leaf rdf:about="&example_binary_tree;#D"/>
+      <binary_tree:Node rdf:about="&example_binary_tree;#E"/>
+      <binary_tree:Leaf rdf:about="&example_binary_tree;#F"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent/>
+  <owl:AllDifferent/>
+</rdf:RDF>

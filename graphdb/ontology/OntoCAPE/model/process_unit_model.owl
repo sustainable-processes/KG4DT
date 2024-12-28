@@ -1,0 +1,321 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY technical_system "&root;OntoCAPE/upper_level/technical_system.owl">
+  <!ENTITY phase_system "&root;OntoCAPE/material/phase_system/phase_system.owl">
+  <!ENTITY behavior "&root;OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl">
+  <!ENTITY chemical_process_system  "&root;OntoCAPE/chemical_process_system/chemical_process_system.owl">
+  <!ENTITY plant    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant.owl">
+  <!ENTITY process  "&root;OntoCAPE/chemical_process_system/CPS_function/process.owl">
+  <!ENTITY chemical_reactor "&root;OntoCAPE/chemical_process_system/process_units/chemical_reactor.owl">
+  <!ENTITY distillation_system  "&root;OntoCAPE/chemical_process_system/process_units/distillation_system.owl">
+  <!ENTITY flash_unit   "&root;OntoCAPE/chemical_process_system/process_units/flash_unit.owl">
+  <!ENTITY heat_transfer_unit   "&root;OntoCAPE/chemical_process_system/process_units/heat_transfer_unit.owl">
+  <!ENTITY splitting_unit   "&root;OntoCAPE/chemical_process_system/process_units/splitting_unit.owl">
+  <!ENTITY laws "&root;OntoCAPE/model/laws.owl">
+  <!ENTITY mathematical_model   "&root;OntoCAPE/model/mathematical_model.owl">
+  <!ENTITY process_model    "&root;OntoCAPE/model/process_model.owl">
+  <!ENTITY process_unit_model   "&root;OntoCAPE/model/process_unit_model.owl">
+]>
+
+<rdf:RDF
+    xmlns:behavior="&behavior;#"
+    xmlns:technical_system="&technical_system;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:chemical_process_system="&chemical_process_system;#"
+    xmlns:phase_system="&phase_system;#"
+    xmlns:plant="&plant;#"
+    xmlns:process="&process;#"
+    xmlns:mathematical_model="&mathematical_model;#"
+    xmlns:flash_unit="&flash_unit;#"
+    xmlns:heat_transfer_unit="&heat_transfer_unit;#"
+    xmlns:laws="&laws;#"
+    xmlns:chemical_reactor="&chemical_reactor;#"
+    xmlns:system="&system;#"
+    xmlns:process_model="&process_model;#"
+    xmlns="&process_unit_model;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:distillation_system="&distillation_system;#"
+    xmlns:splitting_unit="&splitting_unit;#"
+  xml:base="&process_unit_model;">
+ 
+  <owl:Ontology rdf:about="&process_unit_model;">
+    <owl:imports rdf:resource="&laws;"/>
+    <owl:imports rdf:resource="&distillation_system;"/>
+    <owl:imports rdf:resource="&chemical_reactor;"/>
+    <owl:imports rdf:resource="&flash_unit;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string">2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'process_unit_models' provides a collection of mathematical models that model the behavioral aspect of ProcessUnits.
+The following classes, relations, and individuals from other ontology modules are used within 'process_unit_model':
+
+&lt;owl:Class rdf:about="&mathematical_model;#Submodel"/>
+&lt;owl:Class rdf:about="&distillation_system;#DistillationSystemBehavior"/>
+&lt;owl:Class rdf:about="&process_model;#ProcessModel"/>
+
+process_model;#hasModelingPrinciple"/>
+
+&lt;owl:Class rdf:about="&behavior;#MaterialAmount"/>
+&lt;owl:Class rdf:about="&chemical_reactor;#ChemicalReactorBehavior"/>
+&lt;owl:Class rdf:about="&flash_unit;#FlashUnitBehavior"/>
+&lt;owl:Class rdf:about="&heat_transfer_unit;#HeatTransferUnitBehavior"/>
+&lt;owl:Class rdf:about="&laws;#EnergyConservationLaw"/>
+&lt;owl:Class rdf:about="&laws;#NonEquilibriumLaw"/>
+&lt;owl:Class rdf:about="&laws;#MassConservationLaw"/>
+&lt;owl:Class rdf:about="&laws;#ReactionKineticsLaw"/>
+&lt;owl:Class rdf:about="&laws;#PhaseEquilibriumLaw"/>
+
+&lt;owl:ObjectProperty rdf:about="&process_model;#hasModelingPrinciple">
+&lt;owl:ObjectProperty rdf:about="&system;#hasDirectSubsystem"/>
+&lt;owl:ObjectProperty rdf:about="&system;#models"/>
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasPhenomenon"/>
+
+&lt;behavior:FlowPattern rdf:about="&behavior;#ideal_mixing"/>
+&lt;behavior:FlowPattern rdf:about="&behavior;#turbulent_flow"/>
+&lt;process_model:ModelingPrinciple rdf:about="&process_model;#first-principles"/>
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+  </owl:Ontology>
+ 
+  <owl:Class rdf:ID="TrayModel">
+    <rdfs:subClassOf rdf:resource="&mathematical_model;#Submodel"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="FlashUnitModel"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+ 
+  <owl:Class rdf:ID="TrayByTrayDistillationColumnModel">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#models"/>
+            <owl:allValuesFrom rdf:resource="&distillation_system;#DistillationSystemBehavior"/>
+          </owl:Restriction>
+          <owl:Class rdf:ID="ProcessUnitModel"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&process_model;#first-principles"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&process_model;#hasModelingPrinciple"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&laws;#MassConservationLaw"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&system;#hasDirectSubsystem"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&laws;#EnergyConservationLaw"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&process_unit_model;#ProcessUnitModel">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:allValuesFrom rdf:resource="&behavior;#MaterialAmount"/>
+            <owl:onProperty rdf:resource="&system;#models"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&process_model;#ProcessModel"/>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#models"/>
+            <owl:someValuesFrom rdf:resource="&behavior;#MaterialAmount"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="CSTRModel">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&laws;#MassConservationLaw"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&process_model;#hasModelingPrinciple"/>
+        </owl:onProperty>
+        <owl:hasValue rdf:resource="&process_model;#first-principles"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&laws;#ReactionKineticsLaw"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:someValuesFrom rdf:resource="&laws;#EnergyConservationLaw"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#models"/>
+            <owl:allValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <rdf:Description rdf:about="&chemical_reactor;#ChemicalReactorBehavior"/>
+                  <owl:Restriction>
+                    <owl:onProperty rdf:resource="&technical_system;#hasPhenomenon"/>
+                    <owl:hasValue rdf:resource="&behavior;#ideal_mixing"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:allValuesFrom>
+          </owl:Restriction>
+          <owl:Class rdf:ID="ChemicalReactorModel"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&process_unit_model;#ChemicalReactorModel">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&chemical_reactor;#ChemicalReactorBehavior"/>
+        <owl:onProperty rdf:resource="&system;#models"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="&process_unit_model;#ProcessUnitModel"/>
+  </owl:Class>
+  
+  <owl:Class rdf:ID="HeatTransferUnitModel">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&heat_transfer_unit;#HeatTransferUnitBehavior"/>
+        <owl:onProperty rdf:resource="&system;#models"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="&process_unit_model;#ProcessUnitModel"/>
+  </owl:Class>
+  
+  <owl:Class rdf:about="&process_unit_model;#FlashUnitModel">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:someValuesFrom rdf:resource="&laws;#MassConservationLaw"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&process_model;#first-principles"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&process_model;#hasModelingPrinciple"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&laws;#PhaseEquilibriumLaw"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&laws;#EnergyConservationLaw"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#models"/>
+            <owl:allValuesFrom rdf:resource="&flash_unit;#FlashUnitBehavior"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&process_unit_model;#ProcessUnitModel"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&laws;#NonEquilibriumLaw"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="PFRModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Model of an ideal Plug Flow Reactor</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:allValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <rdf:Description rdf:about="&chemical_reactor;#ChemicalReactorBehavior"/>
+                  <owl:Restriction>
+                    <owl:onProperty rdf:resource="&technical_system;#hasPhenomenon"/>
+                    <owl:hasValue rdf:resource="&behavior;#turbulent_flow"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:allValuesFrom>
+            <owl:onProperty rdf:resource="&system;#models"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&process_unit_model;#ChemicalReactorModel"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&laws;#EnergyConservationLaw"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:someValuesFrom rdf:resource="&laws;#ReactionKineticsLaw"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&laws;#MassConservationLaw"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&process_model;#hasModelingPrinciple"/>
+        </owl:onProperty>
+        <owl:hasValue rdf:resource="&process_model;#first-principles"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:FunctionalProperty rdf:about="&process_model;#hasModelingPrinciple">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+  </owl:FunctionalProperty>
+</rdf:RDF>

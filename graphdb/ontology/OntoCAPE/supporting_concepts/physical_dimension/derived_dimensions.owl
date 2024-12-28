@@ -1,0 +1,814 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY system "file:/ontology/OntoCAPE/upper_level/system.owl#" >
+    <!ENTITY binary_tree "file:/ontology/meta_model/data_structures/binary_tree.owl#" >
+    <!ENTITY phys_dim "file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#" >
+    <!ENTITY derived_dimensions "file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#" >
+    <!ENTITY maths "file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#" >
+]>
+
+
+<rdf:RDF xmlns="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#"
+     xml:base="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:system="file:/ontology/OntoCAPE/upper_level/system.owl#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:derived_dimensions="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:terms="http://purl.org/dc/terms/"
+     xmlns:maths="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:binary_tree="file:/ontology/meta_model/data_structures/binary_tree.owl#"
+     xmlns:phys_dim="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#">
+    <owl:Ontology rdf:about="">
+        <owl:versionInfo rdf:datatype="&xsd;string">2.0</owl:versionInfo>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The ontology module &#39;derived_dimensions&#39; introduces a number of physical dimensions and their mathematical definitions. 
+The following classes, relations, and individuals from other ontology modules are used within &#39;derived_dimensions&#39;:
+
+&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#DerivedDimension&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#BinaryOperator&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Leaf&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node&quot;/&gt;
+
+&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#hasLeftChild&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#hasNodeValue&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#hasRightChild&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#isLeftChildOf&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#isRightChildOf&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#rightChildNodeValue&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#isDefinedBy&quot;/&gt;
+
+&lt;maths:BinaryOperator rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide&quot;/&gt;
+&lt;maths:BinaryOperator rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#power&quot;/&gt;
+&lt;maths:BinaryOperator rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times&quot;/&gt;
+&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#AMOUNT_OF_SUBSTANCE&quot;/&gt;
+&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#ELECTRIC_CURRENT&quot;&gt;
+&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#LENGTH&quot;/&gt;
+&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#MASS&quot;/&gt;
+&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#TIME&quot;&gt;</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+        <owl:imports rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#hasLeftChild -->
+
+    <owl:ObjectProperty rdf:about="&maths;hasLeftChild"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#hasNodeValue -->
+
+    <owl:ObjectProperty rdf:about="&maths;hasNodeValue"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#hasRightChild -->
+
+    <owl:ObjectProperty rdf:about="&maths;hasRightChild"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#isLeftChildOf -->
+
+    <owl:ObjectProperty rdf:about="&maths;isLeftChildOf"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#isRightChildOf -->
+
+    <owl:ObjectProperty rdf:about="&maths;isRightChildOf"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#isDefinedBy -->
+
+    <owl:ObjectProperty rdf:about="&phys_dim;isDefinedBy"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#rightChildNodeValue -->
+
+    <owl:DatatypeProperty rdf:about="&maths;rightChildNodeValue"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node -->
+
+    <owl:Class rdf:about="&maths;Node"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#ElectricityAndMagnetism -->
+
+    <owl:Class rdf:about="#ElectricityAndMagnetism">
+        <rdfs:subClassOf rdf:resource="&phys_dim;DerivedDimension"/>
+        <owl:disjointWith rdf:resource="#Mechanics"/>
+        <owl:disjointWith rdf:resource="#PeriodicPhenomena"/>
+        <owl:disjointWith rdf:resource="#SpaceAndTime"/>
+        <owl:disjointWith rdf:resource="#Thermodynamics"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The class ElectricityAndMagnetism subsumes DerivedDimensions that are connected with the phenomena of electricity or magnetism.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#Mechanics -->
+
+    <owl:Class rdf:about="#Mechanics">
+        <rdfs:subClassOf rdf:resource="&phys_dim;DerivedDimension"/>
+        <owl:disjointWith rdf:resource="#PeriodicPhenomena"/>
+        <owl:disjointWith rdf:resource="#SpaceAndTime"/>
+        <owl:disjointWith rdf:resource="#Thermodynamics"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The class Mechanics subsumes DerivedDimensions that are of relevance for the field of mechanics.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#PeriodicPhenomena -->
+
+    <owl:Class rdf:about="#PeriodicPhenomena">
+        <rdfs:subClassOf rdf:resource="&phys_dim;DerivedDimension"/>
+        <owl:disjointWith rdf:resource="#SpaceAndTime"/>
+        <owl:disjointWith rdf:resource="#Thermodynamics"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The class PeriodicPhenomena subsumes DerivedDimensions with a periodic character, such as frequency or period.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#SpaceAndTime -->
+
+    <owl:Class rdf:about="#SpaceAndTime">
+        <rdfs:subClassOf rdf:resource="&phys_dim;DerivedDimension"/>
+        <owl:disjointWith rdf:resource="#Thermodynamics"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The class SpaceAndTime subsumes DerivedDimensions that can be derived from the base dimensions length and time.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#Thermodynamics -->
+
+    <owl:Class rdf:about="#Thermodynamics">
+        <rdfs:subClassOf rdf:resource="&phys_dim;DerivedDimension"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The class Thermodynamics subsumes DerivedDimensions that are of relevance in the area of heat transfer and thermodynamics.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#DerivedDimension -->
+
+    <owl:Class rdf:about="&phys_dim;DerivedDimension"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide -->
+
+    <rdf:Description rdf:about="&maths;divide"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#power -->
+
+    <rdf:Description rdf:about="&maths;power"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times -->
+
+    <rdf:Description rdf:about="&maths;times"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#ACCELERATION -->
+
+    <maths:Node rdf:about="#ACCELERATION">
+        <rdfs:comment rdf:datatype="&xsd;string">velocity/time</rdfs:comment>
+        <maths:hasNodeValue rdf:resource="&maths;divide"/>
+        <maths:hasLeftChild rdf:resource="#VELOCITY"/>
+        <maths:hasRightChild rdf:resource="&phys_dim;TIME"/>
+    </maths:Node>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#AREA -->
+
+    <maths:Node rdf:about="#AREA">
+        <maths:rightChildNodeValue rdf:datatype="&xsd;decimal">2</maths:rightChildNodeValue>
+        <rdfs:comment rdf:datatype="&xsd;string">length^2</rdfs:comment>
+        <maths:hasNodeValue rdf:resource="&maths;power"/>
+        <maths:hasLeftChild rdf:resource="&phys_dim;LENGTH"/>
+    </maths:Node>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#ELECTRIC_CHARGE -->
+
+    <maths:Node rdf:about="#ELECTRIC_CHARGE">
+        <maths:hasNodeValue rdf:resource="&maths;times"/>
+        <maths:hasLeftChild rdf:resource="&phys_dim;ELECTRIC_CURRENT"/>
+        <maths:hasRightChild rdf:resource="&phys_dim;TIME"/>
+    </maths:Node>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#MOLAR_VOLUME -->
+
+    <maths:Node rdf:about="#MOLAR_VOLUME">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >volume/amount_of_substance</rdfs:comment>
+        <maths:hasNodeValue rdf:resource="&maths;divide"/>
+        <maths:hasLeftChild rdf:resource="#VOLUME"/>
+        <maths:hasRightChild rdf:resource="&phys_dim;AMOUNT_OF_SUBSTANCE"/>
+    </maths:Node>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#MOLECULAR_MASS -->
+
+    <maths:Node rdf:about="#MOLECULAR_MASS">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >mass/amount_of_substance</rdfs:comment>
+        <maths:hasNodeValue rdf:resource="&maths;divide"/>
+        <maths:hasRightChild rdf:resource="&phys_dim;AMOUNT_OF_SUBSTANCE"/>
+        <maths:hasLeftChild rdf:resource="&phys_dim;MASS"/>
+    </maths:Node>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#VELOCITY -->
+
+    <maths:Node rdf:about="#VELOCITY">
+        <rdfs:comment rdf:datatype="&xsd;string">length/time</rdfs:comment>
+        <maths:hasNodeValue rdf:resource="&maths;divide"/>
+        <maths:hasLeftChild rdf:resource="&phys_dim;LENGTH"/>
+        <maths:hasRightChild rdf:resource="&phys_dim;TIME"/>
+    </maths:Node>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#VOLUME -->
+
+    <maths:Node rdf:about="#VOLUME">
+        <maths:rightChildNodeValue rdf:datatype="&xsd;decimal">3</maths:rightChildNodeValue>
+        <rdfs:comment rdf:datatype="&xsd;string">length^3</rdfs:comment>
+        <maths:hasNodeValue rdf:resource="&maths;power"/>
+        <maths:isLeftChildOf rdf:resource="#MOLAR_VOLUME"/>
+        <maths:hasLeftChild rdf:resource="&phys_dim;LENGTH"/>
+    </maths:Node>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#acceleration -->
+
+    <SpaceAndTime rdf:about="#acceleration">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the first time derivative from velocity [Chertov, 1997]</rdfs:comment>
+        <phys_dim:isDefinedBy rdf:resource="#ACCELERATION"/>
+        <phys_dim:isDefinedBy rdf:resource="#AREA"/>
+    </SpaceAndTime>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#angular_acceleration -->
+
+    <SpaceAndTime rdf:about="#angular_acceleration">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the first time derivative from the angular velocity [Chertov, 1997]</rdfs:comment>
+    </SpaceAndTime>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#angular_velocity -->
+
+    <SpaceAndTime rdf:about="#angular_velocity">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the first time derivative from the deflection angle [Chertov, 1997]</rdfs:comment>
+    </SpaceAndTime>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#area -->
+
+    <SpaceAndTime rdf:about="#area">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >characterizes the plane and curved surfaces of a physical body [Chertov, 1997]</rdfs:comment>
+        <phys_dim:isDefinedBy rdf:resource="#AREA"/>
+    </SpaceAndTime>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#damping_coefficient -->
+
+    <PeriodicPhenomena rdf:about="#damping_coefficient">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the inverse to the time interval during which the amplitude decrease e times [Chertov, 1997]</rdfs:comment>
+    </PeriodicPhenomena>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#density -->
+
+    <Mechanics rdf:about="#density">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the ratio of the mass to the volume of a body&#180;s element [Chertov, 1997]</rdfs:comment>
+    </Mechanics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#dynamic_viscosity -->
+
+    <Mechanics rdf:about="#dynamic_viscosity">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the coefficient of proportinality in the internal friction force formula [Chertov, 1997]</rdfs:comment>
+    </Mechanics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#electric_charge -->
+
+    <ElectricityAndMagnetism rdf:about="#electric_charge">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The measure equal to the product of electic current into time during which the current flows [Chertov]</rdfs:comment>
+        <phys_dim:isDefinedBy rdf:resource="#ELECTRIC_CHARGE"/>
+    </ElectricityAndMagnetism>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#entropy -->
+
+    <Thermodynamics rdf:about="#entropy">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the ratio of an infinitely small quantity of heat transmitted to a system to the temperature [Chertov, 1997]</rdfs:comment>
+    </Thermodynamics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#force -->
+
+    <Mechanics rdf:about="#force">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the degree of mechanical influence exerted on a body by other bodies [Chertov, 1997]</rdfs:comment>
+    </Mechanics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#frequency -->
+
+    <PeriodicPhenomena rdf:about="#frequency">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the inverse to the period [Chertov, 1997]</rdfs:comment>
+    </PeriodicPhenomena>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#heat_capacity -->
+
+    <Thermodynamics rdf:about="#heat_capacity">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the ratio of heat required to warm a physical body to the difference in temperature [Chertov, 1997]</rdfs:comment>
+    </Thermodynamics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#heat_flow_rate -->
+
+    <Thermodynamics rdf:about="#heat_flow_rate">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the ratio of the quantity of heat which passes a surface to time [Chertov, 1997]</rdfs:comment>
+    </Thermodynamics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#internal_energy -->
+
+    <Thermodynamics rdf:about="#internal_energy">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the energy from the random thermal movement of all microparticles in a system [Chertov, 1997]</rdfs:comment>
+    </Thermodynamics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#kinematic_viscosity -->
+
+    <Mechanics rdf:about="#kinematic_viscosity">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the ratio of the dynamic viscosity of a medium to its density [Chertov, 1997]</rdfs:comment>
+    </Mechanics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#mass_fraction -->
+
+    <phys_dim:DerivedDimension rdf:about="#mass_fraction">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The mass of some particular substance per total mass</rdfs:comment>
+    </phys_dim:DerivedDimension>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molar_fraction -->
+
+    <phys_dim:DerivedDimension rdf:about="#molar_fraction">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The amount of some particular substance per total amount of substance</rdfs:comment>
+    </phys_dim:DerivedDimension>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molar_volume -->
+
+    <phys_dim:DerivedDimension rdf:about="#molar_volume">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the volume of one mole of material</rdfs:comment>
+        <phys_dim:isDefinedBy rdf:resource="#MOLAR_VOLUME"/>
+    </phys_dim:DerivedDimension>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molecular_mass -->
+
+    <phys_dim:DerivedDimension rdf:about="#molecular_mass">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The molecular mass of a substance (less accurately called molecular weight) is the mass of one molecule of that substance, relative to the unified atomic mass unit u (equal to 1/12 the mass of one atom of carbon-12). [Wikipedia]</rdfs:comment>
+        <phys_dim:isDefinedBy rdf:resource="#MOLECULAR_MASS"/>
+    </phys_dim:DerivedDimension>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#moment_of_force -->
+
+    <Mechanics rdf:about="#moment_of_force">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >in relation to a certain point, the product of the force and the arm, i.e. the distance between the direction of the force and the point [Chertov, 1997]</rdfs:comment>
+    </Mechanics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#moment_of_inertia -->
+
+    <Mechanics rdf:about="#moment_of_inertia">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the mass of a material point per square distance to the axis of rotation [Chertov, 1997]</rdfs:comment>
+    </Mechanics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#momentum -->
+
+    <Mechanics rdf:about="#momentum">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the mass of a physical body at its velocity [Chertov, 1997]</rdfs:comment>
+    </Mechanics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#oscillation_phase -->
+
+    <PeriodicPhenomena rdf:about="#oscillation_phase">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >independent variable of a function describing the quantity which changes according the law of harmonic vibrations [Chertov, 1997]</rdfs:comment>
+    </PeriodicPhenomena>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#period -->
+
+    <PeriodicPhenomena rdf:about="#period">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the time interval during which a cycle of periodic process is completed [Chertov, 1997]</rdfs:comment>
+    </PeriodicPhenomena>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#plane_angle -->
+
+    <SpaceAndTime rdf:about="#plane_angle">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >geometric figure formed by two rays (sides of the angle) extending from one point [Chertov, 1997]</rdfs:comment>
+    </SpaceAndTime>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#power -->
+
+    <Mechanics rdf:about="#power">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the ratio of work to time interval during which the work is completed [Chertov, 1997]</rdfs:comment>
+    </Mechanics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#pressure -->
+
+    <Mechanics rdf:about="#pressure">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the ratio between the perpendicular force acting on a surface element to the area of the element [Chertov, 1997]</rdfs:comment>
+    </Mechanics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#quantity_of_heat -->
+
+    <Thermodynamics rdf:about="#quantity_of_heat">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the part of internal energy which is transferred spontaneously, with no external influence from more to less heated physical body [Chertov, 1997]</rdfs:comment>
+    </Thermodynamics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#rotational_frequency -->
+
+    <PeriodicPhenomena rdf:about="#rotational_frequency">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the number of rotations completed in a second [Chertov, 1997]</rdfs:comment>
+    </PeriodicPhenomena>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#solid_angle -->
+
+    <SpaceAndTime rdf:about="#solid_angle">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the part of space enclosed within one cavity of conical surface with a closed directrix [Chertov, 1997]</rdfs:comment>
+    </SpaceAndTime>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#specific_entropy -->
+
+    <Thermodynamics rdf:about="#specific_entropy">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the ratio of entropy to the mass of a system [Chertov, 1997]</rdfs:comment>
+    </Thermodynamics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#specific_heat_capacity -->
+
+    <Thermodynamics rdf:about="#specific_heat_capacity">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the ratio of the heat capacity of a uniform physical body to its mass [Chertov, 1997]</rdfs:comment>
+    </Thermodynamics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#specific_volume -->
+
+    <Mechanics rdf:about="#specific_volume">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the ratio of the volume to the mass of a body&#180;s element [Chertov, 1997]</rdfs:comment>
+    </Mechanics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#surface_tension -->
+
+    <Mechanics rdf:about="#surface_tension">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the ratio of between the force, acting on a segment of the free surface contour perpendicular to the contour and tangentially to the surface, and the length of the segment [Chertov, 1997]</rdfs:comment>
+    </Mechanics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#temperature_coefficient -->
+
+    <Thermodynamics rdf:about="#temperature_coefficient">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the ratio of the relative change in a physical quantity to the temperature change reckoned from the initial temperature [Chertov, 1997]</rdfs:comment>
+    </Thermodynamics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#thermal_conductivity -->
+
+    <Thermodynamics rdf:about="#thermal_conductivity">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the density of heat flux produced by heat conductivity at temperature gradient [Chertov, 1997]</rdfs:comment>
+    </Thermodynamics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#velocity -->
+
+    <SpaceAndTime rdf:about="#velocity">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the first time derivative from movement [Chertov, 1997]</rdfs:comment>
+        <phys_dim:isDefinedBy rdf:resource="#VELOCITY"/>
+    </SpaceAndTime>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#volume -->
+
+    <SpaceAndTime rdf:about="#volume">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >characterizes physical bodies [Chertov, 1997]</rdfs:comment>
+        <phys_dim:isDefinedBy rdf:resource="#VOLUME"/>
+    </SpaceAndTime>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#volume_fraction -->
+
+    <phys_dim:DerivedDimension rdf:about="#volume_fraction">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The volume of some particular substance per total volume</rdfs:comment>
+    </phys_dim:DerivedDimension>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#work -->
+
+    <Mechanics rdf:about="#work">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >the scalar product of force into an elementary displacement [Chertov, 1997]</rdfs:comment>
+    </Mechanics>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#AMOUNT_OF_SUBSTANCE -->
+
+    <rdf:Description rdf:about="&phys_dim;AMOUNT_OF_SUBSTANCE"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#ELECTRIC_CURRENT -->
+
+    <rdf:Description rdf:about="&phys_dim;ELECTRIC_CURRENT">
+        <maths:isLeftChildOf rdf:resource="#ELECTRIC_CHARGE"/>
+    </rdf:Description>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#LENGTH -->
+
+    <rdf:Description rdf:about="&phys_dim;LENGTH"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#MASS -->
+
+    <rdf:Description rdf:about="&phys_dim;MASS"/>
+    
+
+
+    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#TIME -->
+
+    <rdf:Description rdf:about="&phys_dim;TIME">
+        <maths:isRightChildOf rdf:resource="#ELECTRIC_CHARGE"/>
+    </rdf:Description>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDifferent"/>
+        <owl:distinctMembers rdf:parseType="Collection">
+            <rdf:Description rdf:about="#AREA"/>
+            <rdf:Description rdf:about="#ACCELERATION"/>
+            <rdf:Description rdf:about="#VOLUME"/>
+            <rdf:Description rdf:about="#MOLECULAR_MASS"/>
+            <rdf:Description rdf:about="#MOLAR_VOLUME"/>
+            <rdf:Description rdf:about="#VELOCITY"/>
+        </owl:distinctMembers>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDifferent"/>
+        <owl:distinctMembers rdf:parseType="Collection">
+            <rdf:Description rdf:about="#pressure"/>
+            <rdf:Description rdf:about="#dynamic_viscosity"/>
+            <rdf:Description rdf:about="#kinematic_viscosity"/>
+            <rdf:Description rdf:about="#power"/>
+            <rdf:Description rdf:about="#moment_of_inertia"/>
+            <rdf:Description rdf:about="#force"/>
+            <rdf:Description rdf:about="#density"/>
+            <rdf:Description rdf:about="#specific_volume"/>
+            <rdf:Description rdf:about="#moment_of_force"/>
+            <rdf:Description rdf:about="#momentum"/>
+            <rdf:Description rdf:about="#work"/>
+            <rdf:Description rdf:about="#surface_tension"/>
+        </owl:distinctMembers>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDifferent"/>
+        <owl:distinctMembers rdf:parseType="Collection">
+            <rdf:Description rdf:about="#quantity_of_heat"/>
+            <rdf:Description rdf:about="#specific_entropy"/>
+            <rdf:Description rdf:about="#entropy"/>
+            <rdf:Description rdf:about="#heat_flow_rate"/>
+            <rdf:Description rdf:about="#specific_heat_capacity"/>
+            <rdf:Description rdf:about="#temperature_coefficient"/>
+            <rdf:Description rdf:about="#internal_energy"/>
+            <rdf:Description rdf:about="#thermal_conductivity"/>
+            <rdf:Description rdf:about="#heat_capacity"/>
+        </owl:distinctMembers>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDifferent"/>
+        <owl:distinctMembers rdf:parseType="Collection">
+            <rdf:Description rdf:about="#rotational_frequency"/>
+            <rdf:Description rdf:about="#frequency"/>
+            <rdf:Description rdf:about="#damping_coefficient"/>
+            <rdf:Description rdf:about="#period"/>
+            <rdf:Description rdf:about="#oscillation_phase"/>
+        </owl:distinctMembers>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDifferent"/>
+        <owl:distinctMembers rdf:parseType="Collection">
+            <rdf:Description rdf:about="#acceleration"/>
+            <rdf:Description rdf:about="#plane_angle"/>
+            <rdf:Description rdf:about="#angular_velocity"/>
+            <rdf:Description rdf:about="#solid_angle"/>
+            <rdf:Description rdf:about="#volume"/>
+            <rdf:Description rdf:about="#velocity"/>
+            <rdf:Description rdf:about="#angular_acceleration"/>
+            <rdf:Description rdf:about="#area"/>
+        </owl:distinctMembers>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDifferent"/>
+        <owl:distinctMembers rdf:parseType="Collection">
+            <rdf:Description rdf:about="#molar_fraction"/>
+            <rdf:Description rdf:about="#volume_fraction"/>
+            <rdf:Description rdf:about="#mass_fraction"/>
+            <rdf:Description rdf:about="#molar_volume"/>
+            <rdf:Description rdf:about="#molecular_mass"/>
+        </owl:distinctMembers>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.842) http://owlapi.sourceforge.net -->
+

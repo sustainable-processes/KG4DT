@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY binary_tree  "&root;meta_model/data_structures/binary_tree.owl">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY maths    "&root;OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl">
+  <!ENTITY phys_dim "&root;OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:maths="&maths;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:binary_tree="&binary_tree;#"
+    xmlns="&phys_dim;#"
+  xml:base="&phys_dim;">
+  <owl:Ontology rdf:about="&phys_dim;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'physical_dimension' defines a set of fundamental dimensions and introduces a method to derive further physical dimensions from these base dimensions.
+The following classes and relations of other ontology modules are used within 'physical_dimension':
+
+&lt;owl:Class rdf:about="&maths;#Leaf"/&gt;
+&lt;owl:Class rdf:about="&maths;#Node"/&gt;
+&lt;owl:Class rdf:about="&maths;#Operand"/&gt;
+&lt;owl:Class rdf:about="&system;#PhysicalDimension"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&maths;#hasNodeValue"/&gt;  
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <owl:imports rdf:resource="&maths;"/>
+    <owl:imports rdf:resource="&system;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="BaseDimension">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Most PhysicalDimensions can be mathematically derived from a small set of dimensions that we call BaseDimensions. Such a set of base dimensions is chosen by convention. In OntoCAPE, we adopt the base dimensions of the SI system of units (BIPM, 2006), which are length, time, thermodynamic temperature, mass, amount of substance, electric current, and luminous intensity.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <BaseDimension rdf:ID="length">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The physical dimension which characterizes the space and distance traveled by bodies or their parts along a given line. [Chertov, 1997]</rdfs:comment>
+          </BaseDimension>
+          <BaseDimension rdf:ID="amount_of_substance">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The number of elementary entities contained in a body (or a system of bodies). [Chertov, 1997]</rdfs:comment>
+          </BaseDimension>
+          <BaseDimension rdf:ID="electric_current">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The time derivative from an electric charge sustained by a charge carrier through an observed surface. [Chertov, 1997]</rdfs:comment>
+          </BaseDimension>
+          <BaseDimension rdf:ID="mass">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The physical dimension which characterizes the inert and gravitational properties of material objects. [Chertov, 1997]</rdfs:comment>
+          </BaseDimension>
+          <BaseDimension rdf:ID="luminous_intensity">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The radiant flux emitted by a source of radiation in a given direction inside a small solid angle in relation to this solid angle. [Chertov, 1997]</rdfs:comment>
+          </BaseDimension>
+          <BaseDimension rdf:ID="thermodynamic_temperature">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The temperature calculated according to a thermodynamic temperature scale from absolute zero. [Chertov, 1997]</rdfs:comment>
+          </BaseDimension>
+          <BaseDimension rdf:ID="time">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The physical dimension characterizing the successive change in phenomena and the states of matter which determines the duration of phenomenal being. [Chertov, 1997]</rdfs:comment>
+          </BaseDimension>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="SupplementaryDimension"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="DerivedDimension"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&maths;#Operand"/>
+    <rdfs:subClassOf>
+      <rdf:Description rdf:about="&system;#PhysicalDimension">
+        <owl:equivalentClass>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&phys_dim;#BaseDimension"/>
+              <owl:Class rdf:about="&phys_dim;#SupplementaryDimension"/>
+              <owl:Class rdf:about="&phys_dim;#DerivedDimension"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:equivalentClass>
+      </rdf:Description>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&phys_dim;#SupplementaryDimension">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >This class subsumes fundamental dimensions that do not form part of the SI system of units and therefore not classified under the BaseDimension class.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&maths;#Operand"/>
+    <rdfs:subClassOf rdf:resource="&system;#PhysicalDimension"/>
+    <owl:disjointWith rdf:resource="&phys_dim;#BaseDimension"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&phys_dim;#DerivedDimension"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&phys_dim;#DerivedDimension">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A DerivedDimension is a PhysicalDimension that can be defined as a product of powers of the BaseDimensions. For example, the DerivedDimension ‘velocity’ can be defined as the ratio of the BaseDimensions ‘length’ and ‘time’.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&phys_dim;#SupplementaryDimension"/>
+    <owl:disjointWith rdf:resource="&phys_dim;#BaseDimension"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isDefinedBy"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&maths;#Node"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#PhysicalDimension"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&phys_dim;#isDefinedBy"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&phys_dim;#isDefinedBy">
+    <rdfs:range rdf:resource="&maths;#Node"/>
+    <rdfs:domain rdf:resource="&phys_dim;#DerivedDimension"/>
+  </owl:ObjectProperty>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <SupplementaryDimension rdf:ID="amount_of_money">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >An amount of money in an arbitrary currency.</rdfs:comment>
+      </SupplementaryDimension>
+      <SupplementaryDimension rdf:ID="identity_dimension">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >According to Gruber &amp; Olsen (1994) the identity_dimension is defined as the identity element for multiplication over PhysicalDimensions. That means that the product of the identity_dimension and any other PhysicalDimension is that other PhysicalDimension.</rdfs:comment>
+      </SupplementaryDimension>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <maths:Leaf rdf:ID="THERMODYNAMIC_TEMPERATURE">
+    <maths:hasNodeValue rdf:resource="&phys_dim;#thermodynamic_temperature"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Auxiliary individual for the definition of DerivedDimensions that are derivable from the BaseDimension of ' thermodynamic_temperature'.</rdfs:comment>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="LUMINOUS_INTENSITY">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Auxiliary individual for the definition of DerivedDimensions that are derivable from the BaseDimension of ' luminous_intensity'.</rdfs:comment>
+    <maths:hasNodeValue rdf:resource="&phys_dim;#luminous_intensity"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="AMOUNT_OF_MONEY">
+    <maths:hasNodeValue rdf:resource="&phys_dim;#amount_of_money"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Auxiliary individual for the definition of DerivedDimensions that are derivable from the FundamentalDimension of ' amount_of_money'.</rdfs:comment>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="MASS">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Auxiliary individual for the definition of DerivedDimensions that are derivable from the BaseDimension of ' mass'.</rdfs:comment>
+    <maths:hasNodeValue rdf:resource="&phys_dim;#mass"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="AMOUNT_OF_SUBSTANCE">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Auxiliary individual for the definition of DerivedDimensions that are derivable from the BaseDimension of ' amount_of_substance'.</rdfs:comment>
+    <maths:hasNodeValue rdf:resource="&phys_dim;#amount_of_substance"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="ELECTRIC_CURRENT">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Auxiliary individual for the definition of DerivedDimensions that are derivable from the BaseDimension of ' electric_current'.</rdfs:comment>
+    <maths:hasNodeValue rdf:resource="&phys_dim;#electric_current"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="TIME">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Auxiliary individual for the definition of DerivedDimensions that are derivable from the BaseDimension of ' time'.</rdfs:comment>
+    <maths:hasNodeValue rdf:resource="&phys_dim;#time"/>
+  </maths:Leaf>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <maths:Leaf rdf:about="&phys_dim;#AMOUNT_OF_MONEY"/>
+      <maths:Leaf rdf:about="&phys_dim;#AMOUNT_OF_SUBSTANCE"/>
+      <maths:Leaf rdf:about="&phys_dim;#ELECTRIC_CURRENT"/>
+      <maths:Leaf rdf:ID="LENGTH">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >Auxiliary individual for the definition of DerivedDimensions that are derivable from the BaseDimension of ' length'.</rdfs:comment>
+        <maths:hasNodeValue rdf:resource="&phys_dim;#length"/>
+      </maths:Leaf>
+      <maths:Leaf rdf:about="&phys_dim;#LUMINOUS_INTENSITY"/>
+      <maths:Leaf rdf:about="&phys_dim;#MASS"/>
+      <maths:Leaf rdf:about="&phys_dim;#TIME"/>
+      <maths:Leaf rdf:about="&phys_dim;#THERMODYNAMIC_TEMPERATURE"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <BaseDimension rdf:about="&phys_dim;#luminous_intensity"/>
+      <BaseDimension rdf:about="&phys_dim;#thermodynamic_temperature"/>
+      <BaseDimension rdf:about="&phys_dim;#length"/>
+      <BaseDimension rdf:about="&phys_dim;#mass"/>
+      <BaseDimension rdf:about="&phys_dim;#time"/>
+      <BaseDimension rdf:about="&phys_dim;#amount_of_substance"/>
+      <BaseDimension rdf:about="&phys_dim;#electric_current"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>

@@ -1,0 +1,1302 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY meta "&root;meta_model/meta_model.owl">
+  <!ENTITY mereology    "&root;meta_model/mereology/mereology.owl">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+]>
+
+<rdf:RDF
+    xmlns:meta="&meta;#"
+    xmlns="&system;#"
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:mereology="&mereology;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+  xml:base="&system;">
+  <owl:Ontology rdf:about="&system;">
+    <owl:imports rdf:resource="&meta;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'system' constitutes the top level of the OntoCAPE ontology. It establishes the fundamental design paradigm of general systems theory according to which the ontology is organized- To this end, the module introduces the constitutive systems-theoretical and physicochemical primitives, such as System, Property, PhysicalQuantity, PhysicalDimension, etc., and specifies their mutual relations.
+The following classes and relations of the Meta Model are used (i.e., refined) within the 'system' module:
+
+&lt;owl:Class rdf:about="&fc;#FeatureSpace"/&gt;
+&lt;owl:Class rdf:about="&fc;#Object"/&gt;
+&lt;owl:Class rdf:about="&fc;#NonExhaustiveValueSet"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&fc;#inter-objectRelation"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#object-featureRelation"/&gt;
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+  </owl:Ontology>
+  <owl:Class rdf:ID="TopLevelSystem">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:ID="Supersystem"/>
+          <owl:Class>
+            <owl:complementOf>
+              <owl:Class rdf:ID="Subsystem"/>
+            </owl:complementOf>
+          </owl:Class>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A TopLevelSystem is a Supersystem that is not a constituent of some other System.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:ID="isDirectlyConnectedTo"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#TopLevelSystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isDirectSubsystemOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&system;#Subsystem"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="SystemInterface">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="AspectSystem"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The class SystemInterface represents the interface through which a System can be connected to another System.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:about="&system;#isDirectlyConnectedTo"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:about="&system;#isDirectlyConnectedTo"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#SystemInterface"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ExclusiveSubsystem"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PhysicalConstant">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PhysicalConstant is a ScalarQuantity, the Value of which is believed to be both universal in nature and invariant over time. Examples are the elementary charge, the gravitational constant, Planck's constant, and the speed of light in the vacuum.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="ScalarValue"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:ID="hasValue"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="isPropertyOf"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ScalarQuantity"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&system;#hasValue"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="QuantitativeValue">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A QuantitativeValue is the value of a PhysicalQuantity.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="QualitativeValue"/>
+    </owl:disjointWith>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:ID="PhysicalQuantity"/>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:ID="isValueOf"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:ID="Value"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&system;#isValueOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&system;#PhysicalQuantity"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ValueEnumeration">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:ID="FixedValueSet"/>
+          <owl:Class rdf:ID="ExtensibleValueSet"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="&fc;#FeatureSpace"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ValueEnumeration specifies a (finite) set of possible values of a QualitativeValue.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Model">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="models"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="System"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&system;#System"/>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&system;#models"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:about="&system;#System"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Model is a system that is used to enable the understanding of or the command over the original system, or to replace the original system. Model system and original system share certain characteristics that are of relevance to the task at hand (Wüsteneck, 1963).</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="InternalProperties">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The 'internal Properties' of a System are the Properties of its constituent Subsystems. They can be specified by means of a query class and thus inferred by reasoner. Such a query class must be defined individually for each System instance. The query class InternalProperties exemplarily demonstrates this approach for a sample System S.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <owl:Class rdf:about="&system;#System"/>
+                  <owl:Restriction>
+                    <owl:onProperty>
+                      <owl:TransitiveProperty rdf:ID="isSubsystemOf"/>
+                    </owl:onProperty>
+                    <owl:hasValue>
+                      <System rdf:ID="S">
+                        <rdfs:comment rdf:datatype="&xsd;#string"
+                        >Sample system; used for the construction of the query classes SystemEnvironment and InternalProperties.</rdfs:comment>
+                      </System>
+                    </owl:hasValue>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="&system;#isPropertyOf"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:ID="Property"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#System">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasCharacteristic"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&system;#ScalarValue"/>
+              <owl:Class rdf:about="&system;#ValueEnumeration"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isModeledBy"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#Model"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&system;#Value"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The System class denotes all kind of systems, which may be physical or abstract</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&fc;#Object"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#System"/>
+        <owl:onProperty>
+          <owl:TransitiveProperty rdf:ID="contains"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&system;#Property"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:ID="hasProperty"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&system;#Property"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:TransitiveProperty rdf:ID="isRelatedTo"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#System"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#ScalarQuantity">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ScalarQuantity is a scalar-valued PhysicalQuantity.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&system;#PhysicalQuantity"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&system;#hasValue"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&system;#ScalarValue"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="SecondLevelSubsystem">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&system;#Subsystem"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#SecondLevelSubsystem"/>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:about="&system;#isDirectlyConnectedTo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="FirstLevelSubsystem"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Subsystem at the second level of decomposition.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&system;#isDirectSubsystemOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&system;#FirstLevelSubsystem"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#QualitativeValue">
+    <owl:disjointWith rdf:resource="&system;#QuantitativeValue"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A QualitativeValue is a value that is not (numerically) quantifiable.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#ValueEnumeration"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="qualitativeValue"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&system;#ValueEnumeration"/>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&system;#qualitativeValue"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:DatatypeProperty rdf:ID="value"/>
+            </owl:onProperty>
+            <owl:cardinality rdf:datatype="&xsd;#int"
+            >1</owl:cardinality>
+          </owl:Restriction>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:about="&system;#value"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&system;#qualitativeValue"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >0</owl:cardinality>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:DatatypeProperty rdf:about="&system;#value"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >0</owl:cardinality>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:about="&system;#qualitativeValue"/>
+                </owl:onProperty>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&system;#Value"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="SystemEnvironment">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:SymmetricProperty rdf:ID="isDirectlyRelatedTo"/>
+            </owl:onProperty>
+            <owl:hasValue rdf:resource="&system;#S"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&system;#System"/>
+          <owl:Class>
+            <owl:complementOf>
+              <owl:Class>
+                <owl:oneOf rdf:parseType="Collection">
+                  <System rdf:about="&system;#S"/>
+                </owl:oneOf>
+              </owl:Class>
+            </owl:complementOf>
+          </owl:Class>
+          <owl:Class>
+            <owl:complementOf>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:TransitiveProperty rdf:about="&system;#isSubsystemOf"/>
+                </owl:onProperty>
+                <owl:hasValue rdf:resource="&system;#S"/>
+              </owl:Restriction>
+            </owl:complementOf>
+          </owl:Class>
+          <owl:Class>
+            <owl:complementOf>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:TransitiveProperty rdf:ID="hasSubsystem"/>
+                </owl:onProperty>
+                <owl:hasValue rdf:resource="&system;#S"/>
+              </owl:Restriction>
+            </owl:complementOf>
+          </owl:Class>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ImmediateEnvironment of a given System S consists of all Systems that are directly related to S. It can be specified by means of a query class. As the environment concept is relative, such a query class must be defined individually for each System instance. The query class SystemEnvironment exemplarily demonstrates the approach for sample System S.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <System rdf:about="&system;#S"/>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="UnitOfMeasure">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PhysicalDimension"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Aspect"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A UnitOfMeasure is a standard measure for the ScalarValue of a of PhysicalQuantity.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="hasDimension"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&system;#hasDimension"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&system;#PhysicalDimension"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&system;#PhysicalDimension"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&system;#hasDimension"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&fc;#NonExhaustiveValueSet"/>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#PhysicalDimension">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PhysicalDimension is a characteristic associated with PhysicalQuantities and UnitsOfMeasure for purposes of organization or differentiation. Mass, length, and force are exemplary instances of PhysicalDimension.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&system;#Aspect"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&system;#UnitOfMeasure"/>
+    <rdfs:subClassOf rdf:resource="&fc;#NonExhaustiveValueSet"/>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#Aspect">
+    <owl:disjointWith rdf:resource="&system;#PhysicalDimension"/>
+    <owl:disjointWith rdf:resource="&system;#UnitOfMeasure"/>
+    <rdfs:subClassOf rdf:resource="&fc;#NonExhaustiveValueSet"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An aspect represents a particular viewpoint of a system. An instance of the aspect class explicitly denominates that viewpoint.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#FirstLevelSubsystem">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&system;#isDirectSubsystemOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&system;#TopLevelSystem"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&system;#SecondLevelSubsystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Subsystem at the first level of decomposition.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&system;#Subsystem"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:about="&system;#isDirectlyConnectedTo"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#FirstLevelSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#Value">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The Value class denotes the different values of a Property.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#Value"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isBackdropOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&fc;#Object"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isObservedAgainstBackdrop"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#Value"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&system;#Property"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&system;#isValueOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&system;#isValueOf"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&system;#Property"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&system;#System"/>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#Property">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The Property class represents the individual properties (traits, qualities) of a System, which distinguish the System from others. Typical examples are Size, Color, or Weight, which are modeled as subclasses of Property.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&fc;#Object"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&system;#isPropertyOf"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&system;#hasValue"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#Value"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#System"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&system;#isPropertyOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&system;#Value"/>
+    <owl:disjointWith rdf:resource="&system;#System"/>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#ExclusiveSubsystem">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An ExclusiveSubsystem is a direct subsystem of a CompositeSystem; it cannot be a direct subsystem of any other System.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&system;#Subsystem"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#System"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isExclusivelySubsystemOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&system;#isExclusivelySubsystemOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&system;#System"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#AspectSystem">
+    <owl:disjointWith rdf:resource="&system;#SystemInterface"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&system;#Aspect"/>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="isConsideredUnderAspectOf"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:about="&system;#ExclusiveSubsystem"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An AspectSystem is an ExclusiveSubsystem that contains those system components, relationships, and constraints that are of relevance to a particular Aspect.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&system;#isConsideredUnderAspectOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#Aspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="representsAspectOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="CompositeSystem"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&system;#isConsideredUnderAspectOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&system;#representsAspectOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&system;#CompositeSystem"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&system;#representsAspectOf"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#Supersystem">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Supersystem is a System that has some constituent Subsystems.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:TransitiveProperty rdf:about="&system;#hasSubsystem"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#System"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="ElementarySystem"/>
+    </owl:disjointWith>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&system;#System"/>
+            <owl:onProperty>
+              <owl:TransitiveProperty rdf:about="&system;#hasSubsystem"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:about="&system;#System"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#ScalarValue">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#ScalarQuantity"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&system;#isValueOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#QuantitativeValue"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="hasUnitOfMeasure"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&system;#hasUnitOfMeasure"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#UnitOfMeasure"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="numericalValue"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ScalarValue is the value of a ScalarQuantity.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#Subsystem">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:TransitiveProperty rdf:about="&system;#isSubsystemOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#System"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Subsystem is a System that is a constituent of another System.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:TransitiveProperty rdf:about="&system;#isSubsystemOf"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="&system;#System"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&system;#System"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&system;#TopLevelSystem"/>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#FixedValueSet">
+    <rdfs:subClassOf rdf:resource="&system;#ValueEnumeration"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A FixedValueSet is a ValueEnumeration that is defined by an exhaustive enumeration of its instances. Thus, the number of possible values is fixed.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&system;#ExtensibleValueSet"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#PhysicalQuantity">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&system;#hasValue"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&system;#hasDimension"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#PhysicalDimension"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&system;#hasDimension"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="&system;#hasDimension"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="&system;#PhysicalDimension"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&system;#Property"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PhysicalQuantity is a Property that has quantifiable Values. The concept includes scalars as well as vectors and higher-order tensors. Moreover, it comprises both physical quantities, such as mass or velocity, and nonphysical quantities, such as amount of money or rate of inflation</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="ConstantProperty">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:InverseFunctionalProperty rdf:about="&system;#hasValue"/>
+            </owl:onProperty>
+            <owl:cardinality rdf:datatype="&xsd;#int"
+            >1</owl:cardinality>
+          </owl:Restriction>
+          <owl:Class rdf:about="&system;#Property"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ConstantProperty is a Property that has exactly one Value.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#CompositeSystem">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&system;#System"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isComposedOfSubsystem"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#AspectSystem"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasAspectSystem"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#Supersystem"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&system;#isComposedOfSubsystem"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#System"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A CompositeSystem is a System that is composed of other Systems.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#ElementarySystem">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An ElementarySystem is a Subsystem that cannot further partitioned into Subsystems.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasDirectSubsystem"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#ElementarySystem"/>
+        <owl:onProperty>
+          <owl:SymmetricProperty rdf:about="&system;#isDirectlyConnectedTo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&system;#Supersystem"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&system;#Subsystem"/>
+          <owl:Class>
+            <owl:complementOf rdf:resource="&system;#Supersystem"/>
+          </owl:Class>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&system;#ExtensibleValueSet">
+    <rdfs:subClassOf rdf:resource="&system;#ValueEnumeration"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An ExtensibleValueSet is a ValueEnumeration which, unlike a FixedValueSet, is not defined by an (exhaustive) enumeration of its instances. Thus, the number of possible values may change at run time.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&system;#FixedValueSet"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PropertySet">
+    <owl:disjointWith>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&system;#Value"/>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&system;#hasValue"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&system;#hasValue"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#Property"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="comprisesDirectly"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Property set constitutes an (unordered) collection of Properties, which may be of different types.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&system;#Property"/>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&system;#comprisesDirectly"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:about="&system;#Property"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&system;#hasCharacteristic">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The hasCharacteristic relation constitutes a shorthand notation for the specification of a ConstantProperty and its Value.</rdfs:comment>
+    <rdfs:domain rdf:resource="&system;#System"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&system;#ValueEnumeration"/>
+          <owl:Class rdf:about="&system;#QuantitativeValue"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#hasAspectSystem">
+    <rdfs:range rdf:resource="&system;#AspectSystem"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="&system;#isComposedOfSubsystem"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasAspectSystem designates the AspectSystems of a System.</rdfs:comment>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&system;#representsAspectOf"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#representsAspectOf">
+    <owl:inverseOf rdf:resource="&system;#hasAspectSystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation representsAspectOf links a AspectSystem to its respective System.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="&system;#isExclusivelySubsystemOf"/>
+    </rdfs:subPropertyOf>
+    <rdfs:domain rdf:resource="&system;#AspectSystem"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#qualitativeValue">
+    <rdfs:domain rdf:resource="&system;#QualitativeValue"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation qualitativeValue specifies the actual value of a QualitativeValue.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&fc;#object-featureRelation"/>
+    <rdfs:range rdf:resource="&system;#ValueEnumeration"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#isConsideredUnderAspectOf">
+    <rdfs:domain rdf:resource="&system;#AspectSystem"/>
+    <rdfs:range rdf:resource="&system;#Aspect"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isConsideredUnderAspectOf indicates the type of an AspectSystem by referring to an instance of the Aspect class.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&fc;#object-featureRelation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#comprisesDirectly">
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:ID="comprises"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation ComprisesDirectly indicates the direct members of a PropertySet.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#isBackdropOf">
+    <rdfs:domain rdf:resource="&system;#Value"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&system;#isObservedAgainstBackdrop"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The isBackdropOf relation states that the Value serves as a backdrop for the observation of some other Value.</rdfs:comment>
+    <rdfs:range rdf:resource="&system;#Value"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#isModeledBy">
+    <rdfs:domain rdf:resource="&system;#System"/>
+    <rdfs:subPropertyOf>
+      <owl:SymmetricProperty rdf:about="&system;#isDirectlyRelatedTo"/>
+    </rdfs:subPropertyOf>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&system;#models"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="&system;#Model"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isModeldBy points from a modeled System to its Model.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#isComposedOfSubsystem">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isComposedOf indicates the non-sharable, direct Subsystem of a Supersystem.</rdfs:comment>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&system;#isExclusivelySubsystemOf"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="&system;#hasDirectSubsystem"/>
+    </rdfs:subPropertyOf>
+    <rdfs:domain rdf:resource="&system;#Supersystem"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#isExclusivelySubsystemOf">
+    <rdfs:range rdf:resource="&system;#Supersystem"/>
+    <owl:inverseOf rdf:resource="&system;#isComposedOfSubsystem"/>
+    <rdfs:domain rdf:resource="&system;#Subsystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isExclusivelySubsystemOf links a non-sharable Subsystem to its direct Supersystem.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="&system;#isDirectSubsystemOf"/>
+    </rdfs:subPropertyOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#hasDirectSubsystem">
+    <rdfs:range rdf:resource="&system;#Subsystem"/>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:about="&system;#hasSubsystem"/>
+    </rdfs:subPropertyOf>
+    <rdfs:subPropertyOf>
+      <owl:SymmetricProperty rdf:about="&system;#isDirectlyRelatedTo"/>
+    </rdfs:subPropertyOf>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&system;#isDirectSubsystemOf"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="&system;#Supersystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasDirectSubsystem refers from a Supersystem to its direct Subsystem.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#isDirectSubsystemOf">
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:about="&system;#isSubsystemOf"/>
+    </rdfs:subPropertyOf>
+    <rdfs:subPropertyOf>
+      <owl:SymmetricProperty rdf:about="&system;#isDirectlyRelatedTo"/>
+    </rdfs:subPropertyOf>
+    <rdfs:domain rdf:resource="&system;#Subsystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isDirectlySubsystemOf links a Subsystem to its direct Supersystem.</rdfs:comment>
+    <owl:inverseOf rdf:resource="&system;#hasDirectSubsystem"/>
+    <rdfs:range rdf:resource="&system;#Supersystem"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#isObservedAgainstBackdrop">
+    <rdfs:range rdf:resource="&system;#Value"/>
+    <owl:inverseOf rdf:resource="&system;#isBackdropOf"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdfs:domain rdf:resource="&system;#Value"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The isObservedAgainstBackdrop relation maps a Value against a backdrop Value.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&system;#models">
+    <owl:inverseOf rdf:resource="&system;#isModeledBy"/>
+    <rdfs:domain rdf:resource="&system;#Model"/>
+    <rdfs:subPropertyOf>
+      <owl:SymmetricProperty rdf:about="&system;#isDirectlyRelatedTo"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation 'models' links a Model to the modeled System.</rdfs:comment>
+    <rdfs:range rdf:resource="&system;#System"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="containsDirectly">
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:about="&system;#contains"/>
+    </rdfs:subPropertyOf>
+    <rdfs:subPropertyOf>
+      <owl:SymmetricProperty rdf:about="&system;#isDirectlyRelatedTo"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation containsDirectly is an alternative to the hasDirectSubsystem relation. It should be used instead of hasDirectSubsystem 
+-   if the hasDirectSubsystem relation causes performance problems, or
+-   if only one side of the aggregation relation is of interest, namely the indication of the direct constituents Supersystem.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="&system;#value">
+    <rdfs:domain rdf:resource="&system;#QualitativeValue"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The Value attribute holds the actual value of a QualitativeValue.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&system;#numericalValue">
+    <rdfs:domain rdf:resource="&system;#ScalarValue"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The attribute numericalValue specifies the number part of a QuantitativeValue.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:TransitiveProperty rdf:about="&system;#isSubsystemOf">
+    <rdfs:range rdf:resource="&system;#Supersystem"/>
+    <rdfs:domain rdf:resource="&system;#Subsystem"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <owl:inverseOf>
+      <owl:TransitiveProperty rdf:about="&system;#hasSubsystem"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isSubsystemOf refers from a Subsystem to its Supersystem.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:about="&system;#isRelatedTo"/>
+    </rdfs:subPropertyOf>
+  </owl:TransitiveProperty>
+  <owl:TransitiveProperty rdf:about="&system;#isRelatedTo">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isRelatedTo subsumes all kinds of inter-system relations.</rdfs:comment>
+    <rdfs:domain rdf:resource="&system;#System"/>
+    <owl:inverseOf rdf:resource="&system;#isRelatedTo"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdfs:range rdf:resource="&system;#System"/>
+    <rdf:type rdf:resource="&owl;#SymmetricProperty"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+  </owl:TransitiveProperty>
+  <owl:TransitiveProperty rdf:ID="isConnectedTo">
+    <owl:inverseOf rdf:resource="&system;#isConnectedTo"/>
+    <rdfs:range rdf:resource="&system;#System"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#isRelatedTo"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isConnectedTo represents topological connectivity between System.</rdfs:comment>
+    <rdfs:domain rdf:resource="&system;#System"/>
+    <rdf:type rdf:resource="&owl;#SymmetricProperty"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+  </owl:TransitiveProperty>
+  <owl:TransitiveProperty rdf:about="&system;#comprises">
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:range rdf:resource="&system;#Property"/>
+    <rdfs:domain rdf:resource="&system;#PropertySet"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation Comprises indicates the members of a PropertySet.</rdfs:comment>
+  </owl:TransitiveProperty>
+  <owl:TransitiveProperty rdf:about="&system;#hasSubsystem">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:domain rdf:resource="&system;#Supersystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasSubsystem denotes the relation between a Supersystem and its Subsystem.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&system;#isRelatedTo"/>
+    <rdfs:range rdf:resource="&system;#Subsystem"/>
+    <owl:inverseOf rdf:resource="&system;#isSubsystemOf"/>
+  </owl:TransitiveProperty>
+  <owl:TransitiveProperty rdf:about="&system;#contains">
+    <rdfs:subPropertyOf rdf:resource="&system;#isRelatedTo"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:domain rdf:resource="&system;#Supersystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The Contains relation constitutes an alternative to the hasSubsystem relation. It should be used instead of hasSubsystem 
+-   if the hasSubsystem relation causes performance problems, or
+-   if only one side of the aggregation relation is of interest, namely the indication of the constituting elements of a supersystem</rdfs:comment>
+  </owl:TransitiveProperty>
+  <owl:SymmetricProperty rdf:about="&system;#isDirectlyRelatedTo">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#isRelatedTo"/>
+    <owl:inverseOf rdf:resource="&system;#isDirectlyRelatedTo"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isDirectlyRelatedTo subsumes all kinds of direct inter-system relations.</rdfs:comment>
+  </owl:SymmetricProperty>
+  <owl:SymmetricProperty rdf:about="&system;#isDirectlyConnectedTo">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#isConnectedTo"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#isDirectlyRelatedTo"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isDirectlyConnectedTo denotes the direct topological connectedness of two System.</rdfs:comment>
+  </owl:SymmetricProperty>
+  <owl:FunctionalProperty rdf:about="&system;#isValueOf">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isValueOf assigns a Value to a Property.</rdfs:comment>
+    <rdfs:domain rdf:resource="&system;#Value"/>
+    <owl:inverseOf>
+      <owl:InverseFunctionalProperty rdf:about="&system;#hasValue"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="&system;#Property"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&system;#hasDimension">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:range rdf:resource="&system;#PhysicalDimension"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasDimension specifies the PhysicalDimension of a PhysicalQuantity or a UnitOfMeasure.</rdfs:comment>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&system;#Property"/>
+          <owl:Class rdf:about="&system;#UnitOfMeasure"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&system;#hasUnitOfMeasure">
+    <rdfs:range rdf:resource="&system;#UnitOfMeasure"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasUnitOfMeasure establishes the UnitOfMeasure of a ScalarValue.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&fc;#object-featureRelation"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:domain rdf:resource="&system;#QuantitativeValue"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&system;#isPropertyOf">
+    <rdfs:domain rdf:resource="&system;#Property"/>
+    <rdfs:range rdf:resource="&system;#System"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <owl:inverseOf>
+      <owl:InverseFunctionalProperty rdf:about="&system;#hasProperty"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isPropertyOf links a Property instance to a System instance.</rdfs:comment>
+  </owl:FunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:about="&system;#hasProperty">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:range rdf:resource="&system;#Property"/>
+    <rdfs:domain rdf:resource="&system;#System"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasProperty indicates the Properties of a System.</rdfs:comment>
+    <owl:inverseOf rdf:resource="&system;#isPropertyOf"/>
+  </owl:InverseFunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:about="&system;#hasValue">
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdfs:domain rdf:resource="&system;#Property"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:range rdf:resource="&system;#Value"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The hasValue relation designates the Values of a Property.</rdfs:comment>
+    <owl:inverseOf rdf:resource="&system;#isValueOf"/>
+  </owl:InverseFunctionalProperty>
+</rdf:RDF>

@@ -1,0 +1,262 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY plant    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant.owl">
+  <!ENTITY fixture  "&root;OntoCAPE/chemical_process_system/CPS_realization/plant_equipment/fixture.owl">
+]>
+
+<rdf:RDF
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:plant="&plant;#"
+  xml:base="&fixture;">
+  <owl:Ontology rdf:about="&fixture;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'fixture' provides specializations of fixtures that are applicable to chemical process systems.
+The following classes and relations from other ontology modules are used within 'fixture':
+
+&lt;owl:Class rdf:about="&plant;#Fixture"/&gt;
+&lt;owl:Class rdf:about="&system;#QuantitativeValue"/&gt;
+&lt;owl:Class rdf:about="&system;#FixedValueSet"/&gt;
+&lt;owl:Class rdf:about="&plant;#Multiplicity"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&system;#hasCharacteristic"/&gt;
+&lt;owl:ObjectProperty rdf:about="&plant;#hasNumberOfPlantItems"/&gt;
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:imports rdf:resource="&plant;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Jacket">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Shell"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Tray"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="TubeBundle"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Stirrer"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Tube"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Jacket is a shell-like fixture which surrounds a vessel to provide a space which usually contains fluids for heating or cooling.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&plant;#Fixture"/>
+  </owl:Class>
+  <owl:Class rdf:about="&fixture;#Stirrer">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Stirrer is a fixture which is installed in a Vessel to improve the mixing of the fluid in the vessel through its rotation</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&plant;#Fixture"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&fixture;#Shell"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&fixture;#Tray"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&fixture;#Jacket"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&fixture;#TubeBundle"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&fixture;#Tube"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&fixture;#Tray">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&fixture;#TubeBundle"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&plant;#Fixture"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&fixture;#Shell"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasTrayArea"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&fixture;#Jacket"/>
+    <owl:disjointWith rdf:resource="&fixture;#Stirrer"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Tray is a fixture which is installed in a TrayColumn to provide a stage for holding up fluids.  
+A further classification of trays is beyond the current scope of OntoCAPE.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&fixture;#Tube"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasWeirHeight"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasHoleDiameter"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&fixture;#Shell">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasTEMAShellType"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&plant;#Fixture"/>
+    <owl:disjointWith rdf:resource="&fixture;#Tray"/>
+    <owl:disjointWith rdf:resource="&fixture;#Jacket"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&fixture;#TubeBundle"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&fixture;#Stirrer"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&fixture;#Tube"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Shell is a Fixture as the shell part of a shell-tube unit in a Shell-TubeApparatus.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="TEMAShellType">
+    <rdfs:subClassOf rdf:resource="&system;#FixedValueSet"/>
+  </owl:Class>
+  <owl:Class rdf:about="&fixture;#TubeBundle">
+    <owl:disjointWith rdf:resource="&fixture;#Shell"/>
+    <owl:disjointWith rdf:resource="&fixture;#Tray"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasNumberOfTubes"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&plant;#Multiplicity"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&fixture;#Jacket"/>
+    <owl:disjointWith rdf:resource="&fixture;#Stirrer"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&fixture;#Tube"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="&plant;#Fixture"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&plant;#Multiplicity"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&fixture;#hasNumberOfTubes"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A TubeBundle is a Fixture as part of a unit in a ShellTubeApparatus.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&fixture;#hasNumberOfTubes"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&fixture;#Tube">
+    <owl:disjointWith rdf:resource="&fixture;#Jacket"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Tube is a Fixture as part of a TubeBundle.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&fixture;#Shell"/>
+    <owl:disjointWith rdf:resource="&fixture;#Tray"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasHeatedLength"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&fixture;#TubeBundle"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&fixture;#hasHeatedLength"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&fixture;#Stirrer"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&system;#QuantitativeValue"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&fixture;#hasHeatedLength"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&plant;#Fixture"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&fixture;#hasHeatedLength">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:domain rdf:resource="&fixture;#Tube"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasHeatedLength refers to the length of a tube at which a heat transfer is achieved.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&fixture;#hasNumberOfTubes">
+    <rdfs:subPropertyOf rdf:resource="&plant;#hasNumberOfPlantItems"/>
+    <rdfs:domain rdf:resource="&fixture;#TubeBundle"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&fixture;#hasTEMAShellType">
+    <rdfs:domain rdf:resource="&fixture;#Shell"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&fixture;#TEMAShellType"/>
+          <rdf:Description rdf:about="&system;#QuantitativeValue"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&fixture;#hasHoleDiameter">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasHoleDiameter refers the diameter of a hole in a tray.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:domain rdf:resource="&fixture;#Tray"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&fixture;#hasTrayArea">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasTrayArea refers to the operational area of a tray.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:domain rdf:resource="&fixture;#Tray"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&fixture;#hasWeirHeight">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasWeirHeight refers to the weir height of all trays in a tray column.</rdfs:comment>
+    <rdfs:domain rdf:resource="&fixture;#Tray"/>
+  </owl:ObjectProperty>
+</rdf:RDF>

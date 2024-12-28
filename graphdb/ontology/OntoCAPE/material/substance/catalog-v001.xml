@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base="">
+        <uri id="Automatically generated entry, Timestamp=1732229873097" name="file:/ontology/OntoCAPE/material/substance/atoms.owl" uri="atoms.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1732229873097" name="duplicate:file:/ontology/OntoCAPE/material/substance/chemical_species.owl" uri="chemical_species__all.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1732229873097" name="duplicate:file:/ontology/OntoCAPE/material/substance/chemical_species.owl" uri="chemical_species__test.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1732229873097" name="duplicate:file:/ontology/OntoCAPE/material/substance/chemical_species.owl" uri="chemical_species.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1732229873097" name="file:/ontology/OntoCAPE/material/substance/macromolecules.owl" uri="macromolecules.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1732229873097" name="file:/ontology/OntoCAPE/material/substance/molecular_structure.owl" uri="molecular_structure.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1732229873097" name="file:/ontology/OntoCAPE/material/substance/polymers.owl" uri="polymers.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1732229873097" name="file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl" uri="reaction_mechanism.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1732229873097" name="file:/ontology/OntoCAPE/material/substance/reaction_type.owl" uri="reaction_type.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1732229873097" name="file:/ontology/OntoCAPE/material/substance/substance.owl" uri="substance.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1732229873097" name="file:/ontology/OntoCAPE/material/substance/substance_class.owl" uri="substance_class.owl"/>
+    </group>
+</catalog>

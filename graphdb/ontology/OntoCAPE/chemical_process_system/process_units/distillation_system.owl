@@ -1,0 +1,864 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY network_system   "&root;OntoCAPE/upper_level/network_system.owl">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY technical_system "&root;OntoCAPE/upper_level/technical_system.owl">
+  <!ENTITY phys_dim "&root;OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl">
+  <!ENTITY material "&root;OntoCAPE/material/material.owl">
+  <!ENTITY phase_system "&root;OntoCAPE/material/phase_system/phase_system.owl">
+  <!ENTITY behavior "&root;OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl">
+  <!ENTITY chemical_process_system  "&root;OntoCAPE/chemical_process_system/chemical_process_system.owl">
+  <!ENTITY plant    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant.owl">
+  <!ENTITY process  "&root;OntoCAPE/chemical_process_system/CPS_function/process.owl">
+  <!ENTITY process_ext  "&root;OntoCAPE/chemical_process_system/CPS_function/process_extensionTGL25001.owl">
+  <!ENTITY apparatus    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant_equipment/apparatus.owl">
+  <!ENTITY fixture  "&root;OntoCAPE/chemical_process_system/CPS_realization/plant_equipment/fixture.owl">
+  <!ENTITY distillation_system  "&root;OntoCAPE/chemical_process_system/process_units/distillation_system.owl">
+  <!ENTITY heat_transfer_unit   "&root;OntoCAPE/chemical_process_system/process_units/heat_transfer_unit.owl">
+  <!ENTITY splitting_unit   "&root;OntoCAPE/chemical_process_system/process_units/splitting_unit.owl">
+]>
+
+<rdf:RDF
+    xmlns:behavior="&behavior;#"
+    xmlns:heat_transfer_unit="&heat_transfer_unit;#"
+    xmlns:material="&material;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:chemical_process_system="&chemical_process_system;#"
+    xmlns:phase_system="&phase_system;#"
+    xmlns:process="&process;#"
+    xmlns:plant="&plant;#"
+    xmlns:system="&system;#"
+    xmlns:process_ext="&process_ext;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:splitting_unit="&splitting_unit;#"
+    xmlns="&distillation_system;#"
+  xml:base="&distillation_system;">
+  <owl:Ontology rdf:about="&distillation_system;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'distillation_system' provides concepts for the detailed description of a distillation system applicable in a chemical process system.
+The following classes and relations from other ontology modules are used within 'distillation_system': 
+    
+&lt;owl:Class rdf:about="&behavior;#FilmConnection"/&gt; 
+&lt;owl:Class rdf:about="&behavior;#MaterialStream"/&gt; 
+&lt;owl:Class rdf:about="&material;#Material"/&gt; 
+&lt;owl:Class rdf:about="&chemical_process_system;#ProcessUnit"/&gt; 
+&lt;owl:Class rdf:about="&heat_transfer_unit;#HeatTransferUnit"/&gt; 
+&lt;owl:Class rdf:about="&splitting_unit;#SplittingUnit"/&gt; 
+&lt;owl:Class rdf:about="&phase_system;#SinglePhase"/&gt; 
+&lt;owl:Class rdf:about="&apparatus;#TrayColumn"/&gt; 
+&lt;owl:Class rdf:about="&process_ext;#Distillation"/&gt; 
+&lt;owl:Class rdf:about="&phase_system;#Pressure"/&gt; 
+&lt;owl:Class rdf:about="&system;#ScalarQuantity"/&gt;
+&lt;owl:Class rdf:about="&behavior;#MaterialAmount"/&gt;
+&lt;owl:Class rdf:about="&fixture;#Tray"/&gt;
+&lt;owl:Class rdf:about="&system;#ExtensibleValueSet"/&gt;
+&lt;owl:Class rdf:about="&heat_transfer_unit;#HeatTransferUnitBehavior"/&gt;
+&lt;owl:Class rdf:about="&splitting_unit;#SplittingBehavior"/&gt;
+&lt;owl:Class rdf:about="&process;#ProcessState"/&gt;
+&lt;owl:Class rdf:about="&phase_system;#MultiphaseSystem"/&gt;
+&lt;owl:Class rdf:about="&phase_system;#SinglePhaseInMultiphaseSystem"/&gt;
+&lt;owl:Class rdf:about="&behavior;#MaterialAmountConnection"/&gt;
+&lt;owl:Class rdf:about="&phase_system;#Pressure"/&gt;
+&lt;owl:Class rdf:about="&process;#ProcessStepProperty"/&gt;
+                                  
+&lt;owl:ObjectProperty rdf:about="&system;#hasDirectSubsystem"/&gt; 
+&lt;owl:ObjectProperty rdf:about="&behavior;#refersToMaterial"/&gt; 
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasBehavioralAspect"/&gt; 
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasFunctionalAspect"/&gt; 
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasRealizationAspect"/&gt; 
+&lt;owl:ObjectProperty rdf:about="&system;#hasProperty"/&gt;
+&lt;owl:ObjectProperty rdf:about="&technical_system;#representsBehaviorOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&plant;#hasFixture"/&gt;
+&lt;owl:ObjectProperty rdf:about="&process;#hasBottomProduct"/&gt;
+&lt;owl:ObjectProperty rdf:about="&chemical_process_system;#refersToGeneralizedAmount"/&gt;
+&lt;owl:ObjectProperty rdf:about="&process;#hasInputAtNumeredTray"/&gt;
+&lt;owl:ObjectProperty rdf:about="&process;#hasTopProduct"/&gt;
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasPhenomenon"/&gt;
+&lt;owl:ObjectProperty rdf:about="&material;#thermodynamicBehavior"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isComposedOfSubsystem"/&gt;
+&lt;owl:ObjectProperty rdf:about="&phase_system;#hasStateOfAggregation"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#leaves"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#enters"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#hasOutput"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasCharacteristic"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#hasInput"/&gt;
+    
+&lt;system:QualitativeValue rdf:about="&phase_system;#gaseous"/&gt; 
+&lt;system:QualitativeValue rdf:about="&phase_system;#liquid"/&gt;
+&lt;behavior:MolecularTransportPhenomenon rdf:about="&behavior;#mass_diffusion"/&gt;
+&lt;behavior:PhysicalEquilibriumPhenomenon rdf:about="&behavior;#phase_equilibrium"/&gt;
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <owl:imports rdf:resource="&heat_transfer_unit;"/>
+    <owl:imports rdf:resource="&splitting_unit;"/>
+    <owl:imports rdf:resource="&process_ext;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="GaseousMaterialStream">
+    <rdfs:subClassOf rdf:resource="&behavior;#MaterialStream"/>
+  </owl:Class>
+  <owl:Class rdf:ID="LiquidMaterialStream">
+    <rdfs:subClassOf rdf:resource="&behavior;#MaterialStream"/>
+  </owl:Class>
+  <owl:Class rdf:ID="DistillationSystem">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >5</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasBehavioralAspect"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="DistillationSystemBehavior"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&chemical_process_system;#ProcessUnit"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="DistillationColumn"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+        <owl:allValuesFrom>
+          <rdf:Description rdf:about="&process_ext;#Distillation">
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:ID="hasBottomProduct"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:InverseFunctionalProperty rdf:ID="hasDistillateToFeedRatio"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:allValuesFrom rdf:resource="&process;#ProcessState"/>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:ID="hasInputAtNumberedTray"/>
+                </owl:onProperty>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:ID="hasTopProduct"/>
+                </owl:onProperty>
+                <owl:cardinality rdf:datatype="&xsd;#int"
+                >1</owl:cardinality>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+          </rdf:Description>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:someValuesFrom rdf:resource="&splitting_unit;#SplittingUnit"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A DistillationSystem is a ProcessingSubsystem which represents the combination of a DistillationColumn, a condenser, a reboiler, and a reflux splitter.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="RefluxRatio">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A RefluxRatio is a BehaviorUnitProperty indicating the ratio of the reflux flow to the flow of the top product.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+        <owl:hasValue rdf:resource="&phys_dim;#identity_dimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&process;#ProcessStepProperty"/>
+  </owl:Class>
+  <owl:Class rdf:about="&distillation_system;#DistillationSystemBehavior">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&splitting_unit;#SplittingBehavior"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&heat_transfer_unit;#HeatTransferUnitBehavior"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >11</owl:cardinality>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&heat_transfer_unit;#HeatTransferUnitBehavior"/>
+              <rdf:Description rdf:about="&splitting_unit;#SplittingBehavior"/>
+              <owl:Class rdf:ID="DistillationColumnBehavior"/>
+              <rdf:Description rdf:about="&behavior;#MaterialStream"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasDistillationTopPressure"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&distillation_system;#RefluxRatio"/>
+        <owl:onProperty rdf:resource="&system;#hasProperty"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&behavior;#MaterialStream"/>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&behavior;#MaterialAmount"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A DistillationSystemBehavior is a MaterialAmount which represents the overall behavioral aspect of a DistillationSystem.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&distillation_system;#DistillationColumnBehavior"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasDistillationBottomPressure"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="DistillationTrayBehavior">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasGaseousTrayInput"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&distillation_system;#LiquidMaterialStream"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasLiquidTrayInput"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&process;#ProcessState"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&chemical_process_system;#refersToGeneralizedAmount"/>
+                <owl:someValuesFrom rdf:resource="&distillation_system;#GaseousMaterialStream"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasTopProduct"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&distillation_system;#LiquidMaterialStream"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasLiquidTrayOutput"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasLiquidTrayOutput"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasGaseousTrayOutput"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&distillation_system;#GaseousMaterialStream"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&material;#Material"/>
+              <owl:Restriction>
+                <owl:someValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&phase_system;#MultiphaseSystem"/>
+                      <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                          <owl:Restriction>
+                            <owl:someValuesFrom>
+                              <owl:Class>
+                                <owl:intersectionOf rdf:parseType="Collection">
+                                  <rdf:Description rdf:about="&phase_system;#SinglePhaseInMultiphaseSystem"/>
+                                  <owl:Restriction>
+                                    <owl:onProperty rdf:resource="&phase_system;#hasStateOfAggregation"/>
+                                    <owl:hasValue rdf:resource="&phase_system;#liquid"/>
+                                  </owl:Restriction>
+                                </owl:intersectionOf>
+                              </owl:Class>
+                            </owl:someValuesFrom>
+                            <owl:onProperty rdf:resource="&system;#isComposedOfSubsystem"/>
+                          </owl:Restriction>
+                          <owl:Restriction>
+                            <owl:someValuesFrom>
+                              <owl:Class>
+                                <owl:intersectionOf rdf:parseType="Collection">
+                                  <rdf:Description rdf:about="&phase_system;#SinglePhaseInMultiphaseSystem"/>
+                                  <owl:Restriction>
+                                    <owl:onProperty rdf:resource="&phase_system;#hasStateOfAggregation"/>
+                                    <owl:hasValue rdf:resource="&phase_system;#gaseous"/>
+                                  </owl:Restriction>
+                                </owl:intersectionOf>
+                              </owl:Class>
+                            </owl:someValuesFrom>
+                            <owl:onProperty rdf:resource="&system;#isComposedOfSubsystem"/>
+                          </owl:Restriction>
+                          <owl:Restriction>
+                            <owl:onProperty rdf:resource="&system;#isComposedOfSubsystem"/>
+                            <owl:minCardinality rdf:datatype=
+                            "&xsd;#int"
+                            >2</owl:minCardinality>
+                          </owl:Restriction>
+                          <owl:Restriction>
+                            <owl:maxCardinality rdf:datatype=
+                            "&xsd;#int"
+                            >3</owl:maxCardinality>
+                            <owl:onProperty rdf:resource="&system;#isComposedOfSubsystem"/>
+                          </owl:Restriction>
+                        </owl:intersectionOf>
+                      </owl:Class>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:someValuesFrom>
+                <owl:onProperty rdf:resource="&material;#thermodynamicBehavior"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&behavior;#refersToMaterial"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasBottomProduct"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A DistillationTrayBehavior is a BehavioralUnit which is composed of MaterialAmounts residing on a DistillationTray and represents their connections.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasInputAtNumberedTray"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasGaseousTrayInput"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&distillation_system;#GaseousMaterialStream"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&behavior;#MaterialAmount"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasTopProduct"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasBottomProduct"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&process;#ProcessState"/>
+              <owl:Restriction>
+                <owl:someValuesFrom rdf:resource="&distillation_system;#LiquidMaterialStream"/>
+                <owl:onProperty rdf:resource="&chemical_process_system;#refersToGeneralizedAmount"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&technical_system;#hasPhenomenon"/>
+            <owl:hasValue rdf:resource="&behavior;#mass_diffusion"/>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&technical_system;#hasPhenomenon"/>
+            <owl:hasValue rdf:resource="&behavior;#phase_equilibrium"/>
+          </owl:Restriction>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&distillation_system;#GaseousMaterialStream"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasGaseousTrayInput"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&distillation_system;#LiquidMaterialStream"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasLiquidTrayOutput"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&distillation_system;#GaseousMaterialStream"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasGaseousTrayOutput"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasLiquidTrayInput"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&process;#ProcessState"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&chemical_process_system;#refersToGeneralizedAmount"/>
+                <owl:someValuesFrom rdf:resource="&behavior;#MaterialStream"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasInputAtNumberedTray"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasGaseousTrayOutput"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&distillation_system;#hasLiquidTrayInput"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&distillation_system;#LiquidMaterialStream"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="CondensationMode">
+    <rdfs:subClassOf rdf:resource="&system;#ExtensibleValueSet"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A CondensationMode is a CPProperty for indicating the working mode of a condenser.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <CondensationMode rdf:ID="condenser_mode_partial">
+            <owl:differentFrom>
+              <CondensationMode rdf:ID="condenser_mode_total">
+                <owl:differentFrom rdf:resource="&distillation_system;#condenser_mode_partial"/>
+                <owl:differentFrom>
+                  <CondensationMode rdf:ID="condenser_mode_subcooling">
+                    <rdfs:comment rdf:datatype="&xsd;#string"
+                    >Subcooled condensing is one mode of condensing resulting in a subcooled phase and a condensed phase.</rdfs:comment>
+                    <owl:differentFrom rdf:resource="&distillation_system;#condenser_mode_total"/>
+                    <owl:differentFrom rdf:resource="&distillation_system;#condenser_mode_partial"/>
+                  </CondensationMode>
+                </owl:differentFrom>
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >Total condensing is one mode of condensing resulting in one totally condensed phase.</rdfs:comment>
+              </CondensationMode>
+            </owl:differentFrom>
+            <owl:differentFrom rdf:resource="&distillation_system;#condenser_mode_subcooling"/>
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >Partial condensing is one mode of condensing resulting in a gaseous phase and a condensed phase.</rdfs:comment>
+          </CondensationMode>
+          <CondensationMode rdf:about="&distillation_system;#condenser_mode_subcooling"/>
+          <CondensationMode rdf:about="&distillation_system;#condenser_mode_total"/>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&distillation_system;#DistillationColumnBehavior">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A DistillationColumnBehavior is a MaterialAmount which is composed of DistillationTrayBehaviors and the connecting MaterialStreams.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&behavior;#MaterialAmount"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&distillation_system;#DistillationTrayBehavior"/>
+              <owl:Class rdf:about="&distillation_system;#LiquidMaterialStream"/>
+              <owl:Class rdf:about="&distillation_system;#GaseousMaterialStream"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&behavior;#MaterialStream"/>
+              <owl:Class rdf:about="&distillation_system;#DistillationTrayBehavior"/>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&distillation_system;#DistillationColumn"/>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&plant;#hasFixture"/>
+                <owl:someValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&fixture;#Tray"/>
+                      <owl:Restriction>
+                        <owl:onProperty rdf:resource="&technical_system;#hasBehavioralAspect"/>
+                        <owl:someValuesFrom rdf:resource="&distillation_system;#DistillationTrayBehavior"/>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:someValuesFrom>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&technical_system;#representsBehaviorOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&distillation_system;#DistillationColumn">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A DistillationColumn is a ProcessingSubsystem which is realized by a TrayColumn and performs the major functionality of Distillation.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&chemical_process_system;#ProcessUnit"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&distillation_system;#DistillationColumnBehavior"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasBehavioralAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasRealizationAspect"/>
+        <owl:allValuesFrom rdf:resource="&apparatus;#TrayColumn"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+        <owl:allValuesFrom rdf:resource="&process_ext;#Distillation"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&distillation_system;#hasBottomProduct">
+    <rdfs:subPropertyOf rdf:resource="&network_system;#hasOutput"/>
+    <rdfs:range rdf:resource="&process;#ProcessState"/>
+    <rdfs:domain rdf:resource="&process_ext;#Distillation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCondensationMode">
+    <rdfs:range rdf:resource="&distillation_system;#CondensationMode"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasCondensationMode refers to three common states of aggregation after the condensation took place, namely partially condensed, total condensed and subcooled.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="entersTrayGaseous">
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&behavior;#MaterialAmount"/>
+          <rdf:Description rdf:about="&behavior;#MaterialAmountConnection"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:subPropertyOf rdf:resource="&network_system;#enters"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&distillation_system;#hasGaseousTrayInput"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="&behavior;#MaterialAmountConnection"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation entersTrayGaseous indicates that a MaterialAmountConnection possesses a gaseous state of aggregation when it enters Tray.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&distillation_system;#hasGaseousTrayInput">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasGaseousTrayInput indicates that a MaterialAmountConnection possesses a gaseous state of aggregation that a Tray has as an input.</rdfs:comment>
+    <rdfs:range rdf:resource="&behavior;#MaterialAmountConnection"/>
+    <rdfs:subPropertyOf rdf:resource="&network_system;#hasInput"/>
+    <owl:inverseOf rdf:resource="&distillation_system;#entersTrayGaseous"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&behavior;#MaterialAmount"/>
+          <rdf:Description rdf:about="&behavior;#MaterialAmountConnection"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="entersTrayLiquid">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation entersTrayLiquid indicates that a MaterialAmountConnection possesses a liquid state of aggregation when it enters tray.</rdfs:comment>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&distillation_system;#hasLiquidTrayInput"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="&behavior;#MaterialAmountConnection"/>
+    <rdfs:subPropertyOf rdf:resource="&network_system;#enters"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&behavior;#MaterialAmount"/>
+          <rdf:Description rdf:about="&behavior;#MaterialAmountConnection"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&distillation_system;#hasLiquidTrayInput">
+    <rdfs:subPropertyOf rdf:resource="&network_system;#hasInput"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasLiquidTrayInput indicates that a MaterialAmountConnection possesses a liquid state of aggregation that a tray has as an input.</rdfs:comment>
+    <rdfs:range rdf:resource="&behavior;#MaterialAmountConnection"/>
+    <owl:inverseOf rdf:resource="&distillation_system;#entersTrayLiquid"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&behavior;#MaterialAmount"/>
+          <rdf:Description rdf:about="&behavior;#MaterialAmountConnection"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&distillation_system;#hasGaseousTrayOutput">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&behavior;#MaterialAmount"/>
+          <rdf:Description rdf:about="&behavior;#MaterialAmountConnection"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="&behavior;#MaterialAmountConnection"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasGaseousTrayOutput indicates that a MaterialAmountConnection possesses a gaseous state of aggregation that a tray has as an output.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&network_system;#hasOutput"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="leavesTrayGaseous"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="entersAtNumberedTray">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation entersAtNumberedTray indicates for a tray column at which tray the feed enter the Column.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&network_system;#enters"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&distillation_system;#hasInputAtNumberedTray"/>
+    </owl:inverseOf>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&process;#ProcessStep"/>
+          <rdf:Description rdf:about="&process;#ProcessState"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="&process;#ProcessState"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&distillation_system;#hasInputAtNumberedTray">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasInputAtNumberedTray indicates from the perspective of the column at which tray the mixture is fed.</rdfs:comment>
+    <rdfs:range rdf:resource="&process;#ProcessState"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&process;#ProcessStep"/>
+          <rdf:Description rdf:about="&process;#ProcessState"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:subPropertyOf rdf:resource="&network_system;#hasInput"/>
+    <owl:inverseOf rdf:resource="&distillation_system;#entersAtNumberedTray"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&distillation_system;#hasLiquidTrayOutput">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasLiquidTrayOutput indicates that a MaterialAmountConnection possesses a liquid state of aggregation that a tray has as an output.</rdfs:comment>
+    <rdfs:range rdf:resource="&behavior;#MaterialAmountConnection"/>
+    <rdfs:subPropertyOf rdf:resource="&network_system;#hasOutput"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="leavesTrayLiquid"/>
+    </owl:inverseOf>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&behavior;#MaterialAmount"/>
+          <rdf:Description rdf:about="&behavior;#MaterialAmountConnection"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&distillation_system;#hasTopProduct">
+    <rdfs:subPropertyOf rdf:resource="&network_system;#hasOutput"/>
+    <rdfs:domain rdf:resource="&process_ext;#Distillation"/>
+    <rdfs:range rdf:resource="&process;#ProcessState"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&distillation_system;#leavesTrayGaseous">
+    <rdfs:domain rdf:resource="&behavior;#MaterialAmountConnection"/>
+    <owl:inverseOf rdf:resource="&distillation_system;#hasGaseousTrayOutput"/>
+    <rdfs:subPropertyOf rdf:resource="&network_system;#leaves"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&behavior;#MaterialAmountConnection"/>
+          <rdf:Description rdf:about="&behavior;#MaterialAmount"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation leavesTrayGaseous indicates that a MaterialAmountConnection possesses a gaseous state of aggregation when it leaves a Tray.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&distillation_system;#hasDistillationBottomPressure">
+    <rdfs:domain rdf:resource="&distillation_system;#DistillationSystemBehavior"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasDistillationBottomPressure refers to the pressure that occurs at the bottom of a distillation column.</rdfs:comment>
+    <rdfs:range rdf:resource="&phase_system;#Pressure"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&distillation_system;#leavesTrayLiquid">
+    <rdfs:domain rdf:resource="&behavior;#MaterialAmountConnection"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation leavesTrayLiquid indicates that a MaterialAmountConnection possesses a liquid state of aggregation when it leaves a Tray.</rdfs:comment>
+    <owl:inverseOf rdf:resource="&distillation_system;#hasLiquidTrayOutput"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="&behavior;#MaterialAmountConnection"/>
+          <rdf:Description rdf:about="&behavior;#MaterialAmount"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:subPropertyOf rdf:resource="&network_system;#leaves"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&distillation_system;#hasDistillationTopPressure">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasDistillationTopPressure refers to the pressure that occurs at the top of a distillation column.</rdfs:comment>
+    <rdfs:domain rdf:resource="&distillation_system;#DistillationSystemBehavior"/>
+    <rdfs:range rdf:resource="&phase_system;#Pressure"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+  </owl:ObjectProperty>
+  <owl:InverseFunctionalProperty rdf:ID="hasHeavyKeyRecovery">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+  </owl:InverseFunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:ID="hasLightKeyRecovery">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+  </owl:InverseFunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:about="&distillation_system;#hasDistillateToFeedRatio">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+  </owl:InverseFunctionalProperty>
+</rdf:RDF>
+

@@ -1,0 +1,931 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root         "file:/ontology/">
+  <!ENTITY owl          "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd          "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf          "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs         "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY substance            "&root;OntoCAPE/material/substance/substance.owl">
+  <!ENTITY molecular_structure  "&root;OntoCAPE/material/substance/molecular_structure.owl">
+  <!ENTITY chemical_species     "&root;OntoCAPE/material/substance/chemical_species.owl">
+  <!ENTITY atoms                "&root;OntoCAPE/material/substance/atoms.owl">
+]>
+
+<rdf:RDF
+    xmlns="&atoms;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:substance="&substance;#"
+    xmlns:molecular_structure="&molecular_structure;#"
+    xmlns:chemical_species="&chemical_species;#"
+    xml:base="&atoms;"
+>
+  <owl:Ontology rdf:about="&atoms;">
+    <owl:imports rdf:resource="&molecular_structure;"/>
+    <owl:imports rdf:resource="&chemical_species;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string">2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'atoms' is an application-oriented extension of the ontology module 'molecular_structure'. It provides instance data about the chemical elements.</rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+  </owl:Ontology>
+   
+  <molecular_structure:Atom rdf:ID="HydrogenAtom">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">12385-13-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/H</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">H</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Hydrogen"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">1</molecular_structure:atomicNumber>
+  </molecular_structure:Atom> 
+  
+  <molecular_structure:Atom rdf:ID="Helium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-59-7</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/He</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">He</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Helium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">2</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>   
+ 
+   <molecular_structure:Atom rdf:ID="Lithium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7439-93-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">lnChl=1/Li</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Li</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Lithium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">3</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+ 
+  <molecular_structure:Atom rdf:ID="Beryllium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-41-7</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Be</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Be</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Beryllium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">4</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Boron">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-42-8</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/B</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">B</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Boron"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">5</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Carbon">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-44-0</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/C</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">C</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Carbon"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">6</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="NitrogenAtom">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">17778-88-0</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/N</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">N</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Nitrogen"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">7</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="OxygenAtom">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">17778-80-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/O</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">O</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Oxygen"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">8</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="FluorineAtom">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">14762-94-8</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/F</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">F</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Fluorine"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">9</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Neon">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-01-9</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ne</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ne</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Neon"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">10</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Sodium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-23-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">lnChl=1/Na</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Na</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Sodium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">11</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+    
+  <molecular_structure:Atom rdf:ID="Magnesium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7439-95-4</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Mg </substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Mg</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Magnesium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">12</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Aluminum">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7429-90-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Al</substance:InChI>   
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Al</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Aluminum"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">13</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Silicon">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-21-3</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Si</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Si</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Silicon"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">14</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="PhosphorusAtom">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7723-14-0</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/P</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">P</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Phosphorus"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">15</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="SulphurAtom">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7704-34-9</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/S</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">S</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Sulphur"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">16</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="ChlorineAtom">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">22537-15-1</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Cl</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Cl</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Chlorine"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">17</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Argon">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-37-1</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ar</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ar</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Argon"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">18</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+ 
+  <molecular_structure:Atom rdf:ID="Potassium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-09-7</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">lnChl=1/K</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">K</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Potassium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">19</molecular_structure:atomicNumber>
+  </molecular_structure:Atom> 
+ 
+  <molecular_structure:Atom rdf:ID="Calcium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-70-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ca</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ca</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Calcium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">20</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+ <molecular_structure:Atom rdf:ID="Scandium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-20-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Sc</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Sc</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Scandium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">21</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Titanium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-32-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ti</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ti</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Titanium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">22</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+ 
+  <molecular_structure:Atom rdf:ID="Vanadium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-62-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/V</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">V</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Vanadium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">23</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Chromium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-47-3</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Cr</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Cr</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Chromium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">24</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+    
+  <molecular_structure:Atom rdf:ID="Manganese">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7439-96-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Mn</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Mn</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Manganese"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">25</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Iron">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7439-89-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Fe</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Fe</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Iron"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">26</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Cobalt">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-48-4</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Co</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Co</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Cobalt"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">27</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Nickel">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-02-0</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ni</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ni</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Nickel"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">28</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Copper">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-50-8</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Cu</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Cu</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Copper"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">29</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+ 
+  <molecular_structure:Atom rdf:ID="Zinc">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-66-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Zn</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Zn</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Zinc"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">30</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Gallium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-55-3</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">lnChl=1/Ga</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ga</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Gallium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">31</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Germanium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-56-4</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ge</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ge</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Germanium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">32</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+<molecular_structure:Atom rdf:ID="Arsenic">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-38-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/As</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">As</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Arsenic"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">33</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Selenium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7782-49-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Se</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Se</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Selenium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">34</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Bromine">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">10097-32-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Br</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Br</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Bromine"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">35</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Krypton">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7439-90-9</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Kr</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Kr</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Krypton"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">36</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Rubidium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-17-7</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">lnChl=1/Rb</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Rb</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Rubidium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">37</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Strontium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-24-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Sr</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Sr</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Strontium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">38</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Yttrium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-65-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Y</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Y</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Yttrium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">39</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Zirconium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-67-7</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Zr</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Zr</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Zirconium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">40</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Niobium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-03-1</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Nb</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Nb</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Niobium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">41</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Molybdenum">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7439-98-7</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Mo</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Mo</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Molybdenum"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">42</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+   <molecular_structure:Atom rdf:ID="Technetium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-26-8</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Tc</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Tc</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Technetium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">43</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Ruthenium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-18-8</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ru</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ru</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Ruthenium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">44</molecular_structure:atomicNumber>
+  </molecular_structure:Atom> 
+  
+  <molecular_structure:Atom rdf:ID="Rhodium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-16-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Rh</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Rh</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Rhodium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">45</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Palladium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-05-3</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Pd</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Pd</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Palladium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">46</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Silver">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-22-4</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ag</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ag</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Silver"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">47</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Cadmium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-43-9</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Cd</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Cd</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Cadmium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">48</molecular_structure:atomicNumber>
+  </molecular_structure:Atom> 
+   
+  <molecular_structure:Atom rdf:ID="Indium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-74-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">lnChl=1/In</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">In</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Indium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">49</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Tin">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-31-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Sn</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Sn</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Tin"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">50</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Antimony">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-36-0</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Sb</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Sb</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Antimony"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">51</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Tellurium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">13494-80-9</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Te</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Te</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Tellurium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">52</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="IodineAtom">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">14362-44-8</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/I</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">I</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Iodine"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">53</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Xenon">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-63-3</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Xe</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Xe</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Xenon"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">54</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Caesium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-46-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">lnChl=1/Cs</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Cs</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Caesium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">55</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Barium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-39-3</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">lnChl=1/Ba</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ba</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Barium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">56</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Lanthanum">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7439-91-0</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/La</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">La</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Lanthanum"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">57</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Cerium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-45-1</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ce</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ce</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Cerium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">58</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Praseodymium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-10-0</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Pr</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Pr</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Praseodymium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">59</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Neodymium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-00-8</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Nd</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Nd</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Neodymium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">60</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Promethium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-12-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Pm</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Pm</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Promethium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">61</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Samarium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-19-9</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Sm</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Sm</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Samarium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">62</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Europium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-53-1</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Eu</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Eu</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Europium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">63</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Gadolinium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-54-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Gd</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Gd</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Gadolinium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">64</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Terbium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-27-9</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Tb</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Tb</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Terbium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">65</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Dysprosium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7429-91-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Dy</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Dy</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Dysprosium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">66</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Holmium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-60-0</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ho</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ho</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Holmium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">67</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Erbium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-52-0</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Er</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Er</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Erbium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">68</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Thulium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-30-4</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Tm</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Tm</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Thulium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">69</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Ytterbium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-64-4</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Yb</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Yb</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Ytterbium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">70</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Lutetium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7439-94-3</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Lu</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Lu</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Lutetium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">71</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Hafnium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-58-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Hf</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Hf</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Hafnium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">72</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Tantalum">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-25-7</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ta</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ta</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Tantalum"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">73</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Tungsten">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-33-7</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/W</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">W</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Tungsten"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">74</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Rhenium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-15-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Re</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Re</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Rhenium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">75</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Osmium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-04-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Os</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Os</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Osmium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">76</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Iridium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7439-88-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ir</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ir</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Iridium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">77</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+ 
+  <molecular_structure:Atom rdf:ID="Platinum">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-06-4</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Pt</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Pt</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Platinum"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">78</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Gold">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-57-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Au</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Au</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Gold"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">79</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Mercury">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7439-97-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Hg</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Hg</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Mercury"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">80</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Thallium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-28-0</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Tl</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Tl</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Thallium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">81</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Lead">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7439-92-1</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Pb</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Pb</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Lead"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">82</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Bismuth">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-69-9</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Bi</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Bi</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Bismuth"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">83</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Polonium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-08-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Po</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Po</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Polonium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">84</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Astatine">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-68-8</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/At</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">At</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Astatine"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">85</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Radon">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">10043-92-2 </substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Rn</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Rn</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Radon"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">86</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Francium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-73-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">lnChI=1/Fr</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Fr</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Francium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">87</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Radium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-14-4</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">lnChl=1/Na</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ra</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Radium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">88</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Actinium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-34-8</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ac</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ac</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Actinium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">89</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Thorium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-29-1</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Th</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Th</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Thorium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">90</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Protactinium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-13-3</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Pa</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Pa</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Protactinium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">91</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Uranium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-61-1</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/U</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">U</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Uranium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">92</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Neptunium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7439-99-8</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Np</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Np</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Neptunium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">93</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Plutonium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-07-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Pu</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Pu</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Plutonium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">94</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Americium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-35-9</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Am</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Am</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Americium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">95</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Curium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-51-9</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Cm</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Cm</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Curium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">96</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Berkelium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-40-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Bk</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Bk</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Berkelium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">97</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Californium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-71-3</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Cf</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Cf</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Californium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">98</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Einsteinium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7429-92-7</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Es</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Es</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Einsteinium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">99</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Fermium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-72-4</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Fm</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Fm</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Fermium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">100</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Mendelevium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">7440-11-1</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Md</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Md</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Mendelevium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">101</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Nobelium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">10028-14-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/No</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">No</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Nobelium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">102</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Lawrencium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">22537-19-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Lr</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Lr</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Lawrencium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">103</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Rutherfordium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">53850-36-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Rf</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Rf</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Rutherfordium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">104</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Dubnium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">53850-35-4</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Db</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Db</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Dubnium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">105</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+  
+  <molecular_structure:Atom rdf:ID="Seaborgium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">54038-81-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Sg</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Sg</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Seaborgium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">106</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Bohrium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">54037-14-8</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Bh</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Bh</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Bohrium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">107</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Hassium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">54037-57-9</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Hs</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Hs</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Hassium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">108</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Meitnerium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">54038-01-6</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Mt</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Mt</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Meitnerium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">109</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Darmstadtium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">54083-77-1</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Ds</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Ds</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Darmstadtium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">110</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+  <molecular_structure:Atom rdf:ID="Roentgenium">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">54386-24-2</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/Rg</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">Rg</substance:molecularFormula>
+    <substance:hasMacroscopicAppearance rdf:resource="&chemical_species;#Roentgenium"/>
+    <molecular_structure:atomicNumber rdf:datatype="&xsd;#positiveInteger">111</molecular_structure:atomicNumber>
+  </molecular_structure:Atom>
+
+
+ 
+</rdf:RDF>

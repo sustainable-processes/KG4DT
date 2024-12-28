@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY array                "&root;meta_model/data_structures/array.owl">
+  <!ENTITY binary_tree          "&root;meta_model/data_structures/binary_tree.owl">
+  <!ENTITY fc                   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY linked_list          "&root;meta_model/data_structures/linked_list.owl">
+  <!ENTITY loop                 "&root;meta_model/data_structures/loop.owl">
+  <!ENTITY mereology            "&root;meta_model/mereology/mereology.owl">
+  <!ENTITY multiset             "&root;meta_model/data_structures/multiset.owl">
+  <!ENTITY topology             "&root;meta_model/topology/topology.owl">
+  <!ENTITY example_array        "&root;meta_model/data_structures/example_array.owl">
+  <!ENTITY example_binary_tree  "&root;meta_model/data_structures/example_binary_tree.owl">
+  <!ENTITY example_linked_list  "&root;meta_model/data_structures/example_linked_list.owl">
+  <!ENTITY example_loop         "&root;meta_model/data_structures/example_loop.owl">
+  <!ENTITY example_meta         "&root;meta_model/example_meta_model.owl">
+  <!ENTITY example_mereology    "&root;meta_model/mereology/example_mereology.owl">
+  <!ENTITY example_multiset     "&root;meta_model/data_structures/example_multiset.owl">
+  <!ENTITY example_topology     "&root;meta_model/topology/example_topology.owl">
+]>
+
+<rdf:RDF
+    xmlns="&example_meta;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:array="&array;#"
+    xmlns:binary_tree="&binary_tree;#"
+    xmlns:fc="&fc;#"
+    xmlns:linked_list="&linked_list;#"
+    xmlns:mereology="&mereology;#"
+    xmlns:multiset="&multiset;#"
+    xmlns:topology="&topology;#"
+    
+    xmlns:example_array="&example_array;#"
+    xmlns:example_binary_tree="&example_binary_tree;#"
+    xmlns:example_linked_list="&example_linked_list;#"
+    xmlns:example_loop="&example_loop;#"
+    xmlns:example_mereology="&example_mereology;#"
+    xmlns:example_multiset="&example_multiset;#"
+    xmlns:example_topology="&example_topology;#"
+    
+    xml:base="&example_meta;">
+  
+  <owl:Ontology rdf:about="&example_meta;">
+    <owl:imports rdf:resource="&example_mereology;"/>
+    <owl:imports rdf:resource="&example_topology;"/>
+    <owl:imports rdf:resource="&example_linked_list;"/>
+    <owl:imports rdf:resource="&example_multiset;"/>
+    <owl:imports rdf:resource="&example_array;"/>
+    <owl:imports rdf:resource="&example_binary_tree;"/>
+    <owl:imports rdf:resource="&example_loop;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'meta_model_example' assembles all application examples of the Meta Model.</rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>  
+  </owl:Ontology>
+
+</rdf:RDF>

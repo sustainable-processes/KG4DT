@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY technical_system "&root;OntoCAPE/upper_level/technical_system.owl">
+  <!ENTITY material "&root;OntoCAPE/material/material.owl">
+  <!ENTITY phase_system "&root;OntoCAPE/material/phase_system/phase_system.owl">
+  <!ENTITY substance    "&root;OntoCAPE/material/substance/substance.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns="&material;#"
+    xmlns:technical_system="&technical_system;#"
+    xmlns:substance="&substance;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:phase_system="&phase_system;#"
+  xml:base="&material;">
+  <owl:Ontology rdf:about="&material;">
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'material' assembles the top-level classes of the partial model 'material' and defines their mutual relations.
+The following classes and relations from other ontology modules are used within 'material':
+
+&lt;owl:Class rdf:about="&phase_system;#PhaseSystem"/&gt;
+&lt;owl:Class rdf:about="&substance;#Substance"/&gt;
+&lt;owl:Class rdf:about="&system;#System"/&gt;
+&lt;owl:Class rdf:about="&system;#AspectSystem"/&gt;
+&lt;owl:Class rdf:about="&system;#Aspect"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&system;#hasAspectSystem"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#representsAspectOf"/&gt;
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+    <owl:imports rdf:resource="&phase_system;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Material">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="intrinsicCharacteristics"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&substance;#Substance"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&material;#intrinsicCharacteristics"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&substance;#Substance"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="thermodynamicBehavior"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&phase_system;#PhaseSystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&system;#System"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&material;#thermodynamicBehavior"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&phase_system;#PhaseSystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="representsIntrinsicCharacteristicsOf">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&material;#intrinsicCharacteristics"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="&system;#representsAspectOf"/>
+    <rdfs:domain rdf:resource="&system;#AspectSystem"/>
+    <rdfs:range rdf:resource="&material;#Material"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&material;#thermodynamicBehavior">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="representsThermodynamicBehaviorOf"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasAspectSystem"/>
+    <rdfs:domain rdf:resource="&material;#Material"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&material;#intrinsicCharacteristics">
+    <rdfs:range rdf:resource="&system;#AspectSystem"/>
+    <rdfs:domain rdf:resource="&material;#Material"/>
+    <owl:inverseOf rdf:resource="&material;#representsIntrinsicCharacteristicsOf"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasAspectSystem"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&material;#representsThermodynamicBehaviorOf">
+    <rdfs:domain rdf:resource="&system;#AspectSystem"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#representsAspectOf"/>
+    <rdfs:range rdf:resource="&material;#Material"/>
+    <owl:inverseOf rdf:resource="&material;#thermodynamicBehavior"/>
+  </owl:ObjectProperty>
+  <system:Aspect rdf:ID="intrinsic_characteristics"/>
+  <system:Aspect rdf:ID="thermodynamic_behavior"/>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <system:Aspect rdf:about="&material;#intrinsic_characteristics"/>
+      <system:Aspect rdf:about="&material;#thermodynamic_behavior"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>

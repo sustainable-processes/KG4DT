@@ -1,0 +1,43 @@
+{
+    "basic": {
+        "reactions": [
+            "2-Bromobenzyl Alcohol + Acetic Anhydride > 2-Bromobenzyl Acetate"
+        ],
+        "solvents": [
+            "Acetonitrile"
+        ],
+        "species": [
+            "2-Bromobenzyl Alcohol",
+            "Acetic Anhydride",
+            "2-Bromobenzyl Acetate"
+        ],
+        "streams": [
+            "Liquid stream"
+        ],
+        "catalysts": [
+          "4-Dimethylaminopyridine"
+        ]
+    },
+    "context_descriptor": {
+        "energy_context_descriptor": [
+            "Phase_Density",
+            "Phase_Velocity",
+            "Phase_Viscosity",
+            "Rotational_Angular_Velocity",
+            "Temperature"
+        ],
+        "information_context_descriptor": [
+            "Is_Liquid_Phase_Miscible",
+            "Has_Gas_Phase"
+        ],
+        "space_context_descriptor": [
+            "Reactor_Length",
+            "Reactor_Inner_Radius",
+            "Reactor_Outer_Radius"
+        ],
+        "structure_context_descriptor": "Taylor-Couette_Reactor",
+        "substance_context_descriptor": [],
+        "time_context_descriptor": []
+    },
+    "type": "top-down"
+}

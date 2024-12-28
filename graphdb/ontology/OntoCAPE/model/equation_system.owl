@@ -1,0 +1,673 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY equation_system  "&root;OntoCAPE/model/equation_system.owl">
+  <!ENTITY mathematical_model   "&root;OntoCAPE/model/mathematical_model.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:mathematical_model="&mathematical_model;#"
+    xmlns="&equation_system;#"
+  xml:base="&equation_system;">
+  <owl:Ontology rdf:about="&equation_system;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontolog module 'equation_system' provides concepts for the description of the model equations that constitute a mathematical model. 
+The following classes and relations from other ontology modules are used within 'equation_system':
+
+&lt;owl:Class rdf:about="&mathematical_model;#MathematicalModel"/&gt;
+&lt;owl:Class rdf:about="&system;#FixedValueSet"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&system;#hasCharacteristic"/&gt;
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:imports rdf:resource="&mathematical_model;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="NonlinearAlgebraicSystem">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A NonlinearAlgebraicSystem is an AlgebraicEquationSystem that is characterized as nonlinear.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="LinearAlgebraicSystem"/>
+    </owl:disjointWith>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="hasLinearity"/>
+            </owl:onProperty>
+            <owl:hasValue>
+              <Linearity rdf:ID="nonlinear">
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >Characterizes a nonlinear equation system</rdfs:comment>
+                <owl:differentFrom>
+                  <Linearity rdf:ID="linear">
+                    <owl:differentFrom rdf:resource="&equation_system;#nonlinear"/>
+                    <rdfs:comment rdf:datatype="&xsd;#string"
+                    >Characterizes a linear equation system</rdfs:comment>
+                  </Linearity>
+                </owl:differentFrom>
+              </Linearity>
+            </owl:hasValue>
+          </owl:Restriction>
+          <owl:Class rdf:ID="AlgebraicEquationSystem"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="OrdinaryDifferentialEquationSystem">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasNumericalStiffness"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="NumericalStiffness"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="DifferentialEquationSystem"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasODE_explicitness"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An OrdinaryDifferentialEquationSystem (ODE system) is a DifferentialEquationSystem which solely consists of ordinary differential equations.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&equation_system;#hasODE_explicitness"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="ODE_Explicitness"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&equation_system;#hasNumericalStiffness"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&equation_system;#NumericalStiffness"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&equation_system;#hasODE_explicitness"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&equation_system;#ODE_Explicitness"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PartialDifferentialEquationSystem"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&equation_system;#hasNumericalStiffness"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="OrdinaryDifferentialAlgebraicSystem">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="DifferentialAlgebraicEquationSystem"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An OrdinaryDifferentialAlgebraicSystem is a DifferentialAlgebraicSystem system which comprises ordinary differential equations as well as algebraic equations.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PartialDifferentialAlgebraicSystem"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="DAE_Explicitness">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Linearity"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="ModelRepresentationForm"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#ODE_Explicitness"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#NumericalStiffness"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="VariablesType"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="EquationSystemCharacteristics"/>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <DAE_Explicitness rdf:ID="fully_implicit">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >A DifferentialAlgebraicEquationSystem is fully_implicit if it has the form
+  F(x, x', u, t) = 0</rdfs:comment>
+            <owl:differentFrom>
+              <DAE_Explicitness rdf:ID="semi-explicit">
+                <owl:differentFrom rdf:resource="&equation_system;#fully_implicit"/>
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >A DifferentialAlgebraicEquationSystem is semi-explict if it has the form
+  f(x, u, t) = x'
+  g(x, u, t) = 0</rdfs:comment>
+              </DAE_Explicitness>
+            </owl:differentFrom>
+          </DAE_Explicitness>
+          <DAE_Explicitness rdf:about="&equation_system;#semi-explicit"/>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Characterizes the explicitness of a DAE system</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&equation_system;#ModelRepresentationForm">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A MathematicalModel may appear in two forms, as indicated by the ModelRepresentationForm: 
+- An open-form model is solved by an external algorithm. One can freely choose the inputs and outputs of the open-form model.
+- A closed-form model includes an underlying numerical algorithm that solves the model equations. The algorithm accepts only a fixed set of input variables, and consequently returns only a fixed set of output variables.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&equation_system;#EquationSystemCharacteristics"/>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <ModelRepresentationForm rdf:ID="closed_form">
+            <owl:differentFrom>
+              <ModelRepresentationForm rdf:ID="open_form">
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >An open-form model is solved by an external algorithm. One can freely choose the inputs and outputs of the open-form model.</rdfs:comment>
+                <owl:differentFrom rdf:resource="&equation_system;#closed_form"/>
+              </ModelRepresentationForm>
+            </owl:differentFrom>
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >A closed-form model includes an underlying numerical algorithm that solves the model equations. The algorithm accepts only a fixed set of input variables, and consequently returns only a fixed set of output variables.</rdfs:comment>
+          </ModelRepresentationForm>
+          <ModelRepresentationForm rdf:about="&equation_system;#open_form"/>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&equation_system;#DAE_Explicitness"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#VariablesType"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#NumericalStiffness"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#ODE_Explicitness"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#Linearity"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&equation_system;#NumericalStiffness">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >In mathematics, a stiff equation is a differential equation for which certain numerical methods for solving the equation are numerically unstable, unless the step size is taken to be extremely small. It has proved difficult to formulate a precise definition of stiffness, but the main idea is that the equation includes some terms that can lead to rapid variation in the solution (Wikipedia, 2007).</rdfs:comment>
+    <owl:disjointWith rdf:resource="&equation_system;#DAE_Explicitness"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#VariablesType"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&equation_system;#ModelRepresentationForm"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#Linearity"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#ODE_Explicitness"/>
+    </owl:disjointWith>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <NumericalStiffness rdf:ID="stiff">
+            <owl:differentFrom>
+              <NumericalStiffness rdf:ID="nonstiff">
+                <owl:differentFrom rdf:resource="&equation_system;#stiff"/>
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >Characterizes a nonstiff differential equation.</rdfs:comment>
+              </NumericalStiffness>
+            </owl:differentFrom>
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >Characterizes a stiff differential equation.</rdfs:comment>
+          </NumericalStiffness>
+          <NumericalStiffness rdf:about="&equation_system;#nonstiff"/>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&equation_system;#EquationSystemCharacteristics"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&equation_system;#LinearAlgebraicSystem">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A LinearAlgebraicSystem is an AlgebraicSystem which contains only linear equations.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&equation_system;#NonlinearAlgebraicSystem"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&equation_system;#linear"/>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&equation_system;#hasLinearity"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:about="&equation_system;#AlgebraicEquationSystem"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&equation_system;#ODE_Explicitness">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&equation_system;#EquationSystemCharacteristics"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&equation_system;#DAE_Explicitness"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#VariablesType"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&equation_system;#ModelRepresentationForm"/>
+    <owl:disjointWith rdf:resource="&equation_system;#NumericalStiffness"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#Linearity"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Characterizes the explicitness of an OrdinaryDifferentialEquationSystem, which can be given in implicit_formulation or explicit_formulation.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <ODE_Explicitness rdf:ID="explicit_formulation">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >In an explicit_formulation, the OrdinaryDifferentialAlgebraicSystem is explicitly solved for the highest-order derivative y^(n), i.e., F(x, y, y', y'', ...  y^(n-1) ) = y^(n)</rdfs:comment>
+          </ODE_Explicitness>
+          <ODE_Explicitness rdf:ID="implicit_formulation">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >In an implicit_formulation, the ordinary differential algebraic system is not solved for the highest-order derivative, i.e., F(x, y, y', y'', y''' ...) = 0</rdfs:comment>
+          </ODE_Explicitness>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&equation_system;#DifferentialAlgebraicEquationSystem">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&equation_system;#hasLinearity"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&equation_system;#hasLinearity"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&equation_system;#Linearity"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#AlgebraicEquationSystem"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&equation_system;#DAE_Explicitness"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasDAE_Explicitness"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="differentialIndex"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&equation_system;#hasDAE_Explicitness"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&equation_system;#PartialDifferentialAlgebraicSystem"/>
+          <owl:Class rdf:about="&equation_system;#OrdinaryDifferentialAlgebraicSystem"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#DifferentialEquationSystem"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&equation_system;#DAE_Explicitness"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&equation_system;#hasDAE_Explicitness"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A DifferentialAlgebraicEquationSystem (DAE system) is a MathematicalModel that comprises both algebraic and differential equations.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&equation_system;#Linearity"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&equation_system;#hasLinearity"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <rdf:Description rdf:about="&mathematical_model;#MathematicalModel">
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="hasModelRepresentationForm"/>
+            </owl:onProperty>
+            <owl:allValuesFrom rdf:resource="&equation_system;#ModelRepresentationForm"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&equation_system;#hasModelRepresentationForm"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="&equation_system;#ModelRepresentationForm"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:cardinality rdf:datatype="&xsd;#int"
+            >1</owl:cardinality>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&equation_system;#hasModelRepresentationForm"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="hasVariablesType"/>
+            </owl:onProperty>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&equation_system;#VariablesType"/>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&equation_system;#hasVariablesType"/>
+            </owl:onProperty>
+            <owl:allValuesFrom>
+              <owl:Class rdf:about="&equation_system;#VariablesType"/>
+            </owl:allValuesFrom>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:cardinality rdf:datatype="&xsd;#int"
+            >1</owl:cardinality>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&equation_system;#hasVariablesType"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+      </rdf:Description>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&equation_system;#DifferentialEquationSystem">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#AlgebraicEquationSystem"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&equation_system;#DifferentialAlgebraicEquationSystem"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&equation_system;#OrdinaryDifferentialEquationSystem"/>
+          <owl:Class rdf:about="&equation_system;#PartialDifferentialEquationSystem"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A DifferentialEquationSystem is a MathematicalModel that solely consists of differential equations.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="differentialOrder"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&mathematical_model;#MathematicalModel"/>
+  </owl:Class>
+  <owl:Class rdf:about="&equation_system;#PartialDifferentialAlgebraicSystem">
+    <owl:disjointWith rdf:resource="&equation_system;#OrdinaryDifferentialAlgebraicSystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PartialDifferentialAlgebraicSystem comprises both partial differential equations and algebraic equations.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&equation_system;#DifferentialAlgebraicEquationSystem"/>
+  </owl:Class>
+  <owl:Class rdf:about="&equation_system;#PartialDifferentialEquationSystem">
+    <owl:disjointWith rdf:resource="&equation_system;#OrdinaryDifferentialEquationSystem"/>
+    <rdfs:subClassOf rdf:resource="&equation_system;#DifferentialEquationSystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PartialDifferentialEquationSystem (PDE system) is a DifferentialEquationSystem which consists of partial differential equations.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&equation_system;#Linearity">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&equation_system;#EquationSystemCharacteristics"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Characterizes the linearity of a (Differential)AlgebrailEquationSystem.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <Linearity rdf:about="&equation_system;#nonlinear"/>
+          <Linearity rdf:about="&equation_system;#linear"/>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&equation_system;#DAE_Explicitness"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&equation_system;#VariablesType"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&equation_system;#NumericalStiffness"/>
+    <owl:disjointWith rdf:resource="&equation_system;#ModelRepresentationForm"/>
+    <owl:disjointWith rdf:resource="&equation_system;#ODE_Explicitness"/>
+  </owl:Class>
+  <owl:Class rdf:about="&equation_system;#AlgebraicEquationSystem">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An AlgebraicEquationSystem is a MathematicalModel which solely consists of algebraic equations.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&equation_system;#Linearity"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&equation_system;#hasLinearity"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&equation_system;#hasLinearity"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&equation_system;#Linearity"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&equation_system;#hasLinearity"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&mathematical_model;#MathematicalModel"/>
+    <owl:disjointWith rdf:resource="&equation_system;#DifferentialEquationSystem"/>
+    <owl:disjointWith rdf:resource="&equation_system;#DifferentialAlgebraicEquationSystem"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&equation_system;#LinearAlgebraicSystem"/>
+          <owl:Class rdf:about="&equation_system;#NonlinearAlgebraicSystem"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&equation_system;#EquationSystemCharacteristics">
+    <rdfs:subClassOf rdf:resource="&system;#FixedValueSet"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The EquationSystemCharacteristics characterize the model equations of a MathematicalModel.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&equation_system;#VariablesType">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <VariablesType rdf:ID="discrete_model">
+            <owl:differentFrom>
+              <VariablesType rdf:ID="mixed_model">
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >A  mixed_model denotes a MathematicalModel in which some of the ModelVariables are discrete while the others are continuous. An example of a mixed_model is a mixed integer model.</rdfs:comment>
+                <owl:differentFrom rdf:resource="&equation_system;#discrete_model"/>
+                <owl:differentFrom>
+                  <VariablesType rdf:ID="continuous_model">
+                    <owl:differentFrom rdf:resource="&equation_system;#mixed_model"/>
+                    <owl:differentFrom rdf:resource="&equation_system;#discrete_model"/>
+                    <rdfs:comment rdf:datatype="&xsd;#string"
+                    >A continuous_model denotes a MathematicalModel in which all the ModelVariables are continuous.</rdfs:comment>
+                  </VariablesType>
+                </owl:differentFrom>
+              </VariablesType>
+            </owl:differentFrom>
+            <owl:differentFrom rdf:resource="&equation_system;#continuous_model"/>
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >A discrete_model denotes a MathematicalModel in which all the ModelVariables are discrete. An example of a discrete_model is an integer model.</rdfs:comment>
+          </VariablesType>
+          <VariablesType rdf:about="&equation_system;#mixed_model"/>
+          <VariablesType rdf:about="&equation_system;#continuous_model"/>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="&equation_system;#EquationSystemCharacteristics"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A VariablesType indicates whether the ModelVariables of a MathematicalModel are all continuous, all discrete, or partly continuous and partly discrete:
+-   A continuous_model denotes a MathematicalModel in which all the ModelVariables are continuous.
+-   A discrete_model denotes a MathematicalModel in which all the ModelVariables are discrete. An example of a mixed_model is an integer model.
+-   A mixed_model denotes a MathematicalModel in which some of the model variables are discrete while the others are continuous. An example of a mixed_model is a mixed integer model.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&equation_system;#DAE_Explicitness"/>
+    <owl:disjointWith rdf:resource="&equation_system;#ODE_Explicitness"/>
+    <owl:disjointWith rdf:resource="&equation_system;#NumericalStiffness"/>
+    <owl:disjointWith rdf:resource="&equation_system;#ModelRepresentationForm"/>
+    <owl:disjointWith rdf:resource="&equation_system;#Linearity"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&equation_system;#hasLinearity">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&equation_system;#DifferentialAlgebraicEquationSystem"/>
+          <owl:Class rdf:about="&equation_system;#AlgebraicEquationSystem"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="&equation_system;#Linearity"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Indicates an EquationSystemCharacteristic of type Linearity</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&equation_system;#hasODE_explicitness">
+    <rdfs:range rdf:resource="&equation_system;#ODE_Explicitness"/>
+    <rdfs:domain rdf:resource="&equation_system;#OrdinaryDifferentialEquationSystem"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Indicates an EquationSystemCharacteristic of type ODE_Explicitness.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&equation_system;#hasVariablesType">
+    <rdfs:domain rdf:resource="&mathematical_model;#MathematicalModel"/>
+    <rdfs:range rdf:resource="&equation_system;#VariablesType"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Indicates an EquationSystemCharacteristic of type VariablesType</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&equation_system;#hasModelRepresentationForm">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Indicates an EquationSystemCharacteristic of type ModelRepresentationForm</rdfs:comment>
+    <rdfs:range rdf:resource="&equation_system;#ModelRepresentationForm"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:domain rdf:resource="&mathematical_model;#MathematicalModel"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&equation_system;#hasNumericalStiffness">
+    <rdfs:range rdf:resource="&equation_system;#NumericalStiffness"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Indicates an EquationSystemCharacteristic of type NumericalStiffness</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:domain rdf:resource="&equation_system;#OrdinaryDifferentialEquationSystem"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&equation_system;#hasDAE_Explicitness">
+    <rdfs:range rdf:resource="&equation_system;#DAE_Explicitness"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Indicates an EquationSystemCharacteristic of type DAE_explicitness.</rdfs:comment>
+    <rdfs:domain rdf:resource="&equation_system;#DifferentialAlgebraicEquationSystem"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="&equation_system;#differentialIndex">
+    <rdfs:domain rdf:resource="&equation_system;#DifferentialAlgebraicEquationSystem"/>
+    <rdfs:range rdf:resource="&xsd;#int"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The attribute represents the differential index of a DAE system, as defined by Gear &amp; Petzold (1984).</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&equation_system;#differentialOrder">
+    <rdfs:domain rdf:resource="&equation_system;#DifferentialEquationSystem"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The attribute differentialOrder denotes the order of a differential equation, which is defined as the order of the highest derivative of a ModelVariable appearing in the differential equation</rdfs:comment>
+    <rdfs:range rdf:resource="&xsd;#int"/>
+  </owl:DatatypeProperty>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <ODE_Explicitness rdf:about="&equation_system;#implicit_formulation"/>
+      <ODE_Explicitness rdf:about="&equation_system;#explicit_formulation"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>

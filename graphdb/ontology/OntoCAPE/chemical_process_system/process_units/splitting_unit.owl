@@ -1,0 +1,223 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY network_system   "&root;OntoCAPE/upper_level/network_system.owl">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY technical_system "&root;OntoCAPE/upper_level/technical_system.owl">
+  <!ENTITY behavior "&root;OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl">
+  <!ENTITY chemical_process_system  "&root;OntoCAPE/chemical_process_system/chemical_process_system.owl">
+  <!ENTITY plant    "&root;OntoCAPE/chemical_process_system/CPS_realization/plant.owl">
+  <!ENTITY process  "&root;OntoCAPE/chemical_process_system/CPS_function/process.owl">
+  <!ENTITY splitting_unit   "&root;OntoCAPE/chemical_process_system/process_units/splitting_unit.owl">
+]>
+
+<rdf:RDF
+    xmlns:behavior="&behavior;#"
+    xmlns:system="&system;#"
+    xmlns:technical_system="&technical_system;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:chemical_process_system="&chemical_process_system;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="&splitting_unit;#"
+    xmlns:process="&process;#"
+    xmlns:plant="&plant;#"
+  xml:base="&splitting_unit;">
+  <owl:Ontology rdf:about="&splitting_unit;">
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'splitting_unit' provides concepts for the detailed description of a splitting unit applicable in a chemical process system.
+The following classes and relations from other ontology modules are used within 'splitting_unit':
+
+&lt;owl:Class rdf:about="&behavior;#MaterialAmount"/&gt;
+&lt;owl:Class rdf:about="&chemical_process_system;#ProcessUnit"/&gt;
+&lt;owl:Class rdf:about="&plant;#Apparatus"/&gt;
+&lt;owl:Class rdf:about="&process;#Splitting"/&gt;
+&lt;owl:Class rdf:about="&system;#ScalarValue"/&gt;
+&lt;owl:Class rdf:about="&behavior;#MaterialStream"/&gt;
+&lt;owl:Class rdf:about="&process;#ProcessState"/&gt;
+&lt;owl:Class rdf:about="&process;#Flashing"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasPhenomenon"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasCharacteristic"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#hasOutput"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#leaves"/&gt;
+&lt;owl:ObjectProperty rdf:about="&chemical_process_system;#refersToGeneralizedAmount"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#enters"/&gt;
+&lt;owl:ObjectProperty rdf:about="&network_system;#hasInput"/&gt;
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasBehavioralAspect"/&gt;
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasFunctionalAspect"/&gt;
+&lt;owl:ObjectProperty rdf:about="&technical_system;#hasRealizationAspect"/&gt;
+
+&lt;behavior:FlowPattern rdf:about="&behavior;#ideal_mixing"/&gt;
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:imports rdf:resource="&chemical_process_system;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="SplittingBehavior">
+    <rdfs:subClassOf rdf:resource="&behavior;#MaterialAmount"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&behavior;#ideal_mixing"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasPhenomenon"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+        <owl:someValuesFrom rdf:resource="&behavior;#MaterialStream"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="SplitMaterialStream"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >2</owl:minCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >SplittingBehavior is particularly defined to characterize the behavior aspect of SplittingUnit according to the principles defined in MaterialAmount.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="SplittingUnit">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >SplittingUnit represents a ProcessUnit that has a splitting function and follows the assumption of ideal mixing.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <rdf:Description rdf:about="&process;#Splitting">
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:allValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&process;#ProcessState"/>
+                      <owl:Restriction>
+                        <owl:someValuesFrom>
+                          <owl:Class>
+                            <owl:intersectionOf rdf:parseType="Collection">
+                              <rdf:Description rdf:about="&behavior;#MaterialAmount"/>
+                              <owl:Restriction>
+                                <owl:onProperty rdf:resource="&network_system;#enters"/>
+                                <owl:someValuesFrom rdf:resource="&splitting_unit;#SplittingBehavior"/>
+                              </owl:Restriction>
+                            </owl:intersectionOf>
+                          </owl:Class>
+                        </owl:someValuesFrom>
+                        <owl:onProperty rdf:resource="&chemical_process_system;#refersToGeneralizedAmount"/>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:allValuesFrom>
+                <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:allValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&process;#ProcessState"/>
+                      <owl:Restriction>
+                        <owl:someValuesFrom>
+                          <owl:Class>
+                            <owl:intersectionOf rdf:parseType="Collection">
+                              <owl:Class rdf:about="&splitting_unit;#SplitMaterialStream"/>
+                              <owl:Restriction>
+                                <owl:onProperty rdf:resource="&network_system;#leaves"/>
+                                <owl:someValuesFrom rdf:resource="&splitting_unit;#SplittingBehavior"/>
+                              </owl:Restriction>
+                            </owl:intersectionOf>
+                          </owl:Class>
+                        </owl:someValuesFrom>
+                        <owl:onProperty rdf:resource="&chemical_process_system;#refersToGeneralizedAmount"/>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:allValuesFrom>
+                <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+          </rdf:Description>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&process;#Splitting"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&chemical_process_system;#ProcessUnit"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasBehavioralAspect"/>
+        <owl:allValuesFrom rdf:resource="&splitting_unit;#SplittingBehavior"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasBehavioralAspect"/>
+        <owl:someValuesFrom rdf:resource="&splitting_unit;#SplittingBehavior"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&technical_system;#hasRealizationAspect"/>
+        <owl:allValuesFrom rdf:resource="&plant;#Apparatus"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&plant;#Apparatus"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasRealizationAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&splitting_unit;#SplitMaterialStream">
+    <rdfs:subClassOf rdf:resource="&behavior;#MaterialStream"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasSplitFactor"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&splitting_unit;#hasSplitFactor"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&system;#ScalarValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&splitting_unit;#hasSplitFactor">
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:range rdf:resource="&system;#ScalarValue"/>
+    <rdfs:domain rdf:resource="&splitting_unit;#SplitMaterialStream"/>
+  </owl:ObjectProperty>
+</rdf:RDF>

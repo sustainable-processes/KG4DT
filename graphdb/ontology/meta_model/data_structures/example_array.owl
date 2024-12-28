@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY array    "&root;meta_model/data_structures/array.owl">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY mereology    "&root;meta_model/mereology/mereology.owl">
+  <!ENTITY example_array    "&root;meta_model/data_structures/example_array.owl">
+]>
+
+<rdf:RDF
+    xmlns:array="&array;#"
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:mereology="&mereology;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="&example_array;#"
+  xml:base="&example_array;">
+
+  <owl:Ontology rdf:about="&example_array;">
+    <owl:imports rdf:resource="&array;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Application example that illustrates the usage of the design pattern 'array'</rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+  </owl:Ontology>
+
+  <owl:Class rdf:ID="QueryFor_ElementWithIndexValue_2">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&array;#index"/>
+                <owl:hasValue rdf:datatype="&xsd;#int"
+                >2</owl:hasValue>
+              </owl:Restriction>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="&array;#hasIndex"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&array;#Element"/>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&mereology;#isExclusivelyPartOf"/>
+            <owl:hasValue>
+              <array:Array rdf:ID="A">
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >A[1] = x
+A[2] = y
+A[3] = z</rdfs:comment>
+                <array:isOrderedBy>
+                  <array:Index rdf:ID="Index_of_z">
+                    <array:determinesPositionOf>
+                      <array:Element rdf:ID="z">
+                        <array:hasIndex rdf:resource="&example_array;#Index_of_z"/>
+                        <mereology:isExclusivelyPartOf rdf:resource="&example_array;#A"/>
+                      </array:Element>
+                    </array:determinesPositionOf>
+                    <array:index rdf:datatype="&xsd;#int"
+                    >3</array:index>
+                    <array:isIndexOfArray rdf:resource="&example_array;#A"/>
+                  </array:Index>
+                </array:isOrderedBy>
+                <array:isOrderedBy>
+                  <array:Index rdf:ID="Index_of_x">
+                    <array:index rdf:datatype="&xsd;#int"
+                    >1</array:index>
+                    <array:determinesPositionOf>
+                      <array:Element rdf:ID="x">
+                        <array:hasIndex rdf:resource="&example_array;#Index_of_x"/>
+                      </array:Element>
+                    </array:determinesPositionOf>
+                    <array:isIndexOfArray rdf:resource="&example_array;#A"/>
+                  </array:Index>
+                </array:isOrderedBy>
+                <array:isOrderedBy>
+                  <array:Index rdf:ID="Index_of_y">
+                    <array:isIndexOfArray rdf:resource="&example_array;#A"/>
+                    <array:determinesPositionOf>
+                      <array:Element rdf:ID="y">
+                        <array:hasIndex rdf:resource="&example_array;#Index_of_y"/>
+                        <mereology:isExclusivelyPartOf rdf:resource="&example_array;#A"/>
+                      </array:Element>
+                    </array:determinesPositionOf>
+                    <array:index rdf:datatype="&xsd;#int"
+                    >2</array:index>
+                  </array:Index>
+                </array:isOrderedBy>
+                <mereology:isComposedOf rdf:resource="&example_array;#y"/>
+                <mereology:isComposedOf rdf:resource="&example_array;#x"/>
+              </array:Array>
+            </owl:hasValue>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Query for an element of A with index value 2</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_ArrayOfElement_z">
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_array;#z"/>
+            <owl:onProperty rdf:resource="&mereology;#isComposedOf"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&array;#Array"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Find the Array to which Element 'z' belongs.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_AllElementsOfArray_A">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&mereology;#isExclusivelyPartOf"/>
+            <owl:hasValue rdf:resource="&example_array;#A"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&array;#Element"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Find all elements of the array 'A'</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_IndexOfElement_x">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Find the Index of Element 'x'</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_array;#x"/>
+            <owl:onProperty rdf:resource="&array;#determinesPositionOf"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&array;#Index"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="QueryFor_ArrayOfIndex_Index_of_z">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Find the Array to which the Index 'Index_of_z' belongs</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&owl;#Thing"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:hasValue rdf:resource="&example_array;#Index_of_z"/>
+            <owl:onProperty rdf:resource="&array;#isOrderedBy"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&array;#Array"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <array:Index rdf:ID="Index_of_v">
+    <array:determinesPositionOf>
+      <array:Element rdf:ID="v">
+        <array:hasIndex rdf:resource="&example_array;#Index_of_v"/>
+      </array:Element>
+    </array:determinesPositionOf>
+    <array:isIndexOfArray>
+      <array:Array rdf:ID="B">
+        <array:isOrderedBy rdf:resource="&example_array;#Index_of_v"/>
+        <array:isOrderedBy>
+          <array:Index rdf:ID="Index_of_u">
+            <array:index rdf:datatype="&xsd;#int"
+            >1</array:index>
+            <array:isIndexOfArray rdf:resource="&example_array;#B"/>
+            <array:determinesPositionOf>
+              <array:Element rdf:ID="u">
+                <array:hasIndex rdf:resource="&example_array;#Index_of_u"/>
+              </array:Element>
+            </array:determinesPositionOf>
+          </array:Index>
+        </array:isOrderedBy>
+        <mereology:isComposedOf rdf:resource="&example_array;#v"/>
+        <mereology:isComposedOf rdf:resource="&example_array;#u"/>
+      </array:Array>
+    </array:isIndexOfArray>
+    <array:index rdf:datatype="&xsd;#int"
+    >2</array:index>
+  </array:Index>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <array:Array rdf:about="&example_array;#A"/>
+      <array:Array rdf:about="&example_array;#B"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>

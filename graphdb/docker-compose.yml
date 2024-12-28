@@ -1,0 +1,11 @@
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        GDB_VERSION: 10.6.3
+    ports:
+     - 7200:7200
+    environment:
+      GDB_JAVA_OPTS: -Xms4G -Xmx4G

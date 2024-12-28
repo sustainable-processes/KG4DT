@@ -1,0 +1,527 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY maths    "&root;OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl">
+  <!ENTITY phys_dim "&root;OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl">
+  <!ENTITY SI_unit  "&root;OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl">
+]>
+
+<rdf:RDF
+    xmlns="&SI_unit;#"
+    xmlns:system="&system;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:maths="&maths;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:phys_dim="&phys_dim;#"
+  xml:base="&SI_unit;">
+  <owl:Ontology rdf:about="&SI_unit;">
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <owl:imports rdf:resource="&phys_dim;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'SI_unit' intorduces the base units of the SI system and introduces a method to derive further units from these.
+The following classes, relations, and individuals from other ontology modules are used within 'SI_unit':
+
+&lt;owl:Class rdf:about="&maths;#Leaf"/&gt;
+&lt;owl:Class rdf:about="&maths;#Node"/&gt;
+&lt;owl:Class rdf:about="&maths;#Operand"/&gt;
+&lt;owl:Class rdf:about="&phys_dim;#BaseDimension"/&gt;
+&lt;owl:Class rdf:about="&system;#UnitOfMeasure"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&maths;#hasLeftChild"/&gt;
+&lt;owl:ObjectProperty rdf:about="&maths;#hasNodeValue"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasDimension"/&gt;
+
+&lt;phys_dim:BaseDimension       rdf:about="&phys_dim;#amount_of_substance"/&gt;
+&lt;phys_dim:BaseDimension       rdf:about="&phys_dim;#electric_current"/&gt;
+&lt;phys_dim:BaseDimension       rdf:about="&phys_dim;#luminous_intensity"/&gt;
+&lt;phys_dim:BaseDimension       rdf:about="&phys_dim;#length"/&gt;
+&lt;phys_dim:BaseDimension       rdf:about="&phys_dim;#mass"/&gt;
+&lt;phys_dim:BaseDimension       rdf:about="&phys_dim;#thermodynamic_temperature"/&gt;
+&lt;phys_dim:BaseDimension       rdf:about="&phys_dim;#time"/&gt;
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+  </owl:Ontology>
+  <owl:Class rdf:ID="SI_BaseUnit">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="SI_DerivedUnit"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The seven base units of the SI system are: ampere, candela, kelvin, kilogram, meter, mole, and second (BIPM, 2006).</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <SI_BaseUnit rdf:ID="A">
+            <system:hasDimension rdf:resource="&phys_dim;#electric_current"/>
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >ampere
+The ampere is that constant current which, if maintained in two straight parallel conductors of infinite length, of negligible circular cross-section, and placed 1 meter apart in vacuum, would produce between these conductors a force equal to 2e-7 newton per meter of length (http://www.bipm.fr/en/si/si_brochure/chapter2/2-1/2-1-1/ampere.html).</rdfs:comment>
+          </SI_BaseUnit>
+          <SI_BaseUnit rdf:ID="cd">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >candela
+The candela is the luminous intensity, in a given direction, of a source that emits monochromatic radiation of frequency 540e12 hertz an that has a radiant intensitiy in that direction of 1/683 watt per steradian (http://www.bipm.fr/en/si/si_brochure/chapter2/2-1/2-1-1/candela.html).</rdfs:comment>
+            <system:hasDimension rdf:resource="&phys_dim;#luminous_intensity"/>
+          </SI_BaseUnit>
+          <SI_BaseUnit rdf:ID="K">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >kelvin
+The kelvin is the fraction 1/273.16 of the thermodynamic temperature of the triple point of water (http://www.bipm.fr/en/si/si_brochure/chapter2/2-1/2-1-1/kelvin.html).</rdfs:comment>
+            <system:hasDimension rdf:resource="&phys_dim;#thermodynamic_temperature"/>
+          </SI_BaseUnit>
+          <SI_BaseUnit rdf:ID="m">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >meter
+The meter is the length of the path travelled by light in a vacuum during a time interval of 1/299,792,458 of a second (http://www.bipm.fr/en/si/si_brochure/chapter2/2-1/2-1-1/metre.html).</rdfs:comment>
+            <system:hasDimension rdf:resource="&phys_dim;#length"/>
+          </SI_BaseUnit>
+          <SI_BaseUnit rdf:ID="kg">
+            <system:hasDimension rdf:resource="&phys_dim;#mass"/>
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >kilogram
+The kilogram is the unit of mass; it is equal to the mass of the international prototype of the kilogram (http://www.bipm.fr/en/si/si_brochure/chapter2/2-1/2-1-1/kilogram.html).</rdfs:comment>
+          </SI_BaseUnit>
+          <SI_BaseUnit rdf:ID="mol">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >mole
+The mole is the amount of substance of a system which contains as many elementary entities as there are atoms in 0.012 kilogram of carbon 12.
+When the mole is used, the elementary entities must be specified and may be atoms, molecules, ions, electrons, other particles, or specified groups of such particles.
+(http://www.bipm.fr/en/si/si_brochure/chapter2/2-1/2-1-1/mole.html)</rdfs:comment>
+            <system:hasDimension rdf:resource="&phys_dim;#amount_of_substance"/>
+          </SI_BaseUnit>
+          <SI_BaseUnit rdf:ID="s">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >second
+The second is the duration of 9,192,631,770 periods of the radiation corresponing to the transition between the two hyperfine levels of the ground state of the caesium-133 atom (http://www.bipm.fr/en/si/si_brochure/chapter2/2-1/2-1-1/second.html).</rdfs:comment>
+            <system:hasDimension rdf:resource="&phys_dim;#time"/>
+          </SI_BaseUnit>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="SI_Unit"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&maths;#Operand"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PrefixedDerivedUnit">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PrefixedDerivedUnit is an SI_Unit with an SI_Prefix. Examples are kJ (kilo-joule), hPa (hecto-pascal), or mm (milli-meter).</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isDefinedBy"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <rdf:Description rdf:about="&maths;#Node"/>
+              <owl:Restriction>
+                <owl:someValuesFrom>
+                  <owl:Class>
+                    <owl:intersectionOf rdf:parseType="Collection">
+                      <rdf:Description rdf:about="&maths;#Node"/>
+                      <owl:Restriction>
+                        <owl:onProperty rdf:resource="&maths;#hasNodeValue"/>
+                        <owl:someValuesFrom>
+                          <owl:Class rdf:ID="SI_Prefix"/>
+                        </owl:someValuesFrom>
+                      </owl:Restriction>
+                    </owl:intersectionOf>
+                  </owl:Class>
+                </owl:someValuesFrom>
+                <owl:onProperty rdf:resource="&maths;#hasLeftChild"/>
+              </owl:Restriction>
+            </owl:intersectionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&SI_unit;#SI_DerivedUnit"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&SI_unit;#SI_Unit">
+    <rdfs:subClassOf rdf:resource="&system;#UnitOfMeasure"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&SI_unit;#SI_BaseUnit"/>
+          <owl:Class rdf:about="&SI_unit;#SI_DerivedUnit"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An SI_Unit is Unit that complies with the SI system of units (cf. BIPM, 2006).</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&SI_unit;#SI_DerivedUnit">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&maths;#Node"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&SI_unit;#isDefinedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&SI_unit;#SI_Unit"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&SI_unit;#isDefinedBy"/>
+        </owl:onProperty>
+        <owl:maxCardinality rdf:datatype="&xsd;#int"
+        >1</owl:maxCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >"Derived units are units which may be expressed in terms of base units by means of the mathematical symbols of multiplication and division. Certain derived units have been given special names and symbols, and these special names and symbols may themselves be used in combination with those for base and other derived units to express the units of other quantities" (BIPM, 2006).</rdfs:comment>
+    <owl:disjointWith rdf:resource="&SI_unit;#SI_BaseUnit"/>
+  </owl:Class>
+  <owl:Class rdf:about="&SI_unit;#SI_Prefix">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An SI prefix can be used to prefix any SI unit to produce a multiple or submultiple of the original unit (BIPM, 2006). 
+So far (as of 2006), the following 20 prefixes have been approved by the General Conference on Weights and Measures: 
+yotta, zetta, exa, peta, tera, giga, mega, kilo, hecto, deca, deci, centi, milli, micro, nano, pico, femto, atto, zepto, yocto.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&maths;#Operand"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <SI_Prefix rdf:ID="yotta">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e24
+symbol: Y</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="zetta">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e21 
+symbol: Z</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="exa">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e18 
+symbol: E</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="peta">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e15 
+symbol: P</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="tera">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e12 
+symbol: T</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="giga">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e9 
+symbol: G</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="mega">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e6 
+symbol: M</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="kilo">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e3 
+symbol:  k</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="hecto">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e2 
+symbol:  h</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="deca">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e1 
+symbol:  da</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="deci">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor:   1e–1 
+symbol:  d</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="centi">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e–2 
+symbol:  c</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="milli">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e–3 
+symbol:  m</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="micro">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e–6 
+symbol:  µ</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="nano">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e–9 
+symbol:  n</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="pico">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e–12 
+symbol:  p</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="femto">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e–15 
+symbol:  f</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="atto">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e–18 
+symbol:  a</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="zepto">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e–21 
+symbol:  z</rdfs:comment>
+          </SI_Prefix>
+          <SI_Prefix rdf:ID="yocto">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >factor: 1e–24 
+symbol:  y</rdfs:comment>
+          </SI_Prefix>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&SI_unit;#isDefinedBy">
+    <rdfs:range rdf:resource="&maths;#Node"/>
+    <rdfs:domain rdf:resource="&SI_unit;#SI_DerivedUnit"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation isDefinedBy links an SI_DerivedUnit to a Node, which represents the right hand side of a definition equation for the SI_DerivedUnit.</rdfs:comment>
+  </owl:ObjectProperty>
+  <maths:Leaf rdf:ID="MILLI-">
+    <maths:hasNodeValue rdf:resource="&SI_unit;#milli"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="PETA-">
+    <maths:hasNodeValue rdf:resource="&SI_unit;#peta"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="ZETTA-">
+    <maths:hasNodeValue rdf:resource="&SI_unit;#zetta"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="NANO-">
+    <maths:hasNodeValue rdf:resource="&SI_unit;#nano"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="METER">
+    <maths:hasNodeValue rdf:resource="&SI_unit;#m"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="YOCTO-">
+    <maths:hasNodeValue rdf:resource="&SI_unit;#yocto"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="MICRO-">
+    <maths:hasNodeValue rdf:resource="&SI_unit;#micro"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="PICO-">
+    <maths:hasNodeValue rdf:resource="&SI_unit;#pico"/>
+  </maths:Leaf>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <SI_Prefix rdf:about="&SI_unit;#micro"/>
+      <SI_Prefix rdf:about="&SI_unit;#hecto"/>
+      <SI_Prefix rdf:about="&SI_unit;#centi"/>
+      <SI_Prefix rdf:about="&SI_unit;#kilo"/>
+      <SI_Prefix rdf:about="&SI_unit;#deci"/>
+      <SI_Prefix rdf:about="&SI_unit;#nano"/>
+      <SI_Prefix rdf:about="&SI_unit;#mega"/>
+      <SI_Prefix rdf:about="&SI_unit;#milli"/>
+      <SI_Prefix rdf:about="&SI_unit;#tera"/>
+      <SI_Prefix rdf:about="&SI_unit;#giga"/>
+      <SI_Prefix rdf:about="&SI_unit;#deca"/>
+      <SI_Prefix rdf:about="&SI_unit;#pico"/>
+      <SI_Prefix rdf:about="&SI_unit;#yotta"/>
+      <SI_Prefix rdf:about="&SI_unit;#zetta"/>
+      <SI_Prefix rdf:about="&SI_unit;#exa"/>
+      <SI_Prefix rdf:about="&SI_unit;#peta"/>
+      <SI_Prefix rdf:about="&SI_unit;#femto"/>
+      <SI_Prefix rdf:about="&SI_unit;#atto"/>
+      <SI_Prefix rdf:about="&SI_unit;#zepto"/>
+      <SI_Prefix rdf:about="&SI_unit;#yocto"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <maths:Leaf rdf:ID="MEGA-">
+    <maths:hasNodeValue rdf:resource="&SI_unit;#mega"/>
+  </maths:Leaf>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <SI_BaseUnit rdf:about="&SI_unit;#A"/>
+      <SI_BaseUnit rdf:about="&SI_unit;#cd"/>
+      <SI_BaseUnit rdf:about="&SI_unit;#K"/>
+      <SI_BaseUnit rdf:about="&SI_unit;#m"/>
+      <SI_BaseUnit rdf:about="&SI_unit;#kg"/>
+      <SI_BaseUnit rdf:about="&SI_unit;#s"/>
+      <SI_BaseUnit rdf:about="&SI_unit;#mol"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <maths:Leaf rdf:ID="KELVIN">
+    <maths:hasNodeValue rdf:resource="&SI_unit;#K"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="GIGA-">
+    <maths:hasNodeValue rdf:resource="&SI_unit;#giga"/>
+  </maths:Leaf>
+  <maths:Leaf rdf:ID="KILOGRAM">
+    <maths:hasNodeValue rdf:resource="&SI_unit;#kg"/>
+  </maths:Leaf>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Resource">
+      <rdf:rest rdf:parseType="Resource">
+        <rdf:first rdf:resource="&SI_unit;#METER"/>
+        <rdf:rest rdf:parseType="Resource">
+          <rdf:rest rdf:parseType="Resource">
+            <rdf:rest rdf:parseType="Resource">
+              <rdf:rest rdf:parseType="Resource">
+                <rdf:rest rdf:parseType="Resource">
+                  <rdf:rest rdf:parseType="Resource">
+                    <rdf:rest rdf:parseType="Resource">
+                      <rdf:first>
+                        <maths:Leaf rdf:ID="HECTO-">
+                          <maths:hasNodeValue rdf:resource="&SI_unit;#hecto"/>
+                        </maths:Leaf>
+                      </rdf:first>
+                      <rdf:rest rdf:parseType="Resource">
+                        <rdf:rest rdf:parseType="Resource">
+                          <rdf:first>
+                            <maths:Leaf rdf:ID="KILO-">
+                              <maths:hasNodeValue rdf:resource="&SI_unit;#kilo"/>
+                            </maths:Leaf>
+                          </rdf:first>
+                          <rdf:rest rdf:parseType="Resource">
+                            <rdf:first>
+                              <maths:Leaf rdf:ID="DECI-">
+                                <maths:hasNodeValue rdf:resource="&SI_unit;#deci"/>
+                              </maths:Leaf>
+                            </rdf:first>
+                            <rdf:rest rdf:parseType="Resource">
+                              <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:resource="&SI_unit;#MEGA-"/>
+                                <rdf:rest rdf:parseType="Resource">
+                                  <rdf:first rdf:resource="&SI_unit;#MILLI-"/>
+                                  <rdf:rest rdf:parseType="Resource">
+                                    <rdf:rest rdf:parseType="Resource">
+                                      <rdf:first rdf:resource="&SI_unit;#GIGA-"/>
+                                      <rdf:rest rdf:parseType="Resource">
+                                        <rdf:first>
+                                          <maths:Leaf rdf:ID="DECA-">
+                                            <maths:hasNodeValue rdf:resource="&SI_unit;#deca"/>
+                                          </maths:Leaf>
+                                        </rdf:first>
+                                        <rdf:rest rdf:parseType="Resource">
+                                          <rdf:first rdf:resource="&SI_unit;#PICO-"/>
+                                          <rdf:rest rdf:parseType="Resource">
+                                            <rdf:rest rdf:parseType="Resource">
+                                              <rdf:first rdf:resource="&SI_unit;#ZETTA-"/>
+                                              <rdf:rest rdf:parseType="Resource">
+                                                <rdf:first>
+                                                  <maths:Leaf rdf:ID="EXA-">
+                                                    <maths:hasNodeValue rdf:resource="&SI_unit;#exa"/>
+                                                  </maths:Leaf>
+                                                </rdf:first>
+                                                <rdf:rest rdf:parseType="Resource">
+                                                  <rdf:rest rdf:parseType="Resource">
+                                                    <rdf:first>
+                                                      <maths:Leaf rdf:ID="FEMTO-">
+                                                        <maths:hasNodeValue rdf:resource="&SI_unit;#femto"/>
+                                                      </maths:Leaf>
+                                                    </rdf:first>
+                                                    <rdf:rest rdf:parseType="Resource">
+                                                      <rdf:first>
+                                                        <maths:Leaf rdf:ID="ATTO-">
+                                                          <maths:hasNodeValue rdf:resource="&SI_unit;#atto"/>
+                                                        </maths:Leaf>
+                                                      </rdf:first>
+                                                      <rdf:rest rdf:parseType="Resource">
+                                                        <rdf:rest rdf:parseType="Resource">
+                                                          <rdf:first rdf:resource="&SI_unit;#YOCTO-"/>
+                                                        </rdf:rest>
+                                                        <rdf:first>
+                                                          <maths:Leaf rdf:ID="ZEPTO-">
+                                                            <maths:hasNodeValue rdf:resource="&SI_unit;#zepto"/>
+                                                          </maths:Leaf>
+                                                        </rdf:first>
+                                                      </rdf:rest>
+                                                    </rdf:rest>
+                                                  </rdf:rest>
+                                                  <rdf:first rdf:resource="&SI_unit;#PETA-"/>
+                                                </rdf:rest>
+                                              </rdf:rest>
+                                            </rdf:rest>
+                                            <rdf:first>
+                                              <maths:Leaf rdf:ID="YOTTA-">
+                                                <maths:hasNodeValue rdf:resource="&SI_unit;#yotta"/>
+                                              </maths:Leaf>
+                                            </rdf:first>
+                                          </rdf:rest>
+                                        </rdf:rest>
+                                      </rdf:rest>
+                                    </rdf:rest>
+                                    <rdf:first>
+                                      <maths:Leaf rdf:ID="TERA-">
+                                        <maths:hasNodeValue rdf:resource="&SI_unit;#tera"/>
+                                      </maths:Leaf>
+                                    </rdf:first>
+                                  </rdf:rest>
+                                </rdf:rest>
+                              </rdf:rest>
+                              <rdf:first rdf:resource="&SI_unit;#NANO-"/>
+                            </rdf:rest>
+                          </rdf:rest>
+                        </rdf:rest>
+                        <rdf:first>
+                          <maths:Leaf rdf:ID="CENTI-">
+                            <maths:hasNodeValue rdf:resource="&SI_unit;#centi"/>
+                          </maths:Leaf>
+                        </rdf:first>
+                      </rdf:rest>
+                    </rdf:rest>
+                    <rdf:first rdf:resource="&SI_unit;#MICRO-"/>
+                  </rdf:rest>
+                  <rdf:first>
+                    <maths:Leaf rdf:ID="AMPERE">
+                      <maths:hasNodeValue rdf:resource="&SI_unit;#A"/>
+                    </maths:Leaf>
+                  </rdf:first>
+                </rdf:rest>
+                <rdf:first>
+                  <maths:Leaf rdf:ID="SECOND">
+                    <maths:hasNodeValue rdf:resource="&SI_unit;#s"/>
+                  </maths:Leaf>
+                </rdf:first>
+              </rdf:rest>
+              <rdf:first>
+                <maths:Leaf rdf:ID="CANDELA">
+                  <maths:hasNodeValue rdf:resource="&SI_unit;#cd"/>
+                </maths:Leaf>
+              </rdf:first>
+            </rdf:rest>
+            <rdf:first>
+              <maths:Leaf rdf:ID="MOLE">
+                <maths:hasNodeValue rdf:resource="&SI_unit;#mol"/>
+              </maths:Leaf>
+            </rdf:first>
+          </rdf:rest>
+          <rdf:first rdf:resource="&SI_unit;#KELVIN"/>
+        </rdf:rest>
+      </rdf:rest>
+      <rdf:first rdf:resource="&SI_unit;#KILOGRAM"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>
+

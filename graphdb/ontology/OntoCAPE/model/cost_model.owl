@@ -1,0 +1,222 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY econ_perf    "&root;OntoCAPE/chemical_process_system/CPS_performance/economic_performance.owl">
+  <!ENTITY cost_model   "&root;OntoCAPE/model/cost_model.owl">
+  <!ENTITY mathematical_model   "&root;OntoCAPE/model/mathematical_model.owl">
+]>
+
+<rdf:RDF
+    xmlns="&cost_model;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:econ_perf="&econ_perf;#"
+    xmlns:mathematical_model="&mathematical_model;#"
+    xmlns:system="&system;#"
+    xml:base="&cost_model;">
+
+  <owl:Ontology rdf:about="&cost_model;">
+    <owl:imports rdf:resource="&econ_perf;"/>
+    <owl:imports rdf:resource="&mathematical_model;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'cost_model' establishes some mathematical models for predicting the (investment) costs of chemical plants. 
+The follwoing classes and relations from other ontology modules are used within 'cost_model':
+&lt;owl:Class rdf:about="&econ_perf;#EconomicPerformance"/>
+&lt;owl:Class rdf:about="&econ_perf;#Costs"/>
+&lt;owl:Class rdf:about="&econ_perf;#FixedCapitalInvestment"/>
+&lt;owl:Class rdf:about="&mathematical_model;#MathematicalModel"/>
+&lt;owl:Class rdf:about="&mathematical_model;#ModelVariable"/>
+
+&lt;owl:ObjectProperty rdf:about="&mathematical_model;#correspondsToQuantity"/>
+&lt;owl:ObjectProperty rdf:about="&mathematical_model;#hasModelVariable"/>
+&lt;owl:ObjectProperty rdf:about="&system;#models"/>
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:versionInfo rdf:datatype="&xsd;#string">2.0</owl:versionInfo>
+  </owl:Ontology>
+
+  <owl:Class rdf:ID="TurnoverRatioModel">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="CapacityFCIModel"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PowerFactorModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="StepCountingModel"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The TurnoverRatioModel is a fast evaluation method for order-of-magnitude estimates. The turnover ratio is defined as the ratio of gross annual sales to FixedCapitalInvestment. Values of turnover ratios for different types of chemical processes are for example given by [Schembra91] and [Vogt96].
+Schembra, M. (1991). Daten und Methoden zur Vorkalkulation des Anlagekapitalbedarfs von Chemieanlagen, PhD thesis Technische Universität Berlin.
+Vogt, M. (1996). Neuere Methoden der Investitionsrechnung in der Chemischen Industrie, Diploma thesis, Technische Universität Berlin.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="DifferentialFactorialModel">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="GlobalFactorialModel"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="FactorialFCIModel"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Within DifferentialFactorialModels, different factors are used for the costs of the FixedCapitalInvestment. Examples are modular estimate models, where individual modules consisting of a group of similar items are considered separately and their costs are then summarized.
+[Guthrie, K.: Data and techniques for preliminary capital cost estimation, Chemical Engineering 24 (3), pp. 114-142, 1969]</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="SixTenthsRuleModel">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&cost_model;#PowerFactorModel"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The SixTenthsRuleModel is a PowerFactorModel with x=0.6.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&cost_model;#FactorialFCIModel">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="FixedCapitalInvestmentModel"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&cost_model;#CapacityFCIModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Detailed-itemFCIModel"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >FactorialFCIModels rely on the fact that the percentages of the different costs within the FixedCapitalInvestment are similar for different ChemicalProcessSystems. Based on one or several known costs (for example the equipment costs), the fixed capital investment is estimated using some factors that are derived from cost records, published data and experience.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Unit-costEstimateModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Unit-costEstimateModels are based on detailed estimates of the main purchase costs for a CPS_realization (either obtained from quotations or from cost records and published data).</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&cost_model;#DifferentialFactorialModel"/>
+  </owl:Class>
+  <owl:Class rdf:about="&cost_model;#GlobalFactorialModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A GlobalFactorialModel estimates the FixedCapitalIinvestment by multiplying the basic EquipmentCost by some factor. This factor depends among other things on the type of chemical process involved, required materials of construction, and the location of the ChemicalProcessSystem realization. Examples for global factors are the ones proposed by [Lang47]. This model can be extended to calculate the TotalCapitalInvestment. 
+
+Lang, H.J.: Engineering Approach to Preliminary Cost Estimates, Chemical Engineering, pp. 130-133 (September 1947).</rdfs:comment>
+    <owl:disjointWith rdf:resource="&cost_model;#DifferentialFactorialModel"/>
+    <rdfs:subClassOf rdf:resource="&cost_model;#FactorialFCIModel"/>
+  </owl:Class>
+  <owl:Class rdf:ID="EconomicPerformanceModel">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#models"/>
+        <owl:allValuesFrom rdf:resource="&econ_perf;#EconomicPerformance"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&econ_perf;#EconomicPerformance"/>
+            <owl:onProperty rdf:resource="&system;#models"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&mathematical_model;#MathematicalModel"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An EconomicPerformanceModel models the EconomicPerformance of a ChemicalProcessSystem.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&cost_model;#StepCountingModel">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&cost_model;#CapacityFCIModel"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >StepCountingModel are based on the assumption that the FixedCapitalInvestment can be estimated from the number of process steps (depending on the specific approach, composite process steps or unit operations and reactions are used) multiplied with the costs per process step and some correcting factors. The costs of the process steps are estimated from their capacity and some other factors.
+[Vogt, M.: Neuere Methoden der Investitionsrechnung in der Chemischen Industrie, Diploma thesis, Technische Universität Berlin, 1996]</rdfs:comment>
+    <rdfs:label rdf:datatype="&xsd;#string"
+    >Step Counting Model</rdfs:label>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&cost_model;#PowerFactorModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&cost_model;#TurnoverRatioModel"/>
+  </owl:Class>
+  <owl:Class rdf:ID="CostModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A MathematicalModel to estimate the investment costs of a ChemicalProcessSystem.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="&econ_perf;#Costs"/>
+                    <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+          <owl:Class rdf:about="&cost_model;#EconomicPerformanceModel"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&cost_model;#CapacityFCIModel">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&cost_model;#Detailed-itemFCIModel"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&cost_model;#FactorialFCIModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >CapacityFCIModels are based on FixedCapitalInvestments of past design projects that are similar to the current ChemicalProcessSystem. Besides, some relating factors (e.g. turn-over ratio), exponential power ratios or more complex relations are given.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&cost_model;#FixedCapitalInvestmentModel"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&cost_model;#FixedCapitalInvestmentModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >FixeCapitalInvestmentModels (FCI models) are MathematicalModels that are used to estimate the FixedCapitalInvestment of a ChemicalProcessSystem.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&cost_model;#CostModel"/>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&mathematical_model;#hasModelVariable"/>
+            <owl:someValuesFrom>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <rdf:Description rdf:about="&mathematical_model;#ModelVariable"/>
+                  <owl:Restriction>
+                    <owl:someValuesFrom rdf:resource="&econ_perf;#FixedCapitalInvestment"/>
+                    <owl:onProperty rdf:resource="&mathematical_model;#correspondsToQuantity"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&cost_model;#PowerFactorModel">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The PowerFactorModel relates the fixed capital investment of a new chemical process system to the one of similar, previously constructed systems by an exponential power ratio. 
+[Peters, M.S. and Timmerhaus, K.D.: Plant Design and Economics for Chemical Engineers, McGraw-Hill, New York, 1991]</rdfs:comment>
+    <owl:disjointWith rdf:resource="&cost_model;#StepCountingModel"/>
+    <owl:disjointWith rdf:resource="&cost_model;#TurnoverRatioModel"/>
+    <rdfs:subClassOf rdf:resource="&cost_model;#CapacityFCIModel"/>
+  </owl:Class>
+  <owl:Class rdf:about="&cost_model;#Detailed-itemFCIModel">
+    <owl:disjointWith rdf:resource="&cost_model;#CapacityFCIModel"/>
+    <owl:disjointWith rdf:resource="&cost_model;#FactorialFCIModel"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Detailed-itemFCIModel requires careful determination of all individual direct and indirect cost items. For such models, extensive data and large amounts of engineering time are necessary. Therefore, this type of estimate is almost exclusively prepared by contractors bidding on complete and all-inclusive work from finished drawings and specifications.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&cost_model;#FixedCapitalInvestmentModel"/>
+  </owl:Class>
+</rdf:RDF>

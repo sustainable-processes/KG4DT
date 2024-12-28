@@ -1,0 +1,728 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY network_system   "&root;OntoCAPE/upper_level/network_system.owl">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY der_dim  "&root;OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl">
+  <!ENTITY phys_dim "&root;OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl">
+  <!ENTITY material "&root;OntoCAPE/material/material.owl">
+  <!ENTITY phase_system "&root;OntoCAPE/material/phase_system/phase_system.owl">
+  <!ENTITY process  "&root;OntoCAPE/chemical_process_system/CPS_function/process.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns:material="&material;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:phase_system="&phase_system;#"
+    xmlns="&process;#"
+  xml:base="&process;">
+  <owl:Ontology rdf:about="&process;">
+    <owl:imports rdf:resource="&network_system;"/>
+    <owl:imports rdf:resource="&phase_system;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'process' provides concepts a functional description of an chemical process system at an early stage of design.
+The following classes and relations from other ontology modules are used within 'process':
+    
+ &lt;owl:Class rdf:about="&material;#Material"/&gt;    
+ &lt;owl:Class rdf:about="&phase_system;#ReactionNetwork"/&gt; 
+ &lt;owl:Class rdf:about="&phase_system;#MultiphaseSystem"/&gt; 
+ &lt;owl:Class rdf:about="&phase_system;#SinglePhase"/&gt; 
+ &lt;owl:Class rdf:about="&phase_system;#SinglePhaseInMultiphaseSystem"/&gt; 
+ &lt;owl:Class rdf:about="&system;#ScalarQuantity"/&gt;
+ &lt;owl:Class rdf:about="&network_system;#DirectedConnection"/&gt;
+ &lt;owl:Class rdf:about="&phase_system;#ReactionNetwork"/&gt;
+ &lt;owl:Class rdf:about="&network_system;#Device"/&gt;
+ &lt;owl:Class rdf:about="&system;#Property"/&gt;
+    
+ &lt;owl:ObjectProperty rdf:about="&phase_system;#hasStateOfAggregation"/&gt;   
+ &lt;owl:ObjectProperty rdf:about="&system;#isComposedOfSubsystem"/&gt;    
+ &lt;owl:ObjectProperty rdf:about="&system;#hasProperty"/&gt;    
+ &lt;owl:ObjectProperty rdf:about="&material;#thermodynamicBehavior"/&gt;
+ &lt;owl:ObjectProperty rdf:about="&network_system;#enters"/&gt;
+ &lt;owl:ObjectProperty rdf:about="&network_system;#leaves"/&gt;
+ &lt;owl:ObjectProperty rdf:about="&system;#hasDimension"/&gt;
+ &lt;owl:ObjectProperty rdf:about="&system;#isSubsystemOf"/&gt;
+ &lt;owl:ObjectProperty rdf:about="&system;#hasDirectSubsystem"/&gt;
+ &lt;owl:ObjectProperty rdf:about="&system;#isDirectSubsystemOf"/&gt;
+ &lt;owl:ObjectProperty rdf:about="&system;#isDirectlyRelatedTo"/&gt;
+ &lt;owl:ObjectProperty rdf:about="&network_system;#hasOutput"/&gt;
+ &lt;owl:ObjectProperty rdf:about="&network_system;#hasInput"/&gt;
+ 
+ &lt;phase_system:StateOfAggregation rdf:about="&phase_system;#liquid"/&gt;
+ &lt;phase_system:StateOfAggregation rdf:about="&phase_system;#gaseous"/&gt;
+ &lt;phase_system:StateOfAggregation rdf:about="&phase_system;#solid"/&gt;
+ &lt;der_dim:Mechanics rdf:about="der_dim;#pressure"/&gt;
+ &lt;phys_dim:SupplementaryDimension rdf:about="phys_dim;#identity_dimension"/&gt;
+ 
+ The following classes and relations from the Meta Model are refined within 'process':
+ 
+ &lt;owl:Class rdf:about="&fc;#ValueSet"/&gt;
+ 
+ &lt;owl:ObjectProperty rdf:about="&fc;#isOfType"/&gt;
+    
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+  </owl:Ontology>
+  <owl:Class rdf:ID="PressureChangeOfGas">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="PressureChange"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PressureChangeOfLiquid"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="OutputProduct">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An OutputProduct is a Material that is output by a ProcessStep.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ProcessState"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="ProcessStep"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="&network_system;#leaves"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#enters"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="RawMaterial"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="IntermediateProduct">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&network_system;#enters"/>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&process;#ProcessStep"/>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&process;#ProcessStep"/>
+            </owl:someValuesFrom>
+            <owl:onProperty rdf:resource="&network_system;#leaves"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&process;#ProcessState"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An IntermediateProduct is a ChemicalProduct that is produced in a ProcessStep and is used in another ProcessStep in the whole processing system.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&process;#RawMaterial"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="Process">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class>
+            <owl:complementOf>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="&system;#isSubsystemOf"/>
+                <owl:someValuesFrom>
+                  <owl:Class rdf:about="&process;#ProcessStep"/>
+                </owl:someValuesFrom>
+              </owl:Restriction>
+            </owl:complementOf>
+          </owl:Class>
+          <owl:Class rdf:ID="AggregatedProcessStep"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An AggregatedProcessStep representing the entire function of the Process considered</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="ProcessStepProperty">
+    <rdfs:subClassOf rdf:resource="&system;#ScalarQuantity"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ReusableWasteProduct">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ReusableWasteProduct is a WasteProduct that can be reused for production.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="WasteProduct"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ModeOfOperation">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <ModeOfOperation rdf:ID="Continuous"/>
+          <ModeOfOperation rdf:ID="Batch"/>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="&fc;#ValueSet"/>
+  </owl:Class>
+  <owl:Class rdf:ID="FlashVaporRatio">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="KeyChemicalComponentConversionRatio"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+        <owl:hasValue rdf:resource="&phys_dim;#identity_dimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&process;#ProcessStepProperty"/>
+  </owl:Class>
+  <owl:Class rdf:ID="BatchProcess">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A BatchProcess indicates the batch mode of operation applied to the Process.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="hasOperationMode"/>
+            </owl:onProperty>
+            <owl:hasValue rdf:resource="&process;#Batch"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&process;#ProcessState"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="ProcessStream"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="PhaseChange">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="EnthalpyChange"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&process;#PressureChange"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="TemperatureChange"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >PhaseChange is a specialization of EnthalpyChange an usually it is applied for the purpose of heat exchange between spatially separated phases</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#PressureChangeOfLiquid">
+    <owl:disjointWith rdf:resource="&process;#PressureChangeOfGas"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&process;#PressureChange"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#WasteProduct">
+    <rdfs:subClassOf rdf:resource="&process;#OutputProduct"/>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="EndProduct"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A WasteProduct is an OutputProduct that has no value.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="By-product">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Byproduct is an EndProduct whose production is unavoidable while a CoreProduct is produced.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&process;#EndProduct"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Co-product"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="CoreProduct"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#KeyChemicalComponentConversionRatio">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+        <owl:hasValue rdf:resource="&phys_dim;#identity_dimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&process;#ProcessStepProperty"/>
+    <owl:disjointWith rdf:resource="&process;#FlashVaporRatio"/>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#ProcessState">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ProcessState represents the collectivity of properties of a CertainMaterialAmount  which is produced in the associating process step.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&process;#ProcessState"/>
+              <owl:Class rdf:about="&process;#ProcessStep"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#isDirectSubsystemOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&process;#ProcessState"/>
+              <owl:Class rdf:about="&process;#ProcessStep"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&network_system;#DirectedConnection"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&process;#ProcessStep"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&network_system;#leaves"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&process;#ProcessStep"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&network_system;#enters"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="NonReusableWasteProduct">
+    <rdfs:subClassOf rdf:resource="&process;#WasteProduct"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A NonReusableWasteProduct is a waste product that can not be reused.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Reaction">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Reaction is a ProcessStep in which some material is converted to some other material through chemical or biochemical reactions</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasChemicalReactionNetwork"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&phase_system;#ReactionNetwork"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&phase_system;#ReactionNetwork"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&process;#hasChemicalReactionNetwork"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&process;#hasChemicalReactionNetwork"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&process;#KeyChemicalComponentConversionRatio"/>
+        <owl:onProperty rdf:resource="&system;#hasProperty"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&process;#ProcessStep"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="UnitOperation"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#CoreProduct">
+    <owl:disjointWith rdf:resource="&process;#By-product"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&process;#Co-product"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A CoreProduct is a main (or an intended) EndProduct.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&process;#EndProduct"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Mixing">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Combination"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Mixing in terms of unit operations is a special type of combination which results in a mixture which is required for further processing. It is usually accomplished by means of stirrer.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#ProcessStream">
+    <owl:disjointWith rdf:resource="&process;#BatchProcess"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&process;#hasOperationMode"/>
+            </owl:onProperty>
+            <owl:hasValue rdf:resource="&process;#Continuous"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&process;#ProcessState"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ProcessStream indicated the continuous mode of operation applied to the Process.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#ProcessStep">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A ProcessStep is a certain material processing procedure.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&process;#ProcessState"/>
+              <owl:Class rdf:about="&process;#ProcessStep"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#isDirectSubsystemOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&process;#ProcessStep"/>
+              <owl:Class rdf:about="&process;#ProcessState"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&network_system;#Device"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+        <owl:allValuesFrom rdf:resource="&process;#ProcessState"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+        <owl:allValuesFrom rdf:resource="&process;#ProcessState"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&process;#ProcessState"/>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+        <owl:someValuesFrom rdf:resource="&process;#ProcessState"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#EndProduct">
+    <rdfs:subClassOf rdf:resource="&process;#OutputProduct"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An EndProduct is an OutputProduct that is valuable.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&process;#WasteProduct"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Splitting">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Fragmentation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Flashing">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Separation"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >2</owl:cardinality>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&process;#FlashVaporRatio"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasVapourRatio"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&process;#hasVapourRatio"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Leaching"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Flashing utilized the state of phase equilibrium between a vapor and a liquid phase and the resulting material transport if a mixture with different fugacity is existent. In terms of unit operation this is usually accomplished in a vessel.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#RawMaterial">
+    <owl:disjointWith rdf:resource="&process;#OutputProduct"/>
+    <owl:disjointWith rdf:resource="&process;#IntermediateProduct"/>
+    <rdfs:subClassOf rdf:resource="&process;#ProcessState"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#enters"/>
+        <owl:someValuesFrom rdf:resource="&process;#ProcessStep"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+        <owl:onProperty rdf:resource="&network_system;#leaves"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A RawMaterial is a Material that enters a ProcessStep.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#EnthalpyChange">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&process;#UnitOperation"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >EnthalpyChange in terms of unit operation considers a conversion of energy which often result in a change of the state of aggregation.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&process;#Combination"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&process;#Separation"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#UnitOperation">
+    <owl:disjointWith rdf:resource="&process;#Reaction"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A UnitOperation is a basic step in a process. This basic step might comprise mixing, separation, enthalpy change and many more to achieve the desired product.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&process;#ProcessStep"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PressureDifference">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="&der_dim;#pressure"/>
+        <owl:onProperty rdf:resource="&system;#hasDimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&process;#ProcessStepProperty"/>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#Combination">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A combination in terms of unit operation means to get together different process steps to achieve a particular one.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&process;#UnitOperation"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >2</owl:minCardinality>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&process;#EnthalpyChange"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&process;#Separation"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#AggregatedProcessStep">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An AggregatedProcessStep is a ProcessStep which consists of a number of ProcessSteps in a certain sequence.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&process;#ProcessStep"/>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&system;#hasDirectSubsystem"/>
+            <owl:someValuesFrom rdf:resource="&process;#ProcessStep"/>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#TemperatureChange">
+    <owl:disjointWith rdf:resource="&process;#PhaseChange"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&process;#PressureChange"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >TemperatureChange in terms of unit operation means to transport the heat content of one material to another and it is applied for heating or cooling purposes.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&process;#EnthalpyChange"/>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#Co-product">
+    <rdfs:subClassOf rdf:resource="&process;#EndProduct"/>
+    <owl:disjointWith rdf:resource="&process;#By-product"/>
+    <owl:disjointWith rdf:resource="&process;#CoreProduct"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Co- product is an EndProduct whose production is unintended.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#Separation">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Separation in terms of unit operation means to achieve single components of a mixture by means of physical of chemical phenomenon.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&process;#Combination"/>
+    <owl:disjointWith rdf:resource="&process;#EnthalpyChange"/>
+    <rdfs:subClassOf rdf:resource="&process;#UnitOperation"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >2</owl:minCardinality>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#PressureChange">
+    <owl:disjointWith rdf:resource="&process;#PhaseChange"/>
+    <owl:disjointWith rdf:resource="&process;#TemperatureChange"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >By means of a PressureChange a heat content of a particular fluid may be exchanged which may be used for heating or cooling purposes in terms of unit operations.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasPressureDifference"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&process;#PressureDifference"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&process;#PressureDifference"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&process;#hasPressureDifference"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&process;#EnthalpyChange"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&process;#hasPressureDifference"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#Fragmentation">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Fragmentation in terms of unit operation is the breakup of solid material for further processing.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&process;#UnitOperation"/>
+  </owl:Class>
+  <owl:Class rdf:about="&process;#Leaching">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Leaching in terms of unit operation is a particular form of extraction. Usually, a solute, a insolvable carrier and a solvent are applied for solid extraction</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&process;#Separation"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >2</owl:cardinality>
+        <owl:onProperty rdf:resource="&network_system;#hasOutput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >2</owl:cardinality>
+        <owl:onProperty rdf:resource="&network_system;#hasInput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&process;#Flashing"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&process;#hasVapourRatio">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasVaporRatio indicates the liquid-vapor ratio of a particular mixture at a certain state within a vessel.</rdfs:comment>
+    <rdfs:domain rdf:resource="&process;#Flashing"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:range rdf:resource="&process;#FlashVaporRatio"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&process;#hasChemicalReactionNetwork">
+    <rdfs:domain rdf:resource="&process;#Reaction"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#isDirectlyRelatedTo"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasChemicalRectionNetwork indicates that a reaction as considered on a rather macroscopic perspective of an early design stage may be the result of an sequence of reactions occurring on the bases of several phases.</rdfs:comment>
+    <rdfs:range rdf:resource="&phase_system;#ReactionNetwork"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&process;#hasPressureDifference">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasPressureDifference indicates the intended difference between two pressure state.</rdfs:comment>
+    <rdfs:domain rdf:resource="&process;#PressureChange"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasProperty"/>
+    <rdfs:range rdf:resource="&process;#PressureDifference"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&process;#hasOperationMode">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&process;#BatchProcess"/>
+          <owl:Class rdf:about="&process;#ProcessStream"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:subPropertyOf rdf:resource="&fc;#isOfType"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasOperationMode indicates by which operation modes a particular process state is achieved.</rdfs:comment>
+    <rdfs:range rdf:resource="&process;#ModeOfOperation"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="is_at_numbered_tray">
+    <rdfs:range rdf:resource="&xsd;#integer"/>
+  </owl:DatatypeProperty>
+</rdf:RDF>

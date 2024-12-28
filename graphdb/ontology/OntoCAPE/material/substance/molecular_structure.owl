@@ -1,0 +1,553 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY der_dim  "&root;OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl">
+  <!ENTITY molecular_structure  "&root;OntoCAPE/material/substance/molecular_structure.owl">
+  <!ENTITY substance    "&root;OntoCAPE/material/substance/substance.owl">
+]>
+
+<rdf:RDF
+    xmlns:system="&system;#"
+    xmlns="&molecular_structure;#"
+    xmlns:substance="&substance;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+  xml:base="&molecular_structure;">
+  <owl:Ontology rdf:about="&molecular_structure;">
+    <owl:imports rdf:resource="&substance;"/>
+    <owl:versionInfo rdf:datatype="&xsd;#string"
+    >2.0</owl:versionInfo>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'molecular_structure' is concerned with the characterization of pure substances at the atomic scale.
+The following classes, relations, and individuals from other ontology modules are used within 'molecular_structure':
+
+&lt;owl:Class rdf:about="&substance;#MolecularEntity"&gt;
+&lt;owl:Class rdf:about="&system;#PhysicalConstant"/&gt;
+
+&lt;owl:Class rdf:about="&system;#ScalarValue"/&gt;
+&lt;owl:Class rdf:about="&substance;#MolecularEntity"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&substance;#uniqueSubstanceID"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#contains"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasCharacteristic"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasDimension"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#hasValue"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#isValueOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&system;#numericalValue"/&gt;
+
+&lt;der_dim:ElectricityAndMagnetism  rdf:about="&der_dim;#electric_charge"/&gt;
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Cation">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Anion"/>
+    </owl:disjointWith>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:ID="hasCharge"/>
+            </owl:onProperty>
+            <owl:someValuesFrom>
+              <owl:Class rdf:ID="PositiveIonicCharge"/>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+          <owl:Class rdf:ID="Ion"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Cation is a monoatomic or polyatomic species having one or more elementary charges of the proton (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="MonoatomicAnion">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue>
+          <NegativeIonicCharge rdf:ID="_-e">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >_-e is a ScalarValue; it is defined by the equation _-e = (-1) * e</rdfs:comment>
+            <system:numericalValue rdf:datatype="&xsd;#float"
+            >1.6021765E-19</system:numericalValue>
+          </NegativeIonicCharge>
+        </owl:hasValue>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A MonoatomicAnion is a MonoatomicEntity that has a NegativeIonicCharge.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="MonoatomicCation"/>
+    </owl:disjointWith>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:ID="NegativeIonicCharge"/>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:ID="MonoatomicIon"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="PolyatomicIon">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="IonicCharge"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&molecular_structure;#IonicCharge"/>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:ID="PolyatomicEntity"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PolyatomicIon is an Ion consisting of more than one Atom.
+[http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CHEBI, CHEBI:36358]</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Molecule"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#NegativeIonicCharge">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&molecular_structure;#PositiveIonicCharge"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&molecular_structure;#IonicCharge"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#PositiveIonicCharge">
+    <owl:disjointWith rdf:resource="&molecular_structure;#NegativeIonicCharge"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&molecular_structure;#IonicCharge"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Atom">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="MonoatomicEntity"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="MolecularGroup"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&molecular_structure;#MonoatomicIon"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The smallest particle still characterizing a chemical element (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#PolyatomicEntity">
+    <rdfs:subClassOf>
+      <rdf:Description rdf:about="&substance;#MolecularEntity">
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+            </owl:onProperty>
+            <owl:maxCardinality rdf:datatype="&xsd;#int"
+            >1</owl:maxCardinality>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+            </owl:onProperty>
+            <owl:allValuesFrom>
+              <owl:Class rdf:about="&molecular_structure;#IonicCharge"/>
+            </owl:allValuesFrom>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:allValuesFrom>
+              <owl:Class rdf:about="&molecular_structure;#MolecularGroup"/>
+            </owl:allValuesFrom>
+            <owl:onProperty rdf:resource="&system;#contains"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+      </rdf:Description>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Any MolecularEntity consisting of more than one Atom is a PolyatomicEntity 
+[http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CHEBI, CHEBI:36357]</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&molecular_structure;#MonoatomicEntity"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#IonicCharge">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&molecular_structure;#PositiveIonicCharge"/>
+          <owl:Class rdf:about="&molecular_structure;#NegativeIonicCharge"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="&system;#ScalarValue"/>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#Ion">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Ion is an atomic or molecular particle having a net electric charge (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="&molecular_structure;#IonicCharge"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&substance;#MolecularEntity"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&molecular_structure;#IonicCharge"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#MonoatomicIon">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="&molecular_structure;#IonicCharge"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&molecular_structure;#MonoatomicEntity"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&molecular_structure;#Atom"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&molecular_structure;#MonoatomicAnion"/>
+          <owl:Class rdf:about="&molecular_structure;#MonoatomicCation"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&molecular_structure;#IonicCharge"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A MonoatomicIon is a MonoatomicEntity that has an IonicCharge.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#Molecule">
+    <owl:disjointWith rdf:resource="&molecular_structure;#PolyatomicIon"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&molecular_structure;#PolyatomicEntity"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Molecule is an electrically neutral PolyatomicEntity
+"An  electrically neutral entity consisting of more than one atom" [IUPAC o.J.]</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#MolecularGroup">
+    <rdfs:subClassOf rdf:resource="&substance;#MolecularEntity"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A linked collection of Atoms or a single Atom within a MolecularEntity.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="HomoatomicMolecule">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="HomoatomicMolecularEntity"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&molecular_structure;#Molecule"/>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#HomoatomicMolecularEntity">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="HeteroatomicMolecularEntity"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A HomoatomicMolecularEntity is a MolecularEntity consisting of one or more Atoms of the same element.
+[http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CHEBI, CHEBI:33259]</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&substance;#MolecularEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#MonoatomicCation">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A MonoatomicCation is a MonoatomicEntity that has a PositiveIonicCharge.</rdfs:comment>
+    <owl:disjointWith rdf:resource="&molecular_structure;#MonoatomicAnion"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="&molecular_structure;#PositiveIonicCharge"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&molecular_structure;#MonoatomicIon"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+        </owl:onProperty>
+        <owl:hasValue>
+          <PositiveIonicCharge rdf:ID="e">
+            <rdfs:comment rdf:datatype="&xsd;#string"
+            >The ScalarValue e represents the value of the ElementaryCharge.</rdfs:comment>
+            <system:numericalValue rdf:datatype="&xsd;#float"
+            >1.6021765E-19</system:numericalValue>
+            <system:isValueOf>
+              <system:PhysicalConstant rdf:ID="ElementaryCharge">
+                <rdfs:comment rdf:datatype="&xsd;#string"
+                >The ElementaryCharge is a fundamental PhysicalConstant that denotes the electric charge carried by a single proton, or equivalently, the negative of the electric charge carried by a single electron.</rdfs:comment>
+                <system:hasValue rdf:resource="&molecular_structure;#e"/>
+                <system:hasDimension rdf:resource="&der_dim;#electric_charge"/>
+              </system:PhysicalConstant>
+            </system:isValueOf>
+          </PositiveIonicCharge>
+        </owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PolyatomicCation">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="&molecular_structure;#PositiveIonicCharge"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="&molecular_structure;#PolyatomicIon"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PolyatomicAnion"/>
+    </owl:disjointWith>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PolyatomicCation is an Cation consisting of more than one Atom.
+[http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CHEBI, CHEBI:33702]</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&molecular_structure;#PositiveIonicCharge"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#Anion">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&molecular_structure;#NegativeIonicCharge"/>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:about="&molecular_structure;#Ion"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&molecular_structure;#Cation"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Anion is a monoatomic or polyatomic species having one or more elementary charges of the electron (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#HeteroatomicMolecularEntity">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A HeteroatomicMolecularEntity is a MolecularEntity consisting of two or more [distinct] chemical elements. 
+[http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CHEBI, CHEBI:37577]</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&substance;#MolecularEntity"/>
+    <rdfs:subClassOf rdf:resource="&molecular_structure;#PolyatomicEntity"/>
+    <owl:disjointWith rdf:resource="&molecular_structure;#HomoatomicMolecularEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#MonoatomicEntity">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="&molecular_structure;#Atom"/>
+          <owl:Class rdf:about="&molecular_structure;#MonoatomicIon"/>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&molecular_structure;#PolyatomicEntity"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >0</owl:cardinality>
+        <owl:onProperty rdf:resource="&system;#contains"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&molecular_structure;#HomoatomicMolecularEntity"/>
+    <rdfs:subClassOf rdf:resource="&substance;#MolecularEntity"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A MolecularEntity consisting of a single Atom
+[http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CHEBI, CHEBI:33238]</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&molecular_structure;#PolyatomicAnion">
+    <owl:disjointWith rdf:resource="&molecular_structure;#PolyatomicCation"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&molecular_structure;#NegativeIonicCharge"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A PolyatomicAnion is an Anion consisting of more than one Atom.
+[http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CHEBI, CHEBI:33273]</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&molecular_structure;#NegativeIonicCharge"/>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Class rdf:about="&molecular_structure;#PolyatomicIon"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:FunctionalProperty rdf:about="&molecular_structure;#hasCharge">
+    <rdfs:domain rdf:resource="&substance;#MolecularEntity"/>
+    <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
+    <rdfs:range rdf:resource="&molecular_structure;#IonicCharge"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+  </owl:FunctionalProperty>
+  <owl:DatatypeProperty rdf:ID="atomicNumber">
+    <rdfs:domain rdf:resource="&molecular_structure;#Atom"/>
+    <rdfs:subPropertyOf rdf:resource="&substance;#uniqueSubstanceID"/>
+    <rdfs:range rdf:resource="&xsd;#positiveInteger"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The atomicNumber (also known as the proton number) is the number of protons found in the nucleus of an Atom.</rdfs:comment>
+    <rdf:type rdf:resource="&owl;#FunctionalProperty"/>
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+  </owl:DatatypeProperty>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <PositiveIonicCharge rdf:ID="_2e">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >_2e is a ScalarValue; it is defined by the equation _2e = 2 * e.</rdfs:comment>
+        <system:numericalValue rdf:datatype="&xsd;#float"
+        >3.204353E-19</system:numericalValue>
+      </PositiveIonicCharge>
+      <PositiveIonicCharge rdf:ID="_3e">
+        <system:numericalValue rdf:datatype="&xsd;#float"
+        >4.8065294E-19</system:numericalValue>
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >_3e is a ScalarValue; it is defined by the equation _3e = 3 * e.</rdfs:comment>
+      </PositiveIonicCharge>
+      <PositiveIonicCharge rdf:about="&molecular_structure;#e"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <NegativeIonicCharge rdf:ID="_-2e">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >_-2e is a ScalarValue; it is defined by the equation _-2e = (-2) * e</rdfs:comment>
+    <system:numericalValue rdf:datatype="&xsd;#float"
+    >-3.204353E-19</system:numericalValue>
+  </NegativeIonicCharge>
+  <Molecule rdf:ID="Ethanol"/>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <NegativeIonicCharge rdf:about="&molecular_structure;#_-e"/>
+      <NegativeIonicCharge rdf:about="&molecular_structure;#_-2e"/>
+      <NegativeIonicCharge rdf:ID="_-3e">
+        <rdfs:comment rdf:datatype="&xsd;#string"
+        >_-3e is a ScalarValue; it is defined by the equation _-3e = (-3) * e</rdfs:comment>
+        <system:numericalValue rdf:datatype="&xsd;#float"
+        >-4.8065294E-19</system:numericalValue>
+      </NegativeIonicCharge>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+</rdf:RDF>

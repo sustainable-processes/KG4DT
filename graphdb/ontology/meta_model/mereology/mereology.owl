@@ -1,0 +1,292 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY mereology    "&root;meta_model/mereology/mereology.owl">
+]>
+
+<rdf:RDF
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:owl="&owl;#"
+    xmlns="&mereology;#"
+  xml:base="&mereology;">
+  <owl:Ontology rdf:about="&mereology;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'mereology' establishes aggregation and composition relations between objects.
+The following classes and relations from other ontology modules are used within 'mereology':
+&lt;owl:Class rdf:about="&fc;#Object"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#inter-objectRelation"/&gt; 
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:imports rdf:resource="&fc;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="FirstLevelPart">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Part at the first level of decomposition.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Part"/>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isDirectPartOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="AggregateOnly"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </owl:equivalentClass>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="SecondLevelPart"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&mereology;#SecondLevelPart">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&mereology;#Part"/>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&mereology;#FirstLevelPart"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&mereology;#isDirectPartOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="&mereology;#FirstLevelPart"/>
+  </owl:Class>
+  <owl:Class rdf:about="&mereology;#AggregateOnly">
+    <owl:disjointWith>
+      <owl:Class rdf:about="&mereology;#Part"/>
+    </owl:disjointWith>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Class rdf:ID="Aggregate"/>
+              <owl:Class>
+                <owl:complementOf>
+                  <owl:Class rdf:about="&mereology;#Part"/>
+                </owl:complementOf>
+              </owl:Class>
+            </owl:intersectionOf>
+          </owl:Class>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="&mereology;#isDirectPartOf"/>
+            </owl:onProperty>
+            <owl:cardinality rdf:datatype="&xsd;#int"
+            >0</owl:cardinality>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Object that has one or more distinct Parts and is not part of any Object itself.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&mereology;#Aggregate"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PartOnly">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="&mereology;#Part"/>
+              <owl:Class>
+                <owl:complementOf>
+                  <owl:Class rdf:about="&mereology;#Aggregate"/>
+                </owl:complementOf>
+              </owl:Class>
+            </owl:intersectionOf>
+          </owl:Class>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="hasDirectPart"/>
+            </owl:onProperty>
+            <owl:cardinality rdf:datatype="&xsd;#int"
+            >0</owl:cardinality>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&mereology;#Aggregate"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&mereology;#Part"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&mereology;#Part">
+    <owl:disjointWith rdf:resource="&mereology;#AggregateOnly"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Object that is part of another Object. A Part can be part of more than one Object.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&fc;#Object"/>
+        <owl:onProperty>
+          <owl:TransitiveProperty rdf:ID="isPartOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="&fc;#Object"/>
+            <owl:onProperty>
+              <owl:TransitiveProperty rdf:about="&mereology;#isPartOf"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&fc;#Object"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="PartOfCompositeObject">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isExclusivelyPartOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&mereology;#Part"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&fc;#Object"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&mereology;#isExclusivelyPartOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&mereology;#isExclusivelyPartOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&fc;#Object"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Object that is part of a CompositeObject. The parts of the CompositeObject are non-shareable, i.e. an Object that is part of a CompositeObject cannot be part of another CompositeObject.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&mereology;#Aggregate">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Object that has one or more distinct parts.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&fc;#Object"/>
+        <owl:onProperty>
+          <owl:TransitiveProperty rdf:ID="hasPart"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="&mereology;#PartOnly"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:TransitiveProperty rdf:about="&mereology;#hasPart"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="&fc;#Object"/>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&fc;#Object"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="CompositeObject">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Object that is composed of one or more Objects. The parts of the CompositeObject are non-shareable, i.e. an Object that is part of a CompositeObject cannot be part of another CompositeObject.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&fc;#Object"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isComposedOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&mereology;#Aggregate"/>
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&mereology;#isComposedOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&fc;#Object"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&mereology;#isExclusivelyPartOf">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Parthood relation that links a part to a CompositeObject on the next aggregation level.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="&mereology;#isDirectPartOf"/>
+    </rdfs:subPropertyOf>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&mereology;#isComposedOf"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&mereology;#isDirectPartOf">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="&mereology;#hasDirectPart"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Parthood relation that links a Part to the Object on the next aggregation level.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:about="&mereology;#isPartOf"/>
+    </rdfs:subPropertyOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&mereology;#hasDirectPart">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Parthood relation that indicates the direct Parts of an Object, i.e., the Parts on the next level breakdown.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:TransitiveProperty rdf:about="&mereology;#hasPart"/>
+    </rdfs:subPropertyOf>
+    <owl:inverseOf rdf:resource="&mereology;#isDirectPartOf"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&mereology;#isComposedOf">
+    <rdfs:subPropertyOf rdf:resource="&mereology;#hasDirectPart"/>
+    <owl:inverseOf rdf:resource="&mereology;#isExclusivelyPartOf"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Parthood relation that indicates the direct parts of a CompositeObject. The parts of the CompositeObject are non-shareable, i.e. a part cannot be part of more than one CompositeObject. If the CompositeObject is destroyed, all its parts are destroyed, as well.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:TransitiveProperty rdf:about="&mereology;#isPartOf">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdfs:range rdf:resource="&fc;#Object"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Parthood relation that refers from a Part to the Aggregate.</rdfs:comment>
+    <rdfs:domain rdf:resource="&fc;#Object"/>
+    <owl:inverseOf>
+      <owl:TransitiveProperty rdf:about="&mereology;#hasPart"/>
+    </owl:inverseOf>
+  </owl:TransitiveProperty>
+  <owl:TransitiveProperty rdf:about="&mereology;#hasPart">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#inter-objectRelation"/>
+    <rdfs:domain rdf:resource="&fc;#Object"/>
+    <owl:inverseOf rdf:resource="&mereology;#isPartOf"/>
+    <rdfs:range rdf:resource="&fc;#Object"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >Parthood relation that refers from an Aggregate to its Parts.</rdfs:comment>
+  </owl:TransitiveProperty>
+</rdf:RDF>

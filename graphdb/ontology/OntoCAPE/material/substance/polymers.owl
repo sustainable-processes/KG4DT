@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY system   "&root;OntoCAPE/upper_level/system.owl">
+  <!ENTITY molecular_structure  "&root;OntoCAPE/material/substance/molecular_structure.owl">
+  <!ENTITY polymers "&root;OntoCAPE/material/substance/polymers.owl">
+  <!ENTITY substance    "&root;OntoCAPE/material/substance/substance.owl">
+]>
+
+<rdf:RDF
+    xmlns:molecular_structure="&molecular_structure;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns="&polymers;#"
+  xml:base="&polymers;">
+
+  <owl:Ontology rdf:about="&polymers;">
+    <owl:versionInfo rdf:datatype="&xsd;#string">2.0</owl:versionInfo>
+    <owl:imports rdf:resource="&molecular_structure;"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'polymers' extends the module 'molecular_structure' by concepts for the description of macromolecular structures.    
+The following classes, relations, and individuals from other ontology modules are used within 'polymers':
+
+&lt;owl:Class rdf:about="&molecular_structure;#MolecularGroup"/>
+&lt;owl:Class rdf:about="&molecular_structure;#Molecule"/>
+&lt;owl:Class rdf:about="&substance;#ChemicalSpecies"/>
+
+&lt;owl:ObjectProperty rdf:about="&substance;#hasMolecularStructure"/>
+&lt;owl:ObjectProperty rdf:about="&substance;#hasMacroscopicAppearance"/>
+&lt;owl:ObjectProperty rdf:about="&system;#containsDirectly"/>
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+  </owl:Ontology>
+
+  <owl:Class rdf:ID="End-Group">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An End-Group is a ConstitutionalUnit that is an extremity of a Macromolecule or OligomerMolecule (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ConstitutionalUnit"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="RepeatingUnit">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A RepeatingUnit is the shortest ConstitutionalUnit that can be found repeatedly in a Macromolecule.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="&polymers;#ConstitutionalUnit"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&polymers;#ConstitutionalUnit">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A MolecularGroup comprising a part of the essential structure of a Macromolecule.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="&molecular_structure;#MolecularGroup"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Oligomer">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Polymer"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Monomer"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&substance;#hasMolecularStructure"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="OligomerMolecule"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&substance;#ChemicalSpecies"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Substance composed of OligomerMolecules (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&polymers;#Monomer">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="MonomerMolecule"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&substance;#hasMolecularStructure"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&substance;#ChemicalSpecies"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Substance composed of MonomerMolecules (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&polymers;#Polymer"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&polymers;#Oligomer"/>
+  </owl:Class>
+  <owl:Class rdf:about="&polymers;#Polymer">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="Macromolecule"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="&substance;#hasMolecularStructure"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&substance;#ChemicalSpecies"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Substance composed of Macromolecules (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+    <owl:disjointWith rdf:resource="&polymers;#Monomer"/>
+    <owl:disjointWith rdf:resource="&polymers;#Oligomer"/>
+  </owl:Class>
+  <owl:Class rdf:ID="MonomerUnit">
+    <rdfs:subClassOf rdf:resource="&polymers;#ConstitutionalUnit"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A MonomerUnit is the largest ConstitutionalUnit contributed by a single monomer molecule (IUPAC)
+A MonomerUnit is a ConstitutionalUnit resulting from a monomer residue which has been polymerized. 
+In contrast, a RepeatingUnit, is the shortest sequence that can be found repeatedly in a Macromolecule.
+(aka structural unit)</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&polymers;#OligomerMolecule">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&polymers;#Oligomer"/>
+        <owl:onProperty rdf:resource="&substance;#hasMacroscopicAppearance"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&molecular_structure;#Molecule"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Molecule of intermediate MolecularWeight, the structure of which essentially comprises a small plurality of units derived, actually or conceptually, from Molecules of lower MolecularWeight. A Molecule is regarded as having an intermediate MolecularWeight if it has properties which do vary significantly with the removal of one or a few of the units. (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&polymers;#MonomerMolecule"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&polymers;#Macromolecule"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="&polymers;#Macromolecule">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Molecule of high MolecularWeight, the structure of which essentially comprises the multiple repetition of units derived, actually or conceptually, from molecules of low MolecularWeight (McNaught &amp; Wilkinson, 1997)</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&substance;#hasMacroscopicAppearance"/>
+        <owl:allValuesFrom rdf:resource="&polymers;#Polymer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#containsDirectly"/>
+        <owl:someValuesFrom rdf:resource="&polymers;#ConstitutionalUnit"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&molecular_structure;#Molecule"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&system;#containsDirectly"/>
+        <owl:allValuesFrom rdf:resource="&polymers;#ConstitutionalUnit"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="&polymers;#MonomerMolecule"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="&polymers;#OligomerMolecule"/>
+  </owl:Class>
+  <owl:Class rdf:about="&polymers;#MonomerMolecule">
+    <owl:disjointWith rdf:resource="&polymers;#OligomerMolecule"/>
+    <owl:disjointWith rdf:resource="&polymers;#Macromolecule"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Molecule which can undergo polymerization thereby contributing ConstitutionalUnits to the essential structure of a Macromolecule (McNaught &amp; Wilkinson, 1997).</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&substance;#hasMacroscopicAppearance"/>
+        <owl:allValuesFrom rdf:resource="&polymers;#Monomer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&molecular_structure;#Molecule"/>
+  </owl:Class>
+</rdf:RDF>

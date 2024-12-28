@@ -1,0 +1,50 @@
+{
+    "basic": {
+        "reactions": [
+            "H<sup>+</sup> + H<sub>2</sub>BO<sub>3</sub><sup>-</sup> > H<sub>3</sub>BO<sub>3</sub>",
+            "6 H<sup>+</sup> + 5 I<sup>-</sup> + IO<sub>3</sub><sup>-</sup> > 3 I<sub>2</sub>",
+            "I<sup>-</sup> + I<sub>2</sub> > I<sub>3</sub><sup>-</sup>",
+            "I<sub>3</sub><sup>-</sup> > I<sup>-</sup> + I<sub>2</sub>"
+        ],
+        "solvents": [
+            "water"
+        ],
+        "species": [
+            "H<sup>+</sup>",
+            "I<sup>-</sup>",
+            "I<sub>2</sub>",
+            "I<sub>3</sub><sup>-</sup>",
+            "IO<sub>3</sub><sup>-</sup>",
+            "H<sub>2</sub>BO<sub>3</sub><sup>-</sup>",
+            "H<sub>3</sub>BO<sub>3</sub>"
+        ],
+        "streams": [
+            "liquid stream 1",
+            "liquid stream 2",
+            "gas stream"
+        ]
+    },
+    "context_descriptor": {
+        "energy_context_descriptor": [
+            "Gas_Phase_Density",
+            "Gas_Phase_Velocity",
+            "Gas_Phase_Viscosity",
+            "Phase_Density",
+            "Phase_Velocity",
+            "Phase_Viscosity",
+            "Temperature"
+        ],
+        "information_context_descriptor": [
+            "Is_Liquid_Phase_Miscible",
+            "Has_Gas_Phase"
+        ],
+        "space_context_descriptor": [
+            "Reactor_Length",
+            "Reactor_Radius"
+        ],
+        "structure_context_descriptor": "Annular_Microreactor",
+        "substance_context_descriptor": [],
+        "time_context_descriptor": []
+    },
+    "type": "top-down"
+}

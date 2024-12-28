@@ -1,0 +1,213 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY mereology    "&root;meta_model/mereology/mereology.owl">
+  <!ENTITY multiset "&root;meta_model/data_structures/multiset.owl">
+]>
+
+<rdf:RDF
+    xmlns="&multiset;#"
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:mereology="&mereology;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+  xml:base="&multiset;">
+  <owl:Ontology rdf:about="&multiset;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'multiset' defines a design pattern for the implementation of a multiset.
+The following classes and relations from other ontology modules are used within 'multiset':
+   
+&lt;owl:Class rdf:about="&fc;#N-aryRelation"/&gt;
+&lt;owl:Class rdf:about="&mereology;#Aggregate"/&gt;
+&lt;owl:Class rdf:about="&mereology;#Part"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&fc;#hasTargetObject"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#hasOrigin"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#isOriginOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#relationAttribute"/&gt;
+&lt;owl:ObjectProperty rdf:about="&mereology;#hasDirectPart"/&gt;
+&lt;owl:ObjectProperty rdf:about="&mereology;#isDirectPartOf"/&gt;
+</rdfs:comment>
+<terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+</terms:license>
+    <owl:imports rdf:resource="&mereology;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Multiset">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Multiset differs from an ordinary Aggregate in that each of its parts (Members) has an associated Multiplicity, which indicates the number of its appearances in the Multiset.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mereology;#hasDirectPart"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="Member"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="&mereology;#hasDirectPart"/>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="&multiset;#Member"/>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&mereology;#Aggregate"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="&multiset;#Member">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:ID="Multiplicity"/>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:InverseFunctionalProperty rdf:ID="hasMultiplicity"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <rdf:Description rdf:about="&mereology;#Part"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mereology;#isDirectPartOf"/>
+        <owl:someValuesFrom rdf:resource="&multiset;#Multiset"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&multiset;#Multiset"/>
+        <owl:onProperty rdf:resource="&mereology;#isDirectPartOf"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&multiset;#hasMultiplicity"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&multiset;#Multiplicity"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >A Member is an element of a Multiset; it has a multiplicity that indicates the number of its appearances in the multiset.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&multiset;#Multiplicity">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&multiset;#Multiset"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="refersToMultiset"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="multiplicity"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&fc;#UniqueOriginN-aryRelation"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="indicatesMultiplicityOf"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&multiset;#refersToMultiset"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="&multiset;#refersToMultiset"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&multiset;#Multiset"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The Multiplicity of a Member indicates the number of its appearances in the associated Multiset.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&multiset;#indicatesMultiplicityOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&multiset;#Member"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&multiset;#Member"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&multiset;#indicatesMultiplicityOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&multiset;#refersToMultiset">
+    <rdfs:range rdf:resource="&multiset;#Multiset"/>
+    <rdfs:domain rdf:resource="&multiset;#Multiplicity"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#hasTargetObject"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation refersToMultiset assigns a Multiplicity to the corresponding Multiset.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:FunctionalProperty rdf:about="&multiset;#indicatesMultiplicityOf">
+    <rdfs:domain rdf:resource="&multiset;#Multiplicity"/>
+    <owl:inverseOf>
+      <owl:InverseFunctionalProperty rdf:about="&multiset;#hasMultiplicity"/>
+    </owl:inverseOf>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#hasOrigin"/>
+    <rdfs:range rdf:resource="&multiset;#Member"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation indicatesMultiplicityOf assigns a Multiplicity to the corresponding Member.</rdfs:comment>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&multiset;#multiplicity">
+    <rdfs:subPropertyOf rdf:resource="&fc;#relationAttribute"/>
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+    <rdfs:range rdf:resource="&xsd;#int"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The attribute 'multiplicity' indicates the numerical value of a Multiplicity.</rdfs:comment>
+    <rdfs:domain rdf:resource="&multiset;#Multiplicity"/>
+  </owl:FunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:about="&multiset;#hasMultiplicity">
+    <rdfs:range rdf:resource="&multiset;#Multiplicity"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:domain rdf:resource="&multiset;#Member"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#isOriginOf"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation hasMultiplicity points from a Member to a Multiplicity that indicates the number of its appearances in a particular Multiset.</rdfs:comment>
+    <owl:inverseOf rdf:resource="&multiset;#indicatesMultiplicityOf"/>
+  </owl:InverseFunctionalProperty>
+</rdf:RDF>

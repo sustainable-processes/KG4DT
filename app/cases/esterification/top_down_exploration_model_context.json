@@ -1,0 +1,114 @@
+{
+    "basic": {
+        "reactions": [
+            "2-Bromobenzyl Alcohol + Acetic Anhydride > 2-Bromobenzyl Acetate"
+        ],
+        "solvents": [
+            "Acetonitrile"
+        ],
+        "species": [
+            "2-Bromobenzyl Alcohol",
+            "Acetic Anhydride",
+            "2-Bromobenzyl Acetate"
+        ],
+        "streams": [
+            "Liquid stream"
+        ],
+        "catalysts": [
+          "4-Dimethylaminopyridine"
+        ]
+    },
+    "description": {
+        "accumulation": "Continuous",
+        "flow_pattern": [
+            "Taylor-Couette_Flow",
+            "Taylor-Couette_Turbulent_Flow"
+        ],
+        "model_law": {
+            "Dispersion_Coefficient": [
+                "Dispersion_Coefficient_Law_with_Taylor-Couette_Flow_by_Plain", 
+                "Dispersion_Coefficient_Law_with_Taylor-Couette_Flow_by_Moore_and_Conney",
+                "Dispersion_Coefficient_Law_with_Taylor-Couette_Turbulent_Flow_by_Tam_and_Swinney"
+            ]
+        },
+        "molecular_transport": [
+            "Axial_Dispersion"
+        ],
+        "reaction": {
+            "2-Bromobenzyl Alcohol + Acetic Anhydride > 2-Bromobenzyl Acetate": [
+                "Exponential_Concentration",
+                "Plain_Rate_Constant"
+            ]
+        }
+    },
+    "information": {
+        "model_law_parameters": {
+            "Dispersion_Coefficient_Law_with_Taylor-Couette_Flow_by_Plain": {
+                "Constant_Dispersion_Coefficient": {
+                    "init": 1e-7,
+                    "max": 1e-4,
+                    "min": 1e-10
+                }
+            },
+            "Dispersion_Coefficient_Law_with_Taylor-Couette_Flow_by_Moore_and_Conney": {
+                "Dispersion_Coefficient_Slope": {
+                    "init": 1e-8,
+                    "max": 1e-7,
+                    "min": 1e-9
+                }
+            },
+            "Dispersion_Coefficient_Law_with_Taylor-Couette_Turbulent_Flow_by_Tam_and_Swinney": {
+                "Dispersion_Coefficient_Alpha": {
+                    "init": 0.78,
+                    "max": 1.5,
+                    "min": 0.1
+                },
+                "Dispersion_Coefficient_Slope": {
+                    "init": 1e-8,
+                    "max": 1e-7,
+                    "min": 1e-9
+                }
+            }
+        },
+        "reactions": {
+            "2-Bromobenzyl Alcohol + Acetic Anhydride > 2-Bromobenzyl Acetate": {
+                "Partial_Order": {
+                    "2-Bromobenzyl Alcohol": {
+                        "init": 1,
+                        "max": 1,
+                        "min": 1
+                    },
+                    "Acetic Anhydride": {
+                        "init": 1,
+                        "max": 1,
+                        "min": 1
+                    }
+                },
+                "Rate_Constant": {
+                    "Acetonitrile": {
+                        "init": 0.051,
+                        "max": 0.051,
+                        "min": 0.051
+                    }
+                }
+            }
+        },
+        "reactor": {
+            "Reactor_Inner_Radius": 0.00875,
+            "Reactor_Length": 0.2,
+            "Reactor_Outer_Radius": 0.0102
+        },
+        "streams": {
+            "Liquid stream": {
+                "Density": 786,
+                "reactions": [
+                    "2-Bromobenzyl Alcohol + Acetic Anhydride > 2-Bromobenzyl Acetate"
+                ],
+                "solvent": "Acetonitrile",
+                "state": "liquid",
+                "Viscosity": 0.00035
+            }
+        }
+    },
+    "type": "top-down-exploration"
+}

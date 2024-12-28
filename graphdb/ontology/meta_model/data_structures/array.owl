@@ -1,0 +1,243 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY array    "&root;meta_model/data_structures/array.owl">
+  <!ENTITY fc   "&root;meta_model/fundamental_concepts/fundamental_concepts.owl">
+  <!ENTITY mereology    "&root;meta_model/mereology/mereology.owl">
+]>
+
+<rdf:RDF
+    xmlns="&array;#"
+    xmlns:fc="&fc;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns:mereology="&mereology;#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+  xml:base="&array;">
+  <owl:Ontology rdf:about="&array;">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The ontology module 'array' defines a design pattern for the implementation of arrays.
+The following classes and relations from other ontology modules are used within 'array':
+   
+&lt;owl:Class rdf:about="&mereology;#CompositeObject"/&gt;
+
+&lt;owl:ObjectProperty rdf:about="&fc;#CoequalN-aryRelation"/&gt;
+&lt;owl:ObjectProperty rdf:about="&array;#determinesPositionOf"&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#involvesObject"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#isInvolvedInN-aryRelation"/&gt;
+&lt;owl:ObjectProperty rdf:about="&fc;#relationAttribute"/&gt;
+&lt;owl:ObjectProperty rdf:about="&mereology;#isComposedOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&mereology;#isExclusivelyPartOf"/&gt;
+&lt;owl:ObjectProperty rdf:about="&mereology;#PartOfCompositeObject"/&gt;
+
+    </rdfs:comment>
+    <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+    </terms:license>
+    <owl:imports rdf:resource="&mereology;"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Element">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Element is part of an Array. Its position within the Array is determined by an Index.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mereology;#isExclusivelyPartOf"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="Array"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&mereology;#PartOfCompositeObject"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mereology;#isExclusivelyPartOf"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&array;#Array"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:ID="hasIndex"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="Index"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="&array;#Array">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:ID="isOrderedBy"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="&array;#Index"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="&xsd;#int"
+        >2</owl:minCardinality>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&array;#isOrderedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:about="&array;#isOrderedBy"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="&array;#Index"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mereology;#isComposedOf"/>
+        <owl:someValuesFrom rdf:resource="&array;#Element"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="&mereology;#isComposedOf"/>
+        <owl:allValuesFrom rdf:resource="&array;#Element"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&mereology;#CompositeObject"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Array is an ordered list that is composed of two or more Elements. The position of an Element within the Array is specified by the Index.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="&array;#Index">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="determinesPositionOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&array;#Array"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="isIndexOfArray"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="index"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&array;#determinesPositionOf"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="&array;#Element"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >An Index represents the n-ray relation between an Array, one of its Elements, and the integer datatype value that denotes the position of the Element in the Array.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&array;#isIndexOfArray"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="&array;#Array"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&array;#isIndexOfArray"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="&xsd;#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="&fc;#CoequalN-aryRelation"/>
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&array;#Element"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="&array;#determinesPositionOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:FunctionalProperty rdf:about="&array;#isIndexOfArray">
+    <rdfs:subPropertyOf rdf:resource="&fc;#involvesObject"/>
+    <rdfs:range rdf:resource="&array;#Array"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >denotes the relation between an Index and the associated Array</rdfs:comment>
+    <rdfs:domain rdf:resource="&array;#Index"/>
+    <owl:inverseOf>
+      <owl:InverseFunctionalProperty rdf:about="&array;#isOrderedBy"/>
+    </owl:inverseOf>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&array;#index">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >indicates the numerical value of an Index</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="&fc;#relationAttribute"/>
+    <rdfs:domain rdf:resource="&array;#Index"/>
+    <rdf:type rdf:resource="&owl;#DatatypeProperty"/>
+    <rdfs:range rdf:resource="&xsd;#int"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="&array;#determinesPositionOf">
+    <rdfs:domain rdf:resource="&array;#Index"/>
+    <owl:inverseOf>
+      <owl:InverseFunctionalProperty rdf:about="&array;#hasIndex"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="&array;#Element"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#involvesObject"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >1:1 relation between an Element and the Index that determines the position of the Element in an Array.</rdfs:comment>
+  </owl:FunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:about="&array;#isOrderedBy">
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#isInvolvedInN-aryRelation"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >The relation between an Array and the Index by which it is ordered</rdfs:comment>
+    <rdfs:range rdf:resource="&array;#Index"/>
+    <owl:inverseOf rdf:resource="&array;#isIndexOfArray"/>
+    <rdfs:domain rdf:resource="&array;#Array"/>
+  </owl:InverseFunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:about="&array;#hasIndex">
+    <owl:inverseOf rdf:resource="&array;#determinesPositionOf"/>
+    <rdfs:subPropertyOf rdf:resource="&fc;#isInvolvedInN-aryRelation"/>
+    <rdf:type rdf:resource="&owl;#ObjectProperty"/>
+    <rdfs:range rdf:resource="&array;#Index"/>
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >1:1 relation between an Element and its Index.</rdfs:comment>
+    <rdfs:domain rdf:resource="&array;#Element"/>
+  </owl:InverseFunctionalProperty>
+  <rdf:Description rdf:about="&array;#determinesPositionOf">
+    <rdfs:comment rdf:datatype="&xsd;#string"
+    >1:1 relation between an Element and the Index that determines the position 
+    of the Element in an Array.</rdfs:comment>
+  </rdf:Description>
+</rdf:RDF>

@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY root "file:/ontology/">
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY technical_system "&root;OntoCAPE/upper_level/technical_system.owl">
+  <!ENTITY process_control  "&root;OntoCAPE/chemical_process_system/CPS_function/process_control.owl">
+  <!ENTITY pro_con_sys  "&root;OntoCAPE/chemical_process_system/CPS_realization/process_control_system.owl">
+]>
+
+
+
+-->
+<rdf:RDF
+    xmlns:process_control_system="&pro_con_sys;#"
+    xmlns:rdf="&rdf;#"
+    xmlns:xsd="&xsd;#"
+    xmlns="file:/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl#"
+    xmlns:rdfs="&rdfs;#"
+    xmlns:owl="&owl;#"
+    xmlns:terms="http://purl.org/dc/terms/"
+    xmlns:process_control="&process_control;#"
+    xmlns:technical_system="&technical_system;#"
+  xml:base="file:/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl">
+  
+  <owl:Ontology rdf:about="file:/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl">
+  <terms:license
+            >Copyright (C) [2009] [Andreas Wiesner]
+                This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+                This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+                You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
+  </terms:license>
+    <owl:imports rdf:resource="&process_control;"/>
+    <owl:imports rdf:resource="&pro_con_sys;"/>
+    <owl:imports rdf:resource="&technical_system;"/>
+  </owl:Ontology>
+  
+  <owl:Class rdf:ID="OperatingSubsystem">
+    <rdfs:subClassOf rdf:resource="&technical_system;#TechnicalSystem"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&process_control;#Control"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&process_control;#Control"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasFunctionalAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="&pro_con_sys;#ProcessControlSystem"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasRealizationAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="&pro_con_sys;#ProcessControlSystem"/>
+        <owl:onProperty rdf:resource="&technical_system;#hasRealizationAspect"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  
+  <rdf:Description rdf:about="&process_control;#Control">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+         <owl:onProperty rdf:resource="&technical_system;#representsFunctionOf"/>
+         <owl:someValuesFrom rdf:resource="file:/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl#OperatingSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </rdf:Description>
+  
+ <rdf:Description rdf:about="&pro_con_sys;#ProcessControlSystem">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+         <owl:onProperty rdf:resource="&technical_system;#representsRealizationOf"/>
+         <owl:someValuesFrom rdf:resource="file:/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl#OperatingSubsystem"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </rdf:Description>
+  
+
+</rdf:RDF>
