@@ -23,11 +23,11 @@ Find deployed KG4DT and example cases at [http://127.0.0.1:5000/index](http://12
 
 ## Features
 ### Metagraph
-![metagraph](https://raw.githubusercontent.com/sustainable-processes/KG4DT/main/app/static/assets/img/kg4dt/kg.jpg)
+![metagraph](https://raw.githubusercontent.com/sustainable-processes/KG4DT/main/frontend/assets/img/kg4dt/kg.jpg)
 Inspired by the pioneering schema [OntoCAPE](https://www.avt.rwth-aachen.de/cms/avt/forschung/sonstiges/software/~ipts/ontocape/?lidx=1), OntoModel and OntoProcess as ontologies are designed to bridge the gap between model and process knowledge for developing physical model-based chemical process digital twins.
 
 ### Agents
-![agent](https://raw.githubusercontent.com/sustainable-processes/KG4DT/main/app/static/assets/img/kg4dt/agent.jpg)
+![agent](https://raw.githubusercontent.com/sustainable-processes/KG4DT/main/frontend/assets/img/kg4dt/agent.jpg)
 Multiple functional agents are developed to harness the knowledge graph for model assembly, model calibration, rule inference, database access, AI model invocation, and LLM utilisation.
 - Available databases: [PubChem](https://pubchem.ncbi.nlm.nih.gov), [ChemSpider](https://www.chemspider.com), and [Wikipedia](https://www.wikipedia.org)
 - Example solubility prediction model from the [RMG Group](https://rmg.mit.edu/database/solvation/searchSolubility/)
