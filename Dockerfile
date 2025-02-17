@@ -5,8 +5,10 @@ WORKDIR /ontomo
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
-# COPY app ./app
-# COPY run.py .
+COPY backend/app app
+COPY frontend/assets app/static/assets
+COPY frontend/templates app/templates
+COPY run.py run.py
 
 ENV GRAPHDB_HOST graphdb
 ENV FLASK_DEBUG True

@@ -5,9 +5,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 5000:5000
-    volumes:
-      - ./app:/ontomo/app:ro
-      - ./run.py:/ontomo/run.py:ro
     depends_on:
       - graphdb
     restart: unless-stopped
