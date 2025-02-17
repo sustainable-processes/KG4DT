@@ -7,7 +7,6 @@ RUN pip3 install -r requirements.txt
 
 COPY backend/app app
 COPY frontend/assets app/static/assets
-COPY frontend/templates app/templates
 COPY run.py run.py
 
 ENV GRAPHDB_HOST graphdb

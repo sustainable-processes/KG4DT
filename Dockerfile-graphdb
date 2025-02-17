@@ -6,7 +6,7 @@ FROM alpine:3.12 AS ZipExtractor
 ARG GDB_VERSION
 
 RUN apk add unzip
-COPY "dist/graphdb-${GDB_VERSION}-dist.zip" dist/
+COPY "graphdb/dist/graphdb-${GDB_VERSION}-dist.zip" dist/
 RUN unzip -q "./dist/graphdb-${GDB_VERSION}-dist.zip" \
 	&& mv "graphdb-${GDB_VERSION}" /opt/graphdb \
 	&& rm -rf dist
@@ -19,14 +19,14 @@ FROM golang:1.18-buster AS GoCompiler
 RUN mkdir -p /binaries
 
 # compiles program that initializes GraphDB repositories
-COPY graphdb-repository-init /opt/go/app/graphdb-repository-init
+COPY graphdb/graphdb-repository-init /opt/go/app/graphdb-repository-init
 WORKDIR /opt/go/app/graphdb-repository-init
 RUN go mod vendor \
 	&& go build \
 	&& mv graphdb-repository-init /binaries/graphdb-repository-init
 
 # compiles program that pre-queries SPARQL queries
-COPY repo-presparql-query /opt/go/app/repo-presparql-query
+COPY graphdb/repo-presparql-query /opt/go/app/repo-presparql-query
 WORKDIR /opt/go/app/repo-presparql-query
 RUN go mod vendor \
 	&& go build \
@@ -51,10 +51,9 @@ VOLUME /opt/graphdb/work
 EXPOSE 7200
 EXPOSE 7300
 
-COPY set-ownership.sh /usr/bin/set-ownership
-COPY run-graphdb.sh /usr/bin/run-graphdb
-COPY docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
-# COPY ontology /ontology
+COPY graphdb/set-ownership.sh /usr/bin/set-ownership
+COPY graphdb/run-graphdb.sh /usr/bin/run-graphdb
+COPY graphdb/docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
 COPY --from=GoCompiler /binaries/* /usr/bin/
 
 RUN apt-get update \
