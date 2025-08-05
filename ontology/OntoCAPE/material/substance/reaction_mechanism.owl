@@ -7,56 +7,56 @@
     <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
-    <!ENTITY system "file:/ontology/OntoCAPE/upper_level/system.owl#" >
-    <!ENTITY substance "file:/ontology/OntoCAPE/material/substance/substance.owl#" >
-    <!ENTITY reaction_mechanism "file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#" >
-    <!ENTITY molecular_structure "file:/ontology/OntoCAPE/material/substance/molecular_structure.owl#" >
-    <!ENTITY fundamental_concepts "file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#" >
-    <!ENTITY der_dim "file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#" >
+    <!ENTITY system "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system.owl#" >
+    <!ENTITY substance "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/substance.owl#" >
+    <!ENTITY reaction_mechanism "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#" >
+    <!ENTITY molecular_structure "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/molecular_structure.owl#" >
+    <!ENTITY fundamental_concepts "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#" >
+    <!ENTITY der_dim "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#" >
 ]>
 
 
-<rdf:RDF xmlns="file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#"
-     xml:base="file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl"
-     xmlns:substance="file:/ontology/OntoCAPE/material/substance/substance.owl#"
-     xmlns:reaction_mechanism="file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#"
+<rdf:RDF xmlns="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#"
+     xml:base="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl"
+     xmlns:substance="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/substance.owl#"
+     xmlns:reaction_mechanism="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     xmlns:system="file:/ontology/OntoCAPE/upper_level/system.owl#"
-     xmlns:fundamental_concepts="file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
+     xmlns:system="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system.owl#"
+     xmlns:fundamental_concepts="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
      xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
-     xmlns:molecular_structure="file:/ontology/OntoCAPE/material/substance/molecular_structure.owl#"
+     xmlns:molecular_structure="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/molecular_structure.owl#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:terms="http://purl.org/dc/terms/"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:der_dim="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#">
+     xmlns:der_dim="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#">
     <owl:Ontology rdf:about="">
         <rdfs:comment rdf:datatype="&xsd;string"
             >The ontology module &#39;reaction_mechanism&#39; provides concpts for modeling the mechanism and the stoichiometry of chemical reactions.
 The following classes and relations from other ontology modules are used within &#39;reaction_mechanism&#39;:
 
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/material/substance/substance.owl#ChemicalComponent&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/material/substance/substance.owl#ChemicalSpecies&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/material/substance/substance.owl#MolecularEntity&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#System&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/substance.owl#ChemicalComponent&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/substance.owl#ChemicalSpecies&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/substance.owl#MolecularEntity&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system.owl#System&quot;/&gt;
 
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isComposedOfSubsystem&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isDirectlyRelatedTo&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isExclusivelySubsystemOf&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system.owl#isComposedOfSubsystem&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system.owl#isDirectlyRelatedTo&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system.owl#isExclusivelySubsystemOf&quot;/&gt;
 
 The following classes and relations from the Meta Model are refined within &#39;reaction_mechanism&#39;:
 
-&lt;owl:Class rdf:about=&quot;file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#UniqueOriginN-aryRelation&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasTargetObject&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isOriginOf&quot;/&gt;
-&lt;owl:DatatypeProperty rdf:about=&quot;file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#relationAttribute&quot;/&gt;</rdfs:comment>
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#UniqueOriginN-aryRelation&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasTargetObject&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isOriginOf&quot;/&gt;
+&lt;owl:DatatypeProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#relationAttribute&quot;/&gt;</rdfs:comment>
 <terms:license
             >Copyright (C) [2009] [Andreas Wiesner]
                 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
                 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
                 You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
 </terms:license>
-        <owl:imports rdf:resource="file:/ontology/OntoCAPE/material/substance/molecular_structure.owl"/>
+        <owl:imports rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/molecular_structure.owl"/>
     </owl:Ontology>
     
 
@@ -72,7 +72,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#hasProduct -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#hasProduct -->
 
     <owl:ObjectProperty rdf:about="#hasProduct">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -91,7 +91,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#hasReactant -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#hasReactant -->
 
     <owl:ObjectProperty rdf:about="#hasReactant">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -110,7 +110,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#hasStoichiometricCoefficient -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#hasStoichiometricCoefficient -->
 
     <owl:ObjectProperty rdf:about="#hasStoichiometricCoefficient">
         <rdfs:domain rdf:resource="#ChemicalReaction"/>
@@ -120,7 +120,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#indicatesMultiplicityOf -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#indicatesMultiplicityOf -->
 
     <owl:ObjectProperty rdf:about="#indicatesMultiplicityOf">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
@@ -140,37 +140,37 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#hasDirectSubsystem -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system.owl#hasDirectSubsystem -->
 
     <owl:ObjectProperty rdf:about="&system;hasDirectSubsystem"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isComposedOfSubsystem -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system.owl#isComposedOfSubsystem -->
 
     <owl:ObjectProperty rdf:about="&system;isComposedOfSubsystem"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isDirectlyRelatedTo -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system.owl#isDirectlyRelatedTo -->
 
     <owl:ObjectProperty rdf:about="&system;isDirectlyRelatedTo"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isExclusivelySubsystemOf -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system.owl#isExclusivelySubsystemOf -->
 
     <owl:ObjectProperty rdf:about="&system;isExclusivelySubsystemOf"/>
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasTargetObject -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasTargetObject -->
 
     <owl:ObjectProperty rdf:about="&fundamental_concepts;hasTargetObject"/>
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isOriginOf -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isOriginOf -->
 
     <owl:ObjectProperty rdf:about="&fundamental_concepts;isOriginOf"/>
     
@@ -187,7 +187,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#stoichiometricValue -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#stoichiometricValue -->
 
     <owl:DatatypeProperty rdf:about="#stoichiometricValue">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -199,7 +199,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#relationAttribute -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#relationAttribute -->
 
     <owl:DatatypeProperty rdf:about="&fundamental_concepts;relationAttribute"/>
     
@@ -216,7 +216,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ChemicalReaction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ChemicalReaction -->
 
     <owl:Class rdf:about="#ChemicalReaction">
         <rdfs:subClassOf rdf:resource="&system;System"/>
@@ -302,7 +302,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#CompositeReaction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#CompositeReaction -->
 
     <owl:Class rdf:about="#CompositeReaction">
         <owl:equivalentClass>
@@ -336,7 +336,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ElementaryReaction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ElementaryReaction -->
 
     <owl:Class rdf:about="#ElementaryReaction">
         <owl:equivalentClass>
@@ -368,7 +368,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#IrreversibleReaction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#IrreversibleReaction -->
 
     <owl:Class rdf:about="#IrreversibleReaction">
         <rdfs:subClassOf rdf:resource="#SingleReaction"/>
@@ -376,7 +376,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ReactionNetwork -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ReactionNetwork -->
 
     <owl:Class rdf:about="#ReactionNetwork">
         <rdfs:subClassOf rdf:resource="#ChemicalReaction"/>
@@ -390,7 +390,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ReversibleReaction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ReversibleReaction -->
 
     <owl:Class rdf:about="#ReversibleReaction">
         <rdfs:subClassOf rdf:resource="#SingleReaction"/>
@@ -398,7 +398,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#SingleReaction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#SingleReaction -->
 
     <owl:Class rdf:about="#SingleReaction">
         <rdfs:subClassOf rdf:resource="#ChemicalReaction"/>
@@ -412,7 +412,7 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#StoichiometricCoefficient -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#StoichiometricCoefficient -->
 
     <owl:Class rdf:about="#StoichiometricCoefficient">
         <rdfs:subClassOf rdf:resource="#StoichiometricCoefficient"/>
@@ -454,31 +454,31 @@ The following classes and relations from the Meta Model are refined within &#39;
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/substance.owl#ChemicalComponent -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/substance.owl#ChemicalComponent -->
 
     <owl:Class rdf:about="&substance;ChemicalComponent"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/substance.owl#ChemicalSpecies -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/substance.owl#ChemicalSpecies -->
 
     <owl:Class rdf:about="&substance;ChemicalSpecies"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/substance.owl#MolecularEntity -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/material/substance/substance.owl#MolecularEntity -->
 
     <owl:Class rdf:about="&substance;MolecularEntity"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#System -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system.owl#System -->
 
     <owl:Class rdf:about="&system;System"/>
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#UniqueOriginN-aryRelation -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#UniqueOriginN-aryRelation -->
 
     <owl:Class rdf:about="&fundamental_concepts;UniqueOriginN-aryRelation"/>
     

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE rdf:RDF [
-  <!ENTITY root "file:/ontology/">
+  <!ENTITY root "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/">
   <!ENTITY owl  "http://www.w3.org/2002/07/owl">
   <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
   <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
@@ -11,15 +11,15 @@
 
 
 <rdf:RDF
-    xmlns="file:/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl#"
+    xmlns="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl#"
     xmlns:rdf="&rdf;#"
     xmlns:xsd="&xsd;#"
     xmlns:process_control="&process_control;#"
     xmlns:rdfs="&rdfs;#"
     xmlns:owl="&owl;#"
     xmlns:terms="http://purl.org/dc/terms/"
-  xml:base="file:/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl">
-  <owl:Ontology rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl">
+  xml:base="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl">
+  <owl:Ontology rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl">
     <rdfs:comment rdf:datatype="&xsd;#string"
     >The ontology module 'controller' provides a specialization of the concept controller.
 The following classes and relations from other ontology modules are used within 'controller':
@@ -49,7 +49,7 @@ The following classes and relations from other ontology modules are used within 
       <owl:Class rdf:ID="Knowledge-basedController"/>
     </rdfs:subClassOf>
   </owl:Class>
-  <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl#Knowledge-basedController">
+  <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl#Knowledge-basedController">
     <rdfs:subClassOf rdf:resource="&process_control;#Controller"/>
     <rdfs:comment rdf:datatype="&xsd;#string"
     >A KnowledgeBasedController (KBC) used in process control systems has the characteristic that it does not need the mathematical model and furthermore gains its parameters by means of practical data.</rdfs:comment>
@@ -68,7 +68,7 @@ The following classes and relations from other ontology modules are used within 
   </owl:Class>
   <owl:Class rdf:ID="InternalModelController">
     <rdfs:subClassOf>
-      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl#Model-basedController"/>
+      <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl#Model-basedController"/>
     </rdfs:subClassOf>
     <rdfs:comment rdf:datatype="&xsd;#string"
     >An InternalModelController (IMC) automatically corrects the gain of the internal model control when the settings in the internal model are improper.</rdfs:comment>
@@ -80,10 +80,10 @@ The following classes and relations from other ontology modules are used within 
     <rdfs:comment rdf:datatype="&xsd;#string"
     >The idea of a DynamicMatrixController is that the input variables are subjected to measured perturbations and the dynamic effects on the outputs are noted for prediction of the future response of the processes during on-line operation.</rdfs:comment>
     <rdfs:subClassOf>
-      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl#Model-basedController"/>
+      <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl#Model-basedController"/>
     </rdfs:subClassOf>
   </owl:Class>
-  <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl#Model-basedController">
+  <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_function/controller.owl#Model-basedController">
     <rdfs:comment rdf:datatype="&xsd;#string"
     >A Model-basedController used in process control systems is based on mathematical models.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="&process_control;#Controller"/>
