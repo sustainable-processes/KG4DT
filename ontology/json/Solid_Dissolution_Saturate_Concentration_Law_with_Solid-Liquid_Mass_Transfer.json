@@ -1,0 +1,70 @@
+{
+  "Phenomenon": [
+    {
+      "name": "Batch",
+      "class": "Accumulation",
+      "flow_patterns": ["Well_Mixed"],
+      "molecular_transport_phenomena": []
+    },
+    {
+      "name": "Well_Mixed",
+      "class": "FlowPattern",
+      "flow_patterns": [],
+      "molecular_transport_phenomena": ["Solid-Liquid_Mass_Transfer"]
+    },
+    {
+      "name": "Solid-Liquid_Mass_Transfer",
+      "class": "MolecularTransportPhenomenon",
+      "flow_patterns": [],
+      "molecular_transport_phenomena": []
+    }
+  ],
+  "Unit": [
+    {
+      "name": "oC",
+      "class": "SI_DerivedUnit",
+      "symbol": "<math><mrow><msup><mtext/><mtext>o</mtext></msup><mtext>C</mtext></mrow></math>"
+    },
+    {
+      "name": "mol_per_l",
+      "class": "SI_DerivedUnit",
+      "symbol": "<math><mrow><mtext>mol</mtext><mtext>/</mtext><mtext>L</mtext></mrow></math>"
+    }
+  ],
+  "Variable": [
+    {
+      "name": "Temperature",
+      "class": "StateVariable",
+      "symbol": "<math><mrow><mi>T</mi></mrow></math>",
+      "unit": "oC",
+      "law": null,
+      "dimensions": []
+    },
+    {
+      "name": "Concentration",
+      "class": "StateVariable",
+      "symbol": "<math><mrow><mi>c</mi></mrow></math>",
+      "unit": "mol_per_l",
+      "law": null,
+      "dimensions": ["Species", "Stream"]
+    },
+    {
+      "name": "Solid_Dissolution_Saturated_Concentration",
+      "class": "StateVariable",
+      "symbol": "<math><mrow><msup><msub><mi>c</mi><mtext>s</mtext></msub><mtext>*</mtext></msup></mrow></math>",
+      "unit": "mol_per_l",
+      "law": "Solid_Dissolution_Saturate_Concentration_Law_with_Solid-Liquid_Mass_Transfer",
+      "dimensions": ["Species", "Stream"]
+    }
+  ],
+  "Law": {
+    "name": "Solid_Dissolution_Saturate_Concentration_Law_with_Solid-Liquid_Mass_Transfer",
+    "phenomenon": "Solid-Liquid_Mass_Transfer",
+    "DOI": null,
+    "formula": "<math><mrow><mtext>specifically defined</mtext></mrow></math>",
+    "variables": [
+      "Temperature",
+      "Concentration"
+    ]
+  }
+}

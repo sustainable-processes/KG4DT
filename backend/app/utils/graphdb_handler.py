@@ -181,11 +181,13 @@ class GraphdbHandler:
                 "differential_model_variable": None,
                 "differential_upper_limit": None,
                 "differential_initial_value": None,
+                "associated_gas_law": None,
+                "associated_solid_law": None,
                 "formula_integrated_with_accumulation": None, 
             }
 
         sparql = self.prefix + \
-            "select ?d ?ml ?p ?r ?doi ?v ?ov ?dv ?ul ?iv ?aml where {" \
+            "select ?d ?ml ?p ?r ?doi ?v ?ov ?dv ?ul ?iv, ?agl, ?asl, ?aml where {" \
             f"?d rdf:type {self.ns_dict['Law']}:Law. " \
             f"?d {self.ns_dict['hasFormula']}:hasFormula ?ml. " \
             f"?d {self.ns_dict['isAssociatedWith']}:isAssociatedWith ?p. " \
@@ -196,12 +198,15 @@ class GraphdbHandler:
             f"optional{{?d {self.ns_dict['hasDifferentialModelVariable']}:hasDifferentialModelVariable ?dv}}. " \
             f"optional{{?d {self.ns_dict['hasDifferentialUpperLimit']}:hasDifferentialUpperLimit ?ul}}. " \
             f"optional{{?d {self.ns_dict['hasDifferentialInitialValue']}:hasDifferentialInitialValue ?iv}}. " \
+            f"optional{{?d {self.ns_dict['hasAssociatedGasLaw']}:hasAssociatedGasLaw ?agl}}. " \
+            f"optional{{?d {self.ns_dict['hasAssociatedSolidLaw']}:hasAssociatedSolidLaw ?asl}}. " \
             f"optional{{?d {self.ns_dict['hasFormulaIntegratedWithAccumulation']}:hasFormulaIntegratedWithAccumulation ?aml}}. " \
             "}"
         sparql_res = self.cur.execute(sparql)
         for res in sparql_res.split("\r\n")[1:-1]:
             law, formula, phenomenon, rule, doi, model_variable, optional_model_variable, differential_model_variable, \
-                differential_upper_limit, differential_initial_value, formula_integrated_with_accumulation = res.split(",")
+                differential_upper_limit, differential_initial_value, associated_gas_law, associated_solid_law, \
+                formula_integrated_with_accumulation = res.split(",")
             law = law.split("#")[-1]
             phenomenon = phenomenon.split("#")[-1]
             rule = rule.split("#")[-1]
@@ -211,6 +216,8 @@ class GraphdbHandler:
             differential_model_variable = differential_model_variable.split("#")[-1]
             differential_upper_limit = differential_upper_limit.split("#")[-1]
             differential_initial_value = differential_initial_value.split("#")[-1]
+            associated_gas_law = associated_gas_law.split("#")[-1]
+            associated_solid_law = associated_solid_law.split("#")[-1]
             formula = re.sub(r'("*)"', r'\1', formula)
             formula = re.sub(r' xmlns=".*"', "", formula)
             formula_integrated_with_accumulation = re.sub(r'("*)"', r'\1', formula_integrated_with_accumulation)
@@ -233,8 +240,10 @@ class GraphdbHandler:
                 laws[law]["differential_model_variable"] = differential_model_variable
             if differential_upper_limit != "":
                 laws[law]["differential_upper_limit"] = differential_upper_limit
-            if differential_initial_value != "":
-                laws[law]["differential_initial_value"] = differential_initial_value
+            if associated_gas_law != "":
+                laws[law]["associated_gas_law"] = associated_gas_law
+            if associated_solid_law != "":
+                laws[law]["associated_solid_law"] = associated_solid_law
             if formula_integrated_with_accumulation != "":
                 laws[law]["formula_integrated_with_accumulation"] = formula_integrated_with_accumulation
 

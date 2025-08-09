@@ -85,6 +85,8 @@ class Config:
         "hasDifferentialModelVariable":             "ontomo",
         "hasDifferentialUpperLimit":                "ontomo",
         "hasDifferentialInitialValue":              "ontomo",
+        "hasAssociatedGasLaw":                      "ontomo",
+        "hasAssociatedSolidLaw":                    "ontomo",
         "hasDimension":                             "system",
         "isAssociatedWith":                         "process_model",
         "hasModelVariable":                         "mathematical_model",

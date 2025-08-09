@@ -2,6 +2,7 @@ import re
 import json
 import rdflib
 import argparse
+from mml_expression import MMLExpression
 
 
 prefix_rdf = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
@@ -118,7 +119,6 @@ def patch_pheno(rdf, patch):
             f"    BIND(<{pheno_ns}{pheno_dict['name']}> AS ?p)\n"
             "}"
         )
-        print(sparql)
         rdf.update(sparql)
 
 
@@ -247,18 +247,27 @@ def patch_variable(rdf, patch):
                     for dimension in variable_dict["dimensions"]
                 ]
             )
+            unit_sparql = (
+                f"    ?v <{ns_system}hasUnitOfMeasure> "
+                f"<{ns_ontomo}{variable_dict['unit']}> .\n"
+                if variable_dict["unit"]
+                else ""
+            )
             symbol = variable_dict["symbol"]
             symbol = re.sub("\n", "", symbol)
             symbol = re.sub(r"\> *\<", "><", symbol)
             symbol = re.sub(r" *\< *", "<", symbol)
             symbol = re.sub(r" *\> *", ">", symbol)
+            try:
+                MMLExpression(symbol.replace("\\\"", "\"")).to_numpy()
+            except:
+                print(f"MathML parsing error for {variable_dict['name']}: {symbol}")
             sparql = (
                 f"{prefix_rdf}\n"
                 "INSERT {\n"
                 f"    ?v rdf:type <{variable_ns}{variable_dict['class']}> .\n"
                 f'    ?v <{ns_ontomo}hasSymbol> "{symbol}"^^rdf:XMLLiteral .\n'
-                f"    ?v <{ns_system}hasUnitOfMeasure> "
-                f"<{ns_ontomo}{variable_dict['unit']}> .\n"
+                f"{unit_sparql}"
                 f"{dimension_sparql}"
                 "}\n"
                 "WHERE {\n"
@@ -309,16 +318,17 @@ def patch_law(rdf, patch):
         )
         sparql_res = rdf.query(sparql)
         for res in sparql_res:
-            variables.append(str(res[0]))
+            variables.append((str(res[0]), variable_class))
     for variable in law_dict["variables"]:
         assert variable in [
-            v.split("#")[1] for v in variables
+            v[0].split("#")[1] for v in variables
         ], f"Unknown law variable: {variable}"
     variables = [
-        variable
+        variable[0]
         for variable in variables
-        if variable.split("#")[1]
+        if variable[0].split("#")[1]
         in [variable_dict["name"] for variable_dict in patch["Variable"]]
+        or variable[1] == "Constant"
     ]
 
     formula = law_dict["formula"]
@@ -326,6 +336,10 @@ def patch_law(rdf, patch):
     formula = re.sub(r"\> *\<", "><", formula)
     formula = re.sub(r" *\< *", "<", formula)
     formula = re.sub(r" *\> *", ">", formula)
+    try:
+        MMLExpression(formula.replace("\\\"", "\"")).to_numpy()
+    except:
+        print(f"MathML parsing error for {law_dict['name']}: {formula}")
 
     variable_sparql = "".join(
         [
@@ -333,11 +347,16 @@ def patch_law(rdf, patch):
             for variable in variables
         ]
     )
+    doi_sparql = (
+        f"    ?l <{ns_ontomo}hasDOI> \"{law_dict['DOI']}\"^^rdf:string .\n"
+        if law_dict["DOI"]
+        else ""
+    )
     sparql = (
         f"{prefix_rdf}\n"
         "INSERT {\n"
         f"    ?l rdf:type <{ns_process_model}Law> .\n"
-        f"    ?l <{ns_ontomo}hasDOI> \"{law_dict['DOI']}\"^^rdf:string .\n"
+        f"{doi_sparql}"
         f'    ?l <{ns_ontomo}hasFormula> "{formula}"^^rdf:XMLLiteral .\n'
         f"    ?l <{ns_process_model}isAssociatedWith> "
         f"<{ns_behavior}{law_dict['phenomenon']}> .\n"
@@ -370,9 +389,9 @@ if __name__ == "__main__":
     with open(args.json, "r") as f:
         patch = json.load(f)
         patch_pheno(rdf, patch)
-        # patch_unit(rdf, patch)
-        # patch_variable(rdf, patch)
-        # patch_law(rdf, patch)
+        patch_unit(rdf, patch)
+        patch_variable(rdf, patch)
+        patch_law(rdf, patch)
 
     # save output model ontology
     assert args.in_rdf != args.out_rdf, "Overwriting RDF file is not allowed"

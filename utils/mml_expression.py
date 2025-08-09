@@ -379,9 +379,8 @@ class MMLExpression:
                 level -= 1
             # tag:mtext
             if action == "start" and elem.tag == "mtext" and level == 0:
-                mtext_expr = elem.text.replace(",", "_").strip(" ")
+                mtext_expr = elem.text.replace(",", "_")
                 expr += mtext_expr
-            print(action, elem.tag, expr)
         expr = MMLExpression.sanitize_numpy(expr)
         vars = sorted(list(set(vars)))
         return expr, vars
