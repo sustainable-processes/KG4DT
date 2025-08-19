@@ -2,109 +2,62 @@ import os
 
 
 class Config:
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    GRAPHDB_HOST =      os.getenv("GRAPHDB_HOST", "127.0.0.1")
-    GRAPHDB_PORT =      os.getenv("GRAPHDB_PORT", "7200")
-    GRAPHDB_USER =      os.getenv("GRAPHDB_USER", "admin")
-    GRAPHDB_PASSWORD =  os.getenv("GRAPHDB_PASSWORD", "root")
-    GRAPHDB_DB =        os.getenv("GRAPHDB_DB", "ontomo")
-    ASSETS_ROOT =       os.getenv('ASSETS_ROOT', '/static/assets')
+    # Base directory
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
-    PREFIX_RDF =                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
-    PREFIX_ONTOMO =             "PREFIX ontomo: <file:/ontology/OntoMo.owl#>"
-    PREFIX_SYSTEM =             "PREFIX system: <file:/ontology/OntoCAPE/upper_level/system.owl#>"
-    PREFIX_SIUNIT =             "PREFIX SI_unit: <file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#>"
-    PREFIX_BEHAVIOR =           "PREFIX behavior: <file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#>"
-    PREFIX_PROCESS_MODEL =      "PREFIX process_model: <file:/ontology/OntoCAPE/model/process_model.owl#>"
-    PREFIX_MATHEMATICAL_MODEL = "PREFIX mathematical_model: <file:/ontology/OntoCAPE/model/mathematical_model.owl#>"
-    PREFIX = "\n".join([PREFIX_RDF, PREFIX_ONTOMO, PREFIX_SYSTEM, PREFIX_SIUNIT, PREFIX_BEHAVIOR, PREFIX_PROCESS_MODEL, PREFIX_MATHEMATICAL_MODEL, ""])
+    # GraphDB
+    GRAPHDB_HOST = os.getenv("GRAPHDB_HOST", "127.0.0.1")
+    GRAPHDB_PORT = os.getenv("GRAPHDB_PORT", "7200")
+    GRAPHDB_USER = os.getenv("GRAPHDB_USER", "admin")
+    GRAPHDB_PASSWORD = os.getenv("GRAPHDB_PASSWORD", "root")
+    GRAPHDB_DB = os.getenv("GRAPHDB_DB", "ontomo")
 
+    # Assets
+    ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')
+
+    # RDF prefix
+    PREFIX_RDF = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+    PREFIX_ONTOMO = ("PREFIX ontomo: <https://raw.githubusercontent.com/"
+                     "sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#>")
+    PREFIX = "\n".join([PREFIX_RDF, PREFIX_ONTOMO, ""])
+
+    # Phenomenon
     PHENOMENON_CLASSES = [
-        "Accumulation", 
-        "MolecularTransportPhenomenon",
-        "FlowPattern", 
-        "ChemicalReactionPhenomenon", 
+        "Accumulation",
+        "FlowPattern",
+        "MassTransportPhenomenon",
+        "MassEquilibriumPhenomenon",
+        "ReactionPhenomenon",
     ]
+
+    # Model variable
     MODEL_VARIABLE_CLASSES = [
-        "Constant", 
-        "RateVariable", 
+        "Constant",
+        "RateVariable",
         "StateVariable",
-        "FlowParameter", 
-        "ReactorParameter", 
-        "ReactionParameter", 
-        "PhysicalParameter", 
-        "OperatingParameter", 
-        "MolecularTransportParameter", 
+        "FlowParameter",
+        "PhysicsParameter",
+        "ReactionParameter",
+        "OperationParameter",
+        "StructureParameter",
+        "MassTransportParameter",
     ]
+
+    # Data source
     DATA_SOURCE_CLASSES = [
-        "PhysicalPropertyDataSource", 
-        "SolventMiscibilityDataSource", 
+        "PhysicsDataSource",
+        "MiscibilityDataSource",
     ]
-    CONTEXT_DESCRIPTOR_CLASSES = [
-        "EnergyContextDescriptor", 
-        "InformationContextDescriptor",
-        "SpaceContextDescriptor",
-        "StructureContextDescriptor",
-        "SubstanceContextDescriptor",
-        "TimeContextDescriptor",
+
+    # Descriptor
+    DESCRIPTOR_CLASSES = [
+        "TimeDescriptor",
+        "SpaceDescriptor",
+        "EnergyDescriptor",
+        "StructureDescriptor",
+        "SubstanceDescriptor",
+        "InformationDescriptor",
     ]
-    NS_DICT = {
-        # class
-        "FlowParameter":                            "ontomo",
-        "ReactorParameter":                         "ontomo",
-        "PhysicalParameter":                        "ontomo",
-        "ReactionParameter":                        "ontomo",
-        "OperatingParameter":                       "ontomo",
-        "MolecularTransportParameter":              "ontomo",
-        "Definition":                               "ontomo",
-        "RateVariable":                             "ontomo",
-        "StateVariable":                            "ontomo",
-        "ModelDimension":                           "ontomo",
-        "Law":                                      "process_model",
-        "Constant":                                 "mathematical_model", 
-        "FlowPattern":                              "behavior", 
-        "Accumulation":                             "behavior",
-        "ChemicalReactionPhenomenon":               "behavior", 
-        "MolecularTransportPhenomenon":             "behavior",
-        "SI_BaseUnit":                              "SI_unit",
-        "SI_DerivedUnit":                           "SI_unit",
-        "PhysicalPropertyDataSource":               "ontomo",
-        "SolventMiscibilityDataSource":             "ontomo",
-        "EnergyContextDescriptor":                  "ontomo",
-        "InformationContextDescriptor":             "ontomo",
-        "SpaceContextDescriptor":                   "ontomo",
-        "StructureContextDescriptor":               "ontomo",
-        "SubstanceContextDescriptor":               "ontomo",
-        "TimeContextDescriptor":                    "ontomo",
-        "Rule":                                     "ontomo",
-        # object property
-        "hasLaw":                                   "ontomo",
-        "hasRule":                                  "ontomo",
-        "hasDefinition":                            "ontomo",
-        "hasOptionalModelVariable":                 "ontomo",
-        "hasDifferentialModelVariable":             "ontomo",
-        "hasDifferentialUpperLimit":                "ontomo",
-        "hasDifferentialInitialValue":              "ontomo",
-        "hasAssociatedGasLaw":                      "ontomo",
-        "hasAssociatedSolidLaw":                    "ontomo",
-        "hasDimension":                             "system",
-        "isAssociatedWith":                         "process_model",
-        "hasModelVariable":                         "mathematical_model",
-        "hasStandardUnitOfMeasure":                 "ontomo",
-        "hasUnitOfMeasure":                         "system",
-        "hasContextDescriptor":                     "ontomo",
-        "relatesToFlowPattern":                     "ontomo",
-        "relatesToMolecularTransportPhenomenon":    "ontomo",
-        # data property
-        "hasDOI":                                   "ontomo",
-        "hasURL":                                   "ontomo",
-        "hasSymbol":                                "ontomo",
-        "hasValue":                                 "ontomo",
-        "hasSPARQL":                                "ontomo",
-        "hasFormula":                               "ontomo",
-        "hasRatioToStandardUnitOfMeasure":          "ontomo",
-        "hasFormulaIntegratedWithAccumulation":     "ontomo",
-    }
 
 
 class DebugConfig(Config):
@@ -116,6 +69,6 @@ class ProductionConfig(Config):
 
 
 config_dict = {
-    'Debug'     : DebugConfig, 
-    'Production': ProductionConfig, 
+    'Debug': DebugConfig,
+    'Production': ProductionConfig,
 }

@@ -1,15 +1,15 @@
 {
     "basic": {
-        "reactions": [
+        "rxns": [
             "H<sup>+</sup> + H<sub>2</sub>BO<sub>3</sub><sup>-</sup> > H<sub>3</sub>BO<sub>3</sub>",
             "6 H<sup>+</sup> + 5 I<sup>-</sup> + IO<sub>3</sub><sup>-</sup> > 3 I<sub>2</sub>",
             "I<sup>-</sup> + I<sub>2</sub> > I<sub>3</sub><sup>-</sup>",
             "I<sub>3</sub><sup>-</sup> > I<sup>-</sup> + I<sub>2</sub>"
         ],
-        "solvents": [
+        "sols": [
             "Water"
         ],
-        "species": [
+        "spcs": [
             "H<sup>+</sup>",
             "I<sup>-</sup>",
             "I<sub>2</sub>",
@@ -18,24 +18,24 @@
             "H<sub>2</sub>BO<sub>3</sub><sup>-</sup>",
             "H<sub>3</sub>BO<sub>3</sub>"
         ],
-        "streams": [
+        "stms": [
             "Liquid stream 1",
             "Liquid stream 2",
             "Gas stream"
         ],
-        "catalysts": []
+        "cats": []
     },
     "description": {
-        "accumulation": "Continuous",
-        "flow_pattern": "Annular_Microflow",
-        "molecular_transport": [
+        "ac": "Continuous",
+        "fp": "Annular_Microflow",
+        "mt": [
             "Engulfment"
         ],
-        "parameter_law": {
+        "param_law": {
             "Film_Thickness": "Film_Thickness_Law_with_Annular_Microflow_by_Youngbae_et_al.",
             "Mixing_Time": "Mixing_Time_Law_with_Annular_Microflow_by_Youngbae_et_al."
         },
-        "reaction": {
+        "rxn": {
             "6 H<sup>+</sup> + 5 I<sup>-</sup> + IO<sub>3</sub><sup>-</sup> > 3 I<sub>2</sub>": [
                 "Exponential_Concentration",
                 "Ionicity-Related_Rate_Constant"
@@ -54,10 +54,10 @@
         }
     },
     "information": {
-        "molecular_transport": {
+        "mt": {
             "Mixing_Time_Slope": 0.0075
         },
-        "reactions": {
+        "rxn": {
             "6 H<sup>+</sup> + 5 I<sup>-</sup> + IO<sub>3</sub><sup>-</sup> > 3 I<sub>2</sub>": {
                 "Ionicity-Related_Rate_Constant": "if I < 0.16:\n    10 ** (9.28 - 3.66 * I ** 0.5)\nelse:\n    10 ** (8.38 - 1.51 * I ** 0.5 + 0.23 * I)",
                 "Partial_Order": {
@@ -85,11 +85,11 @@
                 }
             }
         },
-        "reactor": {
-            "Reactor_Length": 0.05,
-            "Reactor_Radius": 0.0005
+        "st": {
+            "Length": 0.05,
+            "Radius": 0.0005
         },
-        "species": {
+        "spc": {
             "Species_Charge": {
                 "H<sub>2</sub>BO<sub>3</sub><sup>-</sup>": -1,
                 "H<sub>3</sub>BO<sub>3</sub>": 0,
@@ -100,35 +100,35 @@
                 "IO<sub>3</sub><sup>-</sup>": -1
             }
         },
-        "streams": {
+        "stm": {
             "Gas stream": {
                 "Density_Gas": 1.183,
-                "reactions": [],
-                "solvent": null,
+                "rxn": [],
+                "sol": null,
                 "state": "gaseous",
                 "Viscosity_Gas": 0.0000181
             },
             "Liquid stream 1": {
                 "Density": 998,
-                "reactions": [
+                "rxn": [
                     "H<sup>+</sup> + H<sub>2</sub>BO<sub>3</sub><sup>-</sup> > H<sub>3</sub>BO<sub>3</sub>",
                     "6 H<sup>+</sup> + 5 I<sup>-</sup> + IO<sub>3</sub><sup>-</sup> > 3 I<sub>2</sub>",
                     "I<sup>-</sup> + I<sub>2</sub> > I<sub>3</sub><sup>-</sup>",
                     "I<sub>3</sub><sup>-</sup> > I<sup>-</sup> + I<sub>2</sub>"
                 ],
-                "solvent": "Water",
+                "sol": "Water",
                 "state": "liquid",
                 "Viscosity": 0.00089
             },
             "Liquid stream 2": {
                 "Density": 998,
-                "reactions": [
+                "rxn": [
                     "H<sup>+</sup> + H<sub>2</sub>BO<sub>3</sub><sup>-</sup> > H<sub>3</sub>BO<sub>3</sub>",
                     "6 H<sup>+</sup> + 5 I<sup>-</sup> + IO<sub>3</sub><sup>-</sup> > 3 I<sub>2</sub>",
                     "I<sup>-</sup> + I<sub>2</sub> > I<sub>3</sub><sup>-</sup>",
                     "I<sub>3</sub><sup>-</sup> > I<sup>-</sup> + I<sub>2</sub>"
                 ],
-                "solvent": "Water",
+                "sol": "Water",
                 "state": "liquid",
                 "Viscosity": 0.00089
             }

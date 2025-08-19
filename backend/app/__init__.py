@@ -1,6 +1,6 @@
 from flask import Flask, g
 from importlib import import_module
-from .utils.graphdb_handler import GraphdbHandler
+from .utils.graphdb_handler import GraphDBHandler
 
 
 def register_extension(app):
@@ -23,7 +23,7 @@ def create_app(config):
     register_blueprint(app)
     
     # Configure database
-    graphdb_handler = GraphdbHandler(config)
+    graphdb_handler = GraphDBHandler(config)
 
     @app.before_request
     def before_request():

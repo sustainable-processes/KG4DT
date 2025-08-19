@@ -95,7 +95,7 @@
     {
       "name": "Solid-Liquid_Volumetric_Mass_Transfer_Coefficient",
       "class": "PhysicalParameter",
-      "symbol": "<math><mrow><msub><mrow><msub><mi>k</mi><mtext>L</mtext></msub><mspace nspace=\\\"0\\\"></mspace><mi>a</mi></mrow><mtext>s</mtext></msub></mrow></math>",
+      "symbol": "<math><mrow><mrow><msub><mi>k</mi><mtext>S</mtext></msub><mspace nspace=\\\"0\\\"></mspace><mi>a</mi></mrow></mrow></math>",
       "unit": "per_s",
       "law": null,
       "dimensions": ["Species", "Stream"]
@@ -113,7 +113,7 @@
     "name": "Solid-Liquid_Volumetric_Mass_Transfer_Rate_Law_with_Solid-Liquid_Mass_Transfer",
     "phenomenon": "Solid-Liquid_Mass_Transfer",
     "DOI": null,
-    "formula": "<math><mrow><mfrac><mrow><msub><mrow><msub><mi>k</mi><mtext>L</mtext></msub><mspace nspace=\\\"0\\\"></mspace><mi>a</mi></mrow><mtext>s</mtext></msub><msub><mi>c</mi><mtext>s</mtext></msub><msub><mi>M</mi><mtext>s</mtext></msub></mrow><msub><mi>ρ</mi><mtext>s</mtext></msub></mfrac><mo>(</mo><msup><msub><mi>c</mi><mtext>s</mtext></msub><mtext>*</mtext></msup><mo>−</mo><mi>c</mi><mo>)</mo></mrow></math>",
+    "formula": "<math><mrow><mfrac><mrow><mrow><msub><mi>k</mi><mtext>L</mtext></msub><mspace nspace=\\\"0\\\"></mspace><mi>a</mi></mrow><msub><mi>c</mi><mtext>s</mtext></msub><msub><mi>M</mi><mtext>s</mtext></msub></mrow><msub><mi>ρ</mi><mtext>s</mtext></msub></mfrac><mo>(</mo><msup><msub><mi>c</mi><mtext>s</mtext></msub><mtext>*</mtext></msup><mo>−</mo><mi>c</mi><mo>)</mo></mrow></math>",
     "variables": [
       "Solid_Mass",
       "Solid_Density",

@@ -2,52 +2,29 @@ import re
 import json
 import rdflib
 import argparse
-from mml_expression import MMLExpression
-
+from backend.app.utils.mml_expression import MMLExpression
+from backend.app.config import Config
+# import rdflib.parser.Parser
 
 prefix_rdf = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
-
-domain = (
+ontomo = (
     "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/"
-    "dev-alkyne-hydrogenation/ontology"
+    "dev-alkyne-hydrogenation/ontology/OntoMo.owl#"
 )
-ns_ontomo = f"{domain}/OntoMo.owl#"
-ns_system = f"{domain}/OntoCAPE/upper_level/system.owl#"
-ns_si_unit = f"{domain}/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#"
-ns_process = f"{domain}/OntoCAPE/chemical_process_system/CPS_function/process.owl#"
-ns_behavior = f"{domain}/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#"
-ns_process_model = f"{domain}/OntoCAPE/model/process_model.owl#"
-ns_mathematical_model = f"{domain}/OntoCAPE/model/mathematical_model.owl#"
 
-unit_classes = ["SI_BaseUnit", "SI_DerivedUnit"]
-pheno_classes = [
-    "Accumulation",
-    "FlowPattern",
-    "MolecularTransportPhenomenon",
-    "ChemicalReactionPhenomenon",
-]
-variable_classes = [
-    "Constant",
-    "RateVariable",
-    "StateVariable",
-    "FlowParameter",
-    "ReactorParameter",
-    "OperatingParameter",
-    "PhysicalParameter",
-    "ReactionParameter",
-    "MolecularTransportParameter",
-]
-variable_dimensions = ["Species", "Reaction", "Stream", "Solvent"]
-
+pheno_classes = Config.PHENOMENON_CLASSES
+var_classes = Config.MODEL_VARIABLE_CLASSES
+dim_classes = ["Species", "Reaction", "Stream", "Solvent", "Time", "Gas", "Solid"]
+unit_classes = ["Unit"]
 
 def patch_pheno(rdf, patch):
     phenos = []
     for pheno_class in pheno_classes:
         sparql = (
-            f"{prefix_rdf}\n"
+            f"{prefix_rdf}"
             f"SELECT ?p\n"
             "WHERE {\n"
-            f"    ?p rdf:type <{ns_behavior}{pheno_class}> .\n"
+            f"    ?p rdf:type <{ontomo}{pheno_class}> .\n"
             "}"
         )
         sparql_res = rdf.query(sparql)
@@ -60,63 +37,58 @@ def patch_pheno(rdf, patch):
         assert (
             pheno_dict["class"] in pheno_classes
         ), f"Unknown phenomenon class {pheno_dict['class']}"
-        if pheno_dict["name"] == "Continuous":
-            pheno_ns = ns_process
-        else:
-            pheno_ns = ns_ontomo
         sparql = (
             f"{prefix_rdf}\n"
             f"SELECT ?fp ?mtp\n"
             "WHERE {\n"
-            f"    ?p rdf:type <{ns_behavior}{pheno_dict['class']}> .\n"
-            f"    optional{{?p <{ns_ontomo}relatesToFlowPattern> ?fp .}}\n"
-            "    optional"
-            f"{{?p <{ns_ontomo}relatesToMolecularTransportPhenomenon> ?mtp .}}\n"
-            f"    BIND(<{pheno_ns}{pheno_dict['name']}> AS ?p)\n"
+            f"    ?p rdf:type <{ontomo}{pheno_dict['class']}> .\n"
+            f"    optional{{?p <{ontomo}relatesToFlowPattern> ?fp .}}\n"
+            f"    optional{{?p <{ontomo}relatesToMassTransportPhenomenon> ?mtp .}}\n"
+            f"    BIND(<{ontomo}{pheno_dict['name']}> AS ?p)\n"
             "}"
         )
         sparql_res = rdf.query(sparql)
-        flow_patterns = []
-        molecular_transport_phenos = []
+        flow_pats = []
+        mt_phenos = []
         for res in sparql_res:
             if res[0]:
-                flow_pattern = str(res[0]).split("#")[1]
-                if flow_pattern not in flow_patterns:
-                    flow_patterns.append(flow_pattern)
+                flow_pat = str(res[0]).split("#")[1]
+                if flow_pat not in flow_pats:
+                    flow_pats.append(flow_pat)
             if res[1]:
-                molecular_transport_pheno = str(res[1]).split("#")[1]
-                if molecular_transport_pheno not in molecular_transport_phenos:
-                    molecular_transport_phenos.append(molecular_transport_pheno)
-        for pheno in flow_patterns:
+                mt_pheno = str(res[1]).split("#")[1]
+                if mt_pheno not in mt_phenos:
+                    mt_phenos.append(mt_pheno)
+        for flow_pat in flow_pats:
             assert (
-                pheno in phenos or pheno in patch_phenos
-            ), f"Flow pattern {pheno} not defined"
-        for pheno in molecular_transport_phenos:
+                flow_pat in phenos or flow_pat in patch_phenos
+            ), f"FlowPattern {flow_pat} not defined"
+        for mt_pheno in mt_phenos:
             assert (
-                pheno in phenos or pheno in patch_phenos
-            ), f"Molecular transport phenomenon {pheno} not defined"
-        flow_pattern_sparql = "".join(
+                mt_pheno in phenos or mt_pheno in patch_phenos
+            ), f"MassTransportPhenomenon {mt_pheno} not defined"
+        flow_pat_sparql = "\n".join(
             [
-                f"    ?p <{ns_ontomo}relatesToFlowPattern> <{ns_ontomo}{fp}> .\n"
-                for fp in pheno_dict["flow_patterns"]
+                f"    ?p <{ontomo}relatesToFlowPattern> <{ontomo}{flow_pat}> ."
+                for flow_pat in pheno_dict["flow_pats"]
             ]
         )
-        molecular_transport_pheno_sparql = "".join(
+        mt_pheno_sparql = "\n".join(
             [
-                f"    ?p <{ns_ontomo}relatesToMolecularTransportPhenomenon> "
-                f"<{ns_ontomo}{mtp}> .\n"
-                for mtp in pheno_dict["molecular_transport_phenomena"]
+                f"    ?p <{ontomo}relatesToMassTransportPhenomenon> "
+                f"<{ontomo}{mt_pheno}> ."
+                for mt_pheno in pheno_dict["mt_phenos"]
             ]
         )
         sparql = (
             f"{prefix_rdf}\n"
             "INSERT {\n"
-            f"    ?p rdf:type <{ns_behavior}{pheno_dict['class']}> .\n"
-            f"{flow_pattern_sparql}"
-            f"{molecular_transport_pheno_sparql}"
+            f"    ?p rdf:type <{ontomo}{pheno_dict['class']}> .\n"
+            f"{flow_pat_sparql}\n"
+            f"{mt_pheno_sparql}\n"
             "}\n"
             "WHERE {\n"
-            f"    BIND(<{pheno_ns}{pheno_dict['name']}> AS ?p)\n"
+            f"    BIND(<{ontomo}{pheno_dict['name']}> AS ?p)\n"
             "}"
         )
         rdf.update(sparql)
@@ -127,54 +99,50 @@ def patch_unit(rdf, patch):
         assert (
             unit_dict["class"] in unit_classes
         ), f"Unknown unit class {unit_dict['class']}"
-        unit_symbol = unit_dict["symbol"]
-        unit_symbol = re.sub("\n", "", unit_symbol)
-        unit_symbol = re.sub(r"\> *\<", "><", unit_symbol)
-        unit_symbol = re.sub(r" *\< *", "<", unit_symbol)
-        unit_symbol = re.sub(r" *\> *", ">", unit_symbol)
+        unit_sym = unit_dict["sym"]
+        unit_sym = re.sub("\n", "", unit_sym)
+        unit_sym = re.sub(r" *\< *", "<", unit_sym)
+        unit_sym = re.sub(r" *\> *", ">", unit_sym)
         sparql = (
             f"{prefix_rdf}\n"
             f"SELECT ?s\n"
             "WHERE {\n"
-            f"    BIND(<{ns_ontomo}{unit_dict['name']}> AS ?u)\n"
-            f"    ?u rdf:type <{ns_si_unit}{unit_dict['class']}> .\n"
-            f"    ?u <{ns_ontomo}hasSymbol> ?s .\n"
+            f"    BIND(<{ontomo}{unit_dict['name']}> AS ?u)\n"
+            f"    ?u rdf:type <{ontomo}Unit> .\n"
+            f"    ?u <{ontomo}hasSymbol> ?s .\n"
             "}"
         )
         sparql_res = rdf.query(sparql)
         if list(sparql_res):
-            sparql_symbol = str(list(sparql_res)[0][0])
-            sparql_symbol = re.sub("xmlns=[^>]*", "", sparql_symbol)
-            sparql_symbol = re.sub("\n", "", sparql_symbol)
-            sparql_symbol = re.sub(r"\> *\<", "><", sparql_symbol)
-            sparql_symbol = re.sub(r" *\< *", "<", sparql_symbol)
-            sparql_symbol = re.sub(r" *\> *", ">", sparql_symbol)
-            assert sparql_symbol == unit_symbol, (
-                f"Inconsistent unit symbol for {unit_dict['name']}: "
-                f"{unit_dict['symbol']}"
+            sparql_sym = str(list(sparql_res)[0][0])
+            sparql_sym = re.sub("xmlns=[^>]*", "", sparql_sym)
+            sparql_sym = re.sub("\n", "", sparql_sym)
+            sparql_sym = re.sub(r" *\< *", "<", sparql_sym)
+            sparql_sym = re.sub(r" *\> *", ">", sparql_sym)
+            assert sparql_sym == sparql_sym, (
+                f"Inconsistent unit symbol for {unit_dict['name']}: {unit_dict['sym']}"
             )
         else:
             sparql = (
                 f"{prefix_rdf}\n"
                 "INSERT {\n"
-                f"    ?u rdf:type <{ns_si_unit}{unit_dict['class']}> .\n"
-                f'    ?u <{ns_ontomo}hasSymbol> "{unit_symbol}"^^rdf:XMLLiteral .\n'
+                f"    ?u rdf:type <{ontomo}Unit> .\n"
+                f'    ?u <{ontomo}hasSymbol> "{unit_sym}"^^rdf:XMLLiteral .\n'
                 "}\n"
                 "WHERE {\n"
-                f"    BIND(<{ns_ontomo}{unit_dict['name']}> AS ?u)\n"
+                f"    BIND(<{ontomo}{unit_dict['name']}> AS ?u)\n"
                 "}"
             )
             rdf.update(sparql)
 
 
-def patch_variable(rdf, patch):
+def patch_var(rdf, patch):
     units = []
     sparql = (
         f"{prefix_rdf}\n"
         f"SELECT ?u\n"
         "WHERE {\n"
-        f"    {{?u rdf:type <{ns_si_unit}SI_BaseUnit>}} UNION "
-        f"{{?u rdf:type <{ns_si_unit}SI_DerivedUnit>}} .\n"
+        f"    ?u rdf:type <{ontomo}Unit> .\n"
         "}"
     )
     sparql_res = rdf.query(sparql)
@@ -182,96 +150,79 @@ def patch_variable(rdf, patch):
         unit = str(res[0]).split("#")[1]
         units.append(unit)
 
-    for variable_dict in patch["Variable"]:
+    for var_dict in patch["Variable"]:
+        assert (var_dict["class"] in var_classes
+        ), f"Unknown variable class {var_dict['class']}"
         assert (
-            variable_dict["class"] in variable_classes
-        ), f"Unknown variable class {variable_dict['class']}"
-        assert (
-            variable_dict["unit"] is None or variable_dict["unit"] in units
-        ), f"Unknown variable unit {variable_dict['unit']}"
-        assert set(variable_dict["dimensions"]).issubset(
-            set(variable_dimensions)
-        ), f"Unknown variable dimension {variable_dict['dimensions']}"
-        if variable_dict["class"] in ["Constant"]:
-            variable_ns = ns_mathematical_model
-        else:
-            variable_ns = ns_ontomo
+            var_dict["unit"] is None or var_dict["unit"] in units
+        ), f"Unknown variable unit {var_dict['unit']}"
+        assert set(var_dict["dims"]).issubset(
+            set(dim_classes)), f"Unknown variable dimension {var_dict['dims']}"
         sparql = (
             f"{prefix_rdf}\n"
             f"SELECT ?v\n"
             "WHERE {\n"
-            f"    BIND(<{ns_ontomo}{variable_dict['name']}> AS ?v)\n"
-            f"    ?v rdf:type <{variable_ns}{variable_dict['class']}> .\n"
+            f"    BIND(<{ontomo}{var_dict['name']}> AS ?v)\n"
+            f"    ?v rdf:type <{ontomo}Unit> .\n"
             "}"
         )
         sparql_res = rdf.query(sparql)
         if sparql_res:
             unit = None
-            dimensions = []
+            dims = []
             sparql = (
                 f"{prefix_rdf}\n"
                 f"SELECT ?s ?u ?d\n"
                 "WHERE {\n"
-                f"    <{ns_ontomo}{variable_dict['name']}> "
-                f"<{ns_ontomo}hasSymbol> ?s .\n"
-                f"    optional{{<{ns_ontomo}{variable_dict['name']}> "
-                f"<{ns_system}hasUnitOfMeasure> ?u .}}\n"
-                f"    optional{{<{ns_ontomo}{variable_dict['name']}> "
-                f"<{ns_system}hasDimension> ?d .}}\n"
+                f"    <{ontomo}{var_dict['name']}> <{ontomo}hasSymbol> ?s .\n"
+                f"    optional{{<{ontomo}{var_dict['name']}> "
+                f"<{var_dict}hasUnit> ?u .}}\n"
+                f"    optional{{<{ontomo}{var_dict['name']}> "
+                f"<{var_dict}hasDimension> ?d .}}\n"
                 "}"
             )
             sparql_res = rdf.query(sparql)
             for res in sparql_res:
-                symbol = re.sub("xmlns=[^>]*", "", str(res[0]))
-                symbol = re.sub("\n", "", symbol)
-                symbol = re.sub(r"\> *\<", "><", symbol)
-                symbol = re.sub(r" *\< *", "<", symbol)
-                symbol = re.sub(r" *\> *", ">", symbol)
+                sym = re.sub("xmlns=[^>]*", "", str(res[0]))
+                sym = re.sub("\n", "", sym)
+                sym = re.sub(r" *\< *", "<", sym)
+                sym = re.sub(r" *\> *", ">", sym)
                 if res[1]:
                     unit = str(res[1]).split("#")[1]
                 if res[2]:
-                    dimension = str(res[2]).split("#")[1].split("_")[0]
-                    dimensions.append(dimension)
-            assert (
-                unit == variable_dict["unit"]
-            ), f"Inconsistent unit for {variable_dict['name']}: {variable_dict['unit']}"
-            assert set(dimensions) == set(variable_dict["dimensions"]), (
-                f"Inconsistent dimensions for {variable_dict['name']}:"
-                f"{variable_dict['dimensions']}"
-            )
+                    dim = str(res[2]).split("#")[1].split("_")[0]
+                    dims.append(dim)
+            assert unit == var_dict["unit"], \
+                f"Inconsistent unit for {var_dict['name']}: {var_dict['unit']}"
+            assert set(dims) == set(var_dict["dims"]), \
+                f"Inconsistent dimensions for {var_dict['name']}: {var_dict['dims']}"
         else:
-            dimension_sparql = "".join(
-                [
-                    f"    ?v <{ns_system}hasDimension> "
-                    f"<{ns_ontomo}{dimension}_Dimension> .\n"
-                    for dimension in variable_dict["dimensions"]
-                ]
-            )
+            dim_sparql = "\n".join([
+                f"    ?v <{ontomo}hasDimension> <{ontomo}{dim}_Dimension> ."
+                for dim in var_dict["dims"]
+            ])
             unit_sparql = (
-                f"    ?v <{ns_system}hasUnitOfMeasure> "
-                f"<{ns_ontomo}{variable_dict['unit']}> .\n"
-                if variable_dict["unit"]
-                else ""
+                f"    ?v <{ontomo}hasUnit> <{ontomo}{var_dict['unit']}> .\n" 
+                if var_dict["unit"] else ""
             )
-            symbol = variable_dict["symbol"]
-            symbol = re.sub("\n", "", symbol)
-            symbol = re.sub(r"\> *\<", "><", symbol)
-            symbol = re.sub(r" *\< *", "<", symbol)
-            symbol = re.sub(r" *\> *", ">", symbol)
+            sym = var_dict["sym"]
+            sym = re.sub("\n", "", sym)
+            sym = re.sub(r" *\< *", "<", sym)
+            sym = re.sub(r" *\> *", ">", sym)
             try:
-                MMLExpression(symbol.replace("\\\"", "\"")).to_numpy()
+                MMLExpression(sym.replace("\\\"", "\"")).to_numpy()
             except:
-                print(f"MathML parsing error for {variable_dict['name']}: {symbol}")
+                print(f"MathML parsing error for {var_dict['name']}: {sym}")
             sparql = (
                 f"{prefix_rdf}\n"
                 "INSERT {\n"
-                f"    ?v rdf:type <{variable_ns}{variable_dict['class']}> .\n"
-                f'    ?v <{ns_ontomo}hasSymbol> "{symbol}"^^rdf:XMLLiteral .\n'
+                f"    ?v rdf:type <{ontomo}{var_dict['class']}> .\n"
+                f'    ?v <{ontomo}hasSymbol> "{sym}"^^rdf:XMLLiteral .\n'
                 f"{unit_sparql}"
-                f"{dimension_sparql}"
+                f"{dim_sparql}"
                 "}\n"
                 "WHERE {\n"
-                f"    BIND(<{ns_ontomo}{variable_dict['name']}> AS ?v)\n"
+                f"    BIND(<{ontomo}{var_dict['name']}> AS ?v)\n"
                 "}"
             )
             rdf.update(sparql)
@@ -279,13 +230,10 @@ def patch_variable(rdf, patch):
 
 def patch_law(rdf, patch):
     law_dict = patch["Law"]
-    variable_dict = [
-        variable_dict
-        for variable_dict in patch["Variable"]
-        if variable_dict["law"] == law_dict["name"]
-    ]
-    assert len(variable_dict) == 1, "Json file is only allowed to add one law"
-    variable_dict = variable_dict[0]
+    var_dict = [var_dict for var_dict in patch["Variable"]
+                if var_dict["law"] == law_dict["name"]]
+    assert len(var_dict) == 1, "Json file is only allowed to add one law"
+    var_dict = var_dict[0]
 
     phenos = []
     for pheno_class in pheno_classes:
@@ -293,78 +241,62 @@ def patch_law(rdf, patch):
             f"{prefix_rdf}\n"
             f"SELECT ?p\n"
             "WHERE {\n"
-            f"    ?p rdf:type <{ns_behavior}{pheno_class}> .\n"
+            f"    ?p rdf:type <{ontomo}{pheno_class}> .\n"
             "}"
         )
         sparql_res = rdf.query(sparql)
         for res in sparql_res:
             phenos.append(str(res[0]).split("#")[1])
-    assert (
-        law_dict["phenomenon"] in phenos
-    ), f"Unknown law phenomenon: {law_dict['phenomenon']}"
+    assert law_dict["pheno"] in phenos, f"Unknown law phenomenon: {law_dict['pheno']}"
 
-    variables = []
-    for variable_class in variable_classes:
-        if variable_class in ["ModelVariable", "Constant"]:
-            variable_ns = ns_mathematical_model
-        else:
-            variable_ns = ns_ontomo
+    vars = []
+    for var_class in var_classes:
         sparql = (
             f"{prefix_rdf}\n"
             f"SELECT ?v\n"
             "WHERE {\n"
-            f"    ?v rdf:type <{variable_ns}{variable_class}> .\n"
+            f"    ?v rdf:type <{ontomo}{var_class}> .\n"
             "}"
         )
         sparql_res = rdf.query(sparql)
         for res in sparql_res:
-            variables.append((str(res[0]), variable_class))
-    for variable in law_dict["variables"]:
-        assert variable in [
-            v[0].split("#")[1] for v in variables
-        ], f"Unknown law variable: {variable}"
-    variables = [
-        variable[0]
-        for variable in variables
-        if variable[0].split("#")[1]
-        in [variable_dict["name"] for variable_dict in patch["Variable"]]
-        or variable[1] == "Constant"
+            vars.append((str(res[0]), var_class))
+    for var in law_dict["vars"]:
+        assert var in [v[0].split("#")[1] for v in vars], f"Unknown law variable: {var}"
+    vars = [
+        var[0] for var in vars if (var[0].split("#")[1] in [var_dict["name"] 
+        for var_dict in patch["Variable"]] or var[1] == "Constant") and 
+        var[0].split("#")[1] in patch["Law"]["vars"]
     ]
 
-    formula = law_dict["formula"]
-    formula = re.sub("\n", "", formula)
-    formula = re.sub(r"\> *\<", "><", formula)
-    formula = re.sub(r" *\< *", "<", formula)
-    formula = re.sub(r" *\> *", ">", formula)
+    fml = law_dict["fml"]
+    fml = re.sub("\n", "", fml)
+    fml = re.sub(r" *\< *", "<", fml)
+    fml = re.sub(r" *\> *", ">", fml)
     try:
-        MMLExpression(formula.replace("\\\"", "\"")).to_numpy()
+        MMLExpression(fml.replace("\\\"", "\"")).to_numpy()
     except:
-        print(f"MathML parsing error for {law_dict['name']}: {formula}")
+        print(f"MathML parsing error for {law_dict['name']}: {fml}")
 
-    variable_sparql = "".join(
-        [
-            f"    ?l <{ns_mathematical_model}hasModelVariable> <{variable}> .\n"
-            for variable in variables
-        ]
-    )
+    var_sparql = "\n".join([
+        f"    ?l <{ontomo}hasModelVariable> <{var}> ." for var in vars
+    ])
     doi_sparql = (
-        f"    ?l <{ns_ontomo}hasDOI> \"{law_dict['DOI']}\"^^rdf:string .\n"
-        if law_dict["DOI"]
-        else ""
+        f"    ?l <{ontomo}hasDOI> \"{law_dict['doi']}\"^^rdf:string .\n"
+        if law_dict["doi"] else ""
     )
     sparql = (
         f"{prefix_rdf}\n"
         "INSERT {\n"
-        f"    ?l rdf:type <{ns_process_model}Law> .\n"
+        f"    ?l rdf:type <{ontomo}Law> .\n"
         f"{doi_sparql}"
-        f'    ?l <{ns_ontomo}hasFormula> "{formula}"^^rdf:XMLLiteral .\n'
-        f"    ?l <{ns_process_model}isAssociatedWith> "
-        f"<{ns_behavior}{law_dict['phenomenon']}> .\n"
-        f"{variable_sparql}"
-        f"    <{ns_ontomo}{variable_dict['name']}> <{ns_ontomo}hasLaw> ?l .\n"
+        f'    ?l <{ontomo}hasFormula> "{fml}"^^rdf:XMLLiteral .\n'
+        f"    ?l <{ontomo}isAssociatedWith> <{ontomo}{law_dict['pheno']}> .\n"
+        f"{var_sparql}"
+        f"    <{ontomo}{var_dict['name']}> <{ontomo}hasLaw> ?l .\n"
         "}\n"
         "WHERE {\n"
-        f"    BIND(<{ns_ontomo}{law_dict['name']}> AS ?l)\n"
+        f"    BIND(<{ontomo}{law_dict['name']}> AS ?l)\n"
         "}"
     )
     rdf.update(sparql)
@@ -390,9 +322,14 @@ if __name__ == "__main__":
         patch = json.load(f)
         patch_pheno(rdf, patch)
         patch_unit(rdf, patch)
-        patch_variable(rdf, patch)
+        patch_var(rdf, patch)
         patch_law(rdf, patch)
 
     # save output model ontology
     assert args.in_rdf != args.out_rdf, "Overwriting RDF file is not allowed"
-    rdf.serialize(args.out_rdf, format="pretty-xml")
+    rdf_str = rdf.serialize(None, format="pretty-xml")
+    rdf_str = re.sub(r"\<OntoMo:", "<", rdf_str)
+    rdf_str = re.sub(r"\</OntoMo:", "</", rdf_str)
+    rdf_str = re.sub(r"\<math[^\>]*\>", "<math>", rdf_str)
+    with open(args.out_rdf, "w") as f:
+        f.write(rdf_str)

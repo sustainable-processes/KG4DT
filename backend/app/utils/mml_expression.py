@@ -215,17 +215,18 @@ class MMLExpression:
             sub_numpy_expr = sub_numpy_expr[:pos] + re.sub(" +", " ", sub_numpy_expr[pos:])
             sub_numpy_expr = sub_numpy_expr.rstrip(" ")
             sub_numpy_expr = re.sub(r" *:", ":", sub_numpy_expr)
-            sub_numpy_expr = re.sub(r" *\[ *", " [", sub_numpy_expr)
+            sub_numpy_expr = re.sub(r"(?<!^) *\[ *", " [", sub_numpy_expr)
             sub_numpy_expr = re.sub(r" *\] *", "] ", sub_numpy_expr)
             sub_numpy_expr = re.sub(r"\( *", "(", sub_numpy_expr)
             sub_numpy_expr = re.sub(r" *\)", ")", sub_numpy_expr)
+            sub_numpy_expr = re.sub(r"([^ \*]) *\* *([^ \*])", r"\1 * \2", sub_numpy_expr)
             sub_numpy_expr = re.sub(r"\(\(([^\(\)]*)\)\)", r"(\1)", sub_numpy_expr)
             sub_numpy_expr = re.sub(r"\(\(([^\(\)]*)\(([^\(\)]*)\)\)\)", r"(\1(\2))", sub_numpy_expr)
             sub_numpy_expr = re.sub(r" *(\[[^ <>\[\]]+(\[[:0-9]+\])* [<>] 0\])", r"\1", sub_numpy_expr)
             sub_numpy_expr = re.sub(r"\(\(((\(([^\(\)]*)\)([^\(\)]*))+)\)\)", r"(\1)", sub_numpy_expr)
             sub_numpy_expr = re.sub(r"\(np.sum\(([^\(\)]+)\)\)", r"np.sum(\1)", sub_numpy_expr)
             sub_numpy_expr = re.sub(r"\(np.prod\(([^\(\)]+)\)\)", r"np.prod(\1)", sub_numpy_expr)
-            sub_numpy_expr = re.sub(r"(?<!len)(?<!np\.exp)(?<!np\.sum)(?<!np\.prod)(?<!np\.maximum)(?<!np\.matmul)\(([^\+\-\*\/\,]*)\)", r"\1", sub_numpy_expr)
+            sub_numpy_expr = re.sub(r"(?<!len)(?<!np\.exp)(?<!np\.sum)(?<!np\.prod)(?<!np\.maximum)(?<!np\.matmul)\(([^\+\-\*\/\,\(\)]*)\)", r"\1", sub_numpy_expr)
             sanitize_numpy_expr.append(sub_numpy_expr)
         sanitize_numpy_expr = "\n".join(sanitize_numpy_expr)
         return sanitize_numpy_expr
@@ -381,7 +382,6 @@ class MMLExpression:
             if action == "start" and elem.tag == "mtext" and level == 0:
                 mtext_expr = elem.text.replace(",", "_").strip(" ")
                 expr += mtext_expr
-            print(action, elem.tag, expr)
         expr = MMLExpression.sanitize_numpy(expr)
         vars = sorted(list(set(vars)))
         return expr, vars
