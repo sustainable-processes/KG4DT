@@ -1,0 +1,72 @@
+
+  <substance:ChemicalSpecies rdf:ID="Noname">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">1999-85-5</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/C12H18O2/c1-11(2,13)9-6-5-7-10(8-9)12(3,4)14/h5-8,13-14H,1-4H3</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">C12H18O2</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string">Noname</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">_ALPHA_,_ALPHA_'-Dihydroxy-m-diisopropylbenzene</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">1,3-Benzenedimethanol, _ALPHA_,_ALPHA_,_ALPHA_',_ALPHA_'-tetramethyl-</substance:name>
+    <system:hasProperty>
+        <substance:MolecularWeight rdf:ID="MolecularWeight_of_Noname">
+            <system:hasValue>
+                <system:ScalarQuantity rdf:ID="Value_of_MolecularWeight_of_Noname">
+                    <system:numericalValue rdf:datatype="&xsd;#string">194.27</system:numericalValue>
+                    <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+                    <system:isValueOf rdf:resource="&chemical_species;#MolecularWeight_of_Noname"/>
+                </system:ScalarQuantity>
+            </system:hasValue>
+        </substance:MolecularWeight>
+    </system:hasProperty>
+  </substance:ChemicalSpecies>
+
+
+  <substance:ChemicalSpecies rdf:ID="Noname">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">2664-63-3</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/C12H10O2S/c13-9-1-5-11(6-2-9)15-12-7-3-10(14)4-8-12/h1-8,13-14H</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">C12H10O2S</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string">Noname</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Phenol, 4,4'-thiobis-</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Phenol, 4,4'-thiodi-</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">p,p'-Dihydroxydiphenyl sulfide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Bis(p-hydroxhphenyl) sulfide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Bis(4-hydroxyphenyl) sulfide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Thiobis[phenol]</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">4,4-Dihydroxydiphenyl sulfide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">4,4-Thiodiphenol</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">4,4'-Dihydroxydiphenyl sulfide</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">4,4'-Thiobis[phenol]</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">4,4'-Thiodiphenol</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">DFS</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Sulfide, bis(4-hydroxyphenyl)</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">4,4'-Dioxydiphenyl sulfide</substance:name>
+    <system:hasProperty>
+        <substance:MolecularWeight rdf:ID="MolecularWeight_of_Noname">
+            <system:hasValue>
+                <system:ScalarQuantity rdf:ID="Value_of_MolecularWeight_of_Noname">
+                    <system:numericalValue rdf:datatype="&xsd;#string">218.27</system:numericalValue>
+                    <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+                    <system:isValueOf rdf:resource="&chemical_species;#MolecularWeight_of_Noname"/>
+                </system:ScalarQuantity>
+            </system:hasValue>
+        </substance:MolecularWeight>
+    </system:hasProperty>
+  </substance:ChemicalSpecies>
+
+    <substance:ChemicalSpecies rdf:ID="Noname">
+    <substance:CAS_RegistryNumber rdf:datatype="&xsd;#string">2802-06-4</substance:CAS_RegistryNumber>
+    <substance:InChI rdf:datatype="&xsd;#string">InChI=1/C4H7NO4.ClH/c6-3(7)1-5-2-4(8)9;/h5H,1-2H2,(H,6,7)(H,8,9);1H</substance:InChI>
+    <substance:molecularFormula rdf:datatype="&xsd;#string">C4H8ClNO4</substance:molecularFormula>
+    <substance:name rdf:datatype="&xsd;#string">Noname</substance:name>
+    <substance:name rdf:datatype="&xsd;#string">Glycine, N-(carboxymethyl)-, hydrochloride</substance:name>
+    <system:hasProperty>
+        <substance:MolecularWeight rdf:ID="MolecularWeight_of_Noname">
+            <system:hasValue>
+                <system:ScalarQuantity rdf:ID="Value_of_MolecularWeight_of_Noname">
+                    <system:numericalValue rdf:datatype="&xsd;#string">169.56</system:numericalValue>
+                    <system:hasUnit rdf:resource="&der_SI_units;#kg_per_kmol"/>
+                    <system:isValueOf rdf:resource="&chemical_species;#MolecularWeight_of_Noname"/>
+                </system:ScalarQuantity>
+            </system:hasValue>
+        </substance:MolecularWeight>
+    </system:hasProperty>
+  </substance:ChemicalSpecies>
