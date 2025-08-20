@@ -1,0 +1,9 @@
+__pycache__
+.pytest_cache
+.venv
+*.egg-info
+buildspec.yml
+graphdb/dist/*zip
+.DS_Store
+docker-compose.yml
+.env
