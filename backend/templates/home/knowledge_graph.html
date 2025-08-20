@@ -1,0 +1,1774 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} KG4DT {% endblock %} 
+
+<!-- Element injected in the BODY element -->
+{% block body_class %} sidebar-mini sidebar-collapse {% endblock body_class %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/fontawesome-free/css/all.min.css') }}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/select2/css/select2.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.css') }}">
+  <!-- TagsInput -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/bootstrap4-tagsinput/tagsinput.css') }}">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+  <!-- Bootstrap-select -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/bootstrap-select/dist/css/bootstrap-select.css') }}">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/jqvmap/jqvmap.min.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/adminlte.min.css') }}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+  <!-- summernote -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/summernote/summernote-bs4.min.css') }}">
+  <!-- jspreadsheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/jspreadsheet/jexcel.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/jspreadsheet/jsuites.css') }}">
+
+{% endblock stylesheets %}
+
+{% block content %}
+  
+  <div class="content-wrapper">
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="row ml-1">
+          <div class="col-sm-6">
+            <h1 class="text-dark">KG4DT</h1>
+          </div>
+          <div class="col-sm-6">
+            <div class="float-sm-right mr-2" style="display: flex">
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- /.content-header -->
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="form-group mb-2">
+              <a style="color: gray;">
+                <b style="font-size:20px; color: black;">Species</b>
+                <!-- : used as species identifier, name or formula, e.g. -->
+              </a>
+              <input multiple data-role="tagsinput" id="species"></input>
+            </div>
+            <div class="form-group mb-2">
+              <a style="color: gray;">
+                <b style="font-size:20px; color: black;">Reaction</b>
+                <!-- : reaction formula, A + 2 B > 3 C, e.g. -->
+              </a>
+              <input multiple data-role="tagsinput" id="reaction"></input>
+            </div>
+            <div class="form-group mb-2">
+              <a style="color: gray;">
+                <b style="font-size:20px; color: black;">Stream</b>
+                <!-- : used as stream identifier, stream 1, e.g. -->
+              </a>
+              <input multiple data-role="tagsinput" id="stream"></input>
+            </div>
+            <div class="form-group mb-2">
+              <a style="color: gray;">
+                <b style="font-size:20px; color: black;">Solvent</b>
+                <!-- : used as solvent identifier, water, e.g. -->
+              </a>
+              <input multiple data-role="tagsinput" id="solvent"></input>
+            </div>
+            <div class="form-group mb-2">
+              <a style="color: gray;">
+                <b style="font-size:20px; color: black;">Catalyst</b>
+                <!-- : used as catalyst identifier, Enzyme, e.g. -->
+              </a>
+              <input data-role="tagsinput" maxTags=1 id="catalyst"></input>
+            </div>
+            <div style="text-align: right;" class="mb-2">
+              <button id="query-info-button" class="btn btn-primary">Query Info</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="solvent-miscibility" class="card card-primary card-outline" style="display: block;">
+          <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
+            <h4 class="card-title">
+              <a data-toggle="collapse" href="#solvent-miscibility-body" aria-expanded="true" style="color: black; display: flex;">
+                Solvent Miscibility
+              </a>
+            </h4>
+          </div>
+          <div id="solvent-miscibility-body" class="collapse">
+            <div class="card-body" style="display: flex;">
+              <ul class="mb-2">
+                <li>
+                  <div style="display: flex;">
+                    <a id="solvent-miscibility-reference" class="mr-4" style="color: black; display: block;">
+                      Sigma Aldrich
+  <img src="{{ url_for('static', filename='assets/img/data_source/sigma_aldrich.png') }}" class="ml-1" style="height: 24px;">
+                    </a>
+                    <div id="solvent-miscibility-value"></div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div id="solute-solubility" class="card card-primary card-outline" style="display: block;">
+          <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
+            <h4 class="card-title">
+              <a data-toggle="collapse" href="#solute-solubility-body" aria-expanded="true" style="color: black; display: flex;">
+                Solute Solubility
+              </a>
+            </h4>
+          </div>
+          <div id="solute-solubility-body" class="collapse">
+            <div class="card-body" style="display: flex;">
+              <ul class="mb-2">
+                <div style="display: block;">
+                  <li>
+                    <div class="mb-2">
+                      <a id="solute-solubility-rmg-reference" class="mr-2" style="color: black;">
+                        RMG
+                        <img src="{{ url_for('static', filename='assets/img/ai_model/rmg.png') }}" class="ml-1" style="height: 24px;">
+                      </a>
+                      <span style="color: #999;" class="mr-4">(mol/L)</span>
+                      <span style="color: #999;">temperature: 25 °C</span>
+                    </div>
+                    <div id="solute-solubility-rmg-value"></div>
+                  </li>
+                </div>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div id="physical-property-pubchem" class="card card-warning card-outline" style="display: block;">
+          <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
+            <h4 class="card-title">
+              <a data-toggle="collapse" href="#physical-property-pubchem-body" aria-expanded="true" style="color: black; display: flex;">
+                PubChem
+                <img src="{{ url_for('static', filename='assets/img/data_source/pubchem.png') }}" class="ml-2" style="height: 24px;">
+              </a>
+            </h4>
+          </div>
+          <div id="physical-property-pubchem-body" class="collapse">
+            <div id="physical-property-pubchem-value" class="card-body"></div>
+          </div>
+        </div>
+
+        <div id="physical-property-chemspider" class="card card-warning card-outline" style="display: block;">
+          <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
+            <h4 class="card-title">
+              <a data-toggle="collapse" href="#physical-property-chemspider-body" aria-expanded="true" style="color: black; display: flex;">
+                ChemSpider
+                <img src="{{ url_for('static', filename='assets/img/data_source/chemspider.png') }}" class="ml-2" style="height: 24px;">
+              </a>
+            </h4>
+          </div>
+          <div id="physical-property-chemspider-body" class="collapse">
+            <div id="physical-property-chemspider-value" class="card-body"></div>
+          </div>
+        </div>
+
+        <div id="physical-property-wikipedia" class="card card-warning card-outline" style="display: block;">
+          <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
+            <h4 class="card-title">
+              <a data-toggle="collapse" href="#physical-property-wikipedia-body" aria-expanded="true" style="color: black; display: flex;">
+                Wikipedia
+                <img src="{{ url_for('static', filename='assets/img/data_source/wikipedia.png') }}" class="ml-2" style="height: 24px;">
+              </a>
+            </h4>
+          </div>
+          <div id="physical-property-wikipedia-body" class="collapse">
+            <div id="physical-property-wikipedia-value" class="card-body"></div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body mt-3 mb-3">
+            <div style="width: 380px;">
+              <div class="ml-2 mb-4" style="display: flex;">
+                <h5 class="mr-3" style="height: 28px; padding-top: 7px;">Mode</h5>
+                <div style="width: 100px;">
+                  <select id="mode" class="selectpicker" data-width="160px" data-placeholder="Select mode">
+                    <option selected>bottom-up</option>
+                    <option>top-down</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div id="context" class="ml-2" style="display: none;">
+              <div style="width: 760px;">
+                <div>
+                  <div class="mb-4" style="display: flex;">
+                    <div id="structure-context-card" class="card card-success" style="display: block; width: 47.5%; margin-right: 5%;">
+                      <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                        <h3 class="card-title">
+                          <i class="nav-icon fas fa-cube"></i>&nbsp;&nbsp;
+                          Structure Context Descriptor
+                        </h3>
+                      </div>
+                      <div class="card-body" style="padding-top: 0.1rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                        <div style="padding-top: 1rem; padding-bottom: 0.4rem;">
+                          <select id="structure-context-descriptor" class="select2 descriptor" style="width: 100%;" data-placeholder="Select a descriptor">
+                            {% for k, attr in entity["context_descriptor"].items() %}
+                              {% if attr["class"] == "StructureContextDescriptor"%}
+                                {% if attr["symbol"] %}
+                                  <option value="{{ k }}">{{ k.replace("_", " ") + "&nbsp;" + attr["symbol"] }}</option>
+                                {% else %}
+                                  <option value="{{ k }}">{{ k.replace("_", " ") }}</option>
+                                {% endif %}
+                              {% endif %}
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="space-context-card" class="card card-success" style="display: block; width: 47.5%;">
+                      <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                        <h3 class="card-title">
+                          <i class="nav-icon fas fa-ruler"></i>&nbsp;&nbsp;
+                          Space Context Descriptor
+                        </h3>
+                      </div>
+                      <div class="card-body" style="padding-top: 0.1rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                        <div style="padding-top: 1rem; padding-bottom: 0.4rem;">
+                          <select id="space-context-descriptor" class="select2 descriptor" multiple="multiple" style="width: 100%;" data-placeholder="Select descriptors">
+                            {% for k, attr in entity["context_descriptor"].items() %}
+                              {% if attr["class"] == "SpaceContextDescriptor"%}
+                                {% if attr["symbol"] %}
+                                  <option value="{{ k }}">{{ k.replace("_", " ") + "&nbsp;" + attr["symbol"] }}</option>
+                                {% else %}
+                                  <option value="{{ k }}">{{ k.replace("_", " ") }}</option>
+                                {% endif %}
+                              {% endif %}
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-4" style="display: flex;">
+                    <div id="energy-context-card" class="card card-success" style="display: block; width: 47.5%; margin-right: 5%;">
+                      <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                        <h3 class="card-title">
+                          <i class="nav-icon fas fa-water"></i>&nbsp;&nbsp;
+                          Energy Context Descriptor
+                        </h3>
+                      </div>
+                      <div class="card-body" style="padding-top: 0.1rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                        <div style="padding-top: 1rem; padding-bottom: 0.4rem;">
+                          <select id="energy-context-descriptor" class="select2 descriptor" multiple="multiple" style="width: 100%;" data-placeholder="Select descriptors">
+                            {% for k, attr in entity["context_descriptor"].items() %}
+                              {% if attr["class"] == "EnergyContextDescriptor"%}
+                                {% if attr["symbol"] %}
+                                  <option value="{{ k }}">{{ k.replace("_", " ") + "&nbsp;" + attr["symbol"] }}</option>
+                                {% else %}
+                                  <option value="{{ k }}">{{ k.replace("_", " ") }}</option>
+                                {% endif %}
+                              {% endif %}
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="substance-context-card" class="card card-success" style="display: block; width: 47.5%;">
+                      <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                        <h3 class="card-title">
+                          <i class="nav-icon fas fa-vials"></i>&nbsp;&nbsp;
+                          Substance Context Descriptor
+                        </h3>
+                      </div>
+                      <div class="card-body" style="padding-top: 0.1rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                        <div style="padding-top: 1rem; padding-bottom: 0.4rem;">
+                          <select id="substance-context-descriptor" class="select2 descriptor" multiple="multiple" style="width: 100%;" data-placeholder="Select descriptors">
+                            {% for k, attr in entity["context_descriptor"].items() %}
+                              {% if attr["class"] == "SubstanceContextDescriptor"%}
+                                {% if attr["symbol"] %}
+                                  <option value="{{ k }}">{{ k.replace("_", " ") + "&nbsp;" + attr["symbol"] }}</option>
+                                {% else %}
+                                  <option value="{{ k }}">{{ k.replace("_", " ") }}</option>
+                                {% endif %}
+                              {% endif %}
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-4" style="display: flex;">
+                    <div id="information-context-card" class="card card-success" style="display: block; width: 47.5%; margin-right: 5%;">
+                      <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                        <h3 class="card-title">
+                          <i class="fas fa-chart-bar"></i>&nbsp;&nbsp;
+                          Information Context Descriptor
+                        </h3>
+                      </div>
+                      <div class="card-body" style="padding-top: 0.1rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                        <div style="padding-top: 1rem; padding-bottom: 0.4rem;">
+                          <select id="information-context-descriptor" class="select2 descriptor" multiple="multiple" style="width: 100%;" data-placeholder="Select descriptors">
+                            {% for k, attr in entity["context_descriptor"].items() %}
+                              {% if attr["class"] == "InformationContextDescriptor"%}
+                                {% if attr["symbol"] %}
+                                  <option value="{{ k }}">{{ k.replace("_", " ") + "&nbsp;" + attr["symbol"] }}</option>
+                                {% else %}
+                                  <option value="{{ k }}">{{ k.replace("_", " ") }}</option>
+                                {% endif %}
+                              {% endif %}
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="time-context-card" class="card card-success" style="display: block; width: 47.5%;">
+                      <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                        <h3 class="card-title">
+                          <i class="nav-icon fas fa-clock"></i>&nbsp;&nbsp;
+                          Time Context Descriptor
+                        </h3>
+                      </div>
+                      <div class="card-body" style="padding-top: 0.1rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                        <div style="padding-top: 1rem; padding-bottom: 0.4rem;">
+                          <select id="time-context-descriptor" class="select2 descriptor" multiple="multiple" style="width: 100%;" data-placeholder="Select descriptors">
+                            {% for k, attr in entity["context_descriptor"].items() %}
+                              {% if attr["class"] == "TimeContextDescriptor"%}
+                                {% if attr["symbol"] %}
+                                  <option value="{{ k }}">{{ k.replace("_", " ") + "&nbsp;" + attr["symbol"] }}</option>
+                                {% else %}
+                                  <option value="{{ k }}">{{ k.replace("_", " ") }}</option>
+                                {% endif %}
+                              {% endif %}
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <div class="card card-success ml-5" style="display: block; width: 800px;">
+                  <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                    <h3 class="card-title">
+                      <i class="nav-icon fas fa-info"></i>&nbsp;&nbsp;
+                      Context Descriptor Table
+                    </h3>
+                  </div>
+                  <div class="card-body" style="padding-top: 0.1rem; padding-bottom: 0.5rem; padding-left: 0.75rem;">
+                    <div class="mb-3">
+                      <div class="ml-2 mt-2" style="display: flex; width: 100%;">
+                        <div style="display: flex;">
+                          <div class="mr-3 mb-2" style="width: 74px; height: 28px; padding-top: 7px;">Data path:</div>
+                          <select id="import" class="selectpicker" data-width="160px">
+                            <option selected>website</option>
+                            <option>local</option>
+                          </select>
+                          <div class="ml-2">
+                            <input id="local-path" type="file" accept=".csv" style="display: none; margin-right: -50px; padding-top: 4.5px;">
+                            <div>
+                              <select id="website-case" class="selectpicker" data-width="221px" style="display: none;">
+                                <option disabled selected hidden></option>
+                                <option value="dushman/descriptor_data.csv">dushman</option>
+                                <option value="esterification/descriptor_data.csv">esterification</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div style="text-align: right; width: 100%;">
+                          <button id="import-btn" class="btn btn-primary" style="height: 38px;">Import</button>
+                          <button id="save-btn" class="btn btn-primary ml-2" style="height: 38px;">Save</button>
+                        </div>
+                      </div>
+                      <div id="input" class="ml-2 mt-2"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex;">
+              <div style="display: flex;">
+                <div style="width: 380px;">
+                  <div id="bottom-up" class="ml-2">
+                    <div class="mb-2" style="height: 28px; padding-top: 7px;;">Phenomenon:</div>
+                    <div style="width: 380px;">
+                      <select id="phenomenon" class="select2" multiple="multiple" style="width: 100%;" data-placeholder="Select phenomena">
+                        {% for k, attr in entity["phenomenon"].items() %}
+                        <option>{{ k.replace("_", " ") }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div id="top-down" class="ml-2">
+                    <div style="width: 380px;">
+                      <div style="display: flex;">
+                        <button id="infer-btn" class="btn btn-primary" style="height: 38px;">Infer</button>
+                        <div class="ml-3">
+                          <select id="sample" class="selectpicker" data-width="200px" data-placeholder="Select sample" style="margin-top: 2px;">
+                            <option value=-1>All rules</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-2" style="height: 28px; padding-top: 7px;">Matched Rules:</div>
+                      <select id="rule" multiple class="custom-select" style="height: 200px; font-size: 14px;">
+                        {% for k, attr in entity["rule"].items() %}
+                        <option>{{ k.replace("_", " ") }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div id="rule-card" class="mt-3 card card-success" style="display: none;">
+                      <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem; background-color: rgb(11, 118, 160);">
+                        <h3 class="card-title">
+                        </h3>
+                      </div>
+                      <div class="card-body" style="padding-top: 0.1rem; padding-bottom: 0.5rem;">
+                        <div style="padding-bottom: 0.4rem;">
+                          <span><b>Law:&nbsp;&nbsp;</b></span>
+                          <ul class="law mb-0" style="padding-left: 25px; font-size: 15px;"></ul>
+                        </div>
+                        <div style="padding-bottom: 0.4rem;">
+                          <span><b>Descriptor:&nbsp;&nbsp;</b></span>
+                          <span class="descriptor" style="font-size: 15px;"></span>
+                        </div>
+                        <a class="sparql" data-toggle="collapse" href="#detail-sparql">
+                          <span>
+                            <span style="color: black;"><b>SPARQL:&nbsp;&nbsp;</b></span>
+                            <span class="concise-sparql" style="text-align: center; font-size: 14px; color: black;">...</span>
+                          </span>
+                          <textarea id="detail-sparql" class="collapse" style="font-size: 14px; margin-top: 0.5rem; color: #999; width: 100%;" rows=10 readonly>
+                          </textarea>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="card-template" class="card card-primary" style="display: none;">
+                  <div class="card-header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                    <h3 class="card-title">
+                    </h3>
+                  </div>
+                  <div class="card-body" style="padding-top: 0.1rem; padding-bottom: 0.5rem;">
+                    <div style="padding-bottom: 0.4rem;">
+                      <span><b>Phenomenon:&nbsp;&nbsp;</b></span>
+                      <span class="phenomenon" style="text-align: center;"></span>
+                    </div>
+                    <div style="padding-bottom: 0.4rem;">
+                      <span><b>Reference:&nbsp;&nbsp;</b></span>
+                      <a class="doi" style="text-align: center; font-size: 15px;"></a>
+                    </div>
+                    <div style="padding-bottom: 0.4rem;">
+                      <span><b>Parameter:&nbsp;&nbsp;</b></span>
+                      <span class="parameter" style="text-align: center;"></span>
+                    </div>
+                    <a class="formula" data-toggle="collapse" href="#chart-template-detail-formula">
+                      <span>
+                        <span style="color: black;"><b>Formula:&nbsp;&nbsp;</b></span>
+                        <span class="concise-formula" style="text-align: center; font-size: 14px; color: black;"></span>
+                      </span>
+                      <div class="collapse detail-formula ml-4" style="font-size: 14px; margin-top: 0.5rem;">
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="ml-4" style="width: 380px;">
+                  <div id="bottom-up-cards">
+                  </div>
+                </div>
+              </div>
+
+              <div class="ml-4">
+                <div style="display: flex;">
+                  <div id="node-label" class="form-check ml-2 mb-3">
+                    <input class="form-check-input" type="checkbox" checked>
+                    <label class="form-check-label">Node Label</label>
+                  </div>
+                  <div id="edge-label" class="form-check ml-5 mb-3">
+                    <input class="form-check-input" type="checkbox">
+                    <label class="form-check-label">Edge Label</label>
+                  </div>
+                </div>
+                <div id="knowledge-graph" style="width: 800px; height: 800px; border: 1px solid #e9ecef;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height: 0.1px;"></div>
+      </div>
+    </section>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- jQuery -->
+  <script src="{{ url_for('static', filename='assets/plugins/jquery/jquery.min.js') }}"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="{{ url_for('static', filename='assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+  <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+  <script>$.widget.bridge('uibutton', $.ui.button)</script>
+  <!-- Bootstrap 4 -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <!-- Bootstrap-select -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap-select/dist/js/bootstrap-select.min.js') }}"></script>
+  <!-- Select2 -->
+  <script src="{{ url_for('static', filename='assets/plugins/select2/js/select2.full.min.js') }}"></script>
+  <!-- TagsInput -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap4-tagsinput/tagsinput.js') }}"></script>
+  <!-- Bootstrap4 Duallistbox -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
+  <!-- InputMask -->
+  <script src="{{ url_for('static', filename='assets/plugins/moment/moment.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/plugins/inputmask/jquery.inputmask.min.js') }}"></script>
+  <!-- date-range-picker -->
+  <script src="{{ url_for('static', filename='assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
+  <!-- bootstrap color picker -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') }}"></script>
+  <!-- Tempusdominus Bootstrap 4 -->
+  <script src="{{ url_for('static', filename='assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+  <!-- Bootstrap Switch -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
+  <!-- ChartJS -->
+  <script src="{{ url_for('static', filename='assets/plugins/chart.js/Chart.min.js') }}"></script>
+  <!-- JQVMap -->
+  <script src="{{ url_for('static', filename='assets/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+  <!-- Summernote -->
+  <script src="{{ url_for('static', filename='assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
+  <!-- overlayScrollbars -->
+  <script src="{{ url_for('static', filename='assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+  <!-- jspreadsheet -->
+  <script src="{{ url_for('static', filename='assets/plugins/jspreadsheet/jexcel.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/plugins/jspreadsheet/jsuites.js') }}"></script>
+  <!-- visjs -->
+  <script src="{{ url_for('static', filename='assets/plugins/visjs/vis-network.min.js') }}"></script>
+  <!-- AdminLTE App -->
+  <script src="{{ url_for('static', filename='assets/js/adminlte.js') }}"></script>
+
+  <script type="text/javascript">{{ entity_json | safe }}</script>
+  <script type="text/javascript">{{ model_context_json | safe }}</script>
+  <script type="text/javascript">{{ knowledge_graph_data_json | safe }}</script>
+
+  <script>
+    if (modelContext) {
+      loadModelContext(modelContext);
+    }
+
+    $(document).on('click', '.bottom-up-link', function() {
+      sessionStorage.removeItem('modelContext');
+    });
+    
+    $(document).on('click', '.top-down-rule-link', function() {
+      sessionStorage.setItem('modelContext', JSON.stringify(getModelContext()));
+    });
+
+    $(document).on('click', '.top-down-exploration-link', function() {
+      sessionStorage.removeItem('modelContext');
+    });
+
+    function speciesValid() {
+      var species = $('#species').val().split(',');
+      $('#species').prev().children().each(function(index, elem) {
+        var symbol = document.createElement('a');
+        var span = document.createElement('span');
+        symbol.innerHTML = species[index];
+        span.setAttribute('data-role', 'remove');
+        $(elem).empty().append(symbol).append(span);
+      })
+    }
+    $(document).on('change', '#species', speciesValid);
+
+    function reactionValid() {
+      var species = $('#species').val().split(',');
+      var reactions = $('#reaction').val().split(',');
+      var reactionVal = [];
+      var re = new RegExp("^((\\d+ )?.+ \\+ )*(\\d+ )?.+ > ((\\d+ )?.+ \\+ )*(\\d+ )?.+$");
+      var reNum = new RegExp("^\\d+$");
+      $('#reaction').prev().children().each(function(index, elem) {
+        var reaction = reactions[index];
+        if (re.test(reaction)) {
+          var lhs_species = $.map(reaction.split(' > ')[0].split(' + '), function(s, i) {
+            if (reNum.test(s.split(' ')[0])) {
+              return s.split(' ').slice(1).join(' ');
+            } else {
+              return s;
+            }
+          });
+          var rhs_species = $.map(reaction.split(' > ')[1].split(' + '), function(s, i) {
+            if (reNum.test(s.split(' ')[0])) {
+              return s.split(' ').slice(1).join(' ');
+            } else {
+              return s;
+            }
+          });
+          var reaction_species = $.merge(lhs_species, rhs_species);
+          if (reaction_species.every(function(s) {return species.includes(s);})) {
+            var formula = document.createElement('a');
+            var span = document.createElement('span');
+            formula.innerHTML = reaction;
+            span.setAttribute('data-role', 'remove');
+            $(elem).empty().append(formula).append(span);
+            reactionVal.push(reaction);
+          } else {
+            $('#reaction').prev().remove(elem);
+          }
+        }
+      })
+      $('#reaction').val(reactionVal.join(','));
+    }
+    $(document).on('change', '#reaction', reactionValid)
+
+    function catalystValid() {
+      var catalysts = $('#catalyst').val().split(',').filter((x) => {return x;});
+      if (catalysts.length > 1) {
+        $('#catalyst').val(catalysts[0]).trigger('change');
+        $('#catalyst').prev().children('span').each(function(index, elem) {
+          if (index > 0) {
+            $(elem).remove();
+          }
+        });
+      } else {
+        $('#catalyst').prev().children().each(function(index, elem) {
+          var symbol = document.createElement('a');
+          var span = document.createElement('span');
+          symbol.innerHTML = catalysts[index];
+          span.setAttribute('data-role', 'remove');
+          $(elem).empty().append(symbol).append(span);
+        });
+      }
+    }
+    $(document).on('change', '#catalyst', catalystValid);
+
+    function getPubChemPhysicalProperty() {
+      var solvents = $('#solvent').val().split(',');
+      solvents = $(solvents).filter(function(index, solvent) {return solvent.length > 0}).toArray();
+      if (!solvents) {
+        $('#physical-property-pubchem').css('display', 'none');
+      };
+      var physicalPropertyRequestJson = JSON.stringify(solvents);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', window.location.origin + '{{ url_for("home.physical_property_pubchem") }}', true);
+      xhr.timeout = 30000; // timeout in 30 seconds
+      xhr.setRequestHeader('Content-type','application/json');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var physicalPropertyResult = JSON.parse(xhr.response);
+          $('#physical-property-pubchem-value').children().remove();
+          for (var solvent in physicalPropertyResult) {
+            var solventPhysicalPropertyResult = physicalPropertyResult[solvent];
+            var solventDiv = $('<div class="ml-3 mb-3"></div>');
+            var solventHeadDiv = $('<div style="display: flex"></div>');
+            $(solventHeadDiv).append($('<label style="margin-bottom: 0;">' + solvent + '</label>'));
+            $(solventHeadDiv).append($('<span class="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;</span>'));
+            $(solventHeadDiv).append($('<span style="color: #999">SMILES: ' + physicalPropertyResult[solvent]['canonical_smiles'] + '</span>'));
+            $(solventDiv).append(solventHeadDiv);
+            for (var solventPhysicalProperty in solventPhysicalPropertyResult['property']) {
+              var solventPhysicalPropertyDiv = $('<div class="ml-3"></div>');
+              var solventPhysicalPropertyList = solventPhysicalPropertyResult['property'][solventPhysicalProperty];
+              $(solventPhysicalPropertyDiv).append($('<a>' + solventPhysicalProperty + '</a>'));
+              var solventPhysicalPropertyUL = $('<ul class="mb-0"></ul>');
+              for (var i in solventPhysicalPropertyList) {
+                var solventPhysicalPropertyLI = $('<li></li>');
+                $(solventPhysicalPropertyLI).append($('<div>' + solventPhysicalPropertyList[i]['value'] + '</div>'));
+                $(solventPhysicalPropertyLI).append($('<div style="color: #999;">' + solventPhysicalPropertyList[i]['reference'] + '</div>'));
+                $(solventPhysicalPropertyUL).append(solventPhysicalPropertyLI);
+              }
+              $(solventPhysicalPropertyDiv).append(solventPhysicalPropertyUL);
+              $(solventDiv).append(solventPhysicalPropertyDiv);
+            }
+            $('#physical-property-pubchem-value').append(solventDiv);
+          }
+          $('#physical-property-pubchem').css('display', 'block')
+        } else {
+          $('#physical-property-pubchem').css('display', 'none');
+        }
+      };
+      xhr.send(physicalPropertyRequestJson);
+    }
+
+    function getChemSpiderPhysicalProperty() {
+      var solvents = $('#solvent').val().split(',');
+      solvents = $(solvents).filter(function(index, solvent) {return solvent.length > 0}).toArray();
+      if (!solvents) {
+        $('#physical-property-chemspider').css('display', 'none');
+      };
+      var physicalPropertyRequestJson = JSON.stringify(solvents);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', window.location.origin + '{{ url_for("home.physical_property_chemspider") }}', true);
+      xhr.timeout = 30000; // timeout in 30 seconds
+      xhr.setRequestHeader('Content-type','application/json');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var physicalPropertyResult = JSON.parse(xhr.response);
+          $('#physical-property-chemspider-value').children().remove();
+          for (var solvent in physicalPropertyResult) {
+            var solventPhysicalPropertyResult = physicalPropertyResult[solvent];
+            var solventDiv = $('<div class="ml-3 mb-3"></div>');
+            var solventHeadDiv = $('<div style="display: flex"></div>');
+            $(solventHeadDiv).append($('<label style="margin-bottom: 0;">' + solvent + '</label>'));
+            $(solventHeadDiv).append($('<span class="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;</span>'));
+            $(solventHeadDiv).append($('<span style="color: #999">SMILES: ' + physicalPropertyResult[solvent]['canonical_smiles'] + '</span>'));
+            $(solventDiv).append(solventHeadDiv);
+            for (var solventPhysicalProperty in solventPhysicalPropertyResult['property']) {
+              var solventPhysicalPropertyDiv = $('<div class="ml-3"></div>');
+              var solventPhysicalPropertyList = solventPhysicalPropertyResult['property'][solventPhysicalProperty];
+              $(solventPhysicalPropertyDiv).append($('<a>' + solventPhysicalProperty + '</a>'));
+              var solventPhysicalPropertyUL = $('<ul class="mb-0"></ul>');
+              for (var i in solventPhysicalPropertyList) {
+                var solventPhysicalPropertyLI = $('<li></li>');
+                $(solventPhysicalPropertyLI).append($('<div>' + solventPhysicalPropertyList[i]['value'] + '</div>'));
+                $(solventPhysicalPropertyLI).append($('<div style="color: #999;">' + solventPhysicalPropertyList[i]['reference'] + '</div>'));
+                $(solventPhysicalPropertyUL).append(solventPhysicalPropertyLI);
+              }
+              $(solventPhysicalPropertyDiv).append(solventPhysicalPropertyUL);
+              $(solventDiv).append(solventPhysicalPropertyDiv);
+            }
+            $('#physical-property-chemspider-value').append(solventDiv);
+          }
+          $('#physical-property-chemspider').css('display', 'block')
+        } else {
+          $('#physical-property-chemspider').css('display', 'none');
+        }
+      };
+      xhr.send(physicalPropertyRequestJson);
+    }
+
+    function getWikipediaPhysicalProperty() {
+      var solvents = $('#solvent').val().split(',');
+      solvents = $(solvents).filter(function(index, solvent) {return solvent.length > 0}).toArray();
+      if (!solvents) {
+        $('#physical-property-wikipedia').css('display', 'none');
+      };
+      var physicalPropertyRequestJson = JSON.stringify(solvents);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', window.location.origin + '{{ url_for("home.physical_property_wikipedia") }}', true);
+      xhr.timeout = 30000; // timeout in 30 seconds
+      xhr.setRequestHeader('Content-type','application/json');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var physicalPropertyResult = JSON.parse(xhr.response);
+          $('#physical-property-wikipedia-value').children().remove();
+          for (var solvent in physicalPropertyResult) {
+            var solventPhysicalPropertyResult = physicalPropertyResult[solvent];
+            var solventDiv = $('<div class="ml-3 mb-3"></div>');
+            var solventHeadDiv = $('<div style="display: flex"></div>');
+            $(solventHeadDiv).append($('<label style="margin-bottom: 0;">' + solvent + '</label>'));
+            $(solventHeadDiv).append($('<span class="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;</span>'));
+            $(solventHeadDiv).append($('<span style="color: #999">SMILES: ' + physicalPropertyResult[solvent]['canonical_smiles'] + '</span>'));
+            $(solventDiv).append(solventHeadDiv);
+            for (var solventPhysicalProperty in solventPhysicalPropertyResult['property']) {
+              var solventPhysicalPropertyDiv = $('<div class="ml-3"></div>');
+              var solventPhysicalPropertyList = solventPhysicalPropertyResult['property'][solventPhysicalProperty];
+              $(solventPhysicalPropertyDiv).append($('<a>' + solventPhysicalProperty + '</a>'));
+              var solventPhysicalPropertyUL = $('<ul class="mb-0"></ul>');
+              for (var i in solventPhysicalPropertyList) {
+                var solventPhysicalPropertyLI = $('<li></li>');
+                $(solventPhysicalPropertyLI).append($('<div>' + solventPhysicalPropertyList[i]['value'] + '</div>'));
+                $(solventPhysicalPropertyLI).append($('<div style="color: #999;">' + solventPhysicalPropertyList[i]['reference'] + '</div>'));
+                $(solventPhysicalPropertyUL).append(solventPhysicalPropertyLI);
+              }
+              $(solventPhysicalPropertyDiv).append(solventPhysicalPropertyUL);
+              $(solventDiv).append(solventPhysicalPropertyDiv);
+            }
+            $('#physical-property-wikipedia-value').append(solventDiv);
+          }
+          $('#physical-property-wikipedia').css('display', 'block')
+        } else {
+          $('#physical-property-wikipedia').css('display', 'none');
+        }
+      };
+      xhr.send(physicalPropertyRequestJson);
+    }
+
+    function getSolventMiscibility() {
+      var solvents = $('#solvent').val().split(',');
+      solvents = $(solvents).filter(function(index, solvent) {return solvent.length > 0}).toArray();
+      if (!solvents) {
+        $('#solvent-miscibility').css('display', 'none');
+      };
+      var solventMiscibilityRequestJson = JSON.stringify(solvents);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', window.location.origin + '{{ url_for("home.solvent_miscibility") }}', true);
+      xhr.timeout = 30000; // timeout in 30 seconds
+      xhr.setRequestHeader('Content-type','application/json');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var solventMiscibilityResult = JSON.parse(xhr.response);
+          $('#solvent-miscibility-value').text(solventMiscibilityResult[0]);
+          $('#solvent-miscibility-reference').attr('href', solventMiscibilityResult[1]);
+          if (solventMiscibilityResult[1]) {
+            $('#solvent-miscibility-reference').css('display', 'block')
+          } else {
+            $('#solvent-miscibility-reference').css('display', 'none')
+          }
+          $('#solvent-miscibility').css('display', 'block');
+        } else {
+          $('#solvent-miscibility').css('display', 'none');
+        }
+      };
+      xhr.send(solventMiscibilityRequestJson);
+    }
+
+    function getSoluteSolubility() {
+      var solvents = $('#solvent').val().split(',');
+      var solutes = $('#species').val().split(',');
+      solvents = $(solvents).filter(function(index, solvent) {return solvent.length > 0}).toArray();
+      solutes = $(solutes).filter(function(index, solute) {return solute.length > 0}).toArray();
+      if (!solvents || !solutes) {
+        $('#solute-solubility').css('display', 'none');
+      };
+      var soluteSolubilityRequestJson = JSON.stringify({"solvents": solvents, "solutes": solutes});
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', window.location.origin + '{{ url_for("home.solute_solubility") }}', true);
+      xhr.timeout = 120000; // timeout in 2 minutes
+      xhr.setRequestHeader('Content-type','application/json');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var soluteSolubilityResult = JSON.parse(xhr.response);
+          $('#solute-solubility-rmg-reference').closest('div').css('display', 'block');
+          $('#solute-solubility-rmg-reference').attr('href', soluteSolubilityResult["reference"]);
+          $('#solute-solubility-rmg-value').children().remove();
+          var table = $('<table class="table table-bordered" style="color: black; text-align: center"><thead><tr><th></th></tr></thead></table>')
+          $(solutes).each(function(_, solute) {
+            $(table).find('thead').find('tr').append($('<th style="font-weight: normal;">' + solute + '</th>'));
+          });
+          var tbody = $('<tbody></tbody>');
+          $(solvents).each(function(index, solvent) {
+            $(tbody).append($('<tr>' + solvent + '</tr>'));
+            $(tbody).find('tr:eq(' + index.toString() + ')').append($('<td>' + solvent + '</td>'))
+            $(soluteSolubilityResult["value"][index]).each(function(_, value) {
+              $(tbody).find('tr:eq(' + index.toString() + ')').append($('<td>' + value + '</td>'))
+            });
+          });
+          $(table).append(tbody);
+          $('#solute-solubility-rmg-value').append(table);
+          $('#solute-solubility').css('display', 'block');
+        } else {
+          $('#solute-solubility').css('display', 'none');
+        }
+      };
+      xhr.send(soluteSolubilityRequestJson);
+    }
+
+    $(document).on('click', '#query-info-button', function() {
+      getSolventMiscibility();
+      getSoluteSolubility();
+      getPubChemPhysicalProperty();
+      getChemSpiderPhysicalProperty();
+      getWikipediaPhysicalProperty();
+    })
+
+    function loadModelContext(modelContext) {
+      $('#species').val(modelContext['basic']['species']);
+      $('#reaction').val(modelContext['basic']['reactions']);
+      $('#stream').val(modelContext['basic']['streams']);
+      $('#solvent').val(modelContext['basic']['solvents']);
+      $('#catalyst').val(modelContext['basic']['catalysts']);
+      setTimeout(function() {
+        $('#query-info-button').click();
+        $('#mode').val('top-down').trigger('change');
+        var structureContextDescriptor = modelContext['context_descriptor']['structure_context_descriptor'];
+        $('#structure-context-descriptor').val(structureContextDescriptor).trigger('change');
+        $.each(['space', 'energy', 'substance', 'information', 'time'], function(_, aspect) {
+          $('#' + aspect + '-context-descriptor').val(modelContext['context_descriptor'][aspect + '_context_descriptor'].sort()).trigger('change');
+        });
+      }, 100);
+    }
+
+    function getModelContext() {
+      var modelContext = {
+        "basic": {
+          "reactions": $('#reaction').val().split(','),
+          "solvents": $('#solvent').val().split(','),
+          "species": $('#species').val().split(','),
+          "streams": $('#stream').val().split(','),
+          "catalysts": $('#catalyst').val().split(','),
+        },
+        "context_descriptor": {
+          "energy_context_descriptor": $('#energy-context-descriptor').val(),
+          "information_context_descriptor": $('#information-context-descriptor').val(),
+          "space_context_descriptor": $('#space-context-descriptor').val(),
+          "structure_context_descriptor": $('#structure-context-descriptor').val(),
+          "substance_context_descriptor": $('#substance-context-descriptor').val(),
+          "time_context_descriptor": $('#time-context-descriptor').val()
+        },
+        "type": "top-down"
+      };
+      return modelContext;
+    }
+
+    function convertParameterSymbol(symbol) {
+      symbol = symbol.replaceAll('\n', '');
+      symbol = symbol.replaceAll(' ', '');
+      var subReg = new RegExp('<msub>[^<>]*?<mi>([^<>]*?)<\/mi>[^<>]*?<mtext>([^<>]*?)<\/mtext>[^<>]*?<\/msub>');
+      symbol = symbol.replace(subReg, '$1<sub>$2</sub>');
+      var subReg = new RegExp('<msub>[^<>]*?<mi>([^<>]*?)<\/mi>[^<>]*?<msub><mtext>([^<>]*?)<\/mtext>[^<>]*?<mtext>([^<>]*?)<\/mtext>[^<>]*?<\/msub>[^<>]*?<\/msub>');
+      symbol = symbol.replace(subReg, '$1<sub>$2<sub>$3</sub></sub>');
+      symbol = symbol.replace('<math>', '');
+      symbol = symbol.replace('</math>', '');
+      symbol = symbol.replace('<mrow>', '');
+      symbol = symbol.replace('</mrow>', '');
+      symbol = symbol.replace('<mtext>', '');
+      symbol = symbol.replace('</mtext>', '');
+      symbol = symbol.replace('<mi>', '');
+      symbol = symbol.replace('</mi>', '');
+      symbol = symbol.trim();
+      return symbol;
+    }
+    function convertUnitSymbol(symbol) {
+      symbol = symbol.replaceAll('\n', '');
+      symbol = symbol.replaceAll(' ', '');
+      var subReg = new RegExp('<msup>[^<>]*?<mtext>([^<>]*?)<\/mtext>[^<>]*?<mn>([^<>]*?)<\/mn>[^<>]*?<\/msup>');
+      symbol = symbol.replace(subReg, '$1<sup>$2</sup>');
+      var subReg = new RegExp('<msup>[^<>]*?<mtext>([^<>]*?)<\/mtext>[^<>]*?<mtext>([^<>]*?)<\/mtext>[^<>]*?<\/msup>');
+      symbol = symbol.replace(subReg, '$1<sup>$2</sup>');
+      symbol = symbol.replaceAll('<math>', '');
+      symbol = symbol.replaceAll('</math>', '');
+      symbol = symbol.replaceAll('<mtext>', '');
+      symbol = symbol.replaceAll('</mtext>', '');
+      return symbol
+    }
+
+    $('.select2').select2();
+    $(document).on('change', '#mode', function() {
+      if ($('#mode').val() == 'bottom-up') {
+        $('#bottom-up').css('display', '');
+        $('#top-down').css('display', 'none');
+        $('#context').css('display', 'none');
+      }
+      if ($('#mode').val() == 'top-down') {
+        $('#phenomenon').val([]).trigger('change');
+        $('#bottom-up').css('display', 'none');
+        $('#top-down').css('display', '');
+        $('#context').css('display', 'flex');
+      }
+    });
+    $('#mode').trigger('change');
+
+    var network;
+    var allNodes;
+    var allEdges;
+    var highlightActive = false;
+    var nodesDataset = new vis.DataSet(knowledgeGraphData['node']);
+    var edgesDataset = new vis.DataSet(knowledgeGraphData['edge']);
+    function draw() {
+      var nodeLabel = $('#node-label input').is(":checked");
+      var edgeLabel = $('#edge-label input').is(":checked");
+      var container = document.getElementById('knowledge-graph');
+      var data = {nodes: nodesDataset, edges: edgesDataset};
+      var nodes = {
+        shape: "dot",
+        size: 8,
+        borderWidth: 1,
+        font: { size: 24 },
+      }
+      edges = {
+        width: 2,
+        smooth: { type: "dynamic" },
+        font: { size: 16 },
+      }
+      if (!nodeLabel) {
+        nodes.font = {
+          color: 'transparent',
+          strokeColor: 'transparent',
+        }
+      }
+      if (!edgeLabel) {
+        edges.font = {
+          color: 'transparent',
+          strokeColor: 'transparent',
+        }
+      }
+      var options = {
+        nodes: nodes,
+        edges: edges,
+        interaction: {
+          hover: true,
+          navigationButtons: true,
+        },
+        layout: {
+          randomSeed: 12,
+          improvedLayout: true,
+        },
+        physics: {
+          enabled: true,
+          maxVelocity: 100,
+          solver: "forceAtlas2Based",
+          timestep: 0.5,
+          stabilization: { iterations: 100 },
+          forceAtlas2Based: {
+            theta: 0.5,
+            gravitationalConstant: -50,
+            centralGravity: 0.01,
+            springConstant: 0.02,
+            springLength: 120,
+            damping: 0.4,
+            avoidOverlap: 1,
+          },
+          hierarchicalRepulsion: {
+            centralGravity: 0.0,
+            springLength: 100,
+            springConstant: 0.01,
+            nodeDistance: 120,
+            damping: 0.09,
+            avoidOverlap: 0
+          },
+          // barnesHut: {
+          //   theta: 0.5,
+          //   gravitationalConstant: -2000,
+          //   centralGravity: 0.3,
+          //   springLength: 150,
+          //   springConstant: 0.02,
+          //   damping: 0.5,
+          //   avoidOverlap: 0.5,
+          // },
+          repulsion: {
+            centralGravity: 0.2,
+            springLength: 200,
+            springConstant: 0.04,
+            nodeDistance: 100,
+            damping: 0.5,
+          },
+        },
+      };
+      network = new vis.Network(container, data, options);
+      allNodes = nodesDataset.get({ returnType: "Object" });
+      allEdges = edgesDataset.get({ returnType: "Object" });
+      network.on("click", neighbourhoodHighlight);
+    }
+    $(document).on('change', '#node-label input', draw);
+    $(document).on('change', '#edge-label input', draw);
+
+    function neighbourhoodHighlight(params) {
+      if (params.nodes.length > 0) {
+        highlightActive = true;
+        var i, j;
+        var selectedNode = params.nodes[0];
+
+        for (var nodeId in allNodes) {
+          allNodes[nodeId].color = "rgba(200,200,200,0.5)";
+          if (allNodes[nodeId].hiddenLabel === undefined) {
+            allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
+            allNodes[nodeId].label = undefined;
+          }
+        }
+        for (var edgeId in allEdges) {
+          allEdges[edgeId].color = "rgba(200,200,200,0.5)";
+          if (allEdges[edgeId].hiddenLabel === undefined) {
+            allEdges[edgeId].hiddenLabel = allEdges[edgeId].label;
+            allEdges[edgeId].label = " ";
+          }
+        }
+
+        var connectedNodes = network.getConnectedNodes(selectedNode).concat([selectedNode]);
+        var connectedEdges = [];
+        for (var i in allEdges) {
+          if (connectedNodes.includes(allEdges[i].from) && connectedNodes.includes(allEdges[i].to)) {
+            connectedEdges = connectedEdges.concat(i);
+          }
+        }
+        for (i = 0; i < connectedNodes.length; i++) {
+          allNodes[connectedNodes[i]].color = undefined;
+          if (allNodes[connectedNodes[i]].hiddenLabel !== undefined) {
+            allNodes[connectedNodes[i]].label = allNodes[connectedNodes[i]].hiddenLabel;
+            allNodes[connectedNodes[i]].hiddenLabel = undefined;
+          }
+        }
+        for (i = 0; i < connectedEdges.length; i++) {
+          allEdges[connectedEdges[i]].color = undefined;
+          if (allEdges[connectedEdges[i]].hiddenLabel !== undefined) {
+            allEdges[connectedEdges[i]].label = allEdges[connectedEdges[i]].hiddenLabel;
+            allEdges[connectedEdges[i]].hiddenLabel = undefined;
+          }
+        }
+
+        var nodeUpdateArray = [];
+        for (nodeId in allNodes) {
+          if (allNodes.hasOwnProperty(nodeId)) {
+            nodeUpdateArray.push(allNodes[nodeId]);
+          }
+        }
+        nodesDataset.update(nodeUpdateArray);
+        var edgeUpdateArray = [];
+        for (edgeId in allEdges) {
+          if (allEdges.hasOwnProperty(edgeId)) {
+            edgeUpdateArray.push(allEdges[edgeId]);
+          }
+        }
+        edgesDataset.update(edgeUpdateArray);
+      } else if (highlightActive === true) {
+        for (var nodeId in allNodes) {
+          allNodes[nodeId].color = undefined;
+          if (allNodes[nodeId].hiddenLabel !== undefined) {
+            allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
+            allNodes[nodeId].hiddenLabel = undefined;
+          }
+        }
+        for (var edgeId in allEdges) {
+          allEdges[edgeId].color = {inherit: 'from'};
+          if (allEdges[edgeId].hiddenLabel !== undefined) {
+            allEdges[edgeId].label = allEdges[edgeId].hiddenLabel;
+            allEdges[edgeId].hiddenLabel = undefined;
+          }
+        }
+        highlightActive = false;
+
+        var nodeUpdateArray = [];
+        for (nodeId in allNodes) {
+          if (allNodes.hasOwnProperty(nodeId)) {
+            nodeUpdateArray.push(allNodes[nodeId]);
+          }
+        }
+        nodesDataset.update(nodeUpdateArray);
+        var edgeUpdateArray = [];
+        for (edgeId in allEdges) {
+          if (allEdges.hasOwnProperty(edgeId)) {
+            edgeUpdateArray.push(allEdges[edgeId]);
+          }
+        }
+        edgesDataset.update(edgeUpdateArray);
+        $('#phenomenon').trigger('change');
+      }
+
+    }
+
+    function law2label(law) {
+      if (law.includes('_by_')) {
+        return law.split('_with_')[0].replaceAll('_', ' ') + '\n' + law.split('_with_')[1].split('_by_')[0].replaceAll('_', ' ') + '\nby ' + law.split('_by_')[1].replaceAll('_', ' ');
+        // return law.split('_with_')[0].replaceAll("_", " ") + ' by ' + law.split('_by_')[1].replaceAll('_', ' ') + '\n(' + law.split('_with_')[1].split('_by_')[0].replaceAll('_', ' ') + ')';
+      } else {
+        return law.split('_with_')[0].replaceAll('_', ' ') + '\n' + law.split('_with_')[1].split('_by_')[0].replaceAll('_', ' ');
+        // return law.split('_with_')[0].replaceAll("_", " ") + '\n(' + law.split('_with_')[1].replaceAll('_', ' ') + ')';
+      }
+    }
+
+    function filterByPhenomenon() {
+      var phenomena = $('#phenomenon').val();
+      if (phenomena.length > 0) {
+        for (var nodeId in allNodes) {
+          allNodes[nodeId].color = "rgba(200,200,200,0.5)";
+          if (allNodes[nodeId].hiddenLabel === undefined) {
+            allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
+            allNodes[nodeId].label = undefined;
+          }
+        }
+        for (var edgeId in allEdges) {
+          allEdges[edgeId].color = "rgba(200,200,200,0.5)";
+          if (allEdges[edgeId].hiddenLabel === undefined) {
+            allEdges[edgeId].hiddenLabel = allEdges[edgeId].label;
+            allEdges[edgeId].label = " ";
+          }
+        }
+
+        var selectedNodes = [];
+        for (var nodeId in allNodes) {
+          for (var phenomenonId in phenomena) {
+            var phenomenon = phenomena[phenomenonId];
+            if (((allNodes[nodeId].label && allNodes[nodeId].label.includes(phenomenon)) || 
+              (allNodes[nodeId].hiddenLabel && (allNodes[nodeId].hiddenLabel.includes(phenomenon))))) {
+              selectedNodes.push(parseInt(nodeId));
+            }
+          }
+        }
+        for (var i in selectedNodes) {
+          selectedNodes = selectedNodes.concat(network.getConnectedNodes(selectedNodes[i]));
+        }
+        var selectedEdges = [];
+        for (var i in allEdges) {
+          if (selectedNodes.includes(allEdges[i].from) && selectedNodes.includes(allEdges[i].to)) {
+            selectedEdges = selectedEdges.concat(parseInt(i));
+          }
+        }
+
+        for (i = 0; i < selectedNodes.length; i++) {
+          allNodes[selectedNodes[i]].color = undefined;
+          if (allNodes[selectedNodes[i]].hiddenLabel !== undefined) {
+            allNodes[selectedNodes[i]].label = allNodes[selectedNodes[i]].hiddenLabel;
+            allNodes[selectedNodes[i]].hiddenLabel = undefined;
+          }
+        }
+        for (i = 0; i < selectedEdges.length; i++) {
+          allEdges[selectedEdges[i]].color = {inherit: 'from'};
+          if (allEdges[selectedEdges[i]].hiddenLabel !== undefined) {
+            allEdges[selectedEdges[i]].label = allEdges[selectedEdges[i]].hiddenLabel;
+            allEdges[selectedEdges[i]].hiddenLabel = undefined;
+          }
+        }
+
+        var nodeUpdateArray = [];
+        for (nodeId in allNodes) {
+          if (allNodes.hasOwnProperty(nodeId)) {
+            nodeUpdateArray.push(allNodes[nodeId]);
+          }
+        }
+        nodesDataset.update(nodeUpdateArray);
+        var edgeUpdateArray = [];
+        for (edgeId in allEdges) {
+          if (allEdges.hasOwnProperty(edgeId)) {
+            edgeUpdateArray.push(allEdges[edgeId]);
+          }
+        }
+        edgesDataset.update(edgeUpdateArray);
+      } else {
+        for (var nodeId in allNodes) {
+          allNodes[nodeId].color = undefined;
+          if (allNodes[nodeId].hiddenLabel !== undefined) {
+            allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
+            allNodes[nodeId].hiddenLabel = undefined;
+          }
+        }
+        for (var edgeId in allEdges) {
+          allEdges[edgeId].color = {inherit: 'from'};
+          if (allEdges[edgeId].hiddenLabel !== undefined) {
+            allEdges[edgeId].label = allEdges[edgeId].hiddenLabel;
+            allEdges[edgeId].hiddenLabel = undefined;
+          }
+        }
+        var nodeUpdateArray = [];
+        for (nodeId in allNodes) {
+          if (allNodes.hasOwnProperty(nodeId)) {
+            nodeUpdateArray.push(allNodes[nodeId]);
+          }
+        }
+        nodesDataset.update(nodeUpdateArray);
+        var edgeUpdateArray = [];
+        for (edgeId in allEdges) {
+          if (allEdges.hasOwnProperty(edgeId)) {
+            edgeUpdateArray.push(allEdges[edgeId]);
+          }
+        }
+        edgesDataset.update(edgeUpdateArray);
+      }
+    }
+    $(document).on('change', '#phenomenon', filterByPhenomenon);
+
+    function filterByRule() {
+      var rule = $('#rule').val()
+      if (rule.length > 0) {
+        rule = rule[0];
+        laws = [];
+        $.each(entity['law'], function(law, lawDict) {
+          if (lawDict['rule'] == rule.replaceAll(' ', '_')) {
+            laws.push(law2label(law));
+          }
+        });
+        for (var nodeId in allNodes) {
+          allNodes[nodeId].color = "rgba(200,200,200,0.5)";
+          if (allNodes[nodeId].hiddenLabel === undefined) {
+            allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
+            allNodes[nodeId].label = undefined;
+          }
+        }
+        for (var edgeId in allEdges) {
+          allEdges[edgeId].color = "rgba(200,200,200,0.5)";
+          if (allEdges[edgeId].hiddenLabel === undefined) {
+            allEdges[edgeId].hiddenLabel = allEdges[edgeId].label;
+            allEdges[edgeId].label = " ";
+          }
+        }
+
+        var selectedNodes = [];
+        for (var nodeId in allNodes) {
+          for (var lawId in laws) {
+            var law = laws[lawId];
+            if (((allNodes[nodeId].label && allNodes[nodeId].label == law) || 
+              (allNodes[nodeId].hiddenLabel && (allNodes[nodeId].hiddenLabel == law)))) {
+              selectedNodes.push(parseInt(nodeId));
+            }
+          }
+        }
+        for (var i in selectedNodes) {
+          selectedNodes = selectedNodes.concat(network.getConnectedNodes(selectedNodes[i]));
+        }
+        var selectedEdges = [];
+        for (var i in allEdges) {
+          if (selectedNodes.includes(allEdges[i].from) && selectedNodes.includes(allEdges[i].to)) {
+            selectedEdges = selectedEdges.concat(parseInt(i));
+          }
+        }
+
+        for (i = 0; i < selectedNodes.length; i++) {
+          allNodes[selectedNodes[i]].color = undefined;
+          if (allNodes[selectedNodes[i]].hiddenLabel !== undefined) {
+            allNodes[selectedNodes[i]].label = allNodes[selectedNodes[i]].hiddenLabel;
+            allNodes[selectedNodes[i]].hiddenLabel = undefined;
+          }
+        }
+        for (i = 0; i < selectedEdges.length; i++) {
+          allEdges[selectedEdges[i]].color = {inherit: 'from'};
+          if (allEdges[selectedEdges[i]].hiddenLabel !== undefined) {
+            allEdges[selectedEdges[i]].label = allEdges[selectedEdges[i]].hiddenLabel;
+            allEdges[selectedEdges[i]].hiddenLabel = undefined;
+          }
+        }
+
+        var nodeUpdateArray = [];
+        for (nodeId in allNodes) {
+          if (allNodes.hasOwnProperty(nodeId)) {
+            nodeUpdateArray.push(allNodes[nodeId]);
+          }
+        }
+        nodesDataset.update(nodeUpdateArray);
+        var edgeUpdateArray = [];
+        for (edgeId in allEdges) {
+          if (allEdges.hasOwnProperty(edgeId)) {
+            edgeUpdateArray.push(allEdges[edgeId]);
+          }
+        }
+        edgesDataset.update(edgeUpdateArray);
+      } else {
+        for (var nodeId in allNodes) {
+          allNodes[nodeId].color = undefined;
+          if (allNodes[nodeId].hiddenLabel !== undefined) {
+            allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
+            allNodes[nodeId].hiddenLabel = undefined;
+          }
+        }
+        for (var edgeId in allEdges) {
+          allEdges[edgeId].color = {inherit: 'from'};
+          if (allEdges[edgeId].hiddenLabel !== undefined) {
+            allEdges[edgeId].label = allEdges[edgeId].hiddenLabel;
+            allEdges[edgeId].hiddenLabel = undefined;
+          }
+        }
+        var nodeUpdateArray = [];
+        for (nodeId in allNodes) {
+          if (allNodes.hasOwnProperty(nodeId)) {
+            nodeUpdateArray.push(allNodes[nodeId]);
+          }
+        }
+        nodesDataset.update(nodeUpdateArray);
+        var edgeUpdateArray = [];
+        for (edgeId in allEdges) {
+          if (allEdges.hasOwnProperty(edgeId)) {
+            edgeUpdateArray.push(allEdges[edgeId]);
+          }
+        }
+        edgesDataset.update(edgeUpdateArray);
+      }
+    }
+    $(document).on('change', '#rule', filterByRule);
+
+    function displayLawCard(laws) {
+      var colors = ['rgb(11, 118, 160)', 'rgb(88, 186, 224)', 'rgb(166, 202, 236)']
+      $('#bottom-up-cards').children().remove();
+      $(laws).each(function(_, law) {
+        var lawDict = entity['law'][law];
+        var phenomenon = lawDict['phenomenon'];
+        var card = $('#card-template').clone();
+        $(card).css('display', 'flex');
+        $(card).attr('id', 'chart-card-' + law.replaceAll('_', '-').toLowerCase().replaceAll('.', ''));
+        var parameter = lawDict['model_variables'].concat(lawDict['optional_model_variables']);
+        parameter = Array.from($(parameter).map(function(index, p) {
+          return entity['model_variable'][p]['symbol'];
+        })).join('<mtext>,&nbsp;</mtext>');
+        var doi = lawDict['doi'] ? lawDict['doi'] : null;
+        if (doi) {
+          $(card).find('.doi').text(doi);
+          $(card).find('.doi').attr('href', 'https://doi.org/' + doi);
+        } else {
+          $(card).find('.doi').parent().css('display', 'none');
+        }
+        $(card).find('.parameter').html(parameter);
+        $(card).find('.parameter').html(parameter);
+        $(card).find('.phenomenon').html(phenomenon.replaceAll('_', ' '));
+        var conciseFormula = lawDict['formula']['concise_formula'];
+        var detailFormula = lawDict['formula']['detail_formula'];
+        if (!conciseFormula) {
+          conciseFormula = '<math><mrow><mtext>fun</mtext><mo>(</mo><mrow>' + parameter + '</mrow><mo>)</mo></mrow></math>';
+        }
+        var detailFormulaId = law.replaceAll('_', '-').toLowerCase().replaceAll('.', '') + '-detail-formula';
+        $(card).find('.concise-formula').append($(conciseFormula));
+        $(card).find('.detail-formula').append($(detailFormula));
+        $(card).find('.detail-formula').attr('id', detailFormulaId);
+        $(card).find('.detail-formula').parent().attr('href', '#' + detailFormulaId);
+        if (!detailFormula) {
+          $(card).find('.detail-formula').remove();
+        }
+        $(card).find('.card-title').text(law2label(law).split('\n')[0]);
+        if (entity['phenomenon'][phenomenon]['class'] == 'Accumulation') {
+          $(card).find('.card-header').css('background-color', colors[0]);
+        }
+        if (entity['phenomenon'][phenomenon]['class'] == 'FlowPattern' || entity['phenomenon'][phenomenon]['class'] == 'MolecularTransportPhenomenon') {
+          $(card).find('.card-header').css('background-color', colors[1]);
+        }
+        if (entity['phenomenon'][phenomenon]['class'] == 'ChemicalReactionPhenomenon') {
+          $(card).find('.card-header').css('background-color', colors[2]);
+        }
+        if (phenomenon == 'Instantaneous') {
+          $(card).find('.formula').remove();
+        }
+        $('#bottom-up-cards').append(card);
+      });
+    }
+
+    function displayByPhenomenon() {
+      var phenomena = [];
+      $.each($('#phenomenon').val().map((x) => x.replaceAll(' ', '_')), function(index, phenomenon) {
+        if (entity['phenomenon'][phenomenon]['class'] == 'Accumulation') {
+          phenomena.push(phenomenon);
+        }
+      });
+      $.each($('#phenomenon').val().map((x) => x.replaceAll(' ', '_')), function(index, phenomenon) {
+        if (entity['phenomenon'][phenomenon]['class'] == 'MolecularTransportPhenomenon') {
+          phenomena.push(phenomenon);
+        }
+      });
+      $.each($('#phenomenon').val().map((x) => x.replaceAll(' ', '_')), function(index, phenomenon) {
+        if (entity['phenomenon'][phenomenon]['class'] == 'FlowPattern') {
+          phenomena.push(phenomenon);
+        }
+      });
+      $.each($('#phenomenon').val().map((x) => x.replaceAll(' ', '_')), function(index, phenomenon) {
+        if (entity['phenomenon'][phenomenon]['class'] == 'ChemicalReactionPhenomenon') {
+          phenomena.push(phenomenon);
+        }
+      });
+      var laws = []
+      $.each(phenomena, function(_, phenomenon) {
+        $.each(entity['law'], function(law, lawDict) {
+          if ((lawDict['phenomenon'] == phenomenon) && (!laws.includes(law))) {
+            laws.push(law);
+          }
+        });
+      });
+      displayLawCard(laws);
+    }
+    $(document).on('change', '#phenomenon', displayByPhenomenon);
+
+    function displayByRule() {
+      $('#rule-card').css('display', '');
+      var rule = $('#rule').val()[0];
+      $('#rule-card').find('.card-title').text(rule);
+      $('#rule-card').find('.law').children().remove();
+      var laws = [];
+      $.each(entity['law'], function(law, lawDict) {
+        if (lawDict['rule'] == rule.replaceAll(' ', '_')) {
+          laws.push(law);
+          $('#rule-card').find('.law').append($('<li>' + law2label(law).split('\n')[0] + '</li>'));
+        }
+      });
+      $('#rule-card').find('.descriptor').html(
+        $(entity['rule'][rule.replaceAll(' ', '_')]['context_descriptors']).map((_, d) => {
+          if (entity['context_descriptor'][d]['symbol']) {
+            return d + '&nbsp;&nbsp;' + entity['context_descriptor'][d]['symbol'];
+          } else {
+            return d;
+          }
+        }).toArray().join(', ').replaceAll('_', ' ')
+      );
+      $('#rule-card').find('#detail-sparql').text(entity['rule'][rule.replaceAll(' ', '_')]['sparql']);
+      
+
+      displayLawCard(laws);
+    }
+    $(document).on('change', '#rule', displayByRule);
+
+    var previousRule;
+    $(document).on('change', '.custom-select', function() {
+      if ($(this).val().length > 1) {
+        $(this).val(previousRule).trigger('change');
+      }
+      previousRule = $(this).val();
+    })
+
+    $(document).on('click', '.select2', function() {
+      $('.select2-container--open').find('li').each(function(_, li) {
+        if ($(li).find('span').length == 0) {
+          var text = '<span>' + $(li).text() + '</span>';
+          $(li).html(null);
+          $(li).append($(text));
+        }
+      })
+    })
+    
+    $(document).on('change', '.descriptor', function() {
+      $(this).next().find('.select2-selection__choice').each(function(_, li) {
+        if ($(li).find('span').length == 1) {
+          var remove = $(li).children()[0];
+          var text = '<span>' + $(li).text().slice(1) + '</span>';
+          $(li).html(null);
+          $(li).append($(remove));
+          $(li).append($(text));
+        }
+      })
+    })
+
+    $(document).on('click', '.select2-selection__choice__remove', function() {
+      $('.select2-container--open').find('li').each(function(_, li) {
+        if ($(li).find('span').length == 0) {
+          var text = '<span>' + $(li).text() + '</span>';
+          $(li).html(null);
+          $(li).append($(text));
+        }
+      })
+    })
+
+    $(document).on('change', '#import', function() {
+      if ($('#import').val() == 'local') {
+        $('#local-path').css('display', 'flex');
+        $('#website-case').parent().css('display', 'none');
+      }
+      if ($('#import').val() == 'website') {
+        $('#local-path').css('display', 'none');
+        $('#website-case').parent().css('display', 'flex');
+      }
+    });
+    setTimeout(function() {$('#import').val('website').trigger('change');}, 100);
+
+    var table = null;
+    var tableOriginalWidth;
+    var minColumnWidth = 70;
+    var tableMaxHeight = '300px';
+    var symbol2parameter = {};
+    function getElementWidth(text, minWidth) {
+      $('body').append($('<span id="text-width">' + text + '</span>'));
+      var width = $('#text-width')[0].getBoundingClientRect().width;
+      $('#text-width').remove();
+      return Math.max(width + 10, minWidth);
+    }
+    function loadInputSheet(data) {
+      var descriptors = [];
+      descriptors = descriptors.concat($('#space-context-descriptor').val());
+      descriptors = descriptors.concat($('#energy-context-descriptor').val());
+      descriptors = descriptors.concat($('#substance-context-descriptor').val());
+      descriptors = descriptors.concat($('#information-context-descriptor').val());
+      descriptors = descriptors.concat($('#time-context-descriptor').val());
+      if (descriptors.length == 0) {
+        $('#input').css('display', 'none');
+      } else {
+        $('#input').css('display', '');
+      }
+
+      var minWidth = 70;
+      data = data ? data : [[]];
+      var columns = [];
+      var nestedHeaders = [[]];
+      $(descriptors).each(function(_, descriptor) {
+        var symbol = entity['context_descriptor'][descriptor]['symbol'];
+        var unit = entity['context_descriptor'][descriptor]['unit'];
+        if (symbol) {
+          if (unit) {
+            nestedHeaders[0].push({'title': convertParameterSymbol(symbol) + ' (' + convertUnitSymbol(entity['unit'][unit]['symbol']) + ')'});
+          } else {
+            nestedHeaders[0].push({'title': convertParameterSymbol(symbol)});
+          }
+        } else {
+          nestedHeaders[0].push({'title': '-', 'colspan': '1'});
+        }
+        var columnWidth = getElementWidth(descriptor, minColumnWidth);
+        columns.push({'title': descriptor.replaceAll('_', ' '), 'width': columnWidth, 'options': {'notation': 'compact'}});
+      })
+      table = jspreadsheet(document.getElementById('input'), {
+        data: data,
+        csvFileName: 'descriptor_data',
+        columns: columns,
+        columnResize: false,
+        tableOverflow: true,
+        allowRenameColumn: false,
+        allowDeleteColumn: false,
+        allowInsertColumn: false,
+        nestedHeaders: nestedHeaders,
+        includeHeadersOnDownload: true,
+      });
+      $(table.content).css('box-shadow', '');
+      $(table.content).css('max-height', tableMaxHeight);
+      $(table.thead).find('td').each(function(index, elem) {
+        if (index > 0) {
+          var symbol = $('<span>' + $(elem).text() + '</span>');
+          $(elem).text(null);
+          $(elem).append(symbol);
+        }
+      })
+      return ;
+    }
+    function triggerLoadInputSheet() {
+      $('#input').children().remove();
+      loadInputSheet(null);
+      tableOriginalWidth = $('#input')[0].getBoundingClientRect().width + 8;
+      resizeTable();
+    }
+    $(document).on('change', '#space-context-descriptor', triggerLoadInputSheet);
+    $(document).on('change', '#energy-context-descriptor', triggerLoadInputSheet);
+    $(document).on('change', '#substance-context-descriptor', triggerLoadInputSheet);
+    $(document).on('change', '#information-context-descriptor', triggerLoadInputSheet);
+    $(document).on('change', '#time-context-descriptor', triggerLoadInputSheet);
+
+    function resizeTable() {
+      let cardWidth = $('#input').closest('.card')[0].getBoundingClientRect().width;
+      if (table) {
+        if (cardWidth - 40 < tableOriginalWidth) {
+          table.content.style['overflow-x'] = 'auto';
+          table.content.style.width = (cardWidth - 40).toString() + 'px';
+        } else {
+          table.content.style['overflow-x'] = null;
+          table.content.style.width = tableOriginalWidth.toString() + 'px';
+        }
+      }
+    }
+    $('#pushmenu-btn').click(function() {setTimeout(resizeTable, 400);});
+    $(window).resize(resizeTable);
+    $(window).trigger('resize');
+
+    var dataText = null;
+    function validateText(dataText) {
+      var dataHeaderText = dataText.split('\r\n').slice(0, 2).join('\r\n');
+      var tableHeaderText = table.copy(false, table.options.csvDelimiter, true, true, true).split('\r\n').slice(0, 2).join('\r\n');
+      return dataHeaderText == tableHeaderText;
+    }
+    $(document).on('click', '#save-btn', function() {table.download();})
+    $(document).on('change', '#local-path', function(e) {
+      var file = e.target.files[0];
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        dataText = e.target.result;
+      }
+      reader.readAsText(file);
+    })
+    $(document).on('click', '#import-btn', function() {
+      if ($('#import').val() == 'local') {
+        if ($('#local-path')[0].files.length == 0) {
+          alert('Select data path!');
+        } else {
+          $('#local-path').trigger('change');
+          if (validateText(dataText)) {
+            var lines = dataText.split('\r\n').slice(2);
+            var data = lines.map(line => line.split(',').map(x => {
+              if (!isNaN(parseFloat(x))) {
+                return parseFloat(x);
+              } else {
+                if (x.toLowerCase() == 'true') {
+                  return true;
+                } else if (x.toLowerCase() == 'false') {
+                  return false;
+                } else {
+                  return x;
+                }
+              }
+            }));
+            table.setData(data);
+          } else {
+            alert('Table header not match!');
+          }
+        }
+      } else {
+        $.get(
+          '{{ url_for("home.case_file", filepath="") }}' + $('#website-case').val(),
+          function (dataText) {
+            if (validateText(dataText)) {
+              var lines = dataText.split('\r\n').slice(2);
+              var data = lines.map(line => line.split(',').map(x => {
+                if (!isNaN(parseFloat(x))) {
+                  return parseFloat(x);
+                } else {
+                  if (x.toLowerCase() == 'true') {
+                    return true;
+                  } else if (x.toLowerCase() == 'false') {
+                    return false;
+                  } else {
+                    return x;
+                  }
+                }
+              }));
+              table.setData(data);
+            } else {
+              alert('Table header not match!');
+            }
+          }
+        ).fail(function(jqXHR, textStatus, errorThrown) {
+          console.error('Data unavailable!');
+        })
+      }
+    })
+
+    var ruleInferenceResult = [];
+    function getData(includeOutletStream) {
+      var structure_context_descriptor = $('#structure-context-descriptor').val().replaceAll(' ', '_');
+      var descriptor = table.copy(false, table.options.csvDelimiter, true, true, true).split('\r\n')[1].split(',').map(d => d.replaceAll(' ', '_'));
+      descriptor.push(structure_context_descriptor);
+      var data = table.getData().map((line) => {
+        line.push(true);
+        return line.map((value) => {
+          return value.toString();
+        });
+      });
+      return {'key': descriptor, 'value': data};
+    }
+    function ruleInference() {
+      var data = getData();
+      var ruleInferenceRequest = {
+        'task': 'inference',
+        'data': data,
+      }
+      var ruleInferenceRequestJson = JSON.stringify(ruleInferenceRequest);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', window.location.origin + '{{ url_for("home.rule_inference") }}', false);
+      xhr.setRequestHeader('Content-type','application/json');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          ruleInferenceResult = JSON.parse(xhr.response);
+        } else {
+        }
+      };
+      xhr.send(ruleInferenceRequestJson);
+    }
+    $(document).on('click', '#infer-btn', function() {
+      if (table) {
+        ruleInference();
+        $('#sample').children().remove();
+        $('#sample').append($('<option value="-1">All rules</option>'));
+        $.each(table.getData(), function(index, elem) {
+          if (index == 0) {
+            $('#sample').append($('<option value=' + index.toString() + ' selected>' + 'Sample ' + (index + 1).toString() + '</option>'))
+          } else {
+            $('#sample').append($('<option value=' + index.toString() + '>' + 'Sample ' + (index + 1).toString() + '</option>'))
+          }
+        })
+        $(document).on('change', '#sample', function() {
+          if ($('#sample').val() == -1) {
+            $('#rule').children().remove();
+            $.each(entity['rule'], function(rule, _) {
+              $('#rule').append($('<option>' + rule.replaceAll('_', ' ') + '</option>'));
+            });
+          } else {
+            $('#rule').children().remove();
+            $.each(ruleInferenceResult[$('#sample').val()], function(_, rule) {
+              $('#rule').append($('<option>' + rule.replaceAll('_', ' ') + '</option>'));
+            });
+          }
+        });
+        $('#sample').selectpicker('refresh').trigger('change');
+        $('#sample').val(-1).trigger('change');
+      }
+    })
+
+    draw();
+  </script>
+  
+  <script>
+  
+    
+  </script>
+
+{% endblock javascripts %}

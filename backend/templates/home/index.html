@@ -1,0 +1,197 @@
+{% extends "layouts/base-index.html" %}
+
+{% block title %} KG4DT {% endblock %} 
+
+<!-- Element injected in the BODY element -->
+{% block body_class %} sidebar-mini sidebar-collapse {% endblock body_class %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/fontawesome-free/css/all.min.css') }}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/select2/css/select2.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.css') }}">
+  <!-- TagsInput -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/bootstrap4-tagsinput/tagsinput.css') }}">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+  <!-- Bootstrap-select -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/bootstrap-select/dist/css/bootstrap-select.css') }}">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/jqvmap/jqvmap.min.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/adminlte.min.css') }}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/daterangepicker/daterangepicker.css') }}">
+  <!-- summernote -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/summernote/summernote-bs4.min.css') }}">
+
+{% endblock stylesheets %}
+
+{% block content %}
+  
+  <div class="content-wrapper">
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="row ml-1">
+        <div class="col-sm-6">
+          <h1 class="text-dark">KG4DT</h1>
+          <div>A knowledge graph framework for developing chemical process digital twins.</div>
+        </div>
+      </div>
+    </div>
+    <!-- /.content-header -->
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="card">
+          <div class="card-body">
+            <ul>
+              <li>Bottom-up case: annular microreactor</li>
+                <ul>
+                  <li><a href="{{ url_for('home.model_case', case='dushman') }}">model description</a></li>
+                  <li><a href="{{ url_for('home.structure_case', case='dushman') }}">model structure</a></li>
+                  <li>
+                    <a href="{{ url_for('home.application_case', case='dushman') }}">model application</a>
+                    <ul>
+                      <li>select <b>dushman</b>, click <b>Import</b></li>
+                      <li>select <b>simulation</b>, click <b>Run</b> to simulate the pristine model</li>
+                      <li>select <b>calibration</b> and <math><msub><mi>k</mi><msub><mi>t</mi><mtext>m</mtext></msub></msub></math>, set <b>min</b> to 0.001 and <b>max</b> to 0.01, click <b>Run</b> to calibrate the model</li>
+                      <li>select <math><msup><msub><mi>I</mi><mn>3</mn></msub><mo>-</mo></msup></math> to check the result</li>
+                    </ul>
+                  </li>
+                </ul>
+              <li>Top-down case: Taylor-Couette reactor</li>
+                <ul>
+                  <li><a href="{{ url_for('home.knowledge_graph_case', case='esterification') }}">model knowledge graph</a></li>
+                  <ul>
+                    <li>select <b>top-down</b> mode</li>
+                    <li>select <b>esterification</b>, click <b>Import</b></li>
+                    <li>click <b>Infer</b> to proceed rule inference</li>
+                    <li>click <b>SPARQL</b> of the <b>Rule</b> card to check SPARQL codes</li>
+                  </ul>
+                  <li><a href="{{ url_for('home.exploration_case', case='esterification') }}">model exploration</a></li>
+                  <ul>
+                    <li>select <b>esterification base case</b>, click <b>Import</b></li>
+                    <li>click <b>Run Model Exploration</b> to proceed parallel model calibration</li>
+                  </ul>
+                </ul>
+              <li>Amidation reaction optimisation</li>
+                <ul>
+                  <li><a href="{{ url_for('home.chatgpt') }}">model ChatGPT</a></li>
+                  <ul>
+                    <li>input your own <b>OpenAI API Key</b>. Find some information <a href="https://platform.openai.com/settings/organization/api-keys">here</a>.</li>
+                    <li>input your question, e.g., for query the reaction kinetics phenomena, input "With a water bath and no catalyst addition, what kinetics phenomena in the knowledge graph can describe the amidation kinetics of benzylamine and acetic anhydride and the hydrolysis of acetic anhydride?"</li>
+                    <li>click <b>Go</b> to get the answer</li>
+                  </ul>
+                </ul>
+            </ul>
+          </div>
+        </div>
+
+        <div style="height: 0.1px;"></div>
+      </div>
+    </section>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- jQuery -->
+  <script src="{{ url_for('static', filename='assets/plugins/jquery/jquery.min.js') }}"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="{{ url_for('static', filename='assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+  <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+  <script>
+    $.widget.bridge('uibutton', $.ui.button)
+  </script>
+  <!-- Bootstrap 4 -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <!-- Bootstrap-select -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap-select/dist/js/bootstrap-select.min.js') }}"></script>
+  <!-- Select2 -->
+  <script src="{{ url_for('static', filename='assets/plugins/select2/js/select2.full.min.js') }}"></script>
+  <!-- TagsInput -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap4-tagsinput/tagsinput.js') }}"></script>
+  <!-- Bootstrap4 Duallistbox -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
+  <!-- InputMask -->
+  <script src="{{ url_for('static', filename='assets/plugins/moment/moment.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/plugins/inputmask/jquery.inputmask.min.js') }}"></script>
+  <!-- date-range-picker -->
+  <script src="{{ url_for('static', filename='assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
+  <!-- bootstrap color picker -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') }}"></script>
+  <!-- Tempusdominus Bootstrap 4 -->
+  <script src="{{ url_for('static', filename='assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+  <!-- Bootstrap Switch -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
+  <!-- ChartJS -->
+  <script src="{{ url_for('static', filename='assets/plugins/chart.js/Chart.min.js') }}"></script>
+  <!-- Sparkline -->
+  <script src="{{ url_for('static', filename='assets/plugins/sparklines/sparkline.js') }}"></script>
+  <!-- JQVMap -->
+  <script src="{{ url_for('static', filename='assets/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+  <!-- jQuery Knob Chart -->
+  <script src="{{ url_for('static', filename='assets/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+  <!-- daterangepicker -->
+  <script src="{{ url_for('static', filename='assets/plugins/moment/moment.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
+  <!-- Tempusdominus Bootstrap 4 -->
+  <script src="{{ url_for('static', filename='assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+  <!-- Summernote -->
+  <script src="{{ url_for('static', filename='assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
+  <!-- overlayScrollbars -->
+  <script src="{{ url_for('static', filename='assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+  <!-- AdminLTE App -->
+  <script src="{{ url_for('static', filename='assets/js/adminlte.js') }}"></script>
+
+  <script type="text/javascript">{{ entity_json | safe }}</script>
+  <script type="text/javascript">{{ model_context_json | safe }}</script>
+
+  <script>
+    function Query() {
+      var chatgptRequest = {
+        'api_key': $('#api_key').val(),
+        'query': $('#query').val(),
+      }
+      var chatgptRequestJson = JSON.stringify(chatgptRequest);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', window.location.origin + '/openai', false);
+      xhr.setRequestHeader('Content-type','application/json');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          chatgptResult = JSON.parse(xhr.response);
+          $('#answer').val(chatgptResult['answer']).trigger('change');
+          $('input').attr('disabled', false);
+          $('button').attr('disabled', false);
+          $('textinput').attr('disabled', false);
+        } else {
+          $('input').attr('disabled', false);
+          $('button').attr('disabled', false);
+          $('textinput').attr('disabled', false);
+        }
+      };
+      $('input').attr('disabled', true);
+      $('button').attr('disabled', true);
+      $('textinput').attr('disabled', true);
+      xhr.send(chatgptRequestJson);
+    }
+
+    $(document).on('click', '#go-btn', function() {Query();});
+  </script>
+{% endblock javascripts %}

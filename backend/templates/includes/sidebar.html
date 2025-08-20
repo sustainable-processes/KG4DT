@@ -1,0 +1,466 @@
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-light-lime elevation-4">
+    <!-- Brand Logo -->
+    <a href="/" class="brand-link">
+      <!-- <img src="{{ url_for('static', filename='assets/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
+      <span class="brand-text font-weight-light">KG4DT</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="{{ url_for('static', filename='assets/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          </a>
+        </div>
+      </div> -->
+
+      <!-- SidebarSearch Form -->
+      <div class="form-inline mt-3" style="display: none;">
+        <div class="input-group" data-widget="sidebar-search">
+          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+            <button class="btn btn-sidebar">
+              <i class="fas fa-search fa-fw"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column nav-compact" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-header">Phenomenon</li>
+          <li class="nav-item has-treeview {% if 'index' in segment %} menu-open {% endif %}">
+            <a href="#" class="nav-link {% if 'index' in segment %} active {% endif %}">
+              <i class="nav-icon fas fa-water"></i>
+              <p >
+                Accumulation
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              {% for k, attr in entity["phenomenon"].items() %}
+                  {% if attr["class"] == "Accumulation" %}
+                    <li class="nav-item">
+                      <a href="javascript:void(0);" class="nav-link">
+                        <i class="far fa-circle nav-icon" style="visibility: hidden;"></i>
+                        <p>{{ k.replace("_", " ") }}</p>
+                      </a>
+                    </li>
+                  {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="nav-item has-treeview {% if 'index' in segment %} menu-open {% endif %}">
+            <a href="#" class="nav-link {% if 'index' in segment %} active {% endif %}">
+              <i class="nav-icon fas fa-tint"></i>
+              <p >
+                Flow Pattern
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              {% for k, attr in entity["phenomenon"].items() %}
+                  {% if attr["class"] == "FlowPattern" %}
+                    <li class="nav-item">
+                      <a href="javascript:void(0);" class="nav-link">
+                        <i class="far fa-circle nav-icon" style="visibility: hidden;"></i>
+                        <p>{{ k.replace("_", " ") }}</p>
+                      </a>
+                    </li>
+                  {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="nav-item has-treeview {% if 'index' in segment %} menu-open {% endif %}">
+            <a href="#" class="nav-link {% if 'index' in segment %} active {% endif %}">
+              <i class="nav-icon fas fa-random"></i>
+              <p >
+                Molecular Transport
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              {% for k, attr in entity["phenomenon"].items() %}
+                  {% if attr["class"] == "MolecularTransportPhenomenon" %}
+                    <li class="nav-item">
+                      <a href="javascript:void(0);" class="nav-link">
+                        <i class="far fa-circle nav-icon" style="visibility: hidden;"></i>
+                        <p>{{ k.replace("_", " ") }}</p>
+                      </a>
+                    </li>
+                  {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="nav-item has-treeview {% if 'index' in segment %} menu-open {% endif %}">
+            <a href="#" class="nav-link {% if 'index' in segment %} active {% endif %}">
+              <i class="nav-icon fas fa-atom"></i>
+              <p >
+                Chemical Reaction
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              {% for k, attr in entity["phenomenon"].items() %}
+                  {% if attr["class"] == "ChemicalReactionPhenomenon" %}
+                    <li class="nav-item">
+                      <a href="javascript:void(0);" class="nav-link">
+                        <i class="far fa-circle nav-icon" style="visibility: hidden;"></i>
+                        <p>{{ k.replace("_", " ") }}</p>
+                      </a>
+                    </li>
+                  {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+
+          <li class="nav-header">Dimension</li>
+          <li class="nav-item">
+            <a target="_blank" rel="noopener noreferrer" href="javascript:void(0);" class="nav-link">
+              <i class="nav-icon fas fa-stream"></i>
+              <p>Stream</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a target="_blank" rel="noopener noreferrer" href="javascript:void(0);" class="nav-link">
+              <i class="nav-icon fas fa-redo-alt"></i>
+              <p>Reaction</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a target="_blank" rel="noopener noreferrer" href="javascript:void(0);" class="nav-link">
+              <i class="nav-icon fas fa-vials"></i>
+              <p>Species</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a target="_blank" rel="noopener noreferrer" href="javascript:void(0);" class="nav-link">
+              <i class="nav-icon fas fa-flask"></i>
+              <p>Solvent</p>
+            </a>
+          </li>
+          
+          <li class="nav-header">Parameter</li>
+          <li class="nav-item has-treeview {% if 'index' in segment %} menu-open {% endif %}">
+            <a href="#" class="nav-link {% if 'index' in segment %} active {% endif %}">
+              <i class="nav-icon fas fa-cube"></i>
+              <p >
+                Reactor
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              {% for k, attr in entity["model_variable"].items() %}
+                {% if attr["class"] == "ReactorParameter" %}
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" 
+                      href="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} #{{ k }} {% endif %}" 
+                      aria-expanded="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} true {% endif %}" 
+                      aria-controls="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} {{ k }} {% endif %}" >
+                      <i class="far fa-circle nav-icon" style="visibility: hidden;"></i>
+                      <p>{{ k.replace("_", " ") }}&nbsp;&nbsp;{{ attr["symbol"] | safe }}</p>
+                      {% if attr['dimensions'] or attr['laws'] or attr['definition'] %}
+                        <div class="collapse" id="{{ k }}">
+                          <div class="card card-body nav-card-body mt-1 mb-2 ml-4 mr-0">
+                          {% if attr["dimensions"] %}
+                            <b>Dimension</b>
+                            <ul style="padding-left: 1rem">
+                            {% for d in attr["dimensions"] %}
+                              <li style="font-size: 16px;">{{ d }}</li>
+                            {% endfor %}
+                            </ul>
+                            {% endif %}
+                          {% if attr["definition"] %}
+                            <b>Definition</b>
+                            {{ entity["definition"][attr["definition"]]["formula"] | safe }}
+                          {% endif %}
+                          {% if attr["laws"] %}
+                            <b>Law</b>
+                            <ul style="padding-left: 1rem">
+                            {% for l in attr["laws"] %}
+                              <li style="font-size: 16px;">for&nbsp;{{ entity["law"][l]["phenomenon"].replace("_", " ") }}</li>
+                              {{ entity["law"][l]["formula"] | safe }}
+                            {% endfor %}
+                            </ul>
+                          {% endif %}
+                          </div>
+                        </div>
+                      {% endif %}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="nav-item has-treeview {% if 'index' in segment %} menu-open {% endif %}">
+            <a href="#" class="nav-link {% if 'index' in segment %} active {% endif %}">
+              <i class="nav-icon fas fa-balance-scale"></i>
+              <p >
+                Physical
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              {% for k, attr in entity["model_variable"].items() %}
+                {% if attr["class"] == "PhysicalParameter" %}
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" 
+                      href="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} #{{ k }} {% endif %}" 
+                      aria-expanded="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} true {% endif %}" 
+                      aria-controls="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} {{ k }} {% endif %}" >
+                      <i class="far fa-circle nav-icon" style="visibility: hidden;"></i>
+                      <p>{{ k.replace("_", " ") }}&nbsp;&nbsp;{{ attr["symbol"] | safe }}</p>
+                      {% if attr['dimensions'] or attr['laws'] or attr['definition'] %}
+                        <div class="collapse" id="{{ k }}">
+                          <div class="card card-body nav-card-body mt-1 mb-2 ml-4 mr-0">
+                          {% if attr["dimensions"] %}
+                            <b>Dimension</b>
+                            <ul style="padding-left: 1rem">
+                            {% for d in attr["dimensions"] %}
+                              <li style="font-size: 16px;">{{ d }}</li>
+                            {% endfor %}
+                            </ul>
+                            {% endif %}
+                          {% if attr["definition"] %}
+                            <b>Definition</b>
+                            {{ entity["definition"][attr["definition"]]["formula"] | safe }}
+                          {% endif %}
+                          {% if attr["laws"] %}
+                            <b>Law</b>
+                            <ul style="padding-left: 1rem">
+                            {% for l in attr["laws"] %}
+                              <li style="font-size: 16px;">for&nbsp;{{ entity["law"][l]["phenomenon"].replace("_", " ") }}</li>
+                              {{ entity["law"][l]["formula"] | safe }}
+                            {% endfor %}
+                            </ul>
+                          {% endif %}
+                          </div>
+                        </div>
+                      {% endif %}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="nav-item has-treeview {% if 'index' in segment %} menu-open {% endif %}">
+            <a href="#" class="nav-link {% if 'index' in segment %} active {% endif %}">
+              <i class="nav-icon fas fa-bacon"></i>
+              <p >
+                Flow
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              {% for k, attr in entity["model_variable"].items() %}
+                {% if attr["class"] == "FlowParameter" %}
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" 
+                      href="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} #{{ k }} {% endif %}" 
+                      aria-expanded="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} true {% endif %}" 
+                      aria-controls="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} {{ k }} {% endif %}" >
+                      <i class="far fa-circle nav-icon" style="visibility: hidden;"></i>
+                      <p>{{ k.replace("_", " ") }}&nbsp;&nbsp;{{ attr["symbol"] | safe }}</p>
+                      {% if attr['dimensions'] or attr['laws'] or attr['definition'] %}
+                        <div class="collapse" id="{{ k }}">
+                          <div class="card card-body nav-card-body mt-1 mb-2 ml-4 mr-0">
+                          {% if attr["dimensions"] %}
+                            <b>Dimension</b>
+                            <ul style="padding-left: 1rem">
+                            {% for d in attr["dimensions"] %}
+                              <li style="font-size: 16px;">{{ d }}</li>
+                            {% endfor %}
+                            </ul>
+                            {% endif %}
+                          {% if attr["definition"] %}
+                            <b>Definition</b>
+                            {{ entity["definition"][attr["definition"]]["formula"] | safe }}
+                          {% endif %}
+                          {% if attr["laws"] %}
+                            <b>Law</b>
+                            <ul style="padding-left: 1rem">
+                            {% for l in attr["laws"] %}
+                              <li style="font-size: 16px;">for&nbsp;{{ entity["law"][l]["phenomenon"].replace("_", " ") }}</li>
+                              {{ entity["law"][l]["formula"] | safe }}
+                            {% endfor %}
+                            </ul>
+                          {% endif %}
+                          </div>
+                        </div>
+                      {% endif %}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="nav-item has-treeview {% if 'index' in segment %} menu-open {% endif %}">
+            <a href="#" class="nav-link {% if 'index' in segment %} active {% endif %}">
+              <i class="nav-icon fas fa-wrench"></i>
+              <p >
+                Operating
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              {% for k, attr in entity["model_variable"].items() %}
+                {% if attr["class"] == "OperatingParameter" %}
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" 
+                      href="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} #{{ k }} {% endif %}" 
+                      aria-expanded="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} true {% endif %}" 
+                      aria-controls="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} {{ k }} {% endif %}" >
+                      <i class="far fa-circle nav-icon" style="visibility: hidden;"></i>
+                      <p>{{ k.replace("_", " ") }}&nbsp;&nbsp;{{ attr["symbol"] | safe }}</p>
+                      {% if attr['dimensions'] or attr['laws'] or attr['definition'] %}
+                        <div class="collapse" id="{{ k }}">
+                          <div class="card card-body nav-card-body mt-1 mb-2 ml-4 mr-0">
+                          {% if attr["dimensions"] %}
+                            <b>Dimension</b>
+                            <ul style="padding-left: 1rem">
+                            {% for d in attr["dimensions"] %}
+                              <li style="font-size: 16px;">{{ d }}</li>
+                            {% endfor %}
+                            </ul>
+                            {% endif %}
+                          {% if attr["definition"] %}
+                            <b>Definition</b>
+                            {{ entity["definition"][attr["definition"]]["formula"] | safe }}
+                          {% endif %}
+                          {% if attr["laws"] %}
+                            <b>Law</b>
+                            <ul style="padding-left: 1rem">
+                            {% for l in attr["laws"] %}
+                              <li style="font-size: 16px;">for&nbsp;{{ entity["law"][l]["phenomenon"].replace("_", " ") }}</li>
+                              {{ entity["law"][l]["formula"] | safe }}
+                            {% endfor %}
+                            </ul>
+                          {% endif %}
+                          </div>
+                        </div>
+                      {% endif %}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="nav-item has-treeview {% if 'index' in segment %} menu-open {% endif %}">
+            <a href="#" class="nav-link {% if 'index' in segment %} active {% endif %}">
+              <i class="nav-icon fas fa-random"></i>
+              <p >
+                Molecular Transport
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              {% for k, attr in entity["model_variable"].items() %}
+                {% if attr["class"] == "MolecularTransportParameter" and not k.startswith("Plain") %}
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" 
+                      href="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} #{{ k }} {% endif %}" 
+                      aria-expanded="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} true {% endif %}" 
+                      aria-controls="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} {{ k }} {% endif %}" >
+                      <i class="far fa-circle nav-icon" style="visibility: hidden;"></i>
+                      <p>{{ k.replace("_", " ") }}&nbsp;&nbsp;{{ attr["symbol"] | safe }}</p>
+                      {% if attr['dimensions'] or attr['laws'] or attr['definition'] %}
+                        <div class="collapse" id="{{ k }}">
+                          <div class="card card-body nav-card-body mt-1 mb-2 ml-4 mr-0">
+                          {% if attr["dimensions"] %}
+                            <b>Dimension</b>
+                            <ul style="padding-left: 1rem">
+                            {% for d in attr["dimensions"] %}
+                              <li style="font-size: 16px;">{{ d }}</li>
+                            {% endfor %}
+                            </ul>
+                            {% endif %}
+                          {% if attr["definition"] %}
+                            <b>Definition</b>
+                            {{ entity["definition"][attr["definition"]]["formula"] | safe }}
+                          {% endif %}
+                          {% if attr["laws"] %}
+                            <b>Law</b>
+                            <ul style="padding-left: 1rem">
+                            {% for l in attr["laws"] %}
+                              <li style="font-size: 14px;"><div>for&nbsp;{{ entity["law"][l]["phenomenon"].replace("_", " ") }}</div></li>
+                              <div class="mb-3">
+                                <span style="font-size: 14px;">doi: {{ entity["law"][l]["doi"] }}</span>
+                                {{ entity["law"][l]["formula"] | safe }}
+                              </div>
+                            {% endfor %}
+                            </ul>
+                          {% endif %}
+                          </div>
+                        </div>
+                      {% endif %}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="nav-item has-treeview {% if 'index' in segment %} menu-open {% endif %}">
+            <a href="#" class="nav-link {% if 'index' in segment %} active {% endif %}">
+              <i class="nav-icon fas fa-atom"></i>
+              <p >
+                Chemical Reaction
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              {% for k, attr in entity["model_variable"].items() %}
+                {% if attr["class"] == "ReactionParameter" %}
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" 
+                      href="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} #{{ k }} {% endif %}" 
+                      aria-expanded="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} true {% endif %}" 
+                      aria-controls="{% if attr['dimensions'] or attr['laws'] or attr['definition'] %} {{ k }} {% endif %}" >
+                      <i class="far fa-circle nav-icon" style="visibility: hidden;"></i>
+                      <p>{{ k.replace("_", " ") }}&nbsp;&nbsp;{{ attr["symbol"] | safe }}</p>
+                      {% if attr['dimensions'] or attr['laws'] or attr['definition'] %}
+                        <div class="collapse" id="{{ k }}">
+                          <div class="card card-body nav-card-body mt-1 mb-2 ml-4 mr-0">
+                          {% if attr["dimensions"] %}
+                            <b>Dimension</b>
+                            <ul style="padding-left: 1rem">
+                            {% for d in attr["dimensions"] %}
+                              <li style="font-size: 16px;">{{ d }}</li>
+                            {% endfor %}
+                            </ul>
+                            {% endif %}
+                          {% if attr["definition"] %}
+                            <b>Definition</b>
+                            {{ entity["definition"][attr["definition"]]["formula"] | safe }}
+                          {% endif %}
+                          {% if attr["laws"] %}
+                            <b>Law</b>
+                            <ul style="padding-left: 1rem">
+                            {% for l in attr["laws"] %}
+                              <li style="font-size: 16px;">for&nbsp;{{ entity["law"][l]["phenomenon"].replace("_", " ") }}</li>
+                              {{ entity["law"][l]["formula"] | safe }}
+                            {% endfor %}
+                            </ul>
+                          {% endif %}
+                          </div>
+                        </div>
+                      {% endif %}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+  
