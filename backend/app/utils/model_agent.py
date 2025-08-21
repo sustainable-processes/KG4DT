@@ -393,21 +393,23 @@ class ModelAgent:
                 if p not in self.entity["var"]:
                     continue
                 dims = self.entity["var"][p]["dims"]
-                for rxn in self.context["information"]["rxn"][p]:
-                    if set(dims) == set(["Reaction"]):
+                if set(dims) == set(["Reaction"]):
+                    for rxn in self.context["information"]["rxn"][p]:
                         v = self.context["information"]["rxn"][p][rxn]
                         param_dict[(p, None, rxn, None, None)] = v
-                    elif set(dims) == set(["Reaction", "Stream"]):
-                        for stm in self.context["information"]["rxn"][p][rxn]:
-                            v = self.context["information"]["rxn"][p][rxn][stm]
-                            param_dict[(p, None, rxn, None, stm)] = v
-                    elif set(dims) == set(["Species", "Reaction"]):
+                elif set(dims) == set(["Reaction", "Stream"]):
+                    for stm in self.context["information"]["rxn"][p]:
+                        for rxn in self.context["information"]["rxn"][p][stm]:
+                            v = self.context["information"]["rxn"][p][stm][rxn]
+                            param_dict[(p, None, rxn, stm, None)] = v
+                elif set(dims) == set(["Species", "Reaction"]):
+                    for rxn in self.context["information"]["rxn"][p]:
                         for spc in self.context["information"]["rxn"][p][rxn]:
                             v = self.context["information"]["rxn"][p][rxn][spc]
                             param_dict[(p, spc, rxn, None, None)] = v
-                    else:
-                        msg = f"Invalid dimensions for reaction parameter {p}: {dims}"
-                        return False, msg
+                else:
+                    msg = f"Invalid dimensions for reaction parameter {p}: {dims}"
+                    return False, msg
 
         # Operation
         phenos = []
@@ -922,35 +924,35 @@ class ModelAgent:
                     for j, spc in enumerate(spcs):
                         if (var, spc, rxn, None, None) in keys:
                             ind = keys.index((var, spc, rxn, None, None))
-                            model.add(f'{sym}[{i}][{j}] = p[{ind}]', 1)
+                            model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
             elif set(dims) == set(["Species", "Stream"]):
                 model.add(f"{sym} = np.zeros({nstm, nspc}, dtype=np.float64)", 1)
                 for i, stm in enumerate(stms):
                     for j, spc in enumerate(spcs):
                         if (var, spc, None, stm, None) in keys:
                             ind = keys.index((var, spc, None, stm, None))
-                            model.add(f'{sym}[{i}][{j}] = p[{ind}]', 1)
+                            model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
             elif set(dims) == set(["Species", "Gas"]):
                 model.add(f"{sym} = np.zeros({ngas, nspc}, dtype=np.float64)", 1)
                 for i, gas in enumerate(gass):
                     for j, spc in enumerate(spcs):
                         if (var, spc, None, None, gas) in keys:
                             ind = keys.index((var, spc, None, None, gas))
-                            model.add(f'{sym}[{i}][{j}] = p[{ind}]', 1)
+                            model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
             elif set(dims) == set(["Species", "Solid"]):
                 model.add(f"{sym} = np.zeros({nsld, nspc}, dtype=np.float64)", 1)
                 for i, sld in enumerate(slds):
                     for j, spc in enumerate(spcs):
                         if (var, spc, None, None, sld) in keys:
                             ind = keys.index((var, spc, None, None, sld))
-                            model.add(f'{sym}[{i}][{j}] = p[{ind}]', 1)
+                            model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
             elif set(dims) == set(["Reaction", "Stream"]):
                 model.add(f"{sym} = np.zeros({nstm, nrxn}, dtype=np.float64)", 1)
                 for i, stm in enumerate(stms):
                     for j, rxn in enumerate(rxns):
                         if (var, None, rxn, stm, None) in keys:
                             ind = keys.index((var, None, rxn, stm, None))
-                            model.add(f'{sym}[{i}][{j}] = p[{ind}]', 1)
+                            model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
             elif set(dims) == set(["Species", "Stream", "Gas"]):
                 model.add(f"{sym} = np.zeros({ngas, nstm, nrxn}, dtype=np.float64)", 1)
                 for i, gas in enumerate(gass):
@@ -958,7 +960,7 @@ class ModelAgent:
                         for k, spc in enumerate(spcs):
                             if (var, spc, None, stm, gas) in keys:
                                 ind = keys.index((var, spc, None, stm, gas))
-                                model.add(f'{sym}[{i}][{j}][{k}] = p[{ind}]', 1)
+                                model.add(f'{sym}[{i}, {j}, {k}] = p[{ind}]', 1)
             elif set(dims) == set(["Species", "Stream", "Solid"]):
                 model.add(f"{sym} = np.zeros({nsld, nstm, nrxn}, dtype=np.float64)", 1)
                 for i, sld in enumerate(slds):
@@ -966,7 +968,7 @@ class ModelAgent:
                         for k, spc in enumerate(spcs):
                             if (var, spc, None, stm, sld) in keys:
                                 ind = keys.index((var, spc, None, stm, sld))
-                                model.add(f'{sym}[{i}][{j}][{k}] = p[{ind}]', 1)
+                                model.add(f'{sym}[{i}, {j}, {k}] = p[{ind}]', 1)
             else:
                 return False, f"Unknown parameter {var} with dimensions: {dims}"
             
@@ -1152,7 +1154,7 @@ class ModelAgent:
             model.add("", 0)
 
         # Concentration derivative: mass transport
-        model.add("# mass transfer", 2)
+        model.add("# mass transport", 2)
         mt_vars = []
         for law in mt_laws:
             if self.entity["law"][law]["fml_int_with_accum"]:
@@ -1183,6 +1185,13 @@ class ModelAgent:
                     ind_fml = self.index_fml(ind_fml, mass_vars, [pha_dim], [ind[0]])
                     ind_fml = self.index_fml(ind_fml, mass_vars, ["Stream"], [ind[1]])
                     model.add(f"{ind_sym} = {ind_fml}", 2)
+                    if "Solid" in dims:
+                        mass_var = "Mass_Solid"
+                        mass_sym = self.entity["var"][mass_var]["sym"]
+                        mass_sym = MMLExpression(mass_sym).to_numpy()
+                        model.add(f"if {mass_sym}[{ind[0]}] < 1e-3:", 2)
+                        model.add(f"{ind_sym} = 0", 3)
+            model.add("", 0)
 
         # Concentration derivative: accumulation
         model.add("# accumulation", 2)
@@ -1220,7 +1229,7 @@ class ModelAgent:
             for ind in itertools.product(*[list(range(size)) for size in sizes]):
                 ind_isym = self.index_fml(isym, [ivar], dims, ind)
                 ind_fml = self.index_fml(fml, vars, dims, ind)
-                model.add(f"{ind_isym} = {ind_fml}", 2)
+                model.add(f"d{ind_isym} = {ind_fml}", 2)
             
             assoc_isyms = []
             assoc_iinds = []
@@ -1238,19 +1247,20 @@ class ModelAgent:
                     model.add(f"d{gas_isym} = np.zeros({shape}, dtype=np.float64)", 2)
                     gas_int_init_val = self.entity["law"][assoc_gas_law]["int_init_val"]
                     for i, gas in enumerate(gass):
-                        for spc in self.context["basic"]["gas"][gas]["spc"]:
-                            j = spcs.index(spc)
-                            assoc_isyms.append(gas_isym)
-                            assoc_iinds.append(f"[{i}, {j}]")
-                            if gas_int_init_val:
-                                key = (gas_int_init_val, spc, None, None, gas)
-                                assoc_ivals.append(keys.index(key))
-                            else:
-                                assoc_ivals.append(0)
-                            dims = ["Gas", "Species"]
-                            ind = [i, j]
-                            ind_fml = self.index_fml(fml, vars, dims, ind)
-                            model.add(f"d{gas_isym}[{i}, {j}] = {ind_fml}", 2)
+                        for j, stm in enumerate(stms):
+                            for spc in self.context["basic"]["gas"][gas]["spc"]:
+                                k = spcs.index(spc)
+                                assoc_isyms.append(gas_isym)
+                                assoc_iinds.append(f"[{i}, {j}, {k}]")
+                                if gas_int_init_val:
+                                    key = (gas_int_init_val, spc, None, None, gas)
+                                    assoc_ivals.append(f"p[{keys.index(key)}]")
+                                else:
+                                    assoc_ivals.append(0)
+                                dims = ["Gas", "Stream", "Species"]
+                                ind = [i, j, k]
+                                ind_fml = self.index_fml(fml, vars, dims, ind)
+                                model.add(f"d{gas_isym}[{i}, {j}, {k}] = {ind_fml}", 2)
                 if self.entity["law"][mt_law]["assoc_sld_law"]:
                     assoc_sld_law = self.entity["law"][mt_law]["assoc_sld_law"]
                     sld_ivar = self.entity["law"][assoc_sld_law]["int_var"]
@@ -1263,19 +1273,20 @@ class ModelAgent:
                     model.add(f"d{sld_isym} = np.zeros({shape}, dtype=np.float64)", 2)
                     sld_int_init_val = self.entity["law"][assoc_sld_law]["int_init_val"]
                     for i, sld in enumerate(slds):
-                        for spc in self.context["basic"]["sld"][sld]["spc"]:
-                            j = spcs.index(spc)
-                            assoc_isyms.append(sld_isym)
-                            assoc_iinds.append(f"[{i}, {j}]")
-                            if sld_int_init_val:
-                                key = (sld_int_init_val, spc, None, None, sld)
-                                assoc_ivals.append(keys.index(key))
-                            else:
-                                assoc_ivals.append(0)
-                            dims = ["Solid", "Species"]
-                            ind = [i, j]
-                            ind_fml = self.index_fml(fml, vars, dims, ind)
-                            model.add(f"d{sld_isym}[{i}, {j}] = {ind_fml}", 2)
+                        for j, stm in enumerate(stms):
+                            for spc in self.context["basic"]["sld"][sld]["spc"]:
+                                k = spcs.index(spc)
+                                assoc_isyms.append(sld_isym)
+                                assoc_iinds.append(f"[{i}, {j}, {k}]")
+                                if sld_int_init_val:
+                                    key = (sld_int_init_val, spc, None, None, sld)
+                                    assoc_ivals.append(f"p[{keys.index(key)}]")
+                                else:
+                                    assoc_ivals.append(0)
+                                dims = ["Solid", "Stream", "Species"]
+                                ind = [i, j, k]
+                                ind_fml = self.index_fml(fml, vars, dims, ind)
+                                model.add(f"d{sld_isym}[{i}, {j}, {k}] = {ind_fml}", 2)
         
         model.add("", 0)
         model.add(f"d{isym} = d{isym}.reshape(-1, ).tolist()", 2)
