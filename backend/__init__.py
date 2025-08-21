@@ -1,5 +1,4 @@
 import os
-import jwt
 import requests
 import datetime
 
@@ -9,9 +8,11 @@ from functools import wraps
 from importlib import import_module
 from .utils.graphdb_handler import GraphdbHandler
 
-APP_PREFIX = os.environ.get("APP_PREFIX")
-graphdb_handler_instance = None
+# Load environment variables before accessing them
 load_dotenv()
+APP_PREFIX = os.environ.get("APP_PREFIX")
+
+graphdb_handler_instance = None
 
 def register_blueprint(app):
     for module_name in ["home"]:
@@ -24,7 +25,7 @@ def register_extension(app):
 
 # Setup Flask App with Frontend and Backend
 def create_app(config):
-    print("[Init] Flask app initialized with config: ", APP_PREFIX)
+    print(f"[Init] Flask app initialized with APP_PREFIX={APP_PREFIX}, config={config}")
     if APP_PREFIX:
         app = Flask(__name__, static_url_path=f"/{APP_PREFIX}/static")
     else:
@@ -40,8 +41,16 @@ def create_app(config):
     def before_request():
         global graphdb_handler_instance
 
+        # Allow health checks without any special handling
         if (APP_PREFIX and request.path == f"/{APP_PREFIX}/health") or request.path == "/health":
-            return  # Bypass auth and allow health checks
+            return
+
+        # If APP_PREFIX is set, transparently redirect bare /api/* calls to the prefixed path.
+        # Use 307 to preserve the HTTP method for POST/PUT/PATCH.
+        if APP_PREFIX and request.path.startswith("/api/"):
+            target = f"/{APP_PREFIX}{request.full_path}" if request.query_string else f"/{APP_PREFIX}{request.path}"
+            # full_path already includes '?' if query_string present
+            return redirect(target, code=307)
 
         if graphdb_handler_instance is None:
             try:

@@ -334,10 +334,11 @@ def api_model_save():
     return jsonify({"success": True, "file": filename, "path": str(file_path.relative_to(current_app.root_path))}), 200
 
 
-
 @blueprint.route("/api/model/load", methods=["GET"])
 def api_model_load():
     project_name = request.args.get("project_name")
+    model = request.args.get("model")            # optional
+    user_id = request.args.get("user_id")        # optional
     if not project_name:
         return jsonify({"error": "Missing required query parameter 'project_name'"}), 400
 
@@ -349,10 +350,21 @@ def api_model_load():
     def _safe(s):
         return str(s).replace(os.sep, "_").replace(" ", "_")
 
-    prefix = f"{_safe(project_name)}_"
-    candidates = [p for p in save_dir.glob(f"{prefix}*.json") if p.is_file()]
+    # Build search pattern: {project}_{model}_{user_id}_{timestamp}.json
+    # If model/user_id not provided, use wildcard to match any.
+    proj = _safe(project_name)
+    mdl = _safe(model) if model else "*"
+    uid = _safe(user_id) if user_id else "*"
+    pattern = f"{proj}_{mdl}_{uid}_*.json"
+
+    candidates = [p for p in save_dir.glob(pattern) if p.is_file()]
     if not candidates:
-        return jsonify({"error": f"No saved files found for project_name '{project_name}'"}), 404
+        detail = {"project_name": project_name}
+        if model:
+            detail["model"] = model
+        if user_id:
+            detail["user_id"] = user_id
+        return jsonify({"error": "No saved files found for given filters", "filters": detail}), 404
 
     # Pick the most recently modified file
     latest = max(candidates, key=lambda p: p.stat().st_mtime)
