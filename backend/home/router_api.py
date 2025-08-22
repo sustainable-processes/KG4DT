@@ -385,17 +385,19 @@ def api_model_phenomenon():
     entity = g.graphdb_handler.query_phenomenon()
     return jsonify(entity)
 
-
-
 @blueprint.route("/api/model/phenomenon/ac", methods=["GET"])
 def api_model_phenomenon_ac():
+    entity = g.graphdb_handler.query_accumulators()
+    return jsonify(entity)
+
+@blueprint.route("/api/model/phenomenon/fp", methods=["GET"])
+def api_model_phenomenon_fp():
     try:
-        # Support legacy/current param "method" and allow "ac" as a fallback alias
         raw_ac = request.args.get("method")
         if raw_ac is None or str(raw_ac).strip() == "":
             return jsonify({
                 "error": "Missing required query parameter 'method'. Allowed values: 'Batch', 'Continuous'.",
-                "hint": "Example: /api/model/phenomenon/ac?method=Batch"
+                "hint": "Example: /api/model/phenomenon/fp?ac=Batch"
             }), 400
 
         ac_norm = str(raw_ac).strip().lower()
@@ -433,15 +435,15 @@ def api_model_phenomenon_ac():
         }), 500
 
 
-@blueprint.route("/api/model/phenomenon/fp", methods=["GET"])
-def api_model_phenomenon_fp():
+@blueprint.route("/api/model/phenomenon/mt", methods=["GET"])
+def api_model_phenomenon_mt():
     try:
         # Accept multiple aliases for the flow pattern parameter for flexibility
-        raw_fp = request.args.get("pattern") or request.args.get("fp") or request.args.get("flow_pattern")
+        raw_fp = request.args.get("fp")
         if raw_fp is None or str(raw_fp).strip() == "":
             return jsonify({
                 "error": "Missing required query parameter 'pattern' (aliases: 'fp', 'flow_pattern').",
-                "hint": "Example: /api/model/phenomenon/fp?pattern=Annular_Microflow"
+                "hint": "Example: /api/model/phenomenon/mt?fp=Annular_Microflow"
             }), 400
 
         # Delegate to graphdb handler to get mass transfer phenomena linked to the FlowPattern
@@ -461,27 +463,81 @@ def api_model_phenomenon_fp():
             "detail": str(e)
         }), 500
 
-
-@blueprint.route("/api/model/phenomenon/mt", methods=["GET"])
-def api_model_phenomenon_mt():
+@blueprint.route("/api/model/phenomenon/me", methods=["GET"])
+def api_model_phenomenon_me():
     try:
-        # Accept multiple aliases for the mass transfer parameter
-        raw_mt = request.args.get("mt")
-        if raw_mt is None or str(raw_mt).strip() == "":
+        # Primary mode: accept JSON body with an array of mass transfer names
+        payload = request.get_json(silent=True) or {}
+        mt_list = payload.get("mt") if isinstance(payload, dict) else None
+
+        if isinstance(mt_list, list) and len(mt_list) > 0:
+            result_set = set()
+            for item in mt_list:
+                if item is None or str(item).strip() == "":
+                    continue
+                equilibria = g.graphdb_handler.query_mass_equilibrium_by_mass_transfer(item)
+                for eq in (equilibria or []):
+                    if eq:
+                        result_set.add(eq)
+            if not result_set:
+                return jsonify({
+                    "error": "No mass equilibrium found for the specified mass transfer phenomena.",
+                    "mt": mt_list
+                }), 404
+            return jsonify({"me": sorted(result_set)}), 200
+
+    except Exception as e:
+        return jsonify({
+            "error": "Internal server error while processing the request.",
+            "detail": str(e)
+        }), 500
+
+
+@blueprint.route("/api/model/phenomenon/param_law", methods=["POST", "GET"])
+def api_model_param_law():
+    """
+    Retrieve parameter -> law mapping constrained by selected phenomena.
+    Accepts either:
+      - POST JSON body with any of keys: ac, fp, mt, me (string or list)
+      - GET query params: ac, fp, mt, me (can be repeated or comma-separated)
+
+    Response: {"param_law": {"<Parameter>": "<Law>", ...}}
+    """
+    try:
+        payload = request.get_json(silent=True) or {}
+        filters = {}
+        keys = ("ac", "fp", "mt", "me")
+
+        for k in keys:
+            val = payload.get(k) if isinstance(payload, dict) else None
+            if val is None and request.method == "GET":
+                # Support multiple via ?k=a&k=b or comma-separated ?k=a,b
+                lst = request.args.getlist(k)
+                if not lst:
+                    s = request.args.get(k)
+                    if s:
+                        lst = [part.strip() for part in s.split(",") if part.strip()]
+                val = lst if lst else None
+            if val is not None:
+                filters[k] = val
+
+        if not any(filters.get(k) for k in keys):
             return jsonify({
-                "error": "Missing required query parameter 'mt' (aliases: 'mass_transfer', 'phenomenon').",
-                "hint": "Example: /api/model/phenomenon/mt?mt=Engulfment"
+                "error": "Provide at least one of 'ac', 'fp', 'mt', or 'me' via JSON body or query params.",
+                "hint": {
+                    "POST": {"ac": "Batch", "fp": "Well_Mixed", "mt": ["Gas-Liquid_Mass_Transfer"], "me": ["Gas_Dissolution_Equilibrium"]},
+                    "GET": "/api/model/phenomenon/param_law?fp=Annular_Microflow&mt=Engulfment"
+                }
             }), 400
 
-        equilibria = g.graphdb_handler.query_mass_equilibrium_by_mass_transfer(raw_mt)
-
-        if equilibria is None or (isinstance(equilibria, (list, dict)) and len(equilibria) == 0):
+        mapping = g.graphdb_handler.query_param_law(filters)
+        if not mapping:
             return jsonify({
-                "error": "No mass equilibrium found for the specified mass transfer phenomenon.",
-                "mt": raw_mt
+                "error": "No parameter law found for the specified filters.",
+                "filters": filters
             }), 404
 
-        return jsonify(equilibria), 200
+        return jsonify({"param_law": mapping}), 200
 
     except Exception as e:
         return jsonify({

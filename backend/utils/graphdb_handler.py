@@ -597,5 +597,156 @@ class GraphdbHandler:
 
         return sorted(equilibria)
  
+    def query_param_law(self, filters):
+        """
+        Retrieve parameter -> law mapping for Laws associated with provided phenomena.
+        filters: dict with optional keys 'ac', 'fp', 'mt', 'me'; values may be string or list of strings.
+        Returns: dict { parameter_name: law_name }
+        """
+        if not isinstance(filters, dict):
+            return {}
+
+        # Normalize filter values to lists of non-empty strings
+        def _norm(v):
+            if v is None:
+                return []
+            if isinstance(v, list):
+                items = v
+            else:
+                items = [v]
+            out = []
+            for s in items:
+                if s is None:
+                    continue
+                s2 = str(s).strip()
+                if s2:
+                    out.append(s2)
+            return out
+
+        ac_list = _norm(filters.get("ac"))
+        fp_list = _norm(filters.get("fp"))
+        mt_list = _norm(filters.get("mt"))
+        me_list = _norm(filters.get("me"))
+
+        if not (ac_list or fp_list or mt_list or me_list):
+            return {}
+
+        # Build UNION blocks for each provided phenomenon group
+        union_blocks = []
+        def _regex_union(names):
+            # Build a single regex that matches any of the names at IRI tail
+            esc = [re.escape(n) for n in names]
+            pattern = "|".join(esc)
+            return pattern
+
+        if ac_list:
+            pattern = _regex_union(ac_list)
+            union_blocks.append(
+                "{"
+                f"?d {self.ns_dict['isAssociatedWith']}:isAssociatedWith ?phen_ac. "
+                f"?phen_ac rdf:type {self.ns_dict['Accumulation']}:Accumulation. "
+                f"FILTER(regex(str(?phen_ac), '#({pattern})$', 'i')). "
+                "}"
+            )
+        if fp_list:
+            pattern = _regex_union(fp_list)
+            union_blocks.append(
+                "{"
+                f"?d {self.ns_dict['isAssociatedWith']}:isAssociatedWith ?phen_fp. "
+                f"?phen_fp rdf:type {self.ns_dict['FlowPattern']}:FlowPattern. "
+                f"FILTER(regex(str(?phen_fp), '#({pattern})$', 'i')). "
+                "}"
+            )
+        if mt_list:
+            pattern = _regex_union(mt_list)
+            union_blocks.append(
+                "{"
+                f"?d {self.ns_dict['isAssociatedWith']}:isAssociatedWith ?phen_mt. "
+                f"?phen_mt rdf:type {self.ns_dict['MolecularTransportPhenomenon']}:MolecularTransportPhenomenon. "
+                f"FILTER(regex(str(?phen_mt), '#({pattern})$', 'i')). "
+                "}"
+            )
+        if me_list:
+            pattern = _regex_union(me_list)
+            union_blocks.append(
+                "{"
+                f"?d {self.ns_dict['isAssociatedWith']}:isAssociatedWith ?phen_me. "
+                f"?phen_me rdf:type {self.ns_dict['PhysicalEquilibriumPhenomenon']}:PhysicalEquilibriumPhenomenon. "
+                f"FILTER(regex(str(?phen_me), '#({pattern})$', 'i')). "
+                "}"
+            )
+
+        # Parameter variable classes
+        param_types = [
+            "FlowParameter",
+            "ReactorParameter",
+            "ReactionParameter",
+            "PhysicalParameter",
+            "OperatingParameter",
+            "MolecularTransportParameter",
+        ]
+        values_param_types = " ".join([f"{self.ns_dict[t]}:{t}" for t in param_types])
+
+        sparql = self.prefix + \
+            "select ?v ?d where {" \
+            f"?d rdf:type {self.ns_dict['Law']}:Law. " \
+            f"{{ ?d {self.ns_dict['hasModelVariable']}:hasModelVariable ?v }} UNION {{ ?d {self.ns_dict['hasOptionalModelVariable']}:hasOptionalModelVariable ?v }}. " \
+            f"?v rdf:type ?pt. VALUES ?pt {{{values_param_types}}}. "
+
+        # Add phenomenon association constraints via UNION of provided groups (ANY of them)
+        if union_blocks:
+            sparql += "(" + " UNION ".join(union_blocks) + ") . "
+
+        sparql += "}"
+
+        try:
+            sparql_res = self.cur.execute(sparql)
+        except Exception:
+            return {}
+
+        mapping = {}
+        # Expect lines: header then rows of two columns v,d
+        for res in sparql_res.split("\r\n")[1:-1]:
+            parts = res.split(",")
+            if len(parts) < 2:
+                continue
+            var_iri, law_iri = parts[0], parts[1]
+            var_name = var_iri.split("#")[-1]
+            law_name = law_iri.split("#")[-1]
+            if not var_name or not law_name:
+                continue
+            # Deterministic selection: keep lexicographically smallest law if multiple
+            if var_name in mapping:
+                if law_name < mapping[var_name]:
+                    mapping[var_name] = law_name
+            else:
+                mapping[var_name] = law_name
+
+        return dict(sorted(mapping.items(), key=lambda x: x[0]))
+ 
+    def query_accumulators(self):
+        """
+        Return a sorted list of Accumulation individuals (e.g., 'Batch', 'Continuous').
+        """
+        sparql = self.prefix + \
+            "select ?p where {" \
+            f"?p rdf:type {self.ns_dict['Accumulation']}:Accumulation. " \
+            "}"
+        try:
+            sparql_res = self.cur.execute(sparql)
+        except Exception:
+            return []
+        result = set()
+        for line in sparql_res.split("\r\n")[1:-1]:
+            try:
+                ns, name = line.split("#")
+            except ValueError:
+                parts = line.split("#")
+                name = parts[-1] if parts else ""
+            name = name.strip()
+            if name:
+                result.add(name)
+        return sorted(result)
+
     def close(self):
         self.conn.close()

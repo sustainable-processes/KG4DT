@@ -1,0 +1,217 @@
+{
+  "basic": {
+    "spc": [
+      "water",
+      "solvent",
+      "RDY",
+      "RYE",
+      "RYA",
+      "REA",
+      "RDEt",
+      "dimer",
+      "H2",
+      "cat2",
+      "cat-H",
+      "catX",
+      "catX-RDEt"
+    ],
+    "rxn": [
+      "H2 + cat2 > 2 cat-H",
+      "2 cat-H > H2 + cat2",
+      "RDY + 2 cat-H > RYE + cat2",
+      "RYE + 2 cat-H > RYA + cat2",
+      "RYA + 2 cat-H > REA + cat2",
+      "REA + 2 cat-H > RDEt + cat2",
+      "RDEt + catX > catX-RDEt",
+      "catX-RDEt > RDEt + catX",
+      "RYE + catX-RDEt > dimer + catX",
+      "REA + catX-RDEt > 2 H2 + dimer + catX"
+    ],
+    "stm": {
+      "Batch stream": {
+        "spc": ["water", "solvent", "cat2", "catX"],
+        "rxn": [
+          "H2 + cat2 > 2 cat-H",
+          "2 cat-H > H2 + cat2",
+          "RDY + 2 cat-H > RYE + cat2",
+          "RYE + 2 cat-H > RYA + cat2",
+          "RYA + 2 cat-H > REA + cat2",
+          "REA + 2 cat-H > RDEt + cat2",
+          "RDEt + catX > catX-RDEt",
+          "catX-RDEt > RDEt + catX",
+          "RYE + catX-RDEt > dimer + catX",
+          "REA + catX-RDEt > 2 H2 + dimer + catX"
+        ]
+      }
+    },
+    "sld": {
+      "RDY solid": {
+        "spc": ["RDY"]
+      }
+    },
+    "gas": {
+      "Hydrogen gas": {
+        "spc": ["H2"]
+      }
+    }
+  },
+  "description": {
+    "ac": "Batch",
+    "fp": "Well_Mixed",
+    "mt": ["Gas-Liquid_Mass_Transfer", "Solid-Liquid_Mass_Transfer"],
+    "me": ["Gas_Dissolution_Equilibrium", "Solid_Dissolution_Equilibrium"],
+    "param_law": {
+      "Gas_Dissolution_Saturated_Concentration": "Gas_Dissolution_Saturated_Concentration_Law_with_Gas_Dissolution_by_Henry",
+      "Solid_Dissolution_Saturated_Concentration": "Solid_Dissolution_Saturated_Concentration_Law_with_Solid_Dissolution_over_Mass"
+    },
+    "rxn": {
+      "H2 + cat2 > 2 cat-H": ["Plain_Rate_Constant", "Exponential_Concentration"],
+      "2 cat-H > H2 + cat2": ["Plain_Rate_Constant", "Exponential_Concentration"],
+      "RDY + 2 cat-H > RYE + cat2": ["Arrhenius", "Exponential_Concentration"],
+      "RYE + 2 cat-H > RYA + cat2": ["Plain_Rate_Constant", "Exponential_Concentration"],
+      "RYA + 2 cat-H > REA + cat2": ["Arrhenius", "Exponential_Concentration"],
+      "REA + 2 cat-H > RDEt + cat2": ["Plain_Rate_Constant", "Exponential_Concentration"],
+      "RDEt + catX > catX-RDEt": ["Plain_Rate_Constant", "Exponential_Concentration"],
+      "catX-RDEt > RDEt + catX": ["Plain_Rate_Constant", "Exponential_Concentration"],
+      "RYE + catX-RDEt > dimer + catX": [
+        "Arrhenius",
+        "Exponential_Concentration"
+      ],
+      "REA + catX-RDEt > 2 H2 + dimer + catX": [
+        "Arrhenius",
+        "Exponential_Concentration"
+      ]
+    }
+  },
+  "information": {
+    "st": {},
+    "spc": {
+      "Molecular_Weight": {
+        "water": 18,
+        "solvent": 60,
+        "RDY": 150,
+        "RYE": 152,
+        "RYA": 154,
+        "REA": 156,
+        "RDEt": 158,
+        "dimer": 310,
+        "H2": 2,
+        "cat2": 100,
+        "cat-H": 51,
+        "catX": 100,
+        "catX-RDEt": 258
+      }
+    },
+    "stm": {
+      "Density": {
+        "Batch stream": 1100
+      }
+    },
+    "sld": {
+      "Density_Solid": {
+        "RDY solid": 1000
+      }
+    },
+    "gas": {},
+    "mt": {
+      "Gas-Liquid_Volumetric_Mass_Transfer_Coefficient": {
+        "Hydrogen gas": {
+          "Batch stream": {
+            "H2": 10
+          }
+        }
+      },
+      "Solid-Liquid_Volumetric_Mass_Transfer_Coefficient": {
+        "RDY solid": {
+          "Batch stream": {
+            "RDY": 16
+          }
+        }
+      }
+    },
+    "me": {
+      "Henry's_Constant": {
+        "Hydrogen gas": {
+          "Batch stream": {
+            "H2": 42
+          }
+        }
+      },
+      "Solid_Dissolution_Saturated_Concentration_Law_with_Solid_Dissolution_over_Mass": {
+        "RDY solid": {
+          "Batch stream": {
+            "RDY": "1.59 * exp(-0.1126 * (100 * m['RDEt'] / sum(m)) ** 0.83)"
+          }
+        }
+      }
+    },
+    "rxn": {
+      "Rate_Constant": {
+        "Batch stream": {
+          "H2 + cat2 > 2 cat-H": 1.3e-4,
+          "2 cat-H > H2 + cat2": 1e-5,
+          "RYE + 2 cat-H > RYA + cat2": 5e-5,
+          "REA + 2 cat-H > RDEt + cat2": 5e-5,
+          "RDEt + catX > catX-RDEt": 1e-6,
+          "catX-RDEt > RDEt + catX": 1e-3
+        }
+      },
+      "Pre-exponential_Factor": {
+        "Batch stream": {
+          "RDY + 2 cat-H > RYE + cat2": 0.67,
+          "RYA + 2 cat-H > REA + cat2": 0.67,
+          "RYE + catX-RDEt > dimer + catX": 5.95,
+          "REA + catX-RDEt > 2 H2 + dimer + catX": 5.95
+        }
+      },
+      "Activation_Energy": {
+        "Batch stream": {
+          "RDY + 2 cat-H > RYE + cat2": 30000,
+          "RYA + 2 cat-H > REA + cat2": 30000,
+          "RYE + catX-RDEt > dimer + catX": 38000,
+          "REA + catX-RDEt > 2 H2 + dimer + catX": 38000
+        }
+      },
+      "Partial_Order": {
+        "H2 + cat2 > 2 cat-H": {
+            "H2": 1,
+            "cat2": 1
+          },
+        "2 cat-H > H2 + cat2": {
+          "cat-H": 2
+        },
+        "RDY + 2 cat-H > RYE + cat2": {
+          "RDY": 1,
+          "cat-H": 1
+        },
+        "RYE + 2 cat-H > RYA + cat2": {
+          "RYE": 1,
+          "cat-H": 1
+        },
+        "RYA + 2 cat-H > REA + cat2": {
+          "RYA": 1,
+          "cat-H": 1
+        },
+        "REA + 2 cat-H > RDEt + cat2": {
+          "REA": 1,
+          "cat-H": 1
+        },
+        "RDEt + catX > catX-RDEt": {
+          "RDEt": 1,
+          "catX": 1
+        },
+        "catX-RDEt > RDEt + catX": {
+          "catX-RDEt": 1
+        },
+        "RYE + catX-RDEt > dimer + catX": {
+          "RYE": 1,
+          "catX-RDEt": 1
+        },
+        "REA + catX-RDEt > 2 H2 + dimer + catX": {
+          "REA": 1,
+          "catX-RDEt": 1
+        }
+      }
+    }
+  }
+}
