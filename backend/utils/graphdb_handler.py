@@ -243,13 +243,7 @@ class GraphdbHandler:
             laws[law]["model_variables"] = sorted(laws[law]["model_variables"])
             laws[law]["optional_model_variables"] = sorted(laws[law]["optional_model_variables"])
         return laws
-    
 
-    def query_model_me(self, mt):
-        print(mt)
-        # "mt": ["sdfdsf", "sdfsdfsd", "sdfsdf"]
-
-        return "as"
 
     def query_model_variable(self):
         model_variables = {}
@@ -481,6 +475,56 @@ class GraphdbHandler:
             rules[rule]["phenomena"] = sorted(rules[rule]["phenomena"])
             rules[rule]["context_descriptors"] = sorted(rules[rule]["context_descriptors"])
         return rules
+
+
+    def query_phenomenon_ac(self, ac):
+        """
+        Query all FlowPattern individuals related to a specific Accumulation individual.
+        The input `ac` is expected to indicate which Accumulation individual to filter, e.g.,
+        "Batch" or "Continuous". Matching is case-insensitive.
+
+        Returns a sorted list of FlowPattern local names.
+        """
+        if ac is None:
+            return []
+
+        # Normalize input (accepts 'batch'/'continuous' and similar variants)
+        ac_str = str(ac).strip()
+        if not ac_str:
+            return []
+        # Try to match typical naming of individuals, e.g., Batch / Continuous
+        # We'll use case-insensitive regex in SPARQL; keep the original for display if needed.
+
+        # Build SPARQL using configured prefixes/namespaces and pygraphdb cursor
+        sparql = self.prefix + \
+            "select ?p ?rp where {" \
+            f"?p rdf:type {self.ns_dict['Accumulation']}:Accumulation. " \
+            f"optional{{?p {self.ns_dict['relatesToFlowPattern']}:relatesToFlowPattern ?rp}}. " \
+            f"FILTER(regex(str(?p), '#{ac_str}$', 'i')). " \
+            "}"
+
+        try:
+            sparql_res = self.cur.execute(sparql)
+        except Exception:
+            # If cursor-based execution fails for any reason, return empty to keep API stable
+            return []
+
+        flow_patterns = set()
+        # Expect CSV-like lines: header, then "<p>,<rp>"; handle empty right part
+        for res in sparql_res.split("\r\n")[1:-1]:
+            try:
+                phenomenon, flow_pattern = res.split(",")
+            except ValueError:
+                # In case the backend returns a single column or malformed line
+                parts = res.split(",")
+                phenomenon = parts[0] if parts else ""
+                flow_pattern = parts[1] if len(parts) > 1 else ""
+            flow_pattern = flow_pattern.split("#")[-1]
+            if flow_pattern:
+                flow_patterns.add(flow_pattern)
+
+        return sorted(flow_patterns)
+
 
 
     def close(self):

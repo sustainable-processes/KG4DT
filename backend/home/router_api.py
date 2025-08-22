@@ -376,3 +376,58 @@ def api_model_load():
         return jsonify({"error": f"Failed to load file '{latest.name}': {e}"}), 500
 
     return jsonify({"success": True, "file": latest.name, "data": data}), 200
+
+
+
+@blueprint.route("/api/model/phenomenon", methods=["GET"])
+def api_model_phenomenon():
+    # Query the database for the phenomenon
+    entity = g.graphdb_handler.query_phenomenon()
+    return jsonify(entity)
+
+
+
+@blueprint.route("/api/model/phenomenon/ac", methods=["GET"])
+def api_model_phenomenon_ac():
+    try:
+        # Support legacy/current param "method" and allow "ac" as a fallback alias
+        raw_ac = request.args.get("method")
+        if raw_ac is None or str(raw_ac).strip() == "":
+            return jsonify({
+                "error": "Missing required query parameter 'method'. Allowed values: 'Batch', 'Continuous'.",
+                "hint": "Example: /api/model/phenomenon/ac?method=Batch"
+            }), 400
+
+        ac_norm = str(raw_ac).strip().lower()
+        allowed = {"batch", "continuous"}
+        if ac_norm not in allowed:
+            return jsonify({
+                "error": "Invalid value for 'method'. Allowed values are 'Batch' or 'Continuous'.",
+                "received": raw_ac
+            }), 400
+
+        # Query the database for the phenomenon
+        entity = g.graphdb_handler.query_phenomenon_ac(ac_norm)
+
+        # Handle empty result sets gracefully
+        if entity is None:
+            return jsonify({
+                "error": "No phenomenon found for the specified operating condition.",
+                "method": raw_ac
+            }), 404
+
+        # If it's a collection, also consider emptiness
+        if isinstance(entity, (list, dict)) and len(entity) == 0:
+            return jsonify({
+                "error": "No phenomenon found for the specified operating condition.",
+                "method": raw_ac
+            }), 404
+
+        return jsonify(entity), 200
+
+    except Exception as e:
+        # Unexpected error
+        return jsonify({
+            "error": "Internal server error while processing the request.",
+            "detail": str(e)
+        }), 500
