@@ -66,6 +66,7 @@ class Config:
         "Accumulation":                             "behavior",
         "ChemicalReactionPhenomenon":               "behavior", 
         "MolecularTransportPhenomenon":             "behavior",
+        "PhysicalEquilibriumPhenomenon":            "behavior",
         "SI_BaseUnit":                              "SI_unit",
         "SI_DerivedUnit":                           "SI_unit",
         "PhysicalPropertyDataSource":               "ontomo",

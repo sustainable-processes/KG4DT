@@ -559,7 +559,43 @@ class GraphdbHandler:
                 mass_transfers.add(mt_name)
         return sorted(mass_transfers)
 
+    def query_mass_equilibrium_by_mass_transfer(self, mt):
+        """
+        Given a MolecularTransportPhenomenon individual name (e.g., "Engulfment" or "mass_diffusion"),
+        return all related PhysicalEquilibriumPhenomenon local names ("mass equilibrium") by traversing
+        Laws that are associated with both the given MTP and a PhysicalEquilibriumPhenomenon.
+        Matching of the MTP is case-insensitive against the IRI tail.
+        """
+        if mt is None:
+            return []
+        mt_str = str(mt).strip()
+        if not mt_str:
+            return []
 
+        sparql = self.prefix + \
+            "select ?mtp ?eq where {" \
+            f"?mtp rdf:type {self.ns_dict['MolecularTransportPhenomenon']}:MolecularTransportPhenomenon. " \
+            f"FILTER(regex(str(?mtp), '#{mt_str}$', 'i')). " \
+            f"?d rdf:type {self.ns_dict['Law']}:Law. " \
+            f"?d {self.ns_dict['isAssociatedWith']}:isAssociatedWith ?mtp. " \
+            f"?d {self.ns_dict['isAssociatedWith']}:isAssociatedWith ?eq. " \
+            f"?eq rdf:type {self.ns_dict['PhysicalEquilibriumPhenomenon']}:PhysicalEquilibriumPhenomenon. " \
+            "}"
 
+        try:
+            sparql_res = self.cur.execute(sparql)
+        except Exception:
+            return []
+
+        equilibria = set()
+        for res in sparql_res.split("\r\n")[1:-1]:
+            parts = res.split(",")
+            eq_iri = parts[1] if len(parts) > 1 else ""
+            eq_name = eq_iri.split("#")[-1]
+            if eq_name:
+                equilibria.add(eq_name)
+
+        return sorted(equilibria)
+ 
     def close(self):
         self.conn.close()

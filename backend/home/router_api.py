@@ -460,3 +460,31 @@ def api_model_phenomenon_fp():
             "error": "Internal server error while processing the request.",
             "detail": str(e)
         }), 500
+
+
+@blueprint.route("/api/model/phenomenon/mt", methods=["GET"])
+def api_model_phenomenon_mt():
+    try:
+        # Accept multiple aliases for the mass transfer parameter
+        raw_mt = request.args.get("mt")
+        if raw_mt is None or str(raw_mt).strip() == "":
+            return jsonify({
+                "error": "Missing required query parameter 'mt' (aliases: 'mass_transfer', 'phenomenon').",
+                "hint": "Example: /api/model/phenomenon/mt?mt=Engulfment"
+            }), 400
+
+        equilibria = g.graphdb_handler.query_mass_equilibrium_by_mass_transfer(raw_mt)
+
+        if equilibria is None or (isinstance(equilibria, (list, dict)) and len(equilibria) == 0):
+            return jsonify({
+                "error": "No mass equilibrium found for the specified mass transfer phenomenon.",
+                "mt": raw_mt
+            }), 404
+
+        return jsonify(equilibria), 200
+
+    except Exception as e:
+        return jsonify({
+            "error": "Internal server error while processing the request.",
+            "detail": str(e)
+        }), 500
