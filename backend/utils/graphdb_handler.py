@@ -876,5 +876,139 @@ class GraphdbHandler:
                 result.add(name)
         return sorted(result)
 
+    def query_information(self, filters):
+        """
+        Build a best-effort "information" object from the ontology based on provided filters.
+        filters: dict with optional keys {ac, fp, mt, me, param_law, rxn}.
+        Returns a dict shaped like:
+          {
+            "st": { <ReactorParameter>: <value>, ... },
+            "mt": { <MolecularTransportParameter>: <value>, ... },
+            "rxn": { <ReactionName>: { <ReactionParameter>: <value>, ... }, ... }
+          }
+        Only sections with content are included.
+        """
+        if not isinstance(filters, dict):
+            filters = {}
+
+        # Helper to normalize various inputs to lists
+        def _norm_list(v):
+            if v is None:
+                return []
+            if isinstance(v, (list, tuple)):
+                items = v
+            else:
+                items = [v]
+            out = []
+            for x in items:
+                if x is None:
+                    continue
+                s = str(x).strip()
+                if s:
+                    out.append(s)
+            return out
+
+        # Compose a filters dict for helper queries
+        phen_filters = {}
+        for k in ("ac", "fp", "mt", "me"):
+            if k in filters and filters[k] is not None:
+                phen_filters[k] = filters[k]
+
+        # Determine parameter->law map
+        param_law_input = filters.get("param_law")
+        param_law_map = {}
+        if isinstance(param_law_input, dict):
+            # Already in desired form
+            param_law_map = {str(k): str(v) for k, v in param_law_input.items() if k and v}
+        elif param_law_input is not None:
+            # list/string of law names: infer parameters whose variables reference these laws
+            law_names = set(_norm_list(param_law_input))
+            if law_names:
+                # Use entity to find variables tied to these laws
+                entity = self.query()
+                for var, meta in entity.get("model_variable", {}).items():
+                    laws = set(meta.get("laws", []) or [])
+                    if laws & law_names:
+                        # choose a deterministic law name (alphabetically smallest in intersection)
+                        chosen = sorted(list(laws & law_names))[0]
+                        param_law_map[var] = chosen
+            else:
+                param_law_map = {}
+        else:
+            # Derive from phenomena selection
+            param_law_map = self.query_param_law(phen_filters) or {}
+
+        # Determine reaction -> laws mapping
+        rxn_input = filters.get("rxn")
+        rxn_laws = {}
+        if isinstance(rxn_input, dict):
+            # Ensure values are list
+            for r, laws in rxn_input.items():
+                rxn_laws[str(r)] = _norm_list(laws)
+        elif rxn_input is not None:
+            # If a list/string of reaction names given, fetch laws for those reactions via query_reactions
+            requested_rxns = set(_norm_list(rxn_input))
+            if requested_rxns:
+                all_map = self.query_reactions({**phen_filters, "param_law": param_law_map or filters.get("param_law")}) or {}
+                rxn_laws = {r: laws for r, laws in all_map.items() if r in requested_rxns}
+        else:
+            rxn_laws = self.query_reactions({**phen_filters, "param_law": param_law_map or filters.get("param_law")}) or {}
+
+        # Gather variables and metadata
+        entity = locals().get('entity') or self.query()
+        vars_meta = entity.get("model_variable", {})
+
+        info = {}
+
+        # st: reactor parameters with available values
+        st = {}
+        for var, meta in vars_meta.items():
+            if meta.get("class") == "ReactorParameter" and meta.get("value") is not None:
+                st[var] = meta.get("value")
+        if st:
+            info["st"] = st
+
+        # mt: molecular transport parameters with available values, prioritizing those selected by param_law
+        mt_info = {}
+        selected_params = set(param_law_map.keys()) if param_law_map else set(
+            [v for v, m in vars_meta.items() if m.get("class") == "MolecularTransportParameter"]
+        )
+        for var in sorted(selected_params):
+            meta = vars_meta.get(var)
+            if not meta:
+                continue
+            if meta.get("class") != "MolecularTransportParameter":
+                continue
+            val = meta.get("value")
+            if val is not None:
+                mt_info[var] = val
+        if mt_info:
+            info["mt"] = mt_info
+
+        # rxn: for each reaction, include ReactionParameter values with dimensions == ["Reaction"]
+        rxn_info = {}
+        for rxn, laws in sorted((rxn_laws or {}).items(), key=lambda x: x[0]):
+            details = {}
+            law_set = set(laws or [])
+            for var, meta in vars_meta.items():
+                if meta.get("class") != "ReactionParameter":
+                    continue
+                dims = meta.get("dimensions") or []
+                if set(dims) != {"Reaction"}:
+                    # skip solvent/species dependent parameters in this best-effort extractor
+                    continue
+                # If we have reaction-specific association via variable laws intersecting reaction laws
+                v_laws = set(meta.get("laws", []) or [])
+                if law_set and not (v_laws & law_set):
+                    continue
+                val = meta.get("value")
+                if val is not None:
+                    details[var] = val
+            rxn_info[rxn] = details
+        if rxn_info:
+            info["rxn"] = rxn_info
+
+        return info
+
     def close(self):
         self.conn.close()

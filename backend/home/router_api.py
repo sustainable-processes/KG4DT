@@ -65,6 +65,51 @@ def api_model_context():
 
 # APIs for structure
 
+# Get only the information block of a case context
+#    Body example (POST):
+#    { "case": "dushman", "postfix": "model_context.json" }
+#    GET also supports query params ?case=dushman&postfix=model_context.json
+@blueprint.route("/api/model/information", methods=["GET", "POST"])
+def api_model_information():
+    data = request.get_json(silent=True) or {}
+
+    # If body contains direct parameters (case-insensitive): ac, fp, mt, me, param_law, rxn
+    direct_keys = {"ac", "fp", "mt", "me", "param_law", "rxn"}
+    direct = {}
+    if isinstance(data, dict):
+        for k, v in data.items():
+            lk = str(k).lower()
+            if lk in direct_keys:
+                direct[lk] = v
+
+    if direct:
+        # Build information from GraphDB using provided filters
+        info = g.graphdb_handler.query_information(direct)
+        return jsonify({"information": info}), 200
+
+    # Otherwise, fallback to loading case context information
+    case = data.get("case") if isinstance(data, dict) else None
+    postfix = data.get("postfix") if isinstance(data, dict) else None
+
+    # Fallback to query parameters for GET
+    if request.method == "GET":
+        case = case or request.args.get("case", "dushman")
+        postfix = postfix or request.args.get("postfix", "model_context.json")
+
+    if not case:
+        return jsonify({"error": "Missing 'case'"}), 400
+    if not postfix:
+        postfix = "model_context.json"
+    if ".json" not in postfix:
+        postfix = f"model_context_{postfix}.json"
+
+    context = _load_case_context(case, postfix)
+    if context is None:
+        return jsonify({"error": "Case or context not found"}), 404
+
+    information = context.get("information", {})
+    return jsonify({"information": information}), 200
+
 # Get entity for the structure page (sidebar data)
 @blueprint.route("/api/structure", methods=["GET"])
 def api_structure():
