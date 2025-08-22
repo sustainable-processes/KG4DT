@@ -544,3 +544,57 @@ def api_model_param_law():
             "error": "Internal server error while processing the request.",
             "detail": str(e)
         }), 500
+
+
+
+@blueprint.route("/api/model/phenomenon/rxn", methods=["POST", "GET"])
+def api_model_reactions():
+    """
+    Retrieve reactions (ChemicalReactionPhenomenon) and their associated kinetic law names.
+    Accepts either:
+      - POST JSON body with any of keys: ac, fp, mt, me, param_law (string, list, or dict)
+      - GET query params: ac, fp, mt, me, param_law (can be repeated or comma-separated)
+
+    Response: {"rxn": {"<Reaction>": ["<Law>", ...], ...}}
+    """
+    try:
+        payload = request.get_json(silent=True) or {}
+        filters = {}
+        keys = ("ac", "fp", "mt", "me", "param_law")
+
+        for k in keys:
+            val = payload.get(k) if isinstance(payload, dict) else None
+            if val is None and request.method == "GET":
+                lst = request.args.getlist(k)
+                if not lst:
+                    s = request.args.get(k)
+                    if s:
+                        lst = [part.strip() for part in s.split(",") if part.strip()]
+                val = lst if lst else None
+            if val is not None:
+                filters[k] = val
+
+        # Require at least one of the accepted filters including param_law
+        if not any(filters.get(k) for k in keys):
+            return jsonify({
+                "error": "Provide at least one of 'ac', 'fp', 'mt', 'me', or 'param_law' via JSON body or query params.",
+                "hint": {
+                    "POST": {"param_law": ["Arrhenius", "Plain_Rate_Constant"]},
+                    "GET": "/api/model/phenomenon/rxn?param_law=Arrhenius&fp=Annular_Microflow"
+                }
+            }), 400
+
+        mapping = g.graphdb_handler.query_reactions(filters)
+        if not mapping:
+            return jsonify({
+                "error": "No reactions found for the specified filters.",
+                "filters": filters
+            }), 404
+
+        return jsonify({"rxn": mapping}), 200
+
+    except Exception as e:
+        return jsonify({
+            "error": "Internal server error while processing the request.",
+            "detail": str(e)
+        }), 500

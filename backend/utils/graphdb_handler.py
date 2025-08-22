@@ -723,6 +723,134 @@ class GraphdbHandler:
                 mapping[var_name] = law_name
 
         return dict(sorted(mapping.items(), key=lambda x: x[0]))
+
+    def query_reactions(self, filters=None):
+        """
+        Retrieve reactions and their associated kinetic law names.
+        filters: optional dict with keys 'ac', 'fp', 'mt', 'me' (string or list) to constrain Laws via isAssociatedWith,
+                 and optional 'param_law' to constrain by specific law name(s).
+        - filters['param_law'] may be:
+            - dict { parameter_name: law_name }
+            - list [law_name, ...]
+            - string law_name
+        Returns: dict { reaction_local_name: [law_name, ...] }
+        """
+        if filters is None:
+            filters = {}
+        if not isinstance(filters, dict):
+            return {}
+
+        # Normalize filters to lists
+        def _norm(v):
+            if v is None:
+                return []
+            if isinstance(v, list):
+                items = v
+            else:
+                items = [v]
+            out = []
+            for s in items:
+                if s is None:
+                    continue
+                s2 = str(s).strip()
+                if s2:
+                    out.append(s2)
+            return out
+
+        ac_list = _norm(filters.get("ac"))
+        fp_list = _norm(filters.get("fp"))
+        mt_list = _norm(filters.get("mt"))
+        me_list = _norm(filters.get("me"))
+
+        # Extract law-name filters from 'param_law'
+        law_list = []
+        pl = filters.get("param_law")
+        if isinstance(pl, dict):
+            law_list = _norm(list(pl.values()))
+        elif isinstance(pl, (list, tuple)):
+            law_list = _norm(list(pl))
+        elif pl is not None:
+            law_list = _norm(pl)
+
+        # UNION constraints for provided phenomena
+        union_blocks = []
+        def _regex_union(names):
+            esc = [re.escape(n) for n in names]
+            return "|".join(esc)
+
+        if ac_list:
+            p = _regex_union(ac_list)
+            union_blocks.append(
+                "{"
+                f"?d {self.ns_dict['isAssociatedWith']}:isAssociatedWith ?phen_ac. "
+                f"?phen_ac rdf:type {self.ns_dict['Accumulation']}:Accumulation. "
+                f"FILTER(regex(str(?phen_ac), '#({p})$', 'i')). "
+                "}"
+            )
+        if fp_list:
+            p = _regex_union(fp_list)
+            union_blocks.append(
+                "{"
+                f"?d {self.ns_dict['isAssociatedWith']}:isAssociatedWith ?phen_fp. "
+                f"?phen_fp rdf:type {self.ns_dict['FlowPattern']}:FlowPattern. "
+                f"FILTER(regex(str(?phen_fp), '#({p})$', 'i')). "
+                "}"
+            )
+        if mt_list:
+            p = _regex_union(mt_list)
+            union_blocks.append(
+                "{"
+                f"?d {self.ns_dict['isAssociatedWith']}:isAssociatedWith ?phen_mt. "
+                f"?phen_mt rdf:type {self.ns_dict['MolecularTransportPhenomenon']}:MolecularTransportPhenomenon. "
+                f"FILTER(regex(str(?phen_mt), '#({p})$', 'i')). "
+                "}"
+            )
+        if me_list:
+            p = _regex_union(me_list)
+            union_blocks.append(
+                "{"
+                f"?d {self.ns_dict['isAssociatedWith']}:isAssociatedWith ?phen_me. "
+                f"?phen_me rdf:type {self.ns_dict['PhysicalEquilibriumPhenomenon']}:PhysicalEquilibriumPhenomenon. "
+                f"FILTER(regex(str(?phen_me), '#({p})$', 'i')). "
+                "}"
+            )
+
+        sparql = self.prefix + \
+            "select ?rxn ?d where {" \
+            f"?rxn rdf:type {self.ns_dict['ChemicalReactionPhenomenon']}:ChemicalReactionPhenomenon. " \
+            f"?d rdf:type {self.ns_dict['Law']}:Law. " \
+            f"?d {self.ns_dict['isAssociatedWith']}:isAssociatedWith ?rxn. "
+
+        if union_blocks:
+            sparql += "(" + " UNION ".join(union_blocks) + ") . "
+
+        # Constrain by specific kinetic law names if provided
+        if law_list:
+            p = _regex_union(law_list)
+            sparql += f"FILTER(regex(str(?d), '#({p})$', 'i')). "
+
+        sparql += "}"
+
+        try:
+            sparql_res = self.cur.execute(sparql)
+        except Exception:
+            return {}
+
+        mapping = {}
+        for line in sparql_res.split("\r\n")[1:-1]:
+            parts = line.split(",")
+            if len(parts) < 2:
+                continue
+            rxn_iri, law_iri = parts[0], parts[1]
+            rxn_name = rxn_iri.split("#")[-1]
+            law_name = law_iri.split("#")[-1]
+            if not rxn_name or not law_name:
+                continue
+            laws = mapping.setdefault(rxn_name, set())
+            laws.add(law_name)
+
+        # Convert sets to sorted lists
+        return {k: sorted(list(v)) for k, v in sorted(mapping.items(), key=lambda x: x[0])}
  
     def query_accumulators(self):
         """
