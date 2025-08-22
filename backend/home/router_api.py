@@ -431,3 +431,32 @@ def api_model_phenomenon_ac():
             "error": "Internal server error while processing the request.",
             "detail": str(e)
         }), 500
+
+
+@blueprint.route("/api/model/phenomenon/fp", methods=["GET"])
+def api_model_phenomenon_fp():
+    try:
+        # Accept multiple aliases for the flow pattern parameter for flexibility
+        raw_fp = request.args.get("pattern") or request.args.get("fp") or request.args.get("flow_pattern")
+        if raw_fp is None or str(raw_fp).strip() == "":
+            return jsonify({
+                "error": "Missing required query parameter 'pattern' (aliases: 'fp', 'flow_pattern').",
+                "hint": "Example: /api/model/phenomenon/fp?pattern=Annular_Microflow"
+            }), 400
+
+        # Delegate to graphdb handler to get mass transfer phenomena linked to the FlowPattern
+        mts = g.graphdb_handler.query_mass_transfer_by_flow_pattern(raw_fp)
+
+        if mts is None or (isinstance(mts, (list, dict)) and len(mts) == 0):
+            return jsonify({
+                "error": "No mass transfer phenomenon found for the specified flow pattern.",
+                "pattern": raw_fp
+            }), 404
+
+        return jsonify(mts), 200
+
+    except Exception as e:
+        return jsonify({
+            "error": "Internal server error while processing the request.",
+            "detail": str(e)
+        }), 500

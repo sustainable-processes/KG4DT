@@ -492,8 +492,6 @@ class GraphdbHandler:
         ac_str = str(ac).strip()
         if not ac_str:
             return []
-        # Try to match typical naming of individuals, e.g., Batch / Continuous
-        # We'll use case-insensitive regex in SPARQL; keep the original for display if needed.
 
         # Build SPARQL using configured prefixes/namespaces and pygraphdb cursor
         sparql = self.prefix + \
@@ -524,6 +522,42 @@ class GraphdbHandler:
                 flow_patterns.add(flow_pattern)
 
         return sorted(flow_patterns)
+
+    def query_mass_transfer_by_flow_pattern(self, fp):
+        """
+        Given a FlowPattern individual name (e.g., "Annular_Microflow"),
+        return all related MolecularTransportPhenomenon local names (mass transfer phenomena).
+        Matching of the flow pattern is case-insensitive against the IRI tail.
+        """
+        if fp is None:
+            return []
+        fp_str = str(fp).strip()
+        if not fp_str:
+            return []
+
+        sparql = self.prefix + \
+            "select ?fp ?mt where {" \
+            f"?fp rdf:type {self.ns_dict['FlowPattern']}:FlowPattern. " \
+            f"optional{{?fp {self.ns_dict['relatesToMolecularTransportPhenomenon']}:relatesToMolecularTransportPhenomenon ?mt}}. " \
+            f"FILTER(regex(str(?fp), '#{fp_str}$', 'i')). " \
+            "}"
+
+        try:
+            sparql_res = self.cur.execute(sparql)
+        except Exception:
+            return []
+
+        mass_transfers = set()
+        for res in sparql_res.split("\r\n")[1:-1]:
+            try:
+                fp_iri, mt_iri = res.split(",")
+            except ValueError:
+                parts = res.split(",")
+                mt_iri = parts[1] if len(parts) > 1 else ""
+            mt_name = mt_iri.split("#")[-1]
+            if mt_name:
+                mass_transfers.add(mt_name)
+        return sorted(mass_transfers)
 
 
 
