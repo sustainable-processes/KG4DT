@@ -603,6 +603,8 @@ class GraphdbHandler:
         filters: dict with optional keys 'ac', 'fp', 'mt', 'me'; values may be string or list of strings.
         Returns: dict { parameter_name: law_name }
         """
+
+        ## Dr Ryan
         if not isinstance(filters, dict):
             return {}
 
@@ -888,6 +890,8 @@ class GraphdbHandler:
           }
         Only sections with content are included.
         """
+
+        ## Dr Ryan
         if not isinstance(filters, dict):
             filters = {}
 
