@@ -9,16 +9,16 @@
 ]>
 
 <rdf:RDF
-    xmlns:fc="file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
+    xmlns:fc="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
     xmlns:rdf="&rdf;#"
     xmlns:xsd="&xsd;#"
-    xmlns:mereology="file:/ontology/meta_model/mereology/mereology.owl#"
+    xmlns:mereology="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/mereology.owl#"
     xmlns:rdfs="&rdfs;#"
     xmlns:owl="&owl;#"
     xmlns:terms="http://purl.org/dc/terms/"
-    xmlns="file:/ontology/meta_model/mereology/example_mereology.owl#"
-  xml:base="file:/ontology/meta_model/mereology/example_mereology.owl">
-  <owl:Ontology rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl">
+    xmlns="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl#"
+  xml:base="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl">
+  <owl:Ontology rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl">
     <rdfs:comment rdf:datatype="&xsd;#string"
     >The ontology module 'example_mereology' provides some application examples of the ontology module 'mereology'.</rdfs:comment>
     <terms:license
@@ -27,7 +27,7 @@
                 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
                 You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
     </terms:license>
-    <owl:imports rdf:resource="file:/ontology/meta_model/mereology/mereology.owl"/>
+    <owl:imports rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/mereology.owl"/>
   </owl:Ontology>
   <fc:Object rdf:ID="SecondLevelPart_A">
     <mereology:isDirectPartOf>
@@ -38,37 +38,37 @@
       </fc:Object>
     </mereology:isDirectPartOf>
   </fc:Object>
-  <rdf:Description rdf:about="file:/ontology/meta_model/mereology/mereology.owl#SecondLevelPart">
+  <rdf:Description rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/mereology.owl#SecondLevelPart">
     <rdfs:comment rdf:datatype="&xsd;#string"
     >A Part at the second level of decomposition.</rdfs:comment>
   </rdf:Description>
   <mereology:AggregateOnly rdf:ID="AggregateOnly_B"/>
-  <rdf:Description rdf:about="file:/ontology/meta_model/mereology/mereology.owl#PartOnly">
+  <rdf:Description rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/mereology.owl#PartOnly">
     <rdfs:comment rdf:datatype="&xsd;#string"
     >An Object that is part of another Object and has no Parts of its own.</rdfs:comment>
   </rdf:Description>
   <fc:Object rdf:ID="FirstLevelPart_B">
-    <mereology:isDirectPartOf rdf:resource="file:/ontology/meta_model/mereology/example_mereology.owl#AggregateOnly_B"/>
+    <mereology:isDirectPartOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl#AggregateOnly_B"/>
   </fc:Object>
   <fc:Object rdf:ID="PartOnly_B">
     <mereology:isDirectPartOf>
       <fc:Object rdf:ID="SecondLevelPart_B">
-        <mereology:isDirectPartOf rdf:resource="file:/ontology/meta_model/mereology/example_mereology.owl#FirstLevelPart_B"/>
+        <mereology:isDirectPartOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl#FirstLevelPart_B"/>
       </fc:Object>
     </mereology:isDirectPartOf>
   </fc:Object>
   <fc:Object rdf:ID="PartOnly_A">
-    <mereology:isDirectPartOf rdf:resource="file:/ontology/meta_model/mereology/example_mereology.owl#SecondLevelPart_A"/>
+    <mereology:isDirectPartOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl#SecondLevelPart_A"/>
   </fc:Object>
   <owl:AllDifferent>
     <owl:distinctMembers rdf:parseType="Collection">
-      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#AggregateOnly_A"/>
-      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#FirstLevelPart_A"/>
-      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#FirstLevelPart_B"/>
-      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#SecondLevelPart_A"/>
-      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#SecondLevelPart_B"/>
-      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#PartOnly_A"/>
-      <fc:Object rdf:about="file:/ontology/meta_model/mereology/example_mereology.owl#PartOnly_B"/>
+      <fc:Object rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl#AggregateOnly_A"/>
+      <fc:Object rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl#FirstLevelPart_A"/>
+      <fc:Object rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl#FirstLevelPart_B"/>
+      <fc:Object rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl#SecondLevelPart_A"/>
+      <fc:Object rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl#SecondLevelPart_B"/>
+      <fc:Object rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl#PartOnly_A"/>
+      <fc:Object rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/meta_model/mereology/example_mereology.owl#PartOnly_B"/>
     </owl:distinctMembers>
   </owl:AllDifferent>
 </rdf:RDF>

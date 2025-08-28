@@ -11,6 +11,7 @@ from . import router_model
 from . import router_structure
 from . import router_application
 from . import router_knowledge_graph
+from . import router_exploration_api
 
 from ..utils.model_agent import ModelAgent
 from ..utils.model_calibration_agent import ModelCalibrationAgent

@@ -1,0 +1,126 @@
+{
+  "Phenomenon": [
+    {
+      "name": "Batch",
+      "class": "Accumulation",
+      "flow_patterns": ["Well_Mixed"],
+      "molecular_transport_phenomena": []
+    },
+    {
+      "name": "Well_Mixed",
+      "class": "FlowPattern",
+      "flow_patterns": [],
+      "molecular_transport_phenomena": ["Solid-Liquid_Mass_Transfer"]
+    },
+    {
+      "name": "Solid-Liquid_Mass_Transfer",
+      "class": "MolecularTransportPhenomenon",
+      "flow_patterns": [],
+      "molecular_transport_phenomena": []
+    }
+  ],
+  "Unit": [
+    {
+      "name": "l",
+      "class": "SI_DerivedUnit",
+      "symbol": "<math><mrow><mtext>L</mtext></mrow></math>"
+    },
+    {
+      "name": "kg",
+      "class": "SI_DerivedUnit",
+      "symbol": "<math><mrow><mtext>kg</mtext></mrow></math>"
+    },
+    {
+      "name": "per_s",
+      "class": "SI_DerivedUnit",
+      "symbol": "<math><mrow><msup><mtext>s</mtext><mn>−1</mn></msup></mrow></math>"
+    },
+    {
+      "name": "mol_per_l",
+      "class": "SI_DerivedUnit",
+      "symbol": "<math><mrow><mtext>mol</mtext><mtext>/</mtext><mtext>L</mtext></mrow></math>"
+    },
+    {
+      "name": "kg_per_cubic_m",
+      "class": "SI_DerivedUnit",
+      "symbol": "<math><mrow><mtext>kg</mtext><mtext>/</mtext><msup><mtext>m</mtext><mn>3</mn></msup></mrow></math>"
+    },
+    {
+      "name": "mol_per_l.s",
+      "class": "SI_DerivedUnit",
+      "symbol": "<math><mrow><mtext>mol</mtext><mtext>/</mtext><mtext>(</mtext><mtext>L</mtext><mtext>·</mtext><mtext>s</mtext><mtext>)</mtext></mrow></math>"
+    }
+  ],
+  "Variable": [
+    {
+      "name": "Concentration",
+      "class": "StateVariable",
+      "symbol": "<math><mrow><mi>c</mi></mrow></math>",
+      "unit": "mol_per_l",
+      "law": null,
+      "dimensions": ["Species", "Stream"]
+    },
+    {
+      "name": "Solid_Mass",
+      "class": "StateVariable",
+      "symbol": "<math><mrow><msub><mi>m</mi><mtext>s</mtext></msub></mrow></math>",
+      "unit": "kg",
+      "law": null,
+      "dimensions": ["Species"]
+    },
+    {
+      "name": "Liquid_Volume",
+      "class": "OperatingParameter",
+      "symbol": "<math><mrow><msub><mi>V</mi><mtext>L</mtext></msub></mrow></math>",
+      "unit": "l",
+      "law": null,
+      "dimensions": []
+    },
+    {
+      "name": "Solid_Density",
+      "class": "PhysicalParameter",
+      "symbol": "<math><mrow><msub><mi>ρ</mi><mtext>s</mtext></msub></mrow></math>",
+      "unit": "kg_per_cubic_m",
+      "law": null,
+      "dimensions": ["Species"]
+    },
+    {
+      "name": "Solid_Dissolution_Saturated_Concentration",
+      "class": "StateVariable",
+      "symbol": "<math><mrow><msup><msub><mi>c</mi><mtext>s</mtext></msub><mtext>*</mtext></msup></mrow></math>",
+      "unit": "mol_per_l",
+      "law": null,
+      "dimensions": ["Species", "Stream"]
+    },
+    {
+      "name": "Solid-Liquid_Volumetric_Mass_Transfer_Coefficient",
+      "class": "PhysicalParameter",
+      "symbol": "<math><mrow><mrow><msub><mi>k</mi><mtext>S</mtext></msub><mspace nspace=\\\"0\\\"></mspace><mi>a</mi></mrow></mrow></math>",
+      "unit": "per_s",
+      "law": null,
+      "dimensions": ["Species", "Stream"]
+    },
+    {
+      "name": "Solid-Liquid_Volumetric_Mass_Transfer_Rate",
+      "class": "RateVariable",
+      "symbol": "<math><mrow><msub><mi>r</mi><mtext>m,g</mtext></msub></mrow></math>",
+      "unit": "mol_per_l.s",
+      "law": "Solid-Liquid_Volumetric_Mass_Transfer_Rate_Law_with_Solid-Liquid_Mass_Transfer",
+      "dimensions": ["Species", "Stream"]
+    }
+  ],
+  "Law": {
+    "name": "Solid-Liquid_Volumetric_Mass_Transfer_Rate_Law_with_Solid-Liquid_Mass_Transfer",
+    "phenomenon": "Solid-Liquid_Mass_Transfer",
+    "DOI": null,
+    "formula": "<math><mrow><mfrac><mrow><mrow><msub><mi>k</mi><mtext>L</mtext></msub><mspace nspace=\\\"0\\\"></mspace><mi>a</mi></mrow><msub><mi>c</mi><mtext>s</mtext></msub><msub><mi>M</mi><mtext>s</mtext></msub></mrow><msub><mi>ρ</mi><mtext>s</mtext></msub></mfrac><mo>(</mo><msup><msub><mi>c</mi><mtext>s</mtext></msub><mtext>*</mtext></msup><mo>−</mo><mi>c</mi><mo>)</mo></mrow></math>",
+    "variables": [
+      "Solid_Mass",
+      "Solid_Density",
+      "Liquid_Volume",
+      "Concentration",
+      "Solid_Dissolution_Saturated_Concentration",
+      "Solid-Liquid_Volumetric_Mass_Transfer_Coefficient"
+    ]
+  }
+}

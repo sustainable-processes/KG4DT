@@ -1,0 +1,96 @@
+{
+  "Phenomenon": [
+    {
+      "name": "Batch",
+      "class": "Accumulation",
+      "flow_pats": ["Well_Mixed"],
+      "mt_phenos": [],
+      "me_phenos": []
+    },
+    {
+      "name": "Well_Mixed",
+      "class": "FlowPattern",
+      "flow_pats": [],
+      "mt_phenos": ["Gas-Liquid_Mass_Transfer"],
+      "me_phenos": []
+    },
+    {
+      "name": "Gas-Liquid_Mass_Transfer",
+      "class": "MassTransportPhenomenon",
+      "flow_pats": [],
+      "mt_phenos": [],
+      "me_phenos": ["Gas_Dissolution_Equilibrium"]
+    }
+  ],
+  "Unit": [
+    {
+      "name": "per_s",
+      "class": "Unit",
+      "sym": "<math><mrow><msup><mtext>s</mtext><mn>−1</mn></msup></mrow></math>",
+      "metr": null,
+      "rto": null,
+      "intcpt": null
+    },
+    {
+      "name": "mol_per_L",
+      "class": "Unit",
+      "sym": "<math><mrow><mtext>mol</mtext><mtext>/</mtext><mtext>L</mtext></mrow></math>",
+      "metr": null,
+      "rto": null,
+      "intcpt": null
+    },
+    {
+      "name": "mol_per_L.s",
+      "class": "Unit",
+      "sym": "<math><mrow><mtext>mol</mtext><mtext>/</mtext><mtext>(</mtext><mtext>L</mtext><mtext>·</mtext><mtext>s</mtext><mtext>)</mtext></mrow></math>",
+      "metr": null,
+      "rto": null,
+      "intcpt": null
+    }
+  ],
+  "Variable": [
+    {
+      "name": "Concentration",
+      "class": "StateVariable",
+      "sym": "<math><mrow><mi>c</mi></mrow></math>",
+      "unit": "mol_per_L",
+      "dims": ["Species", "Stream"],
+      "law": null
+    },
+    {
+      "name": "Gas_Dissolution_Saturated_Concentration",
+      "class": "StateVariable",
+      "sym": "<math><mrow><msup><msub><mi>c</mi><mtext>g</mtext></msub><mtext>*</mtext></msup></mrow></math>",
+      "unit": "mol_per_L",
+      "dims": ["Species", "Stream"],
+      "law": null
+    },
+    {
+      "name": "Gas-Liquid_Volumetric_Mass_Transfer_Coefficient",
+      "class": "PhysicsParameter",
+      "sym": "<math><mrow><mrow><msub><mi>k</mi><mtext>L</mtext></msub><mspace nspace=\\\"0\\\"></mspace><mi>a</mi></mrow></mrow></math>",
+      "unit": "per_s",
+      "dims": ["Species", "Gas"],
+      "law": null
+    },
+    {
+      "name": "Volumetric_Mass_Transfer_Rate",
+      "class": "RateVariable",
+      "sym": "<math><mrow><msub><mi>r</mi><mtext>t,g</mtext></msub></mrow></math>",
+      "unit": "mol_per_L.s",
+      "dims": ["Species", "Stream", "Gas"],
+      "law": "Gas-Liquid_Volumetric_Mass_Transfer_Rate_Law_with_Gas-Liquid_Mass_Transfer"
+    }
+  ],
+  "Law": {
+    "name": "Gas-Liquid_Volumetric_Mass_Transfer_Rate_Law_with_Gas-Liquid_Mass_Transfer",
+    "pheno": "Gas-Liquid_Mass_Transfer",
+    "doi": null,
+    "fml": "<math><mrow><mrow><msub><mi>k</mi><mtext>L</mtext></msub><mspace nspace=\\\"0\\\"></mspace><mi>a</mi></mrow><mfenced><msup><msub><mi>c</mi><mtext>g</mtext></msub><mtext>*</mtext></msup><mo>−</mo><mi>c</mi></mfenced></mrow></math>",
+    "vars": [
+      "Concentration",
+      "Gas_Dissolution_Saturated_Concentration",
+      "Gas-Liquid_Volumetric_Mass_Transfer_Coefficient"
+    ]
+  }
+}

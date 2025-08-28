@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE rdf:RDF [
-  <!ENTITY root "file:/ontology/">
+  <!ENTITY root "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/">
   <!ENTITY owl  "http://www.w3.org/2002/07/owl">
   <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
   <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
@@ -13,19 +13,20 @@
 
 
 
+-->
 <rdf:RDF
     xmlns:process_control_system="&pro_con_sys;#"
     xmlns:rdf="&rdf;#"
     xmlns:xsd="&xsd;#"
-    xmlns="file:/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl#"
+    xmlns="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl#"
     xmlns:rdfs="&rdfs;#"
     xmlns:owl="&owl;#"
     xmlns:terms="http://purl.org/dc/terms/"
     xmlns:process_control="&process_control;#"
     xmlns:technical_system="&technical_system;#"
-  xml:base="file:/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl">
+  xml:base="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl">
   
-  <owl:Ontology rdf:about="file:/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl">
+  <owl:Ontology rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl">
   <terms:license
             >Copyright (C) [2009] [Andreas Wiesner]
                 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
@@ -69,7 +70,7 @@
     <rdfs:subClassOf>
       <owl:Restriction>
          <owl:onProperty rdf:resource="&technical_system;#representsFunctionOf"/>
-         <owl:someValuesFrom rdf:resource="file:/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl#OperatingSubsystem"/>
+         <owl:someValuesFrom rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl#OperatingSubsystem"/>
       </owl:Restriction>
     </rdfs:subClassOf>
   </rdf:Description>
@@ -78,7 +79,7 @@
     <rdfs:subClassOf>
       <owl:Restriction>
          <owl:onProperty rdf:resource="&technical_system;#representsRealizationOf"/>
-         <owl:someValuesFrom rdf:resource="file:/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl#OperatingSubsystem"/>
+         <owl:someValuesFrom rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/operating_subsystem/operating_subsystem.owl#OperatingSubsystem"/>
       </owl:Restriction>
     </rdfs:subClassOf>
   </rdf:Description>

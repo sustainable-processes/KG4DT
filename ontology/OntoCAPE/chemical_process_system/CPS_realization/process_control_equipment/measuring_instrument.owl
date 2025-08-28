@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE rdf:RDF [
-  <!ENTITY root "file:/ontology/">
+  <!ENTITY root "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/">
   <!ENTITY owl  "http://www.w3.org/2002/07/owl">
   <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
   <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
@@ -16,10 +16,10 @@
     xmlns:rdfs="&rdfs;#"
     xmlns:owl="&owl;#"
     xmlns:terms="http://purl.org/dc/terms/"
-    xmlns="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#"
+    xmlns="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#"
     xmlns:pro_con_sys="&pro_con_sys;#"
-  xml:base="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl">
-  <owl:Ontology rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl">
+  xml:base="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl">
+  <owl:Ontology rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl">
     <owl:imports rdf:resource="&pro_con_sys;"/>
     <rdfs:comment rdf:datatype="&xsd;#string"
     >The ontology module 'measuring_instrument' provides specializations for measuring instruments that are applicable to chemical process systems.
@@ -47,12 +47,12 @@ The following classes and relations from other ontology modules are used within 
     <rdfs:comment rdf:datatype="&xsd;#string"
     >SegerCone is a specific type of temperature measuring sensor.</rdfs:comment>
     <rdfs:subClassOf>
-      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
+      <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="Pt100">
     <rdfs:subClassOf>
-      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
+      <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
     </rdfs:subClassOf>
     <rdfs:comment rdf:datatype="&xsd;#string"
     >Pt100 is a specific type of temperature measuring sensor.</rdfs:comment>
@@ -61,7 +61,7 @@ The following classes and relations from other ontology modules are used within 
     <rdfs:comment rdf:datatype="&xsd;#string"
     >BimetalT-sensor is a specific type of temperature measuring sensor.</rdfs:comment>
     <rdfs:subClassOf>
-      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
+      <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="L-Sensor">
@@ -71,7 +71,7 @@ The following classes and relations from other ontology modules are used within 
   </owl:Class>
   <owl:Class rdf:ID="QuartzCristalT-Sensor">
     <rdfs:subClassOf>
-      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
+      <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
     </rdfs:subClassOf>
     <rdfs:comment rdf:datatype="&xsd;#string"
     >QuartzCrystalT-sensor is a specific type of temperature measuring sensor.</rdfs:comment>
@@ -83,7 +83,7 @@ The following classes and relations from other ontology modules are used within 
   </owl:Class>
   <owl:Class rdf:ID="Pyrometer">
     <rdfs:subClassOf>
-      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
+      <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
     </rdfs:subClassOf>
     <rdfs:comment rdf:datatype="&xsd;#string"
     >Pyrometer is a specific type of temperature measuring sensor.</rdfs:comment>
@@ -95,7 +95,7 @@ The following classes and relations from other ontology modules are used within 
   </owl:Class>
   <owl:Class rdf:ID="ExpansionT-Sensor">
     <rdfs:subClassOf>
-      <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
+      <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor"/>
     </rdfs:subClassOf>
     <rdfs:comment rdf:datatype="&xsd;#string"
     >ExpansionT-sensor is a specific type of temperature measuring sensor.</rdfs:comment>
@@ -105,7 +105,7 @@ The following classes and relations from other ontology modules are used within 
     >F-sensor is applied for flow measuring.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="&pro_con_sys;#MeasuringInstrument"/>
   </owl:Class>
-  <owl:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor">
+  <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/chemical_process_system/CPS_realization/process_control_equipment/measuring_instrument.owl#T-Sensor">
     <rdfs:comment rdf:datatype="&xsd;#string"
     >T-sensor is applied for temperature measuring.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="&pro_con_sys;#MeasuringInstrument"/>

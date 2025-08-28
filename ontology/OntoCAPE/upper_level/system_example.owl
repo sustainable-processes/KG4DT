@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE rdf:RDF [
-  <!ENTITY root "file:/ontology/">
+  <!ENTITY root "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/">
   <!ENTITY owl  "http://www.w3.org/2002/07/owl">
   <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
   <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
@@ -14,15 +14,15 @@
 <rdf:RDF
     xmlns:SI_Unit="&SI_unit;#"
     xmlns:system="&system;#"
-    xmlns="file:/ontology/OntoCAPE/upper_level/system_example.owl#"
+    xmlns="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#"
     xmlns:rdf="&rdf;#"
     xmlns:xsd="&xsd;#"
     xmlns:rdfs="&rdfs;#"
     xmlns:owl="&owl;#"
     xmlns:terms="http://purl.org/dc/terms/"
     xmlns:physical_dimension="&phys_dim;#"
-  xml:base="file:/ontology/OntoCAPE/upper_level/system_example.owl">
-  <owl:Ontology rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl">
+  xml:base="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl">
+  <owl:Ontology rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl">
   <terms:license
             >Copyright (C) [2009] [Andreas Wiesner]
                 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
@@ -45,17 +45,17 @@
                         <system:isDirectSubsystemOf rdf:resource="&system;#S"/>
                         <system:hasProperty>
                           <system:Property rdf:ID="P2">
-                            <system:isPropertyOf rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#subsystemOfS"/>
+                            <system:isPropertyOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#subsystemOfS"/>
                           </system:Property>
                         </system:hasProperty>
                         <system:hasDirectSubsystem>
                           <system:System rdf:ID="subsubsystemOfS">
                             <system:hasProperty>
                               <system:Property rdf:ID="P3">
-                                <system:isPropertyOf rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#subsubsystemOfS"/>
+                                <system:isPropertyOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#subsubsystemOfS"/>
                               </system:Property>
                             </system:hasProperty>
-                            <system:isDirectSubsystemOf rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#subsystemOfS"/>
+                            <system:isDirectSubsystemOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#subsystemOfS"/>
                           </system:System>
                         </system:hasDirectSubsystem>
                       </system:System>
@@ -79,17 +79,17 @@
                       <system:System rdf:ID="supersystemOfS">
                         <system:hasProperty>
                           <system:Property rdf:ID="P4">
-                            <system:isPropertyOf rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#supersystemOfS"/>
+                            <system:isPropertyOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#supersystemOfS"/>
                           </system:Property>
                         </system:hasProperty>
                         <system:hasDirectSubsystem>
                           <system:System rdf:ID="siblingOfS">
                             <system:hasProperty>
                               <system:Property rdf:ID="P5">
-                                <system:isPropertyOf rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#siblingOfS"/>
+                                <system:isPropertyOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#siblingOfS"/>
                               </system:Property>
                             </system:hasProperty>
-                            <system:isDirectSubsystemOf rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#supersystemOfS"/>
+                            <system:isDirectSubsystemOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#supersystemOfS"/>
                           </system:System>
                         </system:hasDirectSubsystem>
                         <system:hasDirectSubsystem rdf:resource="&system;#S"/>
@@ -129,11 +129,11 @@
   <rdf:Property rdf:about="&system;#is_backdrop_of"/>
   <owl:AllDifferent>
     <owl:distinctMembers rdf:parseType="Collection">
-      <system:Property rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#P1"/>
-      <system:Property rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#P2"/>
-      <system:Property rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#P3"/>
-      <system:Property rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#P4"/>
-      <system:Property rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#P5"/>
+      <system:Property rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#P1"/>
+      <system:Property rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#P2"/>
+      <system:Property rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#P3"/>
+      <system:Property rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#P4"/>
+      <system:Property rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#P5"/>
     </owl:distinctMembers>
   </owl:AllDifferent>
   <system:ScalarValue rdf:ID="myTimeValue_1">
@@ -141,7 +141,7 @@
       <system:ScalarQuantity rdf:ID="myTime">
         <system:isPropertyOf>
           <system:System rdf:ID="myCoordinateSystem">
-            <system:hasProperty rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTime"/>
+            <system:hasProperty rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTime"/>
           </system:System>
         </system:isPropertyOf>
         <system:hasValue>
@@ -150,18 +150,18 @@
               <system:ScalarValue rdf:ID="myTemperatureValue_2">
                 <system:quantitativeValue rdf:datatype="&xsd;#float"
                 >105.0</system:quantitativeValue>
-                <system:isEvaluatedAgainstBackdrop rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTimeValue_2"/>
+                <system:isEvaluatedAgainstBackdrop rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTimeValue_2"/>
                 <system:numericalValue rdf:datatype="&xsd;#float"
                 >120.0</system:numericalValue>
                 <system:isValueOf>
                   <system:ScalarQuantity rdf:ID="myTemperature">
-                    <system:hasValue rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTemperatureValue_2"/>
+                    <system:hasValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTemperatureValue_2"/>
                     <system:hasValue>
                       <system:ScalarValue rdf:ID="myTemperatureValue_1">
                         <system:hasUnitOfMeasure rdf:resource="&SI_unit;#K"/>
-                        <system:is_evaluated_against_backdrop rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTimeValue_1"/>
-                        <system:isEvaluatedAgainstBackdrop rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTimeValue_1"/>
-                        <system:isValueOf rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTemperature"/>
+                        <system:is_evaluated_against_backdrop rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTimeValue_1"/>
+                        <system:isEvaluatedAgainstBackdrop rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTimeValue_1"/>
+                        <system:isValueOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTemperature"/>
                         <system:numericalValue rdf:datatype="&xsd;#float"
                         >80.0</system:numericalValue>
                         <system:quantitativeValue rdf:datatype=
@@ -172,33 +172,33 @@
                     <system:hasDimension rdf:resource="&phys_dim;#thermodynamic_temperature"/>
                     <system:isPropertyOf>
                       <system:System rdf:ID="mySystem">
-                        <system:hasProperty rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTemperature"/>
+                        <system:hasProperty rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTemperature"/>
                       </system:System>
                     </system:isPropertyOf>
                   </system:ScalarQuantity>
                 </system:isValueOf>
                 <system:hasUnitOfMeasure rdf:resource="&SI_unit;#K"/>
-                <system:is_evaluated_against_backdrop rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTimeValue_2"/>
+                <system:is_evaluated_against_backdrop rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTimeValue_2"/>
               </system:ScalarValue>
             </system:is_backdrop_of>
-            <system:isBackdropOf rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTemperatureValue_2"/>
+            <system:isBackdropOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTemperatureValue_2"/>
             <system:hasUnitOfMeasure rdf:resource="&SI_unit;#s"/>
-            <system:isValueOf rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTime"/>
+            <system:isValueOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTime"/>
             <system:quantitativeValue rdf:datatype="&xsd;#float"
             >10.0</system:quantitativeValue>
             <system:numericalValue rdf:datatype="&xsd;#float"
             >1000.0</system:numericalValue>
           </system:ScalarValue>
         </system:hasValue>
-        <system:hasValue rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTimeValue_1"/>
+        <system:hasValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTimeValue_1"/>
         <system:hasDimension rdf:resource="&phys_dim;#time"/>
       </system:ScalarQuantity>
     </system:isValueOf>
     <system:quantitativeValue rdf:datatype="&xsd;#float"
     >0.0</system:quantitativeValue>
-    <system:isBackdropOf rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTemperatureValue_1"/>
+    <system:isBackdropOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTemperatureValue_1"/>
     <system:hasUnitOfMeasure rdf:resource="&SI_unit;#s"/>
-    <system:is_backdrop_of rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#myTemperatureValue_1"/>
+    <system:is_backdrop_of rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myTemperatureValue_1"/>
     <system:numericalValue rdf:datatype="&xsd;#float"
     >200.0</system:numericalValue>
   </system:ScalarValue>
@@ -206,18 +206,18 @@
   <owl:AllDifferent>
     <owl:distinctMembers rdf:parseType="Collection">
       <rdf:Description rdf:about="&system;#S"/>
-      <system:System rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#myCoordinateSystem"/>
-      <system:System rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#mySystem"/>
-      <system:System rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#connectedToS"/>
-      <system:System rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#isRelatedToS"/>
-      <system:System rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#subsystemOfS"/>
-      <system:System rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#subsubsystemOfS"/>
-      <system:System rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#supersystemOfS"/>
-      <system:System rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#siblingOfS"/>
+      <system:System rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#myCoordinateSystem"/>
+      <system:System rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#mySystem"/>
+      <system:System rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#connectedToS"/>
+      <system:System rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#isRelatedToS"/>
+      <system:System rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#subsystemOfS"/>
+      <system:System rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#subsubsystemOfS"/>
+      <system:System rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#supersystemOfS"/>
+      <system:System rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#siblingOfS"/>
       <system:System rdf:ID="ContainingSystem">
-        <system:containsDirectly rdf:resource="file:/ontology/OntoCAPE/upper_level/system_example.owl#ContainedSystem"/>
+        <system:containsDirectly rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#ContainedSystem"/>
       </system:System>
-      <system:System rdf:about="file:/ontology/OntoCAPE/upper_level/system_example.owl#ContainedSystem"/>
+      <system:System rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoCAPE/upper_level/system_example.owl#ContainedSystem"/>
     </owl:distinctMembers>
   </owl:AllDifferent>
 </rdf:RDF>
