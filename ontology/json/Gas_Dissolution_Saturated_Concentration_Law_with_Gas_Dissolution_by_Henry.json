@@ -1,0 +1,113 @@
+{
+  "Phenomenon": [
+    {
+      "name": "Batch",
+      "class": "Accumulation",
+      "flow_pats": ["Well_Mixed"],
+      "mt_phenos": [],
+      "me_phenos": []
+    },
+    {
+      "name": "Well_Mixed",
+      "class": "FlowPattern",
+      "flow_pats": [],
+      "mt_phenos": ["Gas-Liquid_Mass_Transfer"],
+      "me_phenos": []
+    },
+    {
+      "name": "Gas-Liquid_Mass_Transfer",
+      "class": "MassTransportPhenomenon",
+      "flow_pats": [],
+      "mt_phenos": [],
+      "me_phenos": ["Gas_Dissolution_Equilibrium"]
+    },
+    {
+      "name": "Gas_Dissolution_Equilibrium",
+      "class": "MassEquilibriumPhenomenon",
+      "flow_pats": [],
+      "mt_phenos": [],
+      "me_phenos": []
+    }
+  ],
+  "Unit": [
+    {
+      "name": "oC",
+      "class": "Unit",
+      "sym": "<math><mrow><msup><mtext/><mtext>o</mtext></msup><mtext>C</mtext></mrow></math>",
+      "metr": "K",
+      "rto": null,
+      "intcpt": 273.15
+    },
+    {
+      "name": "Pa",
+      "class": "Unit",
+      "sym": "<math><mrow><mtext>Pa</mtext></mrow></math>",
+      "metr": null,
+      "rto": null,
+      "intcpt": null
+    },
+    {
+      "name": "mol_per_L",
+      "class": "Unit",
+      "sym": "<math><mrow><mtext>mol</mtext><mtext>/</mtext><mtext>L</mtext></mrow></math>",
+      "metr": null,
+      "rto": null,
+      "intcpt": null
+    }
+  ],
+  "Variable": [
+    {
+      "name": "Gas_Fraction",
+      "class": "OperationParameter",
+      "sym": "<math><mrow><mi>x</mi></mrow></math>",
+      "unit": null,
+      "dims": ["Species", "Gas"],
+      "law": null
+    },
+    {
+      "name": "Pressure",
+      "class": "OperationParameter",
+      "sym": "<math><mrow><mi>P</mi></mrow></math>",
+      "unit": "Pa",
+      "dims": [],
+      "law": null
+    },
+    {
+      "name": "Temperature",
+      "class": "OperationParameter",
+      "sym": "<math><mrow><mi>T</mi></mrow></math>",
+      "unit": "oC",
+      "dims": [],
+      "law": null
+    },
+    {
+      "name": "Henry's_Constant",
+      "class": "PhysicsParameter",
+      "sym": "<math><mrow><msub><mi>k</mi><mtext>H</mtext></msub></mrow></math>",
+      "unit": null,
+      "dims": ["Species", "Solvent"],
+      "law": null
+    },
+    {
+      "name": "Gas_Dissolution_Saturated_Concentration",
+      "class": "StateVariable",
+      "sym": "<math><mrow><msup><msub><mi>c</mi><mtext>g</mtext></msub><mtext>*</mtext></msup></mrow></math>",
+      "unit": "mol_per_L",
+      "dims": ["Species", "Stream"],
+      "law": "Gas_Dissolution_Saturated_Concentration_Law_with_Gas_Dissolution_by_Henry"
+    }
+  ],
+  "Law": {
+    "name": "Gas_Dissolution_Saturated_Concentration_Law_with_Gas_Dissolution_by_Henry",
+    "pheno": "Gas_Dissolution_Equilibrium",
+    "doi": null,
+    "fml": "<math><mrow><mfrac><mrow><mi>P</mi><mi>x</mi></mrow><mrow><mi>R</mi><mi>T</mi><msub><mi>k</mi><mtext>H</mtext></msub></mrow></mfrac></mrow></math>",
+    "vars": [
+      "Pressure",
+      "Temperature",
+      "Gas_Constant",
+      "Gas_Fraction",
+      "Henry's_Constant"
+    ]
+  }
+}

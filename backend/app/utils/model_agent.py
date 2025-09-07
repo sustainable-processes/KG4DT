@@ -25,6 +25,7 @@ class ScipyModel:
         self.codes.append("import numpy as np")
         self.codes.append("from scipy.optimize import fsolve")
         self.codes.append("from scipy.integrate import solve_bvp, solve_ivp")
+        self.codes.append("from scipy.interpolate import interp1d")
         self.codes.append("")
     
     def add_func(self, var, syms, code, level):
@@ -189,6 +190,7 @@ class ModelAgent:
         - concentration derivative
     """
 
+    dynamic_segs = 200
     rxn_pattern = r"^((\d+ )?.+ \+ )*(\d+ )?.+ > ((\d+ )?.+ \+ )*(\d+ )?.+$"
     sym_patterns = [
         ("^[sym]$", "[sym]"), # alone
@@ -828,23 +830,23 @@ class ModelAgent:
                     if "Stoichiometric_Coefficient" not in rxn_vars[rxn]:
                         rxn_vars[rxn].append("Stoichiometric_Coefficient")
 
-        vars = []
-        vars.extend(ac_vars)
-        vars.extend(mt_vars)
-        vars.extend(me_vars)
-        vars.extend(fp_vars)
-        vars.extend(sub_fp_vars)
-        vars.extend(conc_vars)
+        model_vars = []
+        model_vars.extend(ac_vars)
+        model_vars.extend(mt_vars)
+        model_vars.extend(me_vars)
+        model_vars.extend(fp_vars)
+        model_vars.extend(sub_fp_vars)
+        model_vars.extend(conc_vars)
         for rxn in rxn_vars:
             for var in rxn_vars[rxn]:
-                if var not in vars:
-                    vars.append(var)
+                if var not in model_vars:
+                    model_vars.append(var)
         # definition
-        for var in vars:
+        for var in model_vars:
             for law in self.entity["var"][var]["laws"]:
                 if not self.entity["law"][law]["pheno"]:
-                    vars.extend(self.entity["law"][law]["vars"])
-        vars = list(set(vars))
+                    model_vars.extend(self.entity["law"][law]["vars"])
+        model_vars = list(set(model_vars))
 
         fia = [self.entity["law"][law]["fml_int_with_accum"] for law in mt_laws]
         fia = [f for f in fia if f]
@@ -871,13 +873,35 @@ class ModelAgent:
         }
 
         # Simulate function
-        model.add("def simulate(param_dict):", 0)
+        if self.context["type"] not in ["dynamic", "steady"]:
+            return False, f"Unknown operation type: {self.context['type']}"
+        if self.context["type"] == "steady":
+            model.add("def simulate(param_dict):", 0)
+        if self.context["type"] == "dynamic":
+            model.add("def simulate(param_dict, op_data):", 0)
+            model.add("# dynamic parameter", 1)
+            dvar = self.entity["law"][ac_law]["diff_var"]
+            dsym = MMLExpression(self.entity["var"][dvar]["sym"]).to_numpy()
+            model.add(f"if '{dsym}' not in op_data:", 1)
+            model.add("return None", 2)
+            model.add("interps = {}", 1)
+            op_vars = [var for var in model_vars if self.entity["var"][var]["class"]
+                == "OperationParameter" and not self.entity["var"][var]["dims"] 
+                and var != self.entity["law"][ac_law]["int_up_lim"]]
+            op_syms = [MMLExpression(
+                self.entity["var"][var]["sym"]).to_numpy() for var in op_vars]
+            for op_sym in op_syms:
+                model.add(f"interps['{op_sym}'] = "
+                    f"interp1d(op_data['{dsym}'], op_data['{op_sym}'])", 1)
+            model.add("", 0)
         model.add("# parameter", 1)
         model.add("p = list(param_dict.values())", 1)
 
         # Parameter setup
         keys = list(param_dict.keys())
-        for var in vars:
+        for var in model_vars:
+            if self.context["type"] == "dynamic" and var in op_vars:
+                continue
             var_dict = self.entity["var"][var]
             sym = MMLExpression(var_dict["sym"]).to_numpy()
             dims = var_dict["dims"]
@@ -997,6 +1021,7 @@ class ModelAgent:
             else:
                 model.add(f"{sym} = {code}", 1)
             model.add("", 0)
+        model.add("", 0)
 
         # Concentration derivative
         if self.context["description"]["ac"] in ["Batch", "Continuous"]:
@@ -1005,6 +1030,9 @@ class ModelAgent:
             dvar = self.entity["law"][ac_law]["diff_var"]
             dsym = MMLExpression(self.entity["var"][dvar]["sym"]).to_numpy()
             model.add(f"def derivative({dsym}, {isym}):", 1)
+            if self.context["type"] == "dynamic":
+                for op_sym in op_syms:
+                    model.add(f"{op_sym} = interps['{op_sym}']({dsym})", 2)
             if fia:
                 ivar_shape = (len(stms), len(spcs) * 2)
                 ivar_num = len(stms) * len(spcs) * 2
@@ -1305,7 +1333,8 @@ class ModelAgent:
             model.add(f"ca = ca.reshape({nstm, nspc * 2})", 2)
             model.add(f"cb = cb.reshape({nstm, nspc * 2})", 2)
             model.add(f"bc = np.zeros({nstm, nspc * 2}, dtype=np.float64)", 2)
-            model.add(f"bc[:, :{nspc}] = u * (ca[:, :{nspc}] - c_0) - D * ca[:, {nspc}:]", 2)
+            model.add(
+                f"bc[:, :{nspc}] = u * (ca[:, :{nspc}] - c_0) - D * ca[:, {nspc}:]", 2)
             model.add(f"bc[:, {nspc}:] = cb[:, {nspc}:]", 2)
             model.add("return bc.reshape(-1, )", 2)
             model.add("", 0)
@@ -1313,33 +1342,69 @@ class ModelAgent:
         # Solution
         int_up_lim = self.entity["law"][ac_law]["int_up_lim"]
         int_up_lim_sym = MMLExpression(self.entity["var"][int_up_lim]["sym"]).to_numpy()
-        model.add(f"{dsym}_eval = np.linspace(0, {int_up_lim_sym}, 201, dtype=np.float64)", 1)
         if fia:
             model.add(f"{isym} = np.zeros(({nstm * nspc * 2}, 201), dtype=np.float64)", 1)
-            model.add(f"res = solve_bvp(derivative_axis, boundary_func, {dsym}_eval, c)", 1)
+            model.add(
+                f"res = solve_bvp(derivative_axis, boundary_func, {dsym}_eval, c)", 1)
         else:
-            model.add(f"{isym}_0 = np.concatenate([{isym}_0.reshape(-1), np.array([{', '.join([str(v) for v in assoc_ivals])}], dtype=np.float64)])", 1)
-            model.add(f"res = solve_ivp(derivative, (0, {int_up_lim_sym}), {isym}_0, t_eval={dsym}_eval, method='LSODA', atol=1e-12)", 1)
-        model.add(f"if res.success:", 1)
-        model.add(f"if np.isnan(res.y).any():", 2)
-        model.add(f"return None", 3)
-        model.add(f"else:", 2)
+            model.add(f"{isym}_0 = np.concatenate(["
+                      f"{isym}_0.reshape(-1), "
+                      f"np.array([{', '.join([str(v) for v in assoc_ivals])}]"
+                      ", dtype=np.float64)])", 1)
+            if self.context["type"] == "steady":
+                model.add(
+                    f"{dsym}_eval = "
+                    f"np.linspace(0, {int_up_lim_sym}, 201, dtype=np.float64)", 1
+                )
+                model.add(
+                    f"res = solve_ivp(derivative, (0, {int_up_lim_sym}), "
+                    f"{isym}_0, t_eval={dsym}_eval, method='LSODA', atol=1e-12)", 1
+                )
+                model.add(f"if res.success:", 1)
+                model.add(f"if np.isnan(res.y).any():", 2)
+                model.add(f"return None", 3)
+                model.add(f"else:", 2)
+            if self.context["type"] == "dynamic":
+                model.add(f"t_span = {int_up_lim_sym} / {self.dynamic_segs}", 1)
+                if self.context["description"]["ac"] == "Continuous":
+                    model.add(f"res = [[0], [{isym}_0], q]", 1)
+                if self.context["description"]["ac"] == "Batch":
+                    model.add(f"res = [[0], [{isym}_0], None]", 1)
+                model.add(f"for i in range({self.dynamic_segs}):", 1)
+                model.add(
+                    "seg_res = solve_ivp(derivative, (t_span * i, t_span * (i+1)), "
+                    f"{isym}_0, t_eval=[t_span * i, t_span * (i+1)], method='LSODA', "
+                    "atol=1e-12)", 2
+                )
+                model.add("if np.isnan(seg_res.y).any():", 2)
+                model.add("return None", 3)
+                model.add("res[0].append(seg_res.t[-1])", 2)
+                model.add("res[1].append(seg_res.y[-1])", 2)
+                model.add(f"{isym}_0 = seg_res.y[-1]", 2)
+        
         if fia:
             model.add(f"return [res.x.round(6), res.y.round(6)[:{nstm * nspc}], q]", 3)
+            model.add(f"else:", 1)
+            model.add(f"return None", 2)
         else:
-            int_up_lim_unit = self.entity["var"][int_up_lim]["unit"]
-            if int_up_lim_unit and self.entity["unit"][int_up_lim_unit]["intcpt"]:
-                intcpt = self.entity["unit"][int_up_lim_unit]["intcpt"]
-                model.add(f"res.t -= {intcpt}", 3)
-            if int_up_lim_unit and self.entity["unit"][int_up_lim_unit]["rto"]:
-                rto = self.entity["unit"][int_up_lim_unit]["rto"]
-                model.add(f"res.t /= {rto}", 3)
-            if self.context["description"]["ac"] == "Continuous":
-                model.add(f"return [res.t.round(6), res.y.round(6), q]", 3)
-            if self.context["description"]["ac"] == "Batch":
-                model.add(f"return [res.t.round(6), res.y.round(6), None]", 3)
-        model.add(f"else:", 1)
-        model.add(f"return None", 2)
+            if self.context["type"] == "steady":
+                int_up_lim_unit = self.entity["var"][int_up_lim]["unit"]
+                if int_up_lim_unit and self.entity["unit"][int_up_lim_unit]["intcpt"]:
+                    intcpt = self.entity["unit"][int_up_lim_unit]["intcpt"]
+                    model.add(f"res.t -= {intcpt}", 3)
+                if int_up_lim_unit and self.entity["unit"][int_up_lim_unit]["rto"]:
+                    rto = self.entity["unit"][int_up_lim_unit]["rto"]
+                    model.add(f"res.t /= {rto}", 3)
+                if self.context["description"]["ac"] == "Continuous":
+                    model.add(f"return [res.t.round(6), res.y.round(6), q]", 3)
+                if self.context["description"]["ac"] == "Batch":
+                    model.add(f"return [res.t.round(6), res.y.round(6), None]", 3)
+                model.add(f"else:", 1)
+                model.add(f"return None", 2)
+            if self.context["type"] == "dynamic":
+                model.add("res[0] = np.array(res[0]).round(6)", 1)
+                model.add("res[1] = np.stack(res[1]).round(6)", 1)
+                model.add("return res", 1)
         return True, model.get_model()
     
 
