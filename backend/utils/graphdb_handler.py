@@ -35,7 +35,7 @@ class GraphdbHandler:
         self._last_pheno_sparql = []
 
         # Phenomenon service (delegation for helper queries)
-        self.pheno = PhenomenonService(self)
+        self.pheno_service = PhenomenonService(self)
 
     def query(self, mode=None):
         """Queries GraphDB and returns model ontology in a dictionary.
@@ -374,95 +374,43 @@ class GraphdbHandler:
             rule_dict[r]["descs"] = sorted(rule_dict[r]["descs"])
 
     def query_pheno(self):
-        """Queries Phenomena from GraphDB.
+        """Delegates to PhenomenonService.query_pheno"""
+        return self.pheno_service.query_pheno()
 
-        Returns:
-            dict: A dictionary of Phenomena.
+    def query_ac(self):
+        """Delegates to PhenomenonService.query_ac"""
+        return self.pheno_service.query_ac()
 
-        Side-effect:
-            Records all SPARQL queries executed for this method. Retrieve them with get_pheno_sparql().
-        """
-        # Reset SPARQL log for this run
-        self._last_pheno_sparql = []
+    def query_fp_by_ac(self, ac):
+        """Delegates to PhenomenonService.query_fp_by_ac"""
+        return self.pheno_service.query_fp_by_ac(ac)
 
-        pheno_dict = {}
-        for pheno_class in self.pheno_classes:
-            sparql = (
-                f"{self.prefix}"
-                "select ?p ?fp ?mtp ?mep where {"
-                f"?p rdf:type ontomo:{pheno_class}. "
-                "optional{?p ontomo:relatesToFlowPattern ?fp}. "
-                "optional{?p ontomo:relatesToMassTransportPhenomenon ?mtp}. "
-                "optional{?p ontomo:relatesToMassEquilibriumPhenomenon ?mep}. "
-                "}"
-            )
-            # Log the query for external use (e.g., copy/paste into GraphDB workbench)
-            self._last_pheno_sparql.append(sparql)
+    def query_mt_by_fp(self, fp):
+        """Delegates to PhenomenonService.query_mt_by_fp"""
+        return self.pheno_service.query_mt_by_fp(fp)
 
-
-            sparql_res = self.cur.execute(sparql)
-            for res in sparql_res.split("\r\n")[1:-1]:
-                p, fp, mtp, mep = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
-                p = p.split("#")[1]
-                fp = fp.split("#")[1] if fp else None
-                mtp = mtp.split("#")[1] if mtp else None
-                mep = mep.split("#")[1] if mep else None
-                if p not in pheno_dict:
-                    pheno_dict[p] = {
-                        "class": pheno_class,
-                        "flow_pats": [],
-                        "mt_phenos": [],
-                        "me_phenos": [],
-                    }
-                if fp and fp not in pheno_dict[p]["flow_pats"]:
-                    pheno_dict[p]["flow_pats"].append(fp)
-                if mtp and mtp not in pheno_dict[p]["mt_phenos"]:
-                    pheno_dict[p]["mt_phenos"].append(mtp)
-                if mep and mep not in pheno_dict[p]["me_phenos"]:
-                    pheno_dict[p]["me_phenos"].append(mep)
-        pheno_dict = dict(sorted(pheno_dict.items(), key=lambda x: x[0]))
-
-        print(f"Querying {self.pheno_classes}s from GraphDB: {self._last_pheno_sparql}")
-        for p in pheno_dict:
-            pheno_dict[p]["flow_pats"] = sorted(pheno_dict[p]["flow_pats"])
-            pheno_dict[p]["mt_phenos"] = sorted(pheno_dict[p]["mt_phenos"])
-            pheno_dict[p]["me_phenos"] = sorted(pheno_dict[p]["me_phenos"])
-        return pheno_dict
-
-    def query_phenomenon_ac(self, ac):
-        """Delegates to PhenomenonService.query_phenomenon_ac"""
-        return self.pheno.query_phenomenon_ac(ac)
-
-    def query_mass_transfer_by_flow_pattern(self, fp):
-        """Delegates to PhenomenonService.query_mass_transfer_by_flow_pattern"""
-        return self.pheno.query_mass_transfer_by_flow_pattern(fp)
-
-    def query_mass_equilibrium_by_mass_transfer(self, mt):
-        """Delegates to PhenomenonService.query_mass_equilibrium_by_mass_transfer"""
-        return self.pheno.query_mass_equilibrium_by_mass_transfer(mt)
+    def query_me_by_mt(self, mt):
+        """Delegates to PhenomenonService.query_me_by_mt"""
+        return self.pheno_service.query_me_by_mt(mt)
 
     def query_param_law(self, filters):
         """Delegates to PhenomenonService.query_param_law"""
-        return self.pheno.query_param_law(filters)
+        return self.pheno_service.query_param_law(filters)
 
-    def query_reactions(self, filters=None):
+    def query_rxn(self):
         """Delegates to PhenomenonService.query_reactions"""
-        return self.pheno.query_reactions(filters)
-
-    def query_accumulators(self):
-        """Delegates to PhenomenonService.query_accumulators"""
-        return self.pheno.query_accumulators()
+        return self.pheno_service.query_rxn()
 
     def query_information(self, filters):
         """Delegates to PhenomenonService.query_information"""
-        return self.pheno.query_information(filters)
+        return self.pheno_service.query_information(filters)
 
     def query_symbol(self, unit):
-        return self.pheno.query_symbol(unit)
+        return self.pheno_service.query_symbol(unit)
 
     def query_operation_parameters(self, filters=None):
         """Delegates to PhenomenonService.query_operation_parameters"""
-        return self.pheno.query_operation_parameters(filters)
+        return self.pheno_service.query_operation_parameters(filters)
 
     def get_pheno_sparql(self):
         """Return the list of SPARQL queries executed by the last call to query_pheno().

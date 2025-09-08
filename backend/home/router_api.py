@@ -353,7 +353,6 @@ def api_model_save():
 
     return jsonify({"success": True, "file": filename, "path": str(file_path.relative_to(current_app.root_path))}), 200
 
-
 @blueprint.route("/api/model/load", methods=["GET"])
 def api_model_load():
     project_name = request.args.get("project_name")
@@ -398,20 +397,19 @@ def api_model_load():
     return jsonify({"success": True, "file": latest.name, "data": data}), 200
 
 
-
-@blueprint.route("/api/model/phenomenon", methods=["GET"])
-def api_model_phenomenon():
+@blueprint.route("/api/model/pheno", methods=["GET"])
+def api_model_pheno():
     # Query the database for the phenomenon
-    entity = g.graphdb_handler.query_pheno()
-    return jsonify(entity)
+    pheno_dict = g.graphdb_handler.query_pheno()
+    return jsonify(pheno_dict)
 
-@blueprint.route("/api/model/phenomenon/ac", methods=["GET"])
-def api_model_phenomenon_ac():
-    entity = g.graphdb_handler.query_accumulators()
-    return jsonify(entity)
+@blueprint.route("/api/model/pheno/ac", methods=["GET"])
+def api_model_pheno_ac():
+    acs = g.graphdb_handler.query_ac()
+    return jsonify(acs)
 
-@blueprint.route("/api/model/phenomenon/fp", methods=["GET"])
-def api_model_phenomenon_fp():
+@blueprint.route("/api/model/pheno/fp", methods=["GET"])
+def api_model_pheno_fp():
     try:
         raw_ac = request.args.get("ac")
         if raw_ac is None or str(raw_ac).strip() == "":
@@ -429,23 +427,23 @@ def api_model_phenomenon_fp():
             }), 400
 
         # Query the database for the phenomenon
-        entity = g.graphdb_handler.query_phenomenon_ac(ac_norm)
+        fps = g.graphdb_handler.query_fp_by_ac(ac_norm)
 
         # Handle empty result sets gracefully
-        if entity is None:
+        if fps is None:
             return jsonify({
                 "error": "No phenomenon found for the specified operating condition.",
                 "method": raw_ac
             }), 404
 
         # If it's a collection, also consider emptiness
-        if isinstance(entity, (list, dict)) and len(entity) == 0:
+        if isinstance(fps, (list, dict)) and len(fps) == 0:
             return jsonify({
                 "error": "No phenomenon found for the specified operating condition.",
                 "method": raw_ac
             }), 404
 
-        return jsonify(entity), 200
+        return jsonify(fps), 200
 
     except Exception as e:
         # Unexpected error
@@ -454,9 +452,8 @@ def api_model_phenomenon_fp():
             "detail": str(e)
         }), 500
 
-
-@blueprint.route("/api/model/phenomenon/mt", methods=["GET"])
-def api_model_phenomenon_mt():
+@blueprint.route("/api/model/pheno/mt", methods=["GET"])
+def api_model_pheno_mt():
     try:
         # Accept multiple aliases for the flow pattern parameter for flexibility
         raw_fp = request.args.get("fp")
@@ -467,7 +464,7 @@ def api_model_phenomenon_mt():
             }), 400
 
         # Delegate to graphdb handler to get mass transfer phenomena linked to the FlowPattern
-        mts = g.graphdb_handler.query_mass_transfer_by_flow_pattern(raw_fp)
+        mts = g.graphdb_handler.query_mt_by_fp(raw_fp)
 
         if mts is None or (isinstance(mts, (list, dict)) and len(mts) == 0):
             return jsonify({
@@ -483,28 +480,28 @@ def api_model_phenomenon_mt():
             "detail": str(e)
         }), 500
 
-@blueprint.route("/api/model/phenomenon/me", methods=["GET"])
-def api_model_phenomenon_me():
+@blueprint.route("/api/model/pheno/me", methods=["GET"])
+def api_model_pheno_me():
     try:
         # Primary mode: accept JSON body with an array of mass transfer names
         payload = request.get_json(silent=True) or {}
         mt_list = payload.get("mt") if isinstance(payload, dict) else None
 
         if isinstance(mt_list, list) and len(mt_list) > 0:
-            result_set = set()
+            mes = set()
             for item in mt_list:
                 if item is None or str(item).strip() == "":
                     continue
-                equilibria = g.graphdb_handler.query_mass_equilibrium_by_mass_transfer(item)
-                for eq in (equilibria or []):
-                    if eq:
-                        result_set.add(eq)
-            if not result_set:
+                mt_mes = g.graphdb_handler.query_me_by_mt(item)
+                for me in (mt_mes or []):
+                    if me:
+                        mes.add(me)
+            if not mes:
                 return jsonify({
                     "error": "No mass equilibrium found for the specified mass transfer phenomena.",
                     "mt": mt_list
                 }), 404
-            return jsonify({"me": sorted(result_set)}), 200
+            return jsonify({"me": sorted(mes)}), 200
 
     except Exception as e:
         return jsonify({
@@ -512,8 +509,7 @@ def api_model_phenomenon_me():
             "detail": str(e)
         }), 500
 
-
-@blueprint.route("/api/model/phenomenon/param_law", methods=["POST", "GET"])
+@blueprint.route("/api/model/pheno/param_law", methods=["POST", "GET"])
 def api_model_param_law():
     """
     Retrieve parameter -> law mapping constrained by selected phenomena.
@@ -550,68 +546,62 @@ def api_model_param_law():
                 }
             }), 400
 
-        mapping = g.graphdb_handler.query_param_law(filters)
-        if not mapping:
-            return jsonify({
-                "error": "No parameter law found for the specified filters.",
-                "filters": filters
-            }), 404
+        ac = payload["ac"] if "ac" in payload else None
+        fp = payload["fp"] if "fp" in payload else None
+        mts = payload["mt"] if "mt" in payload else []
+        mes = payload["me"] if "me" in payload else []
 
-        return jsonify({"param_law": mapping}), 200
+        param_law = {}
+        vars = g.graphdb_handler.query_var()
+        laws = g.graphdb_handler.query_law(mode="mainpage")
 
-    except Exception as e:
-        return jsonify({
-            "error": "Internal server error while processing the request.",
-            "detail": str(e)
-        }), 500
+        # flow pattern laws subsidiary to mass transport
+        for law_dict in laws.values():
+            if law_dict["pheno"] not in mts:
+                continue
+            for var in law_dict["vars"]:
+                if var == "Concentration":
+                    continue
+                if var in param_law or not vars[var]["laws"]:
+                    continue
+                var_laws = []
+                for var_law in vars[var]["laws"]:
+                    if laws[var_law]["pheno"] == fp:
+                        var_laws.append(var_law)
+                if var_laws:
+                    param_law[var] = var_laws
 
+        # flow pattern laws subsidiary to flow pattern
+        for law_dict in laws.values():
+            if law_dict["pheno"] != fp:
+                continue
+            for var in law_dict["vars"]:
+                if var == "Concentration":
+                    continue
+                if var in param_law or not vars[var]["laws"]:
+                    continue
+                var_laws = []
+                for var_law in vars[var]["laws"]:
+                    if laws[var_law]["pheno"] == fp:
+                        var_laws.append(var_law)
+                if var_laws:
+                    param_law[var] = var_laws
+        
+        # mass equilibrium laws
+        for law_dict in laws.values():
+            if law_dict["pheno"] not in mts:
+                continue
+            for var in law_dict["vars"]:
+                if var in param_law or not vars[var]["laws"]:
+                    continue
+                var_laws = []
+                for var_law in vars[var]["laws"]:
+                    if laws[var_law]["pheno"] in mes:
+                        var_laws.append(var_law)
+                if var_laws:
+                    param_law[var] = var_laws
 
-
-@blueprint.route("/api/model/phenomenon/rxn", methods=["POST", "GET"])
-def api_model_reactions():
-    """
-    Retrieve reactions (ChemicalReactionPhenomenon) and their associated kinetic law names.
-    Accepts either:
-      - POST JSON body with any of keys: ac, fp, mt, me, param_law (string, list, or dict)
-      - GET query params: ac, fp, mt, me, param_law (can be repeated or comma-separated)
-
-    Response: {"rxn": {"<Reaction>": ["<Law>", ...], ...}}
-    """
-    try:
-        payload = request.get_json(silent=True) or {}
-        filters = {}
-        keys = ("ac", "fp", "mt", "me", "param_law")
-
-        for k in keys:
-            val = payload.get(k) if isinstance(payload, dict) else None
-            if val is None and request.method == "GET":
-                lst = request.args.getlist(k)
-                if not lst:
-                    s = request.args.get(k)
-                    if s:
-                        lst = [part.strip() for part in s.split(",") if part.strip()]
-                val = lst if lst else None
-            if val is not None:
-                filters[k] = val
-
-        # Require at least one of the accepted filters including param_law
-        if not any(filters.get(k) for k in keys):
-            return jsonify({
-                "error": "Provide at least one of 'ac', 'fp', 'mt', 'me', or 'param_law' via JSON body or query params.",
-                "hint": {
-                    "POST": {"param_law": ["Arrhenius", "Plain_Rate_Constant"]},
-                    "GET": "/api/model/phenomenon/rxn?param_law=Arrhenius&fp=Annular_Microflow"
-                }
-            }), 400
-
-        mapping = g.graphdb_handler.query_reactions(filters)
-        if not mapping:
-            return jsonify({
-                "error": "No reactions found for the specified filters.",
-                "filters": filters
-            }), 404
-
-        return jsonify({"rxn": mapping}), 200
+        return jsonify(param_law), 200
 
     except Exception as e:
         return jsonify({
@@ -619,6 +609,10 @@ def api_model_reactions():
             "detail": str(e)
         }), 500
 
+@blueprint.route("/api/model/pheno/rxn", methods=["POST", "GET"])
+def api_model_rxn():
+    rxns = g.graphdb_handler.query_rxn()
+    return jsonify(rxns)
 
 
 @blueprint.route("/api/model/simulation", methods=["POST"])
@@ -748,7 +742,6 @@ def api_model_simulation_tabular():
             "error": "Internal server error while running simulation.",
             "detail": str(e)
         }), 500
-
 
 @blueprint.route("/api/model/calibration", methods=["POST"])
 def api_model_calibration_tabular():
