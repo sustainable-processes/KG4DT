@@ -393,9 +393,9 @@ class GraphdbHandler:
         """Delegates to PhenomenonService.query_me_by_mt"""
         return self.pheno_service.query_me_by_mt(mt)
 
-    def query_param_law(self, filters):
+    def query_param_law(self, desc):
         """Delegates to PhenomenonService.query_param_law"""
-        return self.pheno_service.query_param_law(filters)
+        return self.pheno_service.query_param_law(desc)
 
     def query_rxn(self):
         """Delegates to PhenomenonService.query_reactions"""
@@ -408,9 +408,9 @@ class GraphdbHandler:
     def query_symbol(self, unit):
         return self.pheno_service.query_symbol(unit)
 
-    def query_operation_parameters(self, filters=None):
-        """Delegates to PhenomenonService.query_operation_parameters"""
-        return self.pheno_service.query_operation_parameters(filters)
+    def query_op_param(self, context=None):
+        """Delegates to PhenomenonService.query_op_param"""
+        return self.pheno_service.query_op_param(context)
 
     def get_pheno_sparql(self):
         """Return the list of SPARQL queries executed by the last call to query_pheno().

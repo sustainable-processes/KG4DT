@@ -506,12 +506,11 @@ def api_model_param_law():
     Response: {"param_law": {"<Parameter>": "<Law>", ...}}
     """
     try:
-        payload = request.get_json(silent=True) or {}
-        filters = {}
+        desc = request.get_json(silent=True) or {}
         keys = ("ac", "fp", "mt", "me")
 
         for k in keys:
-            val = payload.get(k) if isinstance(payload, dict) else None
+            val = desc.get(k) if isinstance(desc, dict) else None
             if val is None and request.method == "GET":
                 # Support multiple via ?k=a&k=b or comma-separated ?k=a,b
                 lst = request.args.getlist(k)
@@ -521,9 +520,9 @@ def api_model_param_law():
                         lst = [part.strip() for part in s.split(",") if part.strip()]
                 val = lst if lst else None
             if val is not None:
-                filters[k] = val
+                desc[k] = val
 
-        if not any(filters.get(k) for k in keys):
+        if not any(desc.get(k) for k in keys):
             return jsonify({
                 "error": "Provide at least one of 'ac', 'fp', 'mt', or 'me' via JSON body or query params.",
                 "hint": {
@@ -532,10 +531,10 @@ def api_model_param_law():
                 }
             }), 400
 
-        ac = payload["ac"] if "ac" in payload else None
-        fp = payload["fp"] if "fp" in payload else None
-        mts = payload["mt"] if "mt" in payload else []
-        mes = payload["me"] if "me" in payload else []
+        ac = desc["ac"] if "ac" in desc else None
+        fp = desc["fp"] if "fp" in desc else None
+        mts = desc["mt"] if "mt" in desc else []
+        mes = desc["me"] if "me" in desc else []
 
         param_law = {}
         vars = g.graphdb_handler.query_var()

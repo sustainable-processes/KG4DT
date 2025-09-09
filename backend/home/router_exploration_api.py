@@ -17,14 +17,14 @@ from ..utils.model_knowledge_graph_agent import ModelKnowledgeGraphAgent
 from ..utils.physical_property_agent import PhysicalPropertyAgent
 from ..utils.solvent_miscibility_agent import SolventMiscibilityAgent
 
+
 @blueprint.route("/api/model/law", methods=["GET"])
 def api_model_law():
     entity = g.graphdb_handler.query_law(None)
-
     return jsonify(entity)
 
 
-@blueprint.route("/api/model/symbol", methods=["GET"])
+@blueprint.route("/api/model/sym", methods=["GET"])
 def api_model_symbol():
     """Return the symbol of a unit by its local name via SPARQL ontomo:hasSymbol.
     Example: /api/model/symbol?unit=Pa
@@ -38,14 +38,14 @@ def api_model_symbol():
                 "hint": "/api/model/symbol?unit=Pa"
             }), 400
 
-        symbol = g.graphdb_handler.query_symbol(unit)
-        if symbol is None or symbol == "":
+        sym = g.graphdb_handler.query_symbol(unit)
+        if sym is None or sym == "":
             return jsonify({
                 "error": "No symbol found for the specified unit.",
                 "unit": unit
             }), 404
 
-        return jsonify({"symbol": symbol}), 200
+        return jsonify({"sym": sym}), 200
 
     except Exception as e:
         return jsonify({
@@ -112,37 +112,44 @@ def api_knowledge_graph_triplets():
 
 
 
-@blueprint.route("/api/model/operation_parameter", methods=["POST"])
+@blueprint.route("/api/model/op_param", methods=["POST"])
 def api_model_operation_parameter():
     """
-    POST body JSON may contain keys: { "ac", "fp", "mt", "me", "rxn", "param_law" }.
-    Returns operation/structure parameter variable names connected via Laws that satisfy the filters.
-    Response example: {"operation_parameter": ["Stirring_Speed", "Residence_Time", ...]}
+    POST body JSON may contain keys: {"basic", "desc"}
+    The "basic" value may contain keys: {"spc", "rxn", "stm", "gas", "sld"}.
+    The "desc" value may contain keys: {"ac", "fp", "mt", "me", "rxn", "param_law" }.
+    Returns operation parameters with dimensions of species and stream/solid/gas.
+    Response example: {"op_param": [
+        ("Stirring_Speed", None, None), 
+        ("Initial_Concentration", "H2O", "Stream 1"), 
+        ...
+    ]}
     - Returns 400 if no filters provided.
     - Returns 404 if no parameters found for the given filters.
     """
     try:
-        payload = request.get_json(silent=True) or {}
-        if not isinstance(payload, dict):
-            return jsonify({"error": "Invalid JSON body; expected an object."}), 400
+        # TODO: preload check Jonathan
+        context = request.get_json(silent=True) or {}
+        # if not isinstance(payload, dict):
+        #     return jsonify({"error": "Invalid JSON body; expected an object."}), 400
 
-        keys = ("ac", "fp", "mt", "me", "rxn", "param_law")
-        filters = {k: payload.get(k) for k in keys if k in payload}
+        # keys = ("ac", "fp", "mt", "me", "rxn", "param_law")
+        # filters = {k: payload.get(k) for k in keys if k in payload}
 
-        if not any(filters.get(k) for k in keys):
-            return jsonify({
-                "error": "Provide at least one of 'ac', 'fp', 'mt', 'me', 'rxn', or 'param_law' in the JSON body.",
-                "hint": {"example": {"fp": "Annular_Microflow", "param_law": ["Arrhenius"]}}
-            }), 400
+        # if not any(filters.get(k) for k in keys):
+        #     return jsonify({
+        #         "error": "Provide at least one of 'ac', 'fp', 'mt', 'me', 'rxn', or 'param_law' in the JSON body.",
+        #         "hint": {"example": {"fp": "Annular_Microflow", "param_law": ["Arrhenius"]}}
+        #     }), 400
 
-        result_set = g.graphdb_handler.query_operation_parameters(filters) or set()
-        if not result_set:
+        op_params = g.graphdb_handler.query_op_param(context) or set()
+        if not op_params:
             return jsonify({
                 "error": "No Operation/Structure parameters found for the specified filters.",
-                "filters": filters
+                "context": context
             }), 404
 
-        return jsonify({"operation_parameter": sorted(list(result_set))}), 200
+        return jsonify({"op_param": list(op_params)}), 200
 
     except Exception as e:
         return jsonify({
