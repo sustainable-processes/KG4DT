@@ -76,15 +76,15 @@ class MMLExpression:
         for i, child in enumerate(root.getchildren()):
             if i == 0:
                 if len(child.getchildren()) > 0 and child.getchildren()[0].tag == "mtext":
-                    mainpage_mml_str["detail_formula"].append(f'<math style="font-size: 13px; color: gray; padding-bottom: 0.2rem;">\n{etree.tostring(child).decode("utf-8")}\n</math>')
+                    mainpage_mml_str["detail_formula"].append(f"<math>{etree.tostring(child).decode('utf-8')}</math>")
                 elif len(child.getchildren()) > 1 and child.getchildren()[1].text == "=":
-                    mainpage_mml_str["detail_formula"].append(f'<math style="font-size: 13px; color: gray; padding-bottom: 0.2rem;">\n{etree.tostring(child).decode("utf-8")}\n</math>')
+                    mainpage_mml_str["detail_formula"].append(f"<math>{etree.tostring(child).decode('utf-8')}</math>")
                 else:
-                    mainpage_mml_str["concise_formula"] = f'<math style="color: black;">\n{etree.tostring(child).decode("utf-8")}\n</math>'
+                    mainpage_mml_str["concise_formula"] = f"<math>{etree.tostring(child).decode('utf-8')}</math>"
                     mainpage_mml_str["concise_formula"] = rx.sub(lambda x: "<mtext>" + "&nbsp;" * int(x.group("nspace")) + "</mtext>", mainpage_mml_str["concise_formula"])
             else:
-                mainpage_mml_str["detail_formula"].append(f'<math style="font-size: 13px; color: gray; padding-bottom: 0.2rem;">\n{etree.tostring(child).decode("utf-8")}\n</math>')
-        mainpage_mml_str["detail_formula"] = "\n<br/>\n".join(mainpage_mml_str["detail_formula"])
+                mainpage_mml_str["detail_formula"].append(f"<math>{etree.tostring(child).decode('utf-8')}</math>")
+        mainpage_mml_str["detail_formula"] = "<br/>".join(mainpage_mml_str["detail_formula"])
         mainpage_mml_str["detail_formula"] = rx.sub(lambda x: "<mtext>" + "&nbsp;" * int(x.group("nspace")) + "</mtext>", mainpage_mml_str["detail_formula"])
         return mainpage_mml_str
 

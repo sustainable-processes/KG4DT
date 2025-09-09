@@ -69,7 +69,7 @@ class GraphdbHandler:
         sparql_res = self.cur.execute(sparql)
         for res in sparql_res.split("\r\n")[1:-1]:
             dim = res.split("#")[1]
-            dim_dict[dim] = {"class": "Dimension"}
+            dim_dict[dim] = {"cls": "Dimension"}
         dim_dict = dict(sorted(dim_dict.items(), key=lambda x: x[0]))
         return dim_dict
 
@@ -116,7 +116,7 @@ class GraphdbHandler:
             asl = asl.split("#")[1] if asl else None
             if l not in law_dict:
                 law_dict[l] = {
-                    "class": "Law",
+                    "cls": "Law",
                     "doi": None,
                     "fml": None,
                     "rule": None,
@@ -191,7 +191,7 @@ class GraphdbHandler:
                 s, url = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
                 s = s.split("#")[1]
                 src_dict[s] = {
-                    "class": src_class,
+                    "cls": src_class,
                     "url": url,
                 }
         src_dict = dict(sorted(src_dict.items(), key=lambda x: x[0]))
@@ -229,7 +229,7 @@ class GraphdbHandler:
                 val = float(val) if val else None
                 if v not in var_dict:
                     var_dict[v] = {
-                        "class": var_class,
+                        "cls": var_class,
                         "sym": None,
                         "val": None,
                         "unit": None,
@@ -276,7 +276,7 @@ class GraphdbHandler:
                 s = re.sub(r" xmlns=[^\>]*", "", s)
                 if d not in desc_dict:
                     desc_dict[d] = {
-                        "class": desc_class,
+                        "cls": desc_class,
                         "sym": None,
                         "unit": None,
                     }
@@ -315,7 +315,7 @@ class GraphdbHandler:
             i = float(i) if i else None
             if u not in unit_dict:
                 unit_dict[u] = {
-                    "class": "Unit",
+                    "cls": "Unit",
                     "sym": None,
                     "metr": None,
                     "rto": None,
@@ -401,9 +401,9 @@ class GraphdbHandler:
         """Delegates to PhenomenonService.query_reactions"""
         return self.pheno_service.query_rxn()
 
-    def query_information(self, filters):
-        """Delegates to PhenomenonService.query_information"""
-        return self.pheno_service.query_information(filters)
+    def query_info(self, context):
+        """Delegates to PhenomenonService.query_info"""
+        return self.pheno_service.query_info(context)
 
     def query_symbol(self, unit):
         return self.pheno_service.query_symbol(unit)

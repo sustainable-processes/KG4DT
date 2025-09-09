@@ -65,25 +65,11 @@ def api_model_context():
 
 # Get only the information block of a case context
 #    Body example (POST):
-@blueprint.route("/api/model/information", methods=["POST"])
+@blueprint.route("/api/model/info", methods=["POST"])
 def api_model_information():
-    data = request.get_json(silent=True) or {}
-
-    # If body contains direct parameters (case-insensitive): ac, fp, mt, me, param_law, rxn
-    direct_keys = {"ac", "fp", "mt", "me", "param_law", "rxn"}
-    direct = {}
-    if isinstance(data, dict):
-        for k, v in data.items():
-            lk = str(k).lower()
-            if lk in direct_keys:
-                direct[lk] = v
-
-    if direct:
-        # Build information from GraphDB using provided filters
-        info = g.graphdb_handler.query_information(direct)
-        return jsonify({"information": info}), 200
-
-    return jsonify({"error": "Case or context not found"}), 404
+    context = request.get_json(silent=True) or {}
+    info = g.graphdb_handler.query_info(context)
+    return jsonify(info), 200
 
 # Get entity for the structure page (sidebar data)
 @blueprint.route("/api/structure", methods=["GET"])
