@@ -161,13 +161,13 @@ def api_model_simulation_tabular():
     Request JSON body:
     {
       "model_context": { ... },                         # required
-      "operation_keys": [[...], ...],                   # required; list of keys (each key is a list) for parameter_value_dict
-      "operation_columns": ["OP1", "OP2", ...],      # required; columns in each row mapped to operation_keys order
+      "operation_columns": ["OP1", "OP2", ...],         # required; columns in each row to send as inputs
       "rows": [
         {"experiment_no": 1, "OP1": 300, "OP2": 1.0, ...},
         ...
-      ],                                                 # required
-      "result_columns": ["A", "B", ...]               # optional; defaults to species list from model_context.basic.species
+      ],                                                # required
+      "result_columns": ["A", "B", ...]                 # required; which species/results to extract
+      // "operation_keys": [[...], ...]                 # optional; if omitted, defaults to [[col] for col in operation_columns]
     }
 
     Response (200):
@@ -175,8 +175,7 @@ def api_model_simulation_tabular():
       "rows": [
         {"experiment_no": 1, "OP1": 300, "OP2": 1.0, "A": 0.12, "B": 0.34, ...},
         ...
-      ],
-      "species": ["A", "B", ...]
+      ]
     }
     """
     try:
@@ -185,28 +184,26 @@ def api_model_simulation_tabular():
             return jsonify({"error": "Invalid JSON body; expected an object."}), 400
 
         model_context = payload.get("model_context")
-        op_keys = payload.get("operation_keys") or payload.get("data_key")
         op_cols = payload.get("operation_columns") or payload.get("data_columns")
         rows = payload.get("rows")
         result_cols = payload.get("result_columns")
+        # operation_keys is optional now; if missing, derive from operation_columns
+        op_keys = payload.get("operation_keys") or payload.get("data_key")
 
         if not model_context or not isinstance(model_context, dict):
             return jsonify({"error": "Field 'model_context' is required and must be an object."}), 400
-        if not op_keys or not isinstance(op_keys, list):
-            return jsonify({"error": "Field 'operation_keys' is required and must be a list."}), 400
         if not op_cols or not isinstance(op_cols, list):
             return jsonify({"error": "Field 'operation_columns' is required and must be a list."}), 400
         if not rows or not isinstance(rows, list):
             return jsonify({"error": "Field 'rows' is required and must be a list of records."}), 400
-        if len(op_keys) != len(op_cols):
-            return jsonify({"error": "Length of 'operation_keys' must match length of 'operation_columns'."}), 400
+        if not result_cols or not isinstance(result_cols, list):
+            return jsonify({"error": "Field 'result_columns' is required and must be a non-empty list."}), 400
 
-        # Determine species/result columns
-        species = (model_context.get("basic", {}) or {}).get("species") or []
-        if not result_cols:
-            result_cols = list(species)
-        if not isinstance(result_cols, list) or not result_cols:
-            return jsonify({"error": "'result_columns' must be a non-empty list or omitted to use species."}), 400
+        # If operation_keys not provided, use a 1:1 mapping with column names
+        if not op_keys:
+            op_keys = [[c] for c in op_cols]
+        if not isinstance(op_keys, list) or len(op_keys) != len(op_cols):
+            return jsonify({"error": "Length of 'operation_keys' must match length of 'operation_columns'."}), 400
 
         # Build request for ModelSimulationAgent
         data_values = []
@@ -214,9 +211,7 @@ def api_model_simulation_tabular():
         for r in rows:
             if not isinstance(r, dict):
                 return jsonify({"error": "Each item in 'rows' must be an object."}), 400
-            exp_no = r.get("experiment_no")
-            if exp_no is None:
-                exp_no = r.get("experiment")
+            exp_no = r.get("experiment_no", r.get("experiment"))
             exp_nos.append(exp_no)
             try:
                 vals = [r[c] for c in op_cols]
@@ -246,22 +241,17 @@ def api_model_simulation_tabular():
                     continue
                 if not label.startswith("average"):
                     continue
-                # expected format: "average  <species>"
                 parts = label.split()
                 sp = parts[-1] if parts else None
                 series = item.get("data") or []
                 if series:
                     final_val = series[-1][1]
                     final_map[sp] = final_val
-            # Return values in order of expected_species
             return [final_map.get(sp) for sp in expected_species]
 
         # Build response rows
         out_rows = []
-        # Align expected species order with result_cols if provided differently
         expected_species = result_cols
-        if not expected_species:
-            expected_species = species
         for idx, r in enumerate(rows):
             avg_vals = extract_final_averages(sim_results[idx] if idx < len(sim_results) else [], expected_species)
             merged = {"experiment_no": exp_nos[idx]}
@@ -273,7 +263,8 @@ def api_model_simulation_tabular():
                 merged[c] = v
             out_rows.append(merged)
 
-        return jsonify({"rows": out_rows, "species": expected_species}), 200
+        # New response format: just the list of rows
+        return jsonify(out_rows), 200
 
     except Exception as e:
         return jsonify({
@@ -286,23 +277,27 @@ def api_model_simulation_tabular():
 def api_model_calibration_tabular():
     """
     Run calibration using a table of experiments where some result columns may be missing.
-    The calibration fills missing values by optimizing parameters, and returns rows with completed results.
+    Accepts a simplified JSON and returns optimized parameter mapping.
 
     Request JSON body:
     {
       "model_context": { ... },                         # required
-      "parameter": {"key": [...], "init": [...], "min": [...], "max": [...]},  # required
-      "operation_keys": [[...], ...],                   # required
-      "operation_columns": ["OP1", "OP2", ...],      # required
-      "rows": [ {"experiment_no": 1, "OP1": 300, ..., "A": 0.1, "B": null}, ... ],  # required
-      "result_columns": ["A", "B", ...]               # optional; defaults to species list
+      "parameter": {"key": ["param1", ...], "min": [...], "max": [...]},  # required; 'init' optional
+      "operation_columns": ["OP1", "OP2", ...],         # required
+      "rows": [
+        {"experiment_no": 1, "OP1": 300, ..., "A": 0.1, "B": null},
+        {"experiment_no": 2, "OP1": 300, ..., "A": 0.2, "B": null}
+      ],                                                # required
+      "result_columns": ["A", "B", ...]                 # required
+      // "operation_keys": [[...], ...]                 # optional; defaults to [[col] for col in operation_columns]
+      // "parameter": may include "init": [...]         # optional; will be derived from min/max if omitted
     }
 
     Response (200):
     {
-      "parameter": {"key": [...], "value": [...]},
-      "rmse": <float>,
-      "rows": [ {"experiment_no": 1, "OP1": ..., "A": <filled>, "B": <filled>, ...}, ... ]
+      "param1": 1,
+      "param2": 2,
+      "param3": 3
     }
     """
     try:
@@ -311,46 +306,65 @@ def api_model_calibration_tabular():
             return jsonify({"error": "Invalid JSON body; expected an object."}), 400
 
         model_context = payload.get("model_context")
-        param_block = payload.get("parameter")
-        op_keys = payload.get("operation_keys") or payload.get("data_key")
+        param_block = payload.get("parameter") or {}
         op_cols = payload.get("operation_columns") or payload.get("data_columns")
         rows = payload.get("rows")
         result_cols = payload.get("result_columns")
+        # operation_keys optional; if missing, map 1:1 to operation_columns
+        op_keys = payload.get("operation_keys") or payload.get("data_key")
 
         if not model_context or not isinstance(model_context, dict):
             return jsonify({"error": "Field 'model_context' is required and must be an object."}), 400
-        if not isinstance(param_block, dict) or not all(k in param_block for k in ("key", "init", "min", "max")):
-            return jsonify({"error": "Field 'parameter' must include 'key', 'init', 'min', 'max'."}), 400
-        if not op_keys or not isinstance(op_keys, list):
-            return jsonify({"error": "Field 'operation_keys' is required and must be a list."}), 400
+        if not isinstance(param_block, dict) or not all(k in param_block for k in ("key", "min", "max")):
+            return jsonify({"error": "Field 'parameter' must include 'key', 'min', and 'max' arrays."}), 400
         if not op_cols or not isinstance(op_cols, list):
             return jsonify({"error": "Field 'operation_columns' is required and must be a list."}), 400
         if not rows or not isinstance(rows, list):
             return jsonify({"error": "Field 'rows' is required and must be a list of records."}), 400
-        if len(op_keys) != len(op_cols):
+        if not result_cols or not isinstance(result_cols, list):
+            return jsonify({"error": "Field 'result_columns' is required and must be a non-empty list."}), 400
+
+        # Ensure parameter arrays have consistent lengths; derive 'init' if missing
+        p_keys = param_block.get("key") or []
+        p_min = param_block.get("min") or []
+        p_max = param_block.get("max") or []
+        if not (isinstance(p_keys, list) and isinstance(p_min, list) and isinstance(p_max, list)):
+            return jsonify({"error": "Parameter 'key', 'min', and 'max' must be lists."}), 400
+        if not (len(p_keys) == len(p_min) == len(p_max)):
+            return jsonify({"error": "Parameter 'key', 'min', and 'max' must have the same length."}), 400
+
+        p_init = param_block.get("init")
+        if not p_init:
+            # Derive init as midpoint of min/max when numeric; otherwise use min
+            derived_init = []
+            for lo, hi in zip(p_min, p_max):
+                try:
+                    if lo is not None and hi is not None:
+                        derived_init.append((float(lo) + float(hi)) / 2.0)
+                    else:
+                        derived_init.append(float(lo) if lo is not None else 0.0)
+                except Exception:
+                    derived_init.append(lo if lo is not None else 0.0)
+            param_block["init"] = derived_init
+        else:
+            if not isinstance(p_init, list) or len(p_init) != len(p_keys):
+                return jsonify({"error": "Parameter 'init' must be a list with the same length as 'key'."}), 400
+
+        # If operation_keys not provided, use a 1:1 mapping with column names
+        if not op_keys:
+            op_keys = [[c] for c in op_cols]
+        if not isinstance(op_keys, list) or len(op_keys) != len(op_cols):
             return jsonify({"error": "Length of 'operation_keys' must match length of 'operation_columns'."}), 400
 
-        species = (model_context.get("basic", {}) or {}).get("species") or []
-        if not result_cols:
-            result_cols = list(species)
-        if not isinstance(result_cols, list) or not result_cols:
-            return jsonify({"error": "'result_columns' must be a non-empty list or omitted to use species."}), 400
-
-        # Build data.value: concatenate operation values then result values (aligned with result_cols/species order)
+        # Build data.value: concatenate operation values then result values (aligned with result_cols)
         data_values = []
-        exp_nos = []
         for r in rows:
             if not isinstance(r, dict):
                 return jsonify({"error": "Each item in 'rows' must be an object."}), 400
-            exp_no = r.get("experiment_no")
-            if exp_no is None:
-                exp_no = r.get("experiment")
-            exp_nos.append(exp_no)
             try:
                 op_vals = [r[c] for c in op_cols]
             except KeyError as e:
                 return jsonify({"error": f"Missing operation column in row: {str(e)}"}), 400
-            # results provided in row (may be missing)
             res_vals = [r.get(c) for c in result_cols]
             data_values.append(op_vals + res_vals)
 
@@ -367,44 +381,20 @@ def api_model_calibration_tabular():
         if not result:
             return jsonify({"error": "Calibration failed or returned no result."}), 500
 
-        # Extract final averages from returned simulation results similar to simulation route
-        sim_results = result.get("simulation") or []
-        def extract_final_averages(result_list, expected_species):
-            final_map = {}
-            for item in (result_list or []):
-                label = item.get("label")
-                if not isinstance(label, str):
-                    continue
-                if not label.startswith("average"):
-                    continue
-                parts = label.split()
-                sp = parts[-1] if parts else None
-                series = item.get("data") or []
-                if series:
-                    final_val = series[-1][1]
-                    final_map[sp] = final_val
-            return [final_map.get(sp) for sp in expected_species]
+        # Expect result format: {"parameter": {"key": [...], "value": [...]}, ...}
+        param_out = result.get("parameter") or {}
+        keys_out = param_out.get("key") or p_keys
+        vals_out = param_out.get("value")
+        if not isinstance(vals_out, list) or len(keys_out) != len(vals_out):
+            return jsonify({"error": "Calibration returned invalid parameter results."}), 500
 
-        expected_species = result_cols
-        out_rows = []
-        for idx, r in enumerate(rows):
-            avg_vals = extract_final_averages(sim_results[idx] if idx < len(sim_results) else [], expected_species)
-            merged = {"experiment_no": exp_nos[idx]}
-            for c in op_cols:
-                merged[c] = r.get(c)
-            for c, v in zip(expected_species, avg_vals):
-                merged[c] = v
-            out_rows.append(merged)
-
-        response = {
-            "parameter": result.get("parameter"),
-            "rmse": result.get("rmse"),
-            "rows": out_rows
-        }
-        return jsonify(response), 200
+        # Build simple mapping { "param": value, ... }
+        mapping = {k: v for k, v in zip(keys_out, vals_out)}
+        return jsonify(mapping), 200
 
     except Exception as e:
         return jsonify({
             "error": "Internal server error while running calibration.",
             "detail": str(e)
         }), 500
+

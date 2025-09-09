@@ -13,11 +13,25 @@ class PhysicalPropertyAgent():
     """
 
     def __init__(self, entity):
-        self.entity = entity
-        self.pubchem_url = entity["data_source"]["PubChem"]["url"]
-        self.chemspider_search_url = entity["data_source"]["ChemSpider"]["url"].split("|")[1]
-        self.chemspider_url = entity["data_source"]["ChemSpider"]["url"].split("|")[0]
-        self.wikipedia_url = entity["data_source"]["Wikipedia"]["url"]
+        # Some callers pass the GraphDB entity dict which exposes data sources under key 'src'.
+        # Older code expected 'data_source'. Support both and provide sensible defaults so the API doesn't 500.
+        self.entity = entity or {}
+        sources = self.entity.get("data_source") or self.entity.get("src") or {}
+        # Normalize keys for lookup
+        def _get_url(name, default=None):
+            entry = sources.get(name) or sources.get(name.lower()) or sources.get(name.capitalize())
+            return (entry or {}).get("url") or default
+        # Defaults allow the agent to function even if GraphDB config is missing.
+        # PubChem record URL template expects {cid} and {property}
+        self.pubchem_url = _get_url("PubChem", "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{cid}/JSON/?heading={property}")
+        chemspider_url_combo = _get_url("ChemSpider")
+        if chemspider_url_combo and "|" in chemspider_url_combo:
+            self.chemspider_url, self.chemspider_search_url = chemspider_url_combo.split("|", 1)
+        else:
+            # Fallbacks for ChemSpider JSON API and search
+            self.chemspider_url = "https://www.chemspider.com/api/records/{cid}"
+            self.chemspider_search_url = "https://www.chemspider.com/api/records/search?query={name}"
+        self.wikipedia_url = _get_url("Wikipedia", "https://en.wikipedia.org/wiki/{name}")
     
 
     def query_pubchem(self, names, properties):
