@@ -215,17 +215,18 @@ class MMLExpression:
             sub_numpy_expr = sub_numpy_expr[:pos] + re.sub(" +", " ", sub_numpy_expr[pos:])
             sub_numpy_expr = sub_numpy_expr.rstrip(" ")
             sub_numpy_expr = re.sub(r" *:", ":", sub_numpy_expr)
-            sub_numpy_expr = re.sub(r" *\[ *", " [", sub_numpy_expr)
+            sub_numpy_expr = re.sub(r"(?<!^) *\[ *", " [", sub_numpy_expr)
             sub_numpy_expr = re.sub(r" *\] *", "] ", sub_numpy_expr)
             sub_numpy_expr = re.sub(r"\( *", "(", sub_numpy_expr)
             sub_numpy_expr = re.sub(r" *\)", ")", sub_numpy_expr)
+            sub_numpy_expr = re.sub(r"([^ \*]) *\* *([^ \*])", r"\1 * \2", sub_numpy_expr)
             sub_numpy_expr = re.sub(r"\(\(([^\(\)]*)\)\)", r"(\1)", sub_numpy_expr)
             sub_numpy_expr = re.sub(r"\(\(([^\(\)]*)\(([^\(\)]*)\)\)\)", r"(\1(\2))", sub_numpy_expr)
             sub_numpy_expr = re.sub(r" *(\[[^ <>\[\]]+(\[[:0-9]+\])* [<>] 0\])", r"\1", sub_numpy_expr)
             sub_numpy_expr = re.sub(r"\(\(((\(([^\(\)]*)\)([^\(\)]*))+)\)\)", r"(\1)", sub_numpy_expr)
             sub_numpy_expr = re.sub(r"\(np.sum\(([^\(\)]+)\)\)", r"np.sum(\1)", sub_numpy_expr)
             sub_numpy_expr = re.sub(r"\(np.prod\(([^\(\)]+)\)\)", r"np.prod(\1)", sub_numpy_expr)
-            sub_numpy_expr = re.sub(r"(?<!len)(?<!np\.exp)(?<!np\.sum)(?<!np\.prod)(?<!np\.maximum)(?<!np\.matmul)\(([^\+\-\*\/\,]*)\)", r"\1", sub_numpy_expr)
+            sub_numpy_expr = re.sub(r"(?<!len)(?<!np\.exp)(?<!np\.sum)(?<!np\.prod)(?<!np\.maximum)(?<!np\.matmul)\(([^\+\-\*\/\,\(\)]*)\)", r"\1", sub_numpy_expr)
             sanitize_numpy_expr.append(sub_numpy_expr)
         sanitize_numpy_expr = "\n".join(sanitize_numpy_expr)
         return sanitize_numpy_expr
@@ -239,6 +240,11 @@ class MMLExpression:
         level = 0
         context = etree.iterparse(BytesIO(mml_str), events=("start", "end"))
         for action, elem in context:
+            # tag:mfenced
+            if action == "start" and elem.tag == "mfenced":
+                expr += "( "
+            if action == "end" and elem.tag == "mfenced":
+                expr += " )"
             # tag:mfrac
             if action == "start" and elem.tag == "mfrac":
                 if level == 0:
@@ -363,8 +369,12 @@ class MMLExpression:
                     r_mml_str = etree.tostring(elem[1])
                     l_expr, l_vars = MMLExpression.mml2numpy(l_mml_str, postfix)
                     r_expr, r_vars = MMLExpression.mml2numpy(r_mml_str, postfix)
-                    expr += f"({l_expr}) ** ({r_expr}) "
-                    vars.extend(l_vars + r_vars)
+                    if r_expr == "*":
+                        expr += f"{l_expr}_star "
+                        vars.extend(l_vars)
+                    else:
+                        expr += f"({l_expr}) ** ({r_expr}) "
+                        vars.extend(l_vars + r_vars)
                 level += 1
             if action == "end" and elem.tag == "msup":
                 level -= 1

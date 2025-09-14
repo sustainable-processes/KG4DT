@@ -159,27 +159,24 @@ def api_model_operation_parameter():
 
 
 
-
-@blueprint.route("/api/model/simulation", methods=["POST"])
-def api_model_simulation_tabular():
+@blueprint.route("/api/model/simulate", methods=["POST"])
+def api_model_simulate_tabular():
     """
     Run simulation for a table of experiments and return tabular results.
 
     Request JSON body:
     {
-      "model_context": { ... },                         # required
-      "operation_columns": ["OP1", "OP2", ...],         # required; columns in each row to send as inputs
-      "rows": [
+      "context": { ... },                       # required
+      "op_params": ["OP1", "OP2", ...],         # required; columns in each row to send as inputs
+      "data": [
         {"experiment_no": 1, "OP1": 300, "OP2": 1.0, ...},
         ...
-      ],                                                # required
-      "result_columns": ["A", "B", ...]                 # required; which species/results to extract
-      // "operation_keys": [[...], ...]                 # optional; if omitted, defaults to [[col] for col in operation_columns]
+      ],                                        # required
     }
 
     Response (200):
     {
-      "rows": [
+      "data": [
         {"experiment_no": 1, "OP1": 300, "OP2": 1.0, "A": 0.12, "B": 0.34, ...},
         ...
       ]
@@ -190,88 +187,59 @@ def api_model_simulation_tabular():
         if not isinstance(payload, dict):
             return jsonify({"error": "Invalid JSON body; expected an object."}), 400
 
-        model_context = payload.get("model_context")
-        op_cols = payload.get("operation_columns") or payload.get("data_columns")
-        rows = payload.get("rows")
-        result_cols = payload.get("result_columns")
-        # operation_keys is optional now; if missing, derive from operation_columns
-        op_keys = payload.get("operation_keys") or payload.get("data_key")
+        context = payload.get("context")
+        op_params = payload.get("op_params")
 
-        if not model_context or not isinstance(model_context, dict):
-            return jsonify({"error": "Field 'model_context' is required and must be an object."}), 400
-        if not op_cols or not isinstance(op_cols, list):
-            return jsonify({"error": "Field 'operation_columns' is required and must be a list."}), 400
-        if not rows or not isinstance(rows, list):
-            return jsonify({"error": "Field 'rows' is required and must be a list of records."}), 400
-        if not result_cols or not isinstance(result_cols, list):
-            return jsonify({"error": "Field 'result_columns' is required and must be a non-empty list."}), 400
-
-        # If operation_keys not provided, use a 1:1 mapping with column names
-        if not op_keys:
-            op_keys = [[c] for c in op_cols]
-        if not isinstance(op_keys, list) or len(op_keys) != len(op_cols):
-            return jsonify({"error": "Length of 'operation_keys' must match length of 'operation_columns'."}), 400
+        if not context or not isinstance(context, dict):
+            return jsonify({"error": "Field 'context' is required and must be an object."}), 400
+        if not op_params or not isinstance(op_params, dict):
+            return jsonify({"error": "Field 'op_params' is required and must be an object."}), 400
 
         # Build request for ModelSimulationAgent
-        data_values = []
-        exp_nos = []
-        for r in rows:
-            if not isinstance(r, dict):
-                return jsonify({"error": "Each item in 'rows' must be an object."}), 400
-            exp_no = r.get("experiment_no", r.get("experiment"))
-            exp_nos.append(exp_no)
-            try:
-                vals = [r[c] for c in op_cols]
-            except KeyError as e:
-                return jsonify({"error": f"Missing operation column in row: {str(e)}"}), 400
-            data_values.append(vals)
+        op_param_inds = []
+        for k in op_params["key"]:
+            if k[1] is None and k[2] is None:
+                op_param_inds.append((k[0], None, None, None, None))
+            elif k[1] in context["basic"]["stm"] and not k[2]:
+                op_param_inds.append((k[0], None, None, k[1], None))
+            elif k[1] in context["basic"]["gas"] and not k[2]:
+                op_param_inds.append((k[0], None, None, None, k[1]))
+            elif k[1] in context["basic"]["sld"] and not k[2]:
+                op_param_inds.append((k[0], None, None, None, k[1]))
+            elif k[1] in context["basic"]["stm"] and k[2]:
+                op_param_inds.append((k[0], k[2], None, k[1], None))
+            elif k[1] in context["basic"]["gas"] and k[2]:
+                op_param_inds.append((k[0], k[2], None, None, k[1]))
+            elif k[1] in context["basic"]["sld"] and k[2]:
+                op_param_inds.append((k[0], k[2], None, None, k[1]))
+            else:
+                raise ValueError(f"Unknown OperationParameter: {k[0]}")
 
         sim_req = {
-            "model_context": model_context,
-            "parameter": {"key": [], "value": []},
-            "data": {"key": op_keys, "value": data_values},
+            "context": context,
+            "op_params": {"ind": op_param_inds, "val": op_params["value"]}
         }
 
         # Run simulation
         entity = g.graphdb_handler.query()
-        agent = ModelSimulationAgent(entity, sim_req)
-        sim_results = agent.simulate_scipy() or []
-
-        # Helper: extract final average values per species from one experiment result list
-        def extract_final_averages(result_list, expected_species):
-            # result_list: list of dicts with keys 'data' and 'label'
-            # labels we want: "average  <species>"
-            final_map = {}
-            for item in (result_list or []):
-                label = item.get("label")
-                if not isinstance(label, str):
-                    continue
-                if not label.startswith("average"):
-                    continue
-                parts = label.split()
-                sp = parts[-1] if parts else None
-                series = item.get("data") or []
-                if series:
-                    final_val = series[-1][1]
-                    final_map[sp] = final_val
-            return [final_map.get(sp) for sp in expected_species]
+        sim_agent = ModelSimulationAgent(entity, sim_req)
+        sim_res = sim_agent.simulate_scipy()
 
         # Build response rows
-        out_rows = []
-        expected_species = result_cols
-        for idx, r in enumerate(rows):
-            avg_vals = extract_final_averages(sim_results[idx] if idx < len(sim_results) else [], expected_species)
-            merged = {"experiment_no": exp_nos[idx]}
-            # include OP columns back
-            for c in op_cols:
-                merged[c] = r.get(c)
-            # include result columns
-            for c, v in zip(expected_species, avg_vals):
-                merged[c] = v
-            out_rows.append(merged)
+        # out_rows = []
+        # for idx, r in enumerate(rows):
+        #     avg_vals = extract_final_averages(sim_results[idx] if idx < len(sim_results) else [], expected_species)
+        #     merged = {"experiment_no": exp_nos[idx]}
+        #     # include OP columns back
+        #     for c in op_cols:
+        #         merged[c] = r.get(c)
+        #     # include result columns
+        #     for c, v in zip(expected_species, avg_vals):
+        #         merged[c] = v
+        #     out_rows.append(merged)
 
         # New response format: just the list of rows
-        return jsonify(out_rows), 200
+        return jsonify(sim_res), 200
 
     except Exception as e:
         return jsonify({

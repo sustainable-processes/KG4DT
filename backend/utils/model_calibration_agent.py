@@ -4,7 +4,7 @@ from scipy.optimize import fsolve, differential_evolution
 import os
 import pickle
 import tempfile
-from .model_agent import ScipyModelCode
+from .model_agent import ScipyModel
 from .model_agent import ModelAgent
 
 
@@ -50,7 +50,7 @@ class ModelCalibrationAgent:
                             for record in self.model_calibration_request["data"]["value"]], dtype=np.float64)
         atol = 0.1 * reals[~np.isnan(reals)].min()
         
-        calibration_code = ScipyModelCode()
+        calibration_code = ScipyModel()
         calibration_code.codes.append("import os")
         calibration_code.codes.append("import pickle")
         calibration_code.codes.append("from scipy.optimize import differential_evolution")

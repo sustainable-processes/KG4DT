@@ -8,4 +8,4 @@ graphdb/dist/*zip
 docker-compose.yml
 .env
 
-backend/app/cases/hydrogenation
+backend/cases/hydrogenation
