@@ -42,9 +42,10 @@ class ModelSimulationAgent:
                 f.write(f"op_param_dicts = {op_param_dicts}\n")
                 f.write("param_dicts = []\n")
                 f.write("for op_param_dict in op_param_dicts:\n")
+                f.write("    _param_dict = param_dict.copy()\n")
                 f.write("    for ind, val in op_param_dict.items():\n")
-                f.write("        param_dict[ind] = val\n")
-                f.write("    param_dicts.append(param_dict)\n\n")
+                f.write("        _param_dict[ind] = val\n")
+                f.write("    param_dicts.append(_param_dict)\n\n")
                 f.write("if __name__ == '__main__':\n")
                 f.write("    import os\n")
                 f.write("    import pickle\n")
@@ -55,7 +56,6 @@ class ModelSimulationAgent:
                         "os.path.dirname(__file__), 'res.pkl'), 'wb'))\n")
             # with open(os.path.join(temp_dir, "simulate.py"), "r") as f:
             #     print("".join(f.readlines()))
-            # exit(0)
             os.system(f"python {temp_dir}/simulate.py")
             res = pickle.load(open(f"{temp_dir}/res.pkl", "rb"))
         return res

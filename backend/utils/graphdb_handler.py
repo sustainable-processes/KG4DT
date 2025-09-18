@@ -412,6 +412,10 @@ class GraphdbHandler:
         """Delegates to PhenomenonService.query_op_param"""
         return self.pheno_service.query_op_param(context)
 
+    def query_cal_param(self, context=None):
+        """Delegates to PhenomenonService.query_cal_param"""
+        return self.pheno_service.query_cal_param(context)
+
     def get_pheno_sparql(self):
         """Return the list of SPARQL queries executed by the last call to query_pheno().
         This allows users to copy/paste the exact queries into GraphDB Workbench.

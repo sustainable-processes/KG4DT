@@ -120,8 +120,8 @@ def api_model_operation_parameter():
     The "desc" value may contain keys: {"ac", "fp", "mt", "me", "rxn", "param_law" }.
     Returns operation parameters with dimensions of species and stream/solid/gas.
     Response example: {"op_param": [
-        ("Stirring_Speed", None, None), 
-        ("Initial_Concentration", "H2O", "Stream 1"), 
+        ("Stirring_Speed", None, None, None, None), 
+        ("Initial_Concentration", None, "Stream1", None, "water"), 
         ...
     ]}
     - Returns 400 if no filters provided.
@@ -145,7 +145,7 @@ def api_model_operation_parameter():
         op_params = g.graphdb_handler.query_op_param(context) or set()
         if not op_params:
             return jsonify({
-                "error": "No Operation/Structure parameters found for the specified filters.",
+                "error": "No Operation parameters found for the specified filters.",
                 "context": context
             }), 404
 
@@ -158,29 +158,56 @@ def api_model_operation_parameter():
         }), 500
 
 
-
 @blueprint.route("/api/model/simulate", methods=["POST"])
-def api_model_simulate_tabular():
+def api_model_simulate():
     """
     Run simulation for a table of experiments and return tabular results.
 
     Request JSON body:
     {
-      "context": { ... },                       # required
-      "op_params": ["OP1", "OP2", ...],         # required; columns in each row to send as inputs
-      "data": [
-        {"experiment_no": 1, "OP1": 300, "OP2": 1.0, ...},
-        ...
-      ],                                        # required
+      "context": { ... },
+      "op_params": {
+        "ind": [
+          ["Experiment_No", null, null, null, null],
+          ["Batch_Time", null, null, null, null],
+          ["Initial_Mass", null, "Stream1", null, "water"],
+          ...
+        ],
+        "value": [
+          [1, 100, 0.5, ...],
+          ...
+        ]
+      }
     }
 
     Response (200):
-    {
-      "data": [
-        {"experiment_no": 1, "OP1": 300, "OP2": 1.0, "A": 0.12, "B": 0.34, ...},
-        ...
-      ]
-    }
+    [
+      {
+        "x": {
+          "var": "Time",
+          "mml": "<math><mrow><mi>t</mi></mrow></math>",
+          "unit": "<math><mrow><mtext>s</mtext></mrow></math>",
+          "stm": null,
+          "gas": null,
+          "sld": null,
+          "spc": null,
+          "data": [...]
+        },
+        "y": [
+          {
+            "var": "Mass",
+            "mml": "<math><mrow><mi>m</mi></mrow></math>",
+            "unit": "<math><mrow><mtext>kg</mtext></mrow></math>",
+            "stm": "Stream1",
+            "gas": null,
+            "sld": null,
+            "spc": "water",
+            "data": [...]
+          },
+          ...
+        ]
+      }
+    ]
     """
     try:
         payload = request.get_json(silent=True) or {}
@@ -196,28 +223,10 @@ def api_model_simulate_tabular():
             return jsonify({"error": "Field 'op_params' is required and must be an object."}), 400
 
         # Build request for ModelSimulationAgent
-        op_param_inds = []
-        for k in op_params["key"]:
-            if k[1] is None and k[2] is None:
-                op_param_inds.append((k[0], None, None, None, None))
-            elif k[1] in context["basic"]["stm"] and not k[2]:
-                op_param_inds.append((k[0], None, None, k[1], None))
-            elif k[1] in context["basic"]["gas"] and not k[2]:
-                op_param_inds.append((k[0], None, None, None, k[1]))
-            elif k[1] in context["basic"]["sld"] and not k[2]:
-                op_param_inds.append((k[0], None, None, None, k[1]))
-            elif k[1] in context["basic"]["stm"] and k[2]:
-                op_param_inds.append((k[0], k[2], None, k[1], None))
-            elif k[1] in context["basic"]["gas"] and k[2]:
-                op_param_inds.append((k[0], k[2], None, None, k[1]))
-            elif k[1] in context["basic"]["sld"] and k[2]:
-                op_param_inds.append((k[0], k[2], None, None, k[1]))
-            else:
-                raise ValueError(f"Unknown OperationParameter: {k[0]}")
-
+        op_params["ind"] = [tuple(ind) for ind in op_params["ind"]]
         sim_req = {
             "context": context,
-            "op_params": {"ind": op_param_inds, "val": op_params["value"]}
+            "op_params": op_params
         }
 
         # Run simulation
@@ -225,20 +234,6 @@ def api_model_simulate_tabular():
         sim_agent = ModelSimulationAgent(entity, sim_req)
         sim_res = sim_agent.simulate_scipy()
 
-        # Build response rows
-        # out_rows = []
-        # for idx, r in enumerate(rows):
-        #     avg_vals = extract_final_averages(sim_results[idx] if idx < len(sim_results) else [], expected_species)
-        #     merged = {"experiment_no": exp_nos[idx]}
-        #     # include OP columns back
-        #     for c in op_cols:
-        #         merged[c] = r.get(c)
-        #     # include result columns
-        #     for c, v in zip(expected_species, avg_vals):
-        #         merged[c] = v
-        #     out_rows.append(merged)
-
-        # New response format: just the list of rows
         return jsonify(sim_res), 200
 
     except Exception as e:
@@ -248,124 +243,142 @@ def api_model_simulate_tabular():
         }), 500
 
 
-@blueprint.route("/api/model/calibration", methods=["POST"])
-def api_model_calibration_tabular():
+@blueprint.route("/api/model/cal_param", methods=["POST"])
+def api_model_calibration_parameter():
+    """
+    POST body JSON may contain keys: {"basic", "desc"}
+    The "basic" value may contain keys: {"spc", "rxn", "stm", "gas", "sld"}.
+    The "desc" value may contain keys: {"ac", "fp", "mt", "me", "rxn", "param_law" }.
+    Returns operation parameters with dimensions of species and stream/solid/gas.
+    Response example: {"cal_param": [
+        ("Activation_Energy", None, "Stream1", "A + B > C", None), 
+        ...
+    ]}
+    - Returns 400 if no filters provided.
+    - Returns 404 if no parameters found for the given filters.
+    """
+    try:
+        # TODO: preload check Jonathan
+        context = request.get_json(silent=True) or {}
+        # if not isinstance(payload, dict):
+        #     return jsonify({"error": "Invalid JSON body; expected an object."}), 400
+
+        # keys = ("ac", "fp", "mt", "me", "rxn", "param_law")
+        # filters = {k: payload.get(k) for k in keys if k in payload}
+
+        # if not any(filters.get(k) for k in keys):
+        #     return jsonify({
+        #         "error": "Provide at least one of 'ac', 'fp', 'mt', 'me', 'rxn', or 'param_law' in the JSON body.",
+        #         "hint": {"example": {"fp": "Annular_Microflow", "param_law": ["Arrhenius"]}}
+        #     }), 400
+
+        cal_params = g.graphdb_handler.query_cal_param(context) or set()
+        if not cal_params:
+            return jsonify({
+                "error": "No Reaction/MassTransport parameters found for the specified filters.",
+                "context": context
+            }), 404
+
+        return jsonify({"cal_param": list(cal_params)}), 200
+
+    except Exception as e:
+        return jsonify({
+            "error": "Internal server error while processing the request.",
+            "detail": str(e)
+        }), 500
+
+
+@blueprint.route("/api/model/calibrate", methods=["POST"])
+def api_model_calibrate():
     """
     Run calibration using a table of experiments where some result columns may be missing.
     Accepts a simplified JSON and returns optimized parameter mapping.
 
     Request JSON body:
     {
-      "model_context": { ... },                         # required
-      "parameter": {"key": ["param1", ...], "min": [...], "max": [...]},  # required; 'init' optional
-      "operation_columns": ["OP1", "OP2", ...],         # required
-      "rows": [
-        {"experiment_no": 1, "OP1": 300, ..., "A": 0.1, "B": null},
-        {"experiment_no": 2, "OP1": 300, ..., "A": 0.2, "B": null}
-      ],                                                # required
-      "result_columns": ["A", "B", ...]                 # required
-      // "operation_keys": [[...], ...]                 # optional; defaults to [[col] for col in operation_columns]
-      // "parameter": may include "init": [...]         # optional; will be derived from min/max if omitted
+      "context": { ... },
+      "op_params": {
+        "ind": [
+          ["Experiment_No", null, null, null, null],
+          ["Batch_Time", null, null, null, null],
+          ["Initial_Mass", null, "Stream1", null, "water"],
+          ...
+        ],
+        "val": [
+          [1, 100, 0.5, ...],
+          ...
+        ]
+      },
+      "cal_params": {
+        "ind": 
+      }
     }
 
     Response (200):
-    {
-      "param1": 1,
-      "param2": 2,
-      "param3": 3
-    }
+    [
+      {
+        "x": {
+          "var": "Time",
+          "mml": "<math><mrow><mi>t</mi></mrow></math>",
+          "unit": "<math><mrow><mtext>s</mtext></mrow></math>",
+          "stm": null,
+          "gas": null,
+          "sld": null,
+          "spc": null,
+          "data": [...]
+        },
+        "y": [
+          {
+            "var": "Mass",
+            "mml": "<math><mrow><mi>m</mi></mrow></math>",
+            "unit": "<math><mrow><mtext>kg</mtext></mrow></math>",
+            "stm": "Stream1",
+            "gas": null,
+            "sld": null,
+            "spc": "water",
+            "data": [...]
+          },
+          ...
+        ]
+      }
+    ]
     """
     try:
         payload = request.get_json(silent=True) or {}
         if not isinstance(payload, dict):
             return jsonify({"error": "Invalid JSON body; expected an object."}), 400
 
-        model_context = payload.get("model_context")
-        param_block = payload.get("parameter") or {}
-        op_cols = payload.get("operation_columns") or payload.get("data_columns")
-        rows = payload.get("rows")
-        result_cols = payload.get("result_columns")
-        # operation_keys optional; if missing, map 1:1 to operation_columns
-        op_keys = payload.get("operation_keys") or payload.get("data_key")
+        context = payload.get("context")
+        op_params = payload.get("op_params")
+        reals = payload.get("reals")
+        cal_params = payload.get("cal_params")
 
-        if not model_context or not isinstance(model_context, dict):
-            return jsonify({"error": "Field 'model_context' is required and must be an object."}), 400
-        if not isinstance(param_block, dict) or not all(k in param_block for k in ("key", "min", "max")):
-            return jsonify({"error": "Field 'parameter' must include 'key', 'min', and 'max' arrays."}), 400
-        if not op_cols or not isinstance(op_cols, list):
-            return jsonify({"error": "Field 'operation_columns' is required and must be a list."}), 400
-        if not rows or not isinstance(rows, list):
-            return jsonify({"error": "Field 'rows' is required and must be a list of records."}), 400
-        if not result_cols or not isinstance(result_cols, list):
-            return jsonify({"error": "Field 'result_columns' is required and must be a non-empty list."}), 400
+        if not context or not isinstance(context, dict):
+            return jsonify({"error": "Field 'context' is required and must be an object."}), 400
+        if not op_params or not isinstance(op_params, dict):
+            return jsonify({"error": "Field 'op_params' is required and must be an object."}), 400
+        if not reals or not isinstance(reals, dict):
+            return jsonify({"error": "Field 'reals' is required and must be an object."}), 400
+        if not cal_params or not isinstance(cal_params, dict):
+            return jsonify({"error": "Field 'cal_params' is required and must be an object."}), 400
 
-        # Ensure parameter arrays have consistent lengths; derive 'init' if missing
-        p_keys = param_block.get("key") or []
-        p_min = param_block.get("min") or []
-        p_max = param_block.get("max") or []
-        if not (isinstance(p_keys, list) and isinstance(p_min, list) and isinstance(p_max, list)):
-            return jsonify({"error": "Parameter 'key', 'min', and 'max' must be lists."}), 400
-        if not (len(p_keys) == len(p_min) == len(p_max)):
-            return jsonify({"error": "Parameter 'key', 'min', and 'max' must have the same length."}), 400
-
-        p_init = param_block.get("init")
-        if not p_init:
-            # Derive init as midpoint of min/max when numeric; otherwise use min
-            derived_init = []
-            for lo, hi in zip(p_min, p_max):
-                try:
-                    if lo is not None and hi is not None:
-                        derived_init.append((float(lo) + float(hi)) / 2.0)
-                    else:
-                        derived_init.append(float(lo) if lo is not None else 0.0)
-                except Exception:
-                    derived_init.append(lo if lo is not None else 0.0)
-            param_block["init"] = derived_init
-        else:
-            if not isinstance(p_init, list) or len(p_init) != len(p_keys):
-                return jsonify({"error": "Parameter 'init' must be a list with the same length as 'key'."}), 400
-
-        # If operation_keys not provided, use a 1:1 mapping with column names
-        if not op_keys:
-            op_keys = [[c] for c in op_cols]
-        if not isinstance(op_keys, list) or len(op_keys) != len(op_cols):
-            return jsonify({"error": "Length of 'operation_keys' must match length of 'operation_columns'."}), 400
-
-        # Build data.value: concatenate operation values then result values (aligned with result_cols)
-        data_values = []
-        for r in rows:
-            if not isinstance(r, dict):
-                return jsonify({"error": "Each item in 'rows' must be an object."}), 400
-            try:
-                op_vals = [r[c] for c in op_cols]
-            except KeyError as e:
-                return jsonify({"error": f"Missing operation column in row: {str(e)}"}), 400
-            res_vals = [r.get(c) for c in result_cols]
-            data_values.append(op_vals + res_vals)
-
-        calib_req = {
-            "model_context": model_context,
-            "parameter": param_block,
-            "data": {"key": op_keys, "value": data_values},
+        # Build request for ModelSimulationAgent
+        op_params["ind"] = [tuple(ind) for ind in op_params["ind"]]
+        reals["ind"] = [tuple(ind) for ind in reals["ind"]]
+        cal_params["ind"] = [tuple(ind) for ind in cal_params["ind"]]
+        cal_req = {
+            "context": context,
+            "op_params": op_params,
+            "reals": reals,
+            "cal_params": cal_params
         }
 
         # Run calibration
         entity = g.graphdb_handler.query()
-        agent = ModelCalibrationAgent(entity, calib_req)
-        result = agent.calibration_scipy()
-        if not result:
-            return jsonify({"error": "Calibration failed or returned no result."}), 500
+        cal_agent = ModelCalibrationAgent(entity, cal_req)
+        cal_res = cal_agent.calibrate_scipy()
 
-        # Expect result format: {"parameter": {"key": [...], "value": [...]}, ...}
-        param_out = result.get("parameter") or {}
-        keys_out = param_out.get("key") or p_keys
-        vals_out = param_out.get("value")
-        if not isinstance(vals_out, list) or len(keys_out) != len(vals_out):
-            return jsonify({"error": "Calibration returned invalid parameter results."}), 500
-
-        # Build simple mapping { "param": value, ... }
-        mapping = {k: v for k, v in zip(keys_out, vals_out)}
-        return jsonify(mapping), 200
+        return jsonify(cal_res), 200
 
     except Exception as e:
         return jsonify({
