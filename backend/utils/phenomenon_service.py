@@ -202,26 +202,143 @@ class PhenomenonService:
 
         return sorted(mes)
 
-    def query_rxn(self):
+    def query_rxn(self, desc=None):
         """
-        Return a sorted list of ReactionPhenomenon individuals (e.g., 'Arrhenius', 'Plain_Rate_Constant').
+        Return ReactionPhenomenon individuals, optionally filtered by provided descriptors.
+        desc (optional): dict with any of keys:
+          - ac / accumulation: Accumulation names (string or list)
+          - fp / flow_pattern: FlowPattern names (string or list)
+          - mt / mass_transport: MassTransportPhenomenon names (string or list)
+          - me / mass_equilibrium: MassEquilibriumPhenomenon names (string or list)
+          - param / parameter: Model variable names used in the law (string or list)
+          - law / law_name: Law names (string or list)
+          - param_law: mapping of {parameter: law} or list of such mappings; treated as hints to
+                        collect parameters and laws to filter on.
+        If no filters are provided, returns all ReactionPhenomenon as before.
         """
+        # Backward-compatible behavior when no filters provided
+        if not desc:
+            sparql = self.h.prefix + \
+                "select ?p where {" \
+                f"?p rdf:type ontomo:ReactionPhenomenon. " \
+                "}"
+            try:
+                sparql_res = self.h.cur.execute(sparql)
+            except Exception:
+                return []
+            rxns = set()
+            for line in sparql_res.split("\r\n")[1:-1]:
+                try:
+                    _, rxn = line.split("#")
+                except ValueError:
+                    parts = line.split("#")
+                    rxn = parts[-1] if parts else ""
+                rxn = rxn.strip()
+                if rxn:
+                    rxns.add(rxn)
+            return sorted(rxns)
+
+        if not isinstance(desc, dict):
+            return []
+
+        def _norm_list(val):
+            if val is None:
+                return []
+            if isinstance(val, list):
+                items = val
+            else:
+                items = [val]
+            out = []
+            for x in items:
+                if x is None:
+                    continue
+                s = str(x).strip()
+                if s:
+                    out.append(s)
+            return out
+
+        # Accept aliases
+        ac_list = _norm_list(desc.get("ac") or desc.get("accumulation"))
+        fp_list = _norm_list(desc.get("fp") or desc.get("flow_pattern"))
+        mt_list = _norm_list(desc.get("mt") or desc.get("mass_transport"))
+        me_list = _norm_list(desc.get("me") or desc.get("mass_equilibrium"))
+        param_list = _norm_list(desc.get("param") or desc.get("parameter"))
+        law_list = _norm_list(desc.get("law") or desc.get("law_name") or desc.get("laws"))
+
+        # param_law can be a dict or list of dicts; collect keys/values
+        pl = desc.get("param_law")
+        if isinstance(pl, dict):
+            param_list += _norm_list(list(pl.keys()))
+            law_list += _norm_list(list(pl.values()))
+        elif isinstance(pl, list):
+            for item in pl:
+                if isinstance(item, dict):
+                    param_list += _norm_list(list(item.keys()))
+                    law_list += _norm_list(list(item.values()))
+
+        # Build SPARQL
+        def _regex_union(names):
+            # Escape regex special chars in provided names
+            esc = [re.escape(n) for n in names]
+            return "|".join(esc)
+
         sparql = self.h.prefix + \
-            "select ?p where {" \
-            f"?p rdf:type ontomo:ReactionPhenomenon. " \
-            "}"
+            "select distinct ?rxn where {" \
+            f"?rxn rdf:type ontomo:ReactionPhenomenon. " \
+            f"?l rdf:type ontomo:Law. " \
+            f"?l ontomo:isAssociatedWith ?rxn. "
+
+        if ac_list:
+            p = _regex_union(ac_list)
+            sparql += (
+                f"?l ontomo:isAssociatedWith ?ac. "
+                f"?ac rdf:type ontomo:Accumulation. "
+                f"FILTER(regex(str(?ac), '#({p})$', 'i')). "
+            )
+        if fp_list:
+            p = _regex_union(fp_list)
+            sparql += (
+                f"?l ontomo:isAssociatedWith ?fp. "
+                f"?fp rdf:type ontomo:FlowPattern. "
+                f"FILTER(regex(str(?fp), '#({p})$', 'i')). "
+            )
+        if mt_list:
+            p = _regex_union(mt_list)
+            sparql += (
+                f"?l ontomo:isAssociatedWith ?mt. "
+                f"?mt rdf:type ontomo:MassTransportPhenomenon. "
+                f"FILTER(regex(str(?mt), '#({p})$', 'i')). "
+            )
+        if me_list:
+            p = _regex_union(me_list)
+            sparql += (
+                f"?l ontomo:isAssociatedWith ?me. "
+                f"?me rdf:type ontomo:MassEquilibriumPhenomenon. "
+                f"FILTER(regex(str(?me), '#({p})$', 'i')). "
+            )
+        if param_list:
+            p = _regex_union(param_list)
+            sparql += (
+                f"{{ ?l ontomo:hasModelVariable ?v }} UNION {{ ?l ontomo:hasOptionalModelVariable ?v }}. "
+                f"FILTER(regex(str(?v), '#({p})$', 'i')). "
+            )
+        if law_list:
+            p = _regex_union(law_list)
+            sparql += f"FILTER(regex(str(?l), '#({p})$', 'i')). "
+
+        sparql += "}"
+
         try:
             sparql_res = self.h.cur.execute(sparql)
         except Exception:
             return []
+
         rxns = set()
         for line in sparql_res.split("\r\n")[1:-1]:
-            try:
-                _, rxn = line.split("#")
-            except ValueError:
-                parts = line.split("#")
-                rxn = parts[-1] if parts else ""
-            rxn = rxn.strip()
+            # Expect a single binding of ?rxn
+            parts = line.split(",")
+            iri = parts[0] if parts else ""
+            rxn = iri.split("#")[-1].strip()
             if rxn:
                 rxns.add(rxn)
         return sorted(rxns)

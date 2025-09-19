@@ -397,9 +397,9 @@ class GraphdbHandler:
         """Delegates to PhenomenonService.query_param_law"""
         return self.pheno_service.query_param_law(desc)
 
-    def query_rxn(self):
-        """Delegates to PhenomenonService.query_reactions"""
-        return self.pheno_service.query_rxn()
+    def query_rxn(self, desc=None):
+        """Delegates to PhenomenonService.query_rxn with optional filters."""
+        return self.pheno_service.query_rxn(desc)
 
     def query_info(self, context):
         """Delegates to PhenomenonService.query_info"""

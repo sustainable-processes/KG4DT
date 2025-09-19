@@ -676,6 +676,7 @@ class ModelAgent:
         spcs = self.context["basic"]["spc"]
         codes = codes.replace("exp", "np.exp")
         codes = codes.replace("sum", "np.sum")
+        codes = codes.replace("maximum", "np.maximum")
         for i, s in enumerate(spcs):
             codes = re.sub(r"['\"]" + s + r"['\"]", f"{i}", codes)
         sentences = codes.split("\n")
@@ -881,6 +882,8 @@ class ModelAgent:
             model.add("", 0)
         model.add("# parameter", 1)
         model.add("p = list(param_dict.values())", 1)
+        # Replace missing operation parameter values (None) with 0.0 to ensure finite initial state
+        model.add("p = [0.0 if v is None else v for v in p]", 1)
 
         # Parameter setup
         keys = list(param_dict.keys())

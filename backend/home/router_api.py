@@ -34,11 +34,6 @@ def _load_case_context(case: str = "dushman", filename: str = "model_context.jso
         return json.load(f)
 
 # APIs for model
-# To remove.
-@blueprint.route("/api/model", methods=["GET"])
-def api_model():
-    entity = g.graphdb_handler.query(mode="sidebar")
-    return jsonify(entity)
 
 # API: post with JSON body to specify filename (extensible for future needs)
 # Body example:
@@ -64,18 +59,14 @@ def api_model_context():
 # APIs for structure
 
 # Get only the information block of a case context
-#    Body example (POST):
-@blueprint.route("/api/model/info", methods=["POST"])
+#    Body example (GET):
+@blueprint.route("/api/model/info", methods=["GET"])
 def api_model_information():
     context = request.get_json(silent=True) or {}
     info = g.graphdb_handler.query_info(context)
     return jsonify(info), 200
 
-# Get entity for the structure page (sidebar data)
-@blueprint.route("/api/structure", methods=["GET"])
-def api_structure():
-    entity = g.graphdb_handler.query(mode="sidebar")
-    return jsonify(entity)
+
 
 # Get structure context via POST with JSON body
 #    Body example:
@@ -98,12 +89,6 @@ def api_structure_context():
 
 
 # APIs for application
-# To Remove
-# Sidebar entity data used by application page
-@blueprint.route("/api/application", methods=["GET"])
-def api_application():
-    entity = g.graphdb_handler.query(mode="sidebar")
-    return jsonify(entity)
 
 
 # Case context via POST body
@@ -129,7 +114,7 @@ def api_application_context():
 # Knowledge Graph APIs
 # 1) Get entity used by knowledge graph with mainpage
 #    Example: /api/knowledge_graph/mainpage
-@blueprint.route("/api/knowledge_graph/mainpage", methods=["GET"])
+@blueprint.route("/api/knowledge_graph", methods=["GET"])
 def api_knowledge_graph_entity():
     entity = g.graphdb_handler.query(mode="mainpage")
     return jsonify(entity)
@@ -288,12 +273,12 @@ def api_solvent():
 
 
 #### Process Definition
-@blueprint.route("/api/model/var", methods=["GET", "POST"])
+@blueprint.route("/api/model/var", methods=["GET"])
 def api_model_var():
     response = g.graphdb_handler.query_var()
     return jsonify(response), 200
 
-@blueprint.route("/api/model/unit", methods=["GET", "POST"])
+@blueprint.route("/api/model/unit", methods=["GET"])
 def api_model_unit():
     response = g.graphdb_handler.query_unit()
     return jsonify(response), 200
@@ -495,7 +480,7 @@ def api_model_pheno_me():
             "detail": str(e)
         }), 500
 
-@blueprint.route("/api/model/pheno/param_law", methods=["POST", "GET"])
+@blueprint.route("/api/model/pheno/param_law", methods=["GET"])
 def api_model_param_law():
     """
     Retrieve parameter -> law mapping constrained by selected phenomena.
@@ -594,7 +579,107 @@ def api_model_param_law():
             "detail": str(e)
         }), 500
 
-@blueprint.route("/api/model/pheno/rxn", methods=["POST", "GET"])
+@blueprint.route("/api/model/pheno/rxn", methods=["GET"])
 def api_model_rxn():
-    rxns = g.graphdb_handler.query_rxn()
-    return jsonify(rxns)
+    """
+    Retrieve Reaction Phenomena.
+    - By default (no filters), returns a list of all ReactionPhenomenon names.
+    - Filters MUST be provided in the JSON body (GET). Query parameters are not supported.
+      Supported JSON keys (string or list of strings):
+        ac | accumulation: Accumulation name(s)
+        fp | flow_pattern: Flow pattern name(s)
+        mt | mass_transport: Mass transport phenomenon name(s)
+        me | mass_equilibrium: Mass equilibrium phenomenon name(s)
+        param | parameter: Parameter/ModelVariable name(s) present in the associated law
+        law | law_name | laws: Law name(s)
+        param_law: JSON mapping of { parameter: law } or list of such mappings
+
+    Examples:
+      - GET /api/model/pheno/rxn with empty body                -> all reactions
+      - POST /api/model/pheno/rxn with body {"ac": "Batch", "fp": "Well_Mixed"}
+      - POST body {"param": ["k_La", "Interfacial_Area"]}
+      - POST body {"law": ["Arrhenius_Rate_Law"]}
+      - POST body {"mt": ["Engulfment"], "me": ["Gas_Dissolution_Equilibrium"]}
+    """
+    try:
+        body = request.get_json(silent=True) or {}
+
+        # Reject use of query parameters for filters
+        forbidden_keys = [
+            "ac", "accumulation",
+            "fp", "flow_pattern",
+            "mt", "mass_transport",
+            "me", "mass_equilibrium",
+            "param", "parameter",
+            "law", "law_name", "laws",
+            "param_law",
+        ]
+        forbidden_in_args = {k: request.args.getlist(k) for k in forbidden_keys if request.args.getlist(k)}
+        if forbidden_in_args:
+            return jsonify({
+                "error": "Pass filters in the request JSON body. Query parameters are not supported for this endpoint.",
+                "forbidden_query_params": forbidden_in_args,
+                "hint": {
+                    "body": {"ac": "Batch", "fp": "Well_Mixed", "mt": ["Engulfment"], "me": ["Gas_Dissolution_Equilibrium"]}
+                }
+            }), 400
+
+        def _collect_list(primary, aliases=None):
+            aliases = aliases or []
+            # Only read from body
+            val = body.get(primary) if isinstance(body, dict) else None
+            if val is None:
+                for a in aliases:
+                    if isinstance(body, dict) and a in body:
+                        val = body.get(a)
+                        break
+            # Normalize to list
+            if val is None:
+                return []
+            if isinstance(val, list):
+                return [str(x).strip() for x in val if x is not None and str(x).strip() != ""]
+            return [str(val).strip()] if str(val).strip() != "" else []
+
+        filters = {}
+        ac_list = _collect_list("ac", ["accumulation"])  # Batch / Continuous
+        fp_list = _collect_list("fp", ["flow_pattern"])  # Flow pattern
+        mt_list = _collect_list("mt", ["mass_transport"])  # Mass transport phenomenon
+        me_list = _collect_list("me", ["mass_equilibrium"])  # Mass equilibrium phenomenon
+        param_list = _collect_list("param", ["parameter"])  # Variables used in laws
+        law_list = _collect_list("law", ["law_name", "laws"])  # Law names
+
+        if ac_list:
+            filters["ac"] = ac_list
+        if fp_list:
+            filters["fp"] = fp_list
+        if mt_list:
+            filters["mt"] = mt_list
+        if me_list:
+            filters["me"] = me_list
+        if param_list:
+            filters["param"] = param_list
+        if law_list:
+            filters["law"] = law_list
+
+        # param_law only from JSON body
+        if isinstance(body, dict) and "param_law" in body and body.get("param_law") is not None:
+            filters["param_law"] = body.get("param_law")
+
+        # If no filters, return the unfiltered list (backward compatible)
+        if not filters:
+            rxns = g.graphdb_handler.query_rxn()
+            return jsonify(rxns), 200
+
+        rxns = g.graphdb_handler.query_rxn(filters)
+        if not rxns:
+            return jsonify({
+                "error": "No reaction phenomenon matched the provided filters.",
+                "filters": filters
+            }), 404
+        return jsonify(rxns), 200
+
+    except Exception as e:
+        return jsonify({
+            "error": "Internal server error while processing the request.",
+            "detail": str(e)
+        }), 500
