@@ -95,7 +95,7 @@ class ModelCalibrationAgent:
                 f.write("    import os\n")
                 f.write("    import pickle\n")
                 f.write("    res = differential_evolution(calc_mse, "
-                        f"bounds={cal_param_bounds}, seed=42, maxiter=10, "
+                        f"bounds={cal_param_bounds}, seed=42, maxiter=40, "
                         "popsize=8, atol=1e-8, updating='deferred', workers=8, "
                         "polish=False, disp=True)\n")
                 f.write("    res_dict = {}\n")

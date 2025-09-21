@@ -52,95 +52,6 @@ class ScipyModel:
         return '\n'.join(self.codes)
 
 
-# TODO: Pyomo model
-# class PyomoModelCode:
-#     """Helper of ModelAgent for creating pyomo model codes."""
-
-#     def __init__(self):
-#         self.spaces = 4
-#         self.codes = []
-
-#     def add_header(self, model_context):
-#         self.codes.append('"""')
-#         self.codes.append("Pyomo Model Created by OntoMo")
-#         self.codes.append("")
-#         self.codes.append("Model Context:")
-#         self.codes.extend(json.dumps(model_context, indent=self.spaces).split("\n"))
-#         self.codes.append('"""')
-#         self.codes.append("")
-
-#     def add_lib(self):
-#         self.codes.append("import numpy as np")
-#         self.codes.append("from scipy.optimize import fsolve")
-#         self.codes.append("from pyomo import dae, environ")
-#         self.codes.append("")
-    
-#     def add_function(self, model_variable, input_symbols, code, level):
-#         function_head = f"calc_{model_variable.lower().replace('-', '_')}({', '.join(input_symbols)})"
-#         self.add(f'def {function_head}:', level)
-#         if "=" not in code.split("\n")[0] and ":" not in code.split("\n")[0]:
-#             code = code.split("\n")[1:] + code.split("\n")[:1]
-#         else:
-#             code = code.split("\n")
-#         for c in code[:-1]:
-#             self.add(c, level + 1)
-#         self.add("return " + code[-1].strip(), level + 1)
-#         return function_head
-
-#     def add(self, code, level):
-#         if isinstance(code, str):
-#             self.codes.append(" " * self.spaces * level + code)
-#         if isinstance(code, list):
-#             for c in code:
-#                 self.codes.append(" " * self.spaces * level + c)
-
-#     def get_model(self):
-#         return '\n'.join(self.codes)
-
-
-# TODO: Julia model
-# class JuliaModelCode:
-#     def __init__(self):
-#         self.spaces = 4
-#         self.codes = []
-
-#     def add_header(self, model_context):
-#         self.codes.append('"""')
-#         self.codes.append("Julia Model Created by OntoMo")
-#         self.codes.append("")
-#         self.codes.append("Model Context:")
-#         self.codes.extend(json.dumps(model_context, indent=self.spaces).split("\n"))
-#         self.codes.append('"""')
-#         self.codes.append("")
-
-#     def add_lib(self):
-#         self.codes.append("using DifferentialEquations")
-#         self.codes.append("using DataStructures")
-#         self.codes.append("")
-
-#     def add_function(self, model_variable, input_symbols, code, level):
-#         function_head = f"calc_{model_variable.lower().replace('-', '_')}({', '.join(input_symbols)})"
-#         self.add(f'def {function_head}:', level)
-#         if "=" not in code.split("\n")[0] and ":" not in code.split("\n")[0]:
-#             code = code.split("\n")[1:] + code.split("\n")[:1]
-#         else:
-#             code = code.split("\n")
-#         for c in code[:-1]:
-#             self.add(c, level + 1)
-#         self.add("return " + code[-1].strip(), level + 1)
-#         return function_head
-
-#     def add(self, code, level):
-#         if isinstance(code, str):
-#             self.codes.append(" " * self.spaces * level + code)
-#         if isinstance(code, list):
-#             for c in code:
-#                 self.codes.append(" " * self.spaces * level + c)
-
-#     def get_model(self):
-#         return '\n'.join(self.codes)
-
-
 class ModelAgent:
     """Model agent for generating model based on model context.
 
@@ -151,32 +62,32 @@ class ModelAgent:
         - mass equilibrium
         - reaction
     
-    For `bottom-up` modelling, the json structure is like:
+    The context json structure is like:
     ```
     {
-        "method": "bottom-up",
+        "type": "steady",
         "basic": {
-            "spcs":     [],
-            "rxns":     [],
-            "stms":     [],
-            "sols":     [],
-            "cats":     [],
+            "spc":     [],
+            "rxn":     [],
+            "stm":     {"stm1": {"spc": [], "rxn": []}},
+            "gas":     {"gas1": {"spc": []}},
+            "sld":     {"sld1": {"spc": []}},
         },
-        "description": {
-            "accum":    "",
-            "flow_pat": "",
-            "mt":       [],
-            "me":       [],
-            "rxn": {"rxn 1": []},
-            "param_law": {"param 1": ""},
+        "desc": {
+            "ac": "",
+            "fp": "",
+            "mt": [],
+            "me": [],
+            "rxn": {"rxn1": []},
+            "param_law": {"param1": ""},
         }, 
-        "information": {
-            "spc":  {"param 1": {}},
+        "info": {
+            "spc":  {"param1": {"spc1": ...}},
             "st":   {},
             "mt":   {},
-            "me":   {"gas 1": {"stm 1": {"param 1": []}}},
-            "stm":  {"stm 1": {"rxns": {}}},
-            "rxn":  {"rxn 1": {"param 1": {}}},
+            "me":   {"param1": {"gas1": {"stm1": ...}},
+            "stm":  {"param1": {"stm1": ...}},
+            "rxn":  {"param1": {"stm1": {"rxn1": ...}}},
         },
     }
     ```
@@ -778,10 +689,27 @@ class ModelAgent:
             def derivative(c, x):
             def boundary(c_a, c_b):
             res = solve_bvp(derivative, boundary, x_init, c_init)
-            return res.x, post_process(res.y)
+            res_dict = {"x": ..., "y": ...}
+            return res_dict
 
         Returns:
-            str: converted scipy model
+            str: converted scipy model, format of the scipy model return is given as
+                {
+                    "x": {
+                        "ind": ("param1", None, None, None, None),
+                        "val": [...],
+                    }, 
+                    "y": {
+                        "ind": [
+                            ("param2", None, None, None, None),
+                            ("param3", None, None, None, None)
+                        ],
+                        "val: [
+                            [...],
+                            [...]
+                        ]
+                    }
+                }
         """
 
         # Validate reaction
@@ -941,33 +869,20 @@ class ModelAgent:
         # Simulate function
         if self.context["type"] not in ["dynamic", "steady"]:
             raise ValueError(f"Unknown operation type: {self.context['type']}")
-        if self.context["type"] == "steady":
-            model.add("def simulate(param_dict):", 0)
-        if self.context["type"] == "dynamic":
-            model.add("def simulate(param_dict, op_data):", 0)
-            model.add("# dynamic parameter", 1)
-            dvar = self.entity["law"][ac_law]["diff_var"]
-            dsym = MMLExpression(self.entity["var"][dvar]["sym"]).to_numpy()
-            model.add(f"if '{dsym}' not in op_data:", 1)
-            model.add("return None", 2)
-            model.add("interps = {}", 1)
-            op_vars = [var for var in model_vars if self.entity["var"][var]["cls"]
-                == "OperationParameter" and not self.entity["var"][var]["dims"] 
-                and var != self.entity["law"][ac_law]["int_up_lim"]]
-            op_syms = [MMLExpression(
-                self.entity["var"][var]["sym"]).to_numpy() for var in op_vars]
-            for op_sym in op_syms:
-                model.add(f"interps['{op_sym}'] = "
-                    f"interp1d(op_data['{dsym}'], op_data['{op_sym}'])", 1)
-            model.add("", 0)
+        model.add("def simulate(param_dict):", 0)
         model.add("# parameter", 1)
         model.add("p = list(param_dict.values())", 1)
 
         # Parameter setup
+        op_vars = [v for v in model_vars if self.entity["var"][v]["cls"] 
+                    == "OperationParameter" and all([
+                    d is None for d in self.entity["var"][v]["dims"]])]
+        op_syms = [MMLExpression(self.entity["var"][v]
+                                 ["sym"]).to_numpy() for v in op_vars]
+        iul_var = self.entity["law"][ac_law]["int_up_lim"]
+        iul_sym = MMLExpression(self.entity["var"][iul_var]["sym"]).to_numpy()
         keys = list(param_dict.keys())
         for var in model_vars:
-            if self.context["type"] == "dynamic" and var in op_vars:
-                continue
             var_dict = self.entity["var"][var]
             sym = MMLExpression(var_dict["sym"]).to_numpy()
             dims = var_dict["dims"]
@@ -1066,10 +981,24 @@ class ModelAgent:
             if unit:
                 rto = self.entity["unit"][unit]["rto"]
                 intcpt = self.entity["unit"][unit]["intcpt"]
-                if rto:
-                    model.add(f"{sym} *= {rto}", 1)
-                if intcpt:
-                    model.add(f"{sym} += {intcpt}", 1)
+                if self.context["type"] == "dynamic" and var in op_vars:
+                    if rto:
+                        model.add(f"{sym} = [_{sym} * {rto} for _{sym} in {sym}]", 1)
+                    if intcpt:
+                        model.add(f"{sym} = [_{sym} + {intcpt} for _{sym} in {sym}]", 1)
+                else:
+                    if rto:
+                        model.add(f"{sym} *= {rto}", 1)
+                    if intcpt:
+                        model.add(f"{sym} += {intcpt}", 1)
+        model.add("", 0)
+
+        model.add("# dynamic parameter interpolation", 1)
+        if self.context["type"] == "dynamic":
+            model.add("interps = {}", 1)
+            for op_sym in op_syms:
+                if op_sym != iul_sym:
+                    model.add(f"interps['{op_sym}'] = interp1d({iul_sym}, {op_sym})", 1)
         model.add("", 0)
 
         # Flow pattern
@@ -1100,7 +1029,8 @@ class ModelAgent:
             model.add(f"def derivative({dsym}, {isym}):", 1)
             if self.context["type"] == "dynamic":
                 for op_sym in op_syms:
-                    model.add(f"{op_sym} = interps['{op_sym}']({dsym})", 2)
+                    if op_sym != iul_sym:
+                        model.add(f"{op_sym} = interps['{op_sym}']({dsym})", 2)
             if fia:
                 ivar_shape = (len(stms), len(spcs) * 2)
                 ivar_num = len(stms) * len(spcs) * 2
@@ -1321,11 +1251,13 @@ class ModelAgent:
                 fml = re.sub(f"\[([^\[\]]*{opt_sym}[^\[\]]*)\]", r"\1", fml)
             fml = re.sub("\[[^\[\]]*\]", "0", fml)
             vars = ac_vars + ac_opt_vars
+            vars = [var for var in vars if var != "Mass"]
             dims = ["Stream", "Species"]
             sizes = [dim2size[dim] for dim in dims]
             for ind in itertools.product(*[list(range(size)) for size in sizes]):
                 ind_isym = self.index_fml(isym, [ivar], dims, ind)
                 ind_fml = self.index_fml(fml, vars, dims, ind)
+                ind_fml = self.index_fml(ind_fml, ["Mass"], ["Stream"], ind[:1])
                 model.add(f"d{ind_isym} = {ind_fml}", 2)
             
             assoc_isyms = []
@@ -1340,6 +1272,7 @@ class ModelAgent:
                     fml = self.entity["law"][assoc_gas_law]["fml"]
                     fml = MMLExpression(fml).to_numpy()
                     vars = self.entity["law"][assoc_gas_law]["vars"]
+                    vars = [var for var in vars if var != "Mass"]
                     shape = f"{ngas, nstm, nspc}"
                     model.add(f"d{gas_isym} = np.zeros({shape}, dtype=np.float64)", 2)
                     gas_int_init_val = self.entity["law"][assoc_gas_law]["int_init_val"]
@@ -1357,6 +1290,8 @@ class ModelAgent:
                                 dims = ["Gas", "Stream", "Species"]
                                 ind = [i, j, k]
                                 ind_fml = self.index_fml(fml, vars, dims, ind)
+                                ind_fml = self.index_fml(
+                                    ind_fml, ["Mass"], ["Stream"], ind[1:2])
                                 model.add(f"d{gas_isym}[{i}, {j}, {k}] = {ind_fml}", 2)
                 if self.entity["law"][mt_law]["assoc_sld_law"]:
                     assoc_sld_law = self.entity["law"][mt_law]["assoc_sld_law"]
@@ -1366,6 +1301,7 @@ class ModelAgent:
                     fml = self.entity["law"][assoc_sld_law]["fml"]
                     fml = MMLExpression(fml).to_numpy()
                     vars = self.entity["law"][assoc_sld_law]["vars"]
+                    vars = [var for var in vars if var != "Mass"]
                     shape = f"{nsld, nstm, nspc}"
                     model.add(f"d{sld_isym} = np.zeros({shape}, dtype=np.float64)", 2)
                     sld_int_init_val = self.entity["law"][assoc_sld_law]["int_init_val"]
@@ -1383,6 +1319,8 @@ class ModelAgent:
                                 dims = ["Solid", "Stream", "Species"]
                                 ind = [i, j, k]
                                 ind_fml = self.index_fml(fml, vars, dims, ind)
+                                ind_fml = self.index_fml(
+                                    ind_fml, ["Mass"], ["Stream"], ind[1:2])
                                 model.add(f"d{sld_isym}[{i}, {j}, {k}] = {ind_fml}", 2)
         
         model.add("", 0)
@@ -1409,8 +1347,6 @@ class ModelAgent:
             model.add("", 0)
 
         # Solution
-        int_up_lim = self.entity["law"][ac_law]["int_up_lim"]
-        int_up_lim_sym = MMLExpression(self.entity["var"][int_up_lim]["sym"]).to_numpy()
         if fia:
             model.add(f"{isym} = np.zeros(({nstm * nspc * 2}, 201), dtype=np.float64)", 1)
             model.add(
@@ -1422,11 +1358,10 @@ class ModelAgent:
                       ", dtype=np.float64)])", 1)
             if self.context["type"] == "steady":
                 model.add(
-                    f"{dsym}_eval = "
-                    f"np.linspace(0, {int_up_lim_sym}, 201, dtype=np.float64)", 1
+                    f"{dsym}_eval = np.linspace(0, {iul_sym}, 201, dtype=np.float64)", 1
                 )
                 model.add(
-                    f"res = solve_ivp(derivative, (0, {int_up_lim_sym}), "
+                    f"res = solve_ivp(derivative, (0, {iul_sym}), "
                     f"{isym}_0, t_eval={dsym}_eval, method='LSODA', atol=1e-12)", 1
                 )
                 model.add(f"if res.success:", 1)
@@ -1434,11 +1369,10 @@ class ModelAgent:
                 model.add(f"return None", 3)
                 model.add(f"else:", 2)
             if self.context["type"] == "dynamic":
-                model.add(f"t_span = {int_up_lim_sym} / {self.dynamic_segs}", 1)
-                if self.context["desc"]["ac"] == "Continuous":
-                    model.add(f"res = [[0], [{isym}_0], q]", 1)
-                if self.context["desc"]["ac"] == "Batch":
-                    model.add(f"res = [[0], [{isym}_0], None]", 1)
+                model.add(f"t_span = {iul_sym}[-1] / {self.dynamic_segs}", 1)
+                model.add("res = {'x': [], 'y': []}", 1)
+                model.add("res['x'].append(0)", 1)
+                model.add(f"res['y'].append({isym}_0.round(6).tolist())", 1)
                 model.add(f"for i in range({self.dynamic_segs}):", 1)
                 model.add(
                     "seg_res = solve_ivp(derivative, (t_span * i, t_span * (i+1)), "
@@ -1447,9 +1381,12 @@ class ModelAgent:
                 )
                 model.add("if np.isnan(seg_res.y).any():", 2)
                 model.add("return None", 3)
-                model.add("res[0].append(seg_res.t[-1])", 2)
-                model.add("res[1].append(seg_res.y[-1])", 2)
-                model.add(f"{isym}_0 = seg_res.y[-1]", 2)
+                model.add("res['x'].append(t_span * (i+1))", 2)
+                model.add(f"res['y'].append(seg_res.y[:, -1].round(6).tolist())", 2)
+                model.add(f"{isym}_0 = seg_res.y[:, -1]", 2)
+                model.add(f"res['x'] = np.array(res['x'])", 1)
+                model.add(f"res['y'] = np.stack(res['y'], axis=-1)", 1)
+                
         
         if fia:
             model.add(f"return [res.x.round(6), res.y.round(6)[:{nstm * nspc}], q]", 3)
@@ -1457,16 +1394,17 @@ class ModelAgent:
             model.add(f"return None", 2)
         else:
             if self.context["type"] == "steady":
-                int_up_lim_unit = self.entity["var"][int_up_lim]["unit"]
-                if int_up_lim_unit and self.entity["unit"][int_up_lim_unit]["intcpt"]:
-                    intcpt = self.entity["unit"][int_up_lim_unit]["intcpt"]
+                iul_unit = self.entity["var"][iul_var]["unit"]
+                if iul_unit and self.entity["unit"][iul_unit]["intcpt"]:
+                    intcpt = self.entity["unit"][iul_unit]["intcpt"]
                     model.add(f"res.t -= {intcpt}", 3)
-                if int_up_lim_unit and self.entity["unit"][int_up_lim_unit]["rto"]:
-                    rto = self.entity["unit"][int_up_lim_unit]["rto"]
+                if iul_unit and self.entity["unit"][iul_unit]["rto"]:
+                    rto = self.entity["unit"][iul_unit]["rto"]
                     model.add(f"res.t /= {rto}", 3)
-                if self.context["desc"]["ac"] == "Continuous":
-                    model.add(f"return {{'x': {{'{dsym}': res.t.round(6).tolist()}}}}", 3)
-                    # model.add(f"return [res.t.round(6), res.y.round(6), q]", 3)
+                # TODO
+                # if self.context["desc"]["ac"] == "Continuous":
+                #     model.add(f"return {{'x': {{'{dsym}': res.t.round(6).tolist()}}}}", 3)
+                #     # model.add(f"return [res.t.round(6), res.y.round(6), q]", 3)
                 if self.context["desc"]["ac"] == "Batch":
                     model.add("res_dict = {"
                         "'x': {'ind': None, 'val': None}, "
@@ -1500,8 +1438,44 @@ class ModelAgent:
                 model.add(f"else:", 1)
                 model.add(f"return None", 2)
             if self.context["type"] == "dynamic":
-                model.add("res[0] = np.array(res[0]).round(6)", 1)
-                model.add("res[1] = np.stack(res[1]).round(6)", 1)
-                model.add("return res", 1)
+                iul_unit = self.entity["var"][iul_var]["unit"]
+                if iul_unit and self.entity["unit"][iul_unit]["intcpt"]:
+                    intcpt = self.entity["unit"][iul_unit]["intcpt"]
+                    model.add(f"res['x'] -= {intcpt}", 1)
+                if iul_unit and self.entity["unit"][iul_unit]["rto"]:
+                    rto = self.entity["unit"][iul_unit]["rto"]
+                    model.add(f"res['x'] /= {rto}", 1)
+                if self.context["desc"]["ac"] == "Batch":
+                    model.add("res_dict = {"
+                        "'x': {'ind': None, 'val': None}, "
+                        "'y': {'ind': [], 'val': []}, "
+                    "}", 1)
+                    model.add(f"res_dict['x']['ind'] = {(dvar, None, None, None, None)}", 1)
+                    model.add(f"res_dict['x']['val'] = res['x'].round(6).tolist()", 1)
+                    out_ind = 0
+                    for i, stm in enumerate(stms):
+                        for j, spc in enumerate(spcs):
+                            model.add(f"res_dict['y']['ind'].append({(ivar, None, stm, None, spc)})", 1)
+                            model.add(f"res_dict['y']['val'].append(res['y'][{out_ind}].round(6).tolist())", 1)
+                            out_ind += 1
+                    for j, spc in enumerate(spcs):
+                        model.add(f"res_dict['y']['ind'].append({(ivar, None, 'Overall', None, spc)})", 1)
+                        model.add(f"res_dict['y']['val'].append(res['y'][:{nstm*nspc}].reshape("
+                                  f"{nstm},{nspc},-1)[:,{j}].sum(axis=0).round(6).tolist())", 1)
+                    if assoc_gas_law and ngas:
+                        for i, gas in enumerate(gass):
+                            for j, spc in enumerate(self.context["basic"]["gas"][gas]["spc"]):
+                                model.add(f"res_dict['y']['ind'].append({(gvar, gas, None, None, spc)})", 1)
+                                model.add(f"res_dict['y']['val'].append(res['y'][{out_ind}].round(6).tolist())", 1)
+                                out_ind += 1
+                    if assoc_sld_law and nsld:
+                        for i, sld in enumerate(slds):
+                            for j, spc in enumerate(self.context["basic"]["sld"][sld]["spc"]):
+                                model.add(f"res_dict['y']['ind'].append({(svar, sld, None, None, spc)})", 1)
+                                model.add(f"res_dict['y']['val'].append(res['y'][{out_ind}].round(6).tolist())", 1)
+                                out_ind += 1
+                    model.add("return res_dict", 1)
         
+        print(model.get_model())
+
         return model.get_model()

@@ -975,7 +975,7 @@
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Temperature"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Henry&apos;s_Constant"/>
         <isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dissolution_Equilibrium"/>
-        <hasFormula rdf:parseType="Literal"><math><mrow><mfrac><mrow><mi>P</mi><msub><mi>x</mi><mtext>g</mtext></msub></mrow><mrow><mi>R</mi><mi>T</mi><msub><mi>k</mi><mtext>H</mtext></msub></mrow></mfrac></mrow></math></hasFormula>
+        <hasFormula rdf:parseType="Literal"><math><mrow><mfrac><mrow><mi>P</mi><msub><mi>x</mi><mtext>g</mtext></msub></mrow><mrow><mn>1000</mn><mi>R</mi><mi>T</mi><msub><mi>k</mi><mtext>H</mtext></msub></mrow></mfrac></mrow></math></hasFormula>
     </owl:NamedIndividual>
     
 
@@ -1136,14 +1136,16 @@
         <hasIntegralModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass"/>
         <hasIntegralUpperLimit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Batch_Time"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Batch_Time"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Density"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Initial_Mass"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass"/>
         <hasOptionalModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Volumetric_Mass_Transfer_Rate"/>
         <hasOptionalModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Molecular_Weight"/>
         <hasOptionalModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Reaction_Rate"/>
         <hasOptionalModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Solid-Liquid_Volumetric_Mass_Transfer_Rate"/>
         <hasOptionalModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Stoichiometric_Coefficient"/>
         <isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Batch"/>
-        <hasFormula rdf:parseType="Literal"><math><mrow><mrow><mo>[</mo><mrow><mo>matmul</mo><msub><mi>r</mi><mtext>r</mtext></msub><mi>ν</mi></mrow><mi>M</mi><mo>]</mo></mrow><mo>+</mo><mrow><mo>[</mo><mrow><mo>∑</mo><msub><mi>r</mi><mtext>t,g</mtext></msub></mrow><mi>M</mi><mo>]</mo></mrow><mo>+</mo><mrow><mo>[</mo><mrow><mo>∑</mo><msub><mi>r</mi><mtext>t,s</mtext></msub></mrow><mi>M</mi><mo>]</mo></mrow></mrow></math></hasFormula>
+        <hasFormula rdf:parseType="Literal"><math><mrow><mfrac><mrow><mo>∑</mo><mi>m</mi></mrow><mi>ρ</mi></mfrac><mrow><mo>(</mo><mrow><mo>[</mo><mrow><mo>matmul</mo><msub><mi>r</mi><mtext>r</mtext></msub><mi>ν</mi></mrow><mi>M</mi><mo>]</mo></mrow><mo>+</mo><mrow><mo>[</mo><mrow><mo>∑</mo><msub><mi>r</mi><mtext>t,g</mtext></msub></mrow><mi>M</mi><mo>]</mo></mrow><mo>+</mo><mrow><mo>[</mo><mrow><mo>∑</mo><msub><mi>r</mi><mtext>t,s</mtext></msub></mrow><mi>M</mi><mo>]</mo></mrow><mo>)</mo></mrow></mrow></math></hasFormula>
     </owl:NamedIndividual>
     
 
@@ -1190,11 +1192,13 @@
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Law"/>
         <hasIntegralInitialValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Initial_Mass_Solid"/>
         <hasIntegralModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Solid"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Density"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Initial_Mass_Solid"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Molecular_Weight"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Solid-Liquid_Volumetric_Mass_Transfer_Rate"/>
         <isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Solid-Liquid_Mass_Transfer"/>
-        <hasFormula rdf:parseType="Literal"><math><mrow><mo>-</mo><mrow><mo>∑</mo><msub><mi>r</mi><mtext>t,s</mtext></msub></mrow><mi>M</mi></mrow></math></hasFormula>
+        <hasFormula rdf:parseType="Literal"><math><mrow><mo>-</mo><mfrac><mrow><mo>∑</mo><mi>m</mi></mrow><mi>ρ</mi></mfrac><mrow><mo>(</mo><mrow><mo>∑</mo><msub><mi>r</mi><mtext>t,s</mtext></msub></mrow><mi>M</mi><mo>)</mo></mrow></mrow></math></hasFormula>
     </owl:NamedIndividual>
     
 
@@ -1241,10 +1245,12 @@
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Used_Gas_Derivative_Law_with_Gas-Liquid_Mass_Transfer">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Law"/>
         <hasIntegralModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Used_Gas"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Density"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Volumetric_Mass_Transfer_Rate"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Molecular_Weight"/>
         <isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Mass_Transfer"/>
-        <hasFormula rdf:parseType="Literal"><math><mrow><mrow><mo>∑</mo><msub><mi>r</mi><mtext>t,g</mtext></msub></mrow><mi>M</mi></mrow></math></hasFormula>
+        <hasFormula rdf:parseType="Literal"><math><mrow><mfrac><mrow><mo>∑</mo><mi>m</mi></mrow><mi>ρ</mi></mfrac><mrow><mo>(</mo><mrow><mo>∑</mo><msub><mi>r</mi><mtext>t,g</mtext></msub></mrow><mi>M</mi><mo>)</mo></mrow></mrow></math></hasFormula>
     </owl:NamedIndividual>
     
 
