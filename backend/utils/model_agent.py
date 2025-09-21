@@ -1476,6 +1476,4 @@ class ModelAgent:
                                 out_ind += 1
                     model.add("return res_dict", 1)
         
-        print(model.get_model())
-
         return model.get_model()

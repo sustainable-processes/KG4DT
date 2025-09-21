@@ -83,7 +83,7 @@ def api_structure():
 #      "case": "dushman",
 #      "postfix": "model_context.json",   // optional
 #    }
-@blueprint.route("/api/structure/context", methods=["GET"])
+@blueprint.route("/api/structure/context", methods=["POST"])
 def api_structure_context():
     data = request.get_json(silent=True) or {}
     case = data.get("case", "dushman")
@@ -288,12 +288,12 @@ def api_solvent():
 
 
 #### Process Definition
-@blueprint.route("/api/model/var", methods=["GET", "POST"])
+@blueprint.route("/api/model/var", methods=["GET"])
 def api_model_var():
     response = g.graphdb_handler.query_var()
     return jsonify(response), 200
 
-@blueprint.route("/api/model/unit", methods=["GET", "POST"])
+@blueprint.route("/api/model/unit", methods=["GET"])
 def api_model_unit():
     response = g.graphdb_handler.query_unit()
     return jsonify(response), 200
@@ -495,7 +495,7 @@ def api_model_pheno_me():
             "detail": str(e)
         }), 500
 
-@blueprint.route("/api/model/pheno/param_law", methods=["POST", "GET"])
+@blueprint.route("/api/model/pheno/param_law", methods=["POST"])
 def api_model_param_law():
     """
     Retrieve parameter -> law mapping constrained by selected phenomena.
@@ -594,7 +594,7 @@ def api_model_param_law():
             "detail": str(e)
         }), 500
 
-@blueprint.route("/api/model/pheno/rxn", methods=["POST", "GET"])
+@blueprint.route("/api/model/pheno/rxn", methods=["GET"])
 def api_model_rxn():
     rxns = g.graphdb_handler.query_rxn()
     return jsonify(rxns)

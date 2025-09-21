@@ -305,12 +305,26 @@ def api_model_calibrate():
           ...
         ],
         "val": [
-          [1, 100, 0.5, ...],
           ...
         ]
       },
+      "reals: {
+        "ind": [
+          ["Initial_Mass", null, "Stream1", null, "water"],
+          ...
+        ],
+        "val": [
+          ...
+        ]
+      }
       "cal_params": {
-        "ind": 
+        "ind": [
+          ["Activation_Energy", null, "Stream1", "A + B > C", null],
+          ...
+        ],
+        "val": [
+          ...
+        ]
       }
     }
 
@@ -318,29 +332,14 @@ def api_model_calibrate():
     [
       {
         "x": {
-          "var": "Time",
-          "mml": "<math><mrow><mi>t</mi></mrow></math>",
-          "unit": "<math><mrow><mtext>s</mtext></mrow></math>",
-          "stm": null,
-          "gas": null,
-          "sld": null,
-          "spc": null,
-          "data": [...]
+          "ind": [...],
+          "val": [...]
         },
-        "y": [
-          {
-            "var": "Mass",
-            "mml": "<math><mrow><mi>m</mi></mrow></math>",
-            "unit": "<math><mrow><mtext>kg</mtext></mrow></math>",
-            "stm": "Stream1",
-            "gas": null,
-            "sld": null,
-            "spc": "water",
-            "data": [...]
-          },
-          ...
-        ]
-      }
+        "y": {
+          "ind": [[...], [...], ...],
+          "val": [[...], [...], ...],
+      },
+      ...
     ]
     """
     try:
