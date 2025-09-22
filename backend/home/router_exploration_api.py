@@ -26,32 +26,96 @@ def api_model_law():
 
 @blueprint.route("/api/model/sym", methods=["GET"])
 def api_model_symbol():
-    """Return the symbol of a unit by its local name via SPARQL ontomo:hasSymbol.
-    Example: /api/model/symbol?unit=Pa
-    Response: {"unit": "Pa", "symbol": "<math>...<mtext>Pa</mtext>...</math>"}
+    """Resolve the symbols for one or more Unit individuals.
+
+    Request examples:
+      - POST body: {"unit": "Pa"}
+      - POST body: {"units": ["Pa", "m", "s"]}
+      - GET with JSON body: {"units": ["Pa", "m"]}
+      - GET with query params (fallback): /api/model/symbol?unit=Pa&unit=m or /api/model/symbol?unit=Pa,m
+
+    Response examples:
+      - {"symbols": {"Pa": "<math>...Pa...</math>"}}
+      - {"symbols": {"Pa": "<math>...Pa...</math>", "m": "<math>...m...</math>", "s": null}, "not_found": ["s"]}
     """
     try:
-        unit = request.args.get("unit")
-        if unit is None or str(unit).strip() == "":
+        payload = request.get_json(silent=True) or {}
+
+        units = []
+
+        def _add(val):
+            if val is None:
+                return
+            if isinstance(val, list):
+                for x in val:
+                    _add(x)
+            else:
+                s = str(val).strip()
+                if s:
+                    units.append(s)
+
+        # Prefer JSON body
+        if isinstance(payload, dict):
+            if "units" in payload:
+                _add(payload.get("units"))
+            if "unit" in payload:
+                _add(payload.get("unit"))
+
+        # Fallback to query params when body is empty or fields missing
+        if not units:
+            lst = request.args.getlist("unit")
+            if not lst:
+                lst = request.args.getlist("units")
+            if not lst:
+                s = request.args.get("unit") or request.args.get("units")
+                if s:
+                    lst = [p.strip() for p in s.split(",") if p.strip()]
+            _add(lst)
+
+        # Deduplicate while preserving order
+        seen = set()
+        uniq_units = []
+        for u in units:
+            if u not in seen:
+                seen.add(u)
+                uniq_units.append(u)
+
+        if not uniq_units:
             return jsonify({
-                "error": "Missing required query parameter 'unit'.",
-                "hint": "/api/model/symbol?unit=Pa"
+                "error": "No 'unit' or 'units' provided.",
+                "hint": {"POST": {"units": ["Pa", "m"]}}
             }), 400
 
-        sym = g.graphdb_handler.query_symbol(unit)
-        if sym is None or sym == "":
+        symbols = {}
+        not_found = []
+        for u in uniq_units:
+            try:
+                sym = g.graphdb_handler.query_symbol(u)
+            except Exception:
+                sym = None
+            if sym:
+                symbols[u] = sym
+            else:
+                symbols[u] = None
+                not_found.append(u)
+
+        if len(not_found) == len(uniq_units):
             return jsonify({
-                "error": "No symbol found for the specified unit.",
-                "unit": unit
+                "error": "No symbols found for the requested unit(s).",
+                "units": uniq_units
             }), 404
 
-        return jsonify({"sym": sym}), 200
+        resp = {"symbols": symbols}
+        if not_found:
+            resp["not_found"] = not_found
+        return jsonify(resp), 200
 
     except Exception as e:
         return jsonify({
             "error": "Internal server error while processing the request.",
             "detail": str(e)
         }), 500
+
 
 
 @blueprint.route("/api/knowledge_graph/triplets", methods=["GET"])
