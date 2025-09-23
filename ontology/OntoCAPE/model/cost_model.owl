@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE rdf:RDF [
-  <!ENTITY root "file:/ontology/">
+  <!ENTITY root "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/">
   <!ENTITY owl  "http://www.w3.org/2002/07/owl">
   <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
   <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">

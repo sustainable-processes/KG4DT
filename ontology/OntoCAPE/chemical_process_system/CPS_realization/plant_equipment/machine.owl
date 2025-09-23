@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE rdf:RDF [
-  <!ENTITY root "file:/ontology/">
+  <!ENTITY root "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/">
   <!ENTITY owl  "http://www.w3.org/2002/07/owl">
   <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema">
   <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns">
@@ -14,7 +14,7 @@
 
 
 <rdf:RDF
-    xmlns:p1="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/apparatus/machine.owl#"
+    xmlns:p1="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/chemical_process_system/CPS_realization/apparatus/machine.owl#"
     xmlns:rdf="&rdf;#"
     xmlns:xsd="&xsd;#"
     xmlns:rdfs="&rdfs;#"
@@ -43,7 +43,7 @@ The following classes and relations from other ontology modules are used within 
     >2.0</owl:versionInfo>
     <owl:imports rdf:resource="&fixture;"/>
   </owl:Ontology>
-  <rdfs:Class rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/apparatus/machine.owl#Pump"/>
+  <rdfs:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/chemical_process_system/CPS_realization/apparatus/machine.owl#Pump"/>
   <owl:Class rdf:ID="Pump">
     <rdfs:subClassOf rdf:resource="&plant;#Machine"/>
     <rdfs:subClassOf>
@@ -55,8 +55,8 @@ The following classes and relations from other ontology modules are used within 
       </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
-  <owl:ObjectProperty rdf:about="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/apparatus/machine.owl#hasPumpHead">
-    <rdfs:domain rdf:resource="file:/ontology/OntoCAPE/chemical_process_system/CPS_realization/apparatus/machine.owl#Pump"/>
+  <owl:ObjectProperty rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/chemical_process_system/CPS_realization/apparatus/machine.owl#hasPumpHead">
+    <rdfs:domain rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/chemical_process_system/CPS_realization/apparatus/machine.owl#Pump"/>
     <rdfs:subPropertyOf rdf:resource="&system;#hasCharacteristic"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="&machine;#hasPumpHead">

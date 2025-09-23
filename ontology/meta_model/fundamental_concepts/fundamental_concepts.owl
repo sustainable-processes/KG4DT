@@ -8,14 +8,14 @@
     <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
-    <!ENTITY fundamental_concepts "file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#" >
+    <!ENTITY fundamental_concepts "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#" >
 ]>
 
 
-<rdf:RDF xmlns="file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
-     xml:base="file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl"
+<rdf:RDF xmlns="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
+     xml:base="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     xmlns:fundamental_concepts="file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
+     xmlns:fundamental_concepts="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#"
      xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
      xmlns:terms="http://purl.org/dc/terms/"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
@@ -57,7 +57,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasOrigin -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasOrigin -->
 
     <owl:ObjectProperty rdf:about="#hasOrigin">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -68,7 +68,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasTarget -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasTarget -->
 
     <owl:ObjectProperty rdf:about="#hasTarget">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -79,7 +79,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasTargetObject -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#hasTargetObject -->
 
     <owl:ObjectProperty rdf:about="#hasTargetObject">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -91,7 +91,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#inter-objectRelation -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#inter-objectRelation -->
 
     <owl:ObjectProperty rdf:about="#inter-objectRelation">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -102,7 +102,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#involves -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#involves -->
 
     <owl:ObjectProperty rdf:about="#involves">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -120,7 +120,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#involvesObject -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#involvesObject -->
 
     <owl:ObjectProperty rdf:about="#involvesObject">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -133,7 +133,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isInvolvedInN-aryRelation -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isInvolvedInN-aryRelation -->
 
     <owl:ObjectProperty rdf:about="#isInvolvedInN-aryRelation">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -144,7 +144,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isOfType -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isOfType -->
 
     <owl:ObjectProperty rdf:about="#isOfType">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -154,7 +154,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isOriginOf -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isOriginOf -->
 
     <owl:ObjectProperty rdf:about="#isOriginOf">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -166,7 +166,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isTargetOf -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#isTargetOf -->
 
     <owl:ObjectProperty rdf:about="#isTargetOf">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -178,7 +178,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#object-featureRelation -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#object-featureRelation -->
 
     <owl:ObjectProperty rdf:about="#object-featureRelation">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -200,7 +200,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#relationAttribute -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#relationAttribute -->
 
     <owl:DatatypeProperty rdf:about="#relationAttribute">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -221,7 +221,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#CoequalN-aryRelation -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#CoequalN-aryRelation -->
 
     <owl:Class rdf:about="#CoequalN-aryRelation">
         <rdfs:subClassOf rdf:resource="#RelationClass"/>
@@ -244,7 +244,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#DirectedN-aryRelation -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#DirectedN-aryRelation -->
 
     <owl:Class rdf:about="#DirectedN-aryRelation">
         <owl:equivalentClass>
@@ -324,7 +324,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#FeatureSpace -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#FeatureSpace -->
 
     <owl:Class rdf:about="#FeatureSpace">
         <owl:equivalentClass>
@@ -344,7 +344,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#NonExhaustiveValueSet -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#NonExhaustiveValueSet -->
 
     <owl:Class rdf:about="#NonExhaustiveValueSet">
         <rdfs:subClassOf rdf:resource="#FeatureSpace"/>
@@ -356,7 +356,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#Object -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#Object -->
 
     <owl:Class rdf:about="#Object">
         <rdfs:subClassOf rdf:resource="&owl;Thing"/>
@@ -393,7 +393,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#RelationClass -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#RelationClass -->
 
     <owl:Class rdf:about="#RelationClass">
         <owl:equivalentClass>
@@ -458,7 +458,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#UniqueOriginN-aryRelation -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#UniqueOriginN-aryRelation -->
 
     <owl:Class rdf:about="#UniqueOriginN-aryRelation">
         <rdfs:subClassOf rdf:resource="#DirectedN-aryRelation"/>
@@ -474,7 +474,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#ValuePartition -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#ValuePartition -->
 
     <owl:Class rdf:about="#ValuePartition">
         <rdfs:subClassOf rdf:resource="#FeatureSpace"/>
@@ -485,7 +485,7 @@
     
 
 
-    <!-- file:/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#ValueSet -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/meta_model/fundamental_concepts/fundamental_concepts.owl#ValueSet -->
 
     <owl:Class rdf:about="#ValueSet">
         <rdfs:subClassOf rdf:resource="#FeatureSpace"/>

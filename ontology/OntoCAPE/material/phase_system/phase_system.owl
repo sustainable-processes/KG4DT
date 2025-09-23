@@ -7,29 +7,29 @@
     <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
-    <!ENTITY system "file:/ontology/OntoCAPE/upper_level/system.owl#" >
-    <!ENTITY network_system "file:/ontology/OntoCAPE/upper_level/network_system.owl#" >
-    <!ENTITY tensor_quantity "file:/ontology/OntoCAPE/upper_level/tensor_quantity.owl#" >
-    <!ENTITY substance "file:/ontology/OntoCAPE/material/substance/substance.owl#" >
-    <!ENTITY phase_system "file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#" >
-    <!ENTITY reaction_mechanism "file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#" >
-    <!ENTITY physical_dimension "file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#" >
-    <!ENTITY der_dim "file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#" >
+    <!ENTITY system "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#" >
+    <!ENTITY network_system "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/network_system.owl#" >
+    <!ENTITY tensor_quantity "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/tensor_quantity.owl#" >
+    <!ENTITY substance "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/substance/substance.owl#" >
+    <!ENTITY phase_system "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#" >
+    <!ENTITY reaction_mechanism "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#" >
+    <!ENTITY physical_dimension "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#" >
+    <!ENTITY der_dim "https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#" >
 ]>
 
 
-<rdf:RDF xmlns="file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#"
-     xml:base="file:/ontology/OntoCAPE/material/phase_system/phase_system.owl"
-     xmlns:tensor_quantity="file:/ontology/OntoCAPE/upper_level/tensor_quantity.owl#"
-     xmlns:der_dim="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#"
-     xmlns:phase_system="file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#"
+<rdf:RDF xmlns="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#"
+     xml:base="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl"
+     xmlns:tensor_quantity="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/tensor_quantity.owl#"
+     xmlns:der_dim="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#"
+     xmlns:phase_system="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     xmlns:substance="file:/ontology/OntoCAPE/material/substance/substance.owl#"
-     xmlns:reaction_mechanism="file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#"
-     xmlns:system="file:/ontology/OntoCAPE/upper_level/system.owl#"
+     xmlns:substance="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/substance/substance.owl#"
+     xmlns:reaction_mechanism="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#"
+     xmlns:system="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#"
      xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
-     xmlns:network_system="file:/ontology/OntoCAPE/upper_level/network_system.owl#"
-     xmlns:physical_dimension="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#"
+     xmlns:network_system="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/network_system.owl#"
+     xmlns:physical_dimension="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:terms="http://purl.org/dc/terms/"
@@ -40,38 +40,38 @@
             >The module &#39;phase_system&#39; models the thermodynamic behavior of materials.
 The &#39;phase_system&#39; module uses the following classes, relations, and individuals from other ontology modules:
 
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/network_system.owl#Connection&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ChemicalReaction&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#ExtensibleValueSet&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#PhysicalQuantity&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#PropertySet&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#System&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/material/substance/substance.owl#ChemicalComponent&quot;/&gt; 
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/network_system.owl#Connection&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ChemicalReaction&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#ExtensibleValueSet&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#PhysicalQuantity&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#PropertySet&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#System&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/substance/substance.owl#ChemicalComponent&quot;/&gt; 
 
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#comprisesDirectly&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#hasCharacteristic&quot;/&gt;    
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#hasDimension&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#hasDirectSubsystem&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#hasProperty&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isComposedOfSubsystem&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isDirectlyConnectedTo&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isDirectlyRelatedTo&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isExclusivelySubsystemOf&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#isPropertyOf&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#comprisesDirectly&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#hasCharacteristic&quot;/&gt;    
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#hasDimension&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#hasDirectSubsystem&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#hasProperty&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#isComposedOfSubsystem&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#isDirectlyConnectedTo&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#isDirectlyRelatedTo&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#isExclusivelySubsystemOf&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#isPropertyOf&quot;/&gt;
 
-&lt;der_dim:Mechanics           rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#pressure&quot;/&gt;
-&lt;phys_dim:BaseDimension      rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#thermodynamic_temperature&quot;/&gt;
-&lt;phys_dim:DerivedDimension   rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#mass_fraction&quot;/&gt;
-&lt;phys_dim:DerivedDimension   rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molar_fraction&quot;/&gt;
-&lt;phys_dim:DerivedDimension   rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#volume_fraction&quot;/&gt;</rdfs:comment>
+&lt;der_dim:Mechanics           rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#pressure&quot;/&gt;
+&lt;phys_dim:BaseDimension      rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#thermodynamic_temperature&quot;/&gt;
+&lt;phys_dim:DerivedDimension   rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#mass_fraction&quot;/&gt;
+&lt;phys_dim:DerivedDimension   rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molar_fraction&quot;/&gt;
+&lt;phys_dim:DerivedDimension   rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#volume_fraction&quot;/&gt;</rdfs:comment>
 <terms:license
             >Copyright (C) [2009] [Andreas Wiesner]
                 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
                 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
                 You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.
 </terms:license>
-        <owl:imports rdf:resource="file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl"/>
-        <owl:imports rdf:resource="file:/ontology/OntoCAPE/upper_level/network_system.owl"/>
+        <owl:imports rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/substance/reaction_mechanism.owl"/>
+        <owl:imports rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/network_system.owl"/>
     </owl:Ontology>
     
 
@@ -87,7 +87,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#hasReaction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#hasReaction -->
 
     <owl:ObjectProperty rdf:about="#hasReaction">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -105,7 +105,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#hasStateOfAggregation -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#hasStateOfAggregation -->
 
     <owl:ObjectProperty rdf:about="#hasStateOfAggregation">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
@@ -118,7 +118,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#has_composition -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#has_composition -->
 
     <owl:ObjectProperty rdf:about="#has_composition">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -129,7 +129,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#has_physical_context -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#has_physical_context -->
 
     <owl:ObjectProperty rdf:about="#has_physical_context">
         <rdfs:comment rdf:datatype="&xsd;string"
@@ -141,7 +141,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#representsOccurenceOf -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#representsOccurenceOf -->
 
     <owl:ObjectProperty rdf:about="#representsOccurenceOf">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
@@ -160,55 +160,55 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#comprisesDirectly -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#comprisesDirectly -->
 
     <owl:ObjectProperty rdf:about="&system;comprisesDirectly"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#hasCharacteristic -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#hasCharacteristic -->
 
     <owl:ObjectProperty rdf:about="&system;hasCharacteristic"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#hasDimension -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#hasDimension -->
 
     <owl:ObjectProperty rdf:about="&system;hasDimension"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#hasProperty -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#hasProperty -->
 
     <owl:ObjectProperty rdf:about="&system;hasProperty"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isComposedOfSubsystem -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#isComposedOfSubsystem -->
 
     <owl:ObjectProperty rdf:about="&system;isComposedOfSubsystem"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isDirectlyConnectedTo -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#isDirectlyConnectedTo -->
 
     <owl:ObjectProperty rdf:about="&system;isDirectlyConnectedTo"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isDirectlyRelatedTo -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#isDirectlyRelatedTo -->
 
     <owl:ObjectProperty rdf:about="&system;isDirectlyRelatedTo"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isExclusivelySubsystemOf -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#isExclusivelySubsystemOf -->
 
     <owl:ObjectProperty rdf:about="&system;isExclusivelySubsystemOf"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#isPropertyOf -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#isPropertyOf -->
 
     <owl:ObjectProperty rdf:about="&system;isPropertyOf"/>
     
@@ -225,7 +225,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#catalyst_required -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#catalyst_required -->
 
     <owl:DatatypeProperty rdf:about="#catalyst_required">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
@@ -236,7 +236,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#stoichiometric_value -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#stoichiometric_value -->
 
     <owl:DatatypeProperty rdf:about="#stoichiometric_value">
         <rdfs:label rdf:datatype="&xsd;string"
@@ -257,7 +257,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#Activity -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#Activity -->
 
     <owl:Class rdf:about="#Activity">
         <rdfs:subClassOf rdf:resource="#PhaseComponentProperty"/>
@@ -272,7 +272,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#ActivityCoefficient -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#ActivityCoefficient -->
 
     <owl:Class rdf:about="#ActivityCoefficient">
         <rdfs:subClassOf rdf:resource="#PhaseComponentProperty"/>
@@ -286,7 +286,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#Composition -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#Composition -->
 
     <owl:Class rdf:about="#Composition">
         <rdfs:subClassOf rdf:resource="&system;PropertySet"/>
@@ -309,7 +309,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#Density -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#Density -->
 
     <owl:Class rdf:about="#Density">
         <rdfs:subClassOf rdf:resource="#ThermodynamicStateProperty"/>
@@ -324,7 +324,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#DiffusionCoefficient -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#DiffusionCoefficient -->
 
     <owl:Class rdf:about="#DiffusionCoefficient">
         <rdfs:subClassOf rdf:resource="#TransportPhenomenaProperty"/>
@@ -336,7 +336,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#DynamicViscosity -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#DynamicViscosity -->
 
     <owl:Class rdf:about="#DynamicViscosity">
         <rdfs:subClassOf rdf:resource="#TransportPhenomenaProperty"/>
@@ -347,7 +347,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#Fugacity -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#Fugacity -->
 
     <owl:Class rdf:about="#Fugacity">
         <rdfs:subClassOf rdf:resource="#PhaseComponentProperty"/>
@@ -360,7 +360,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#FugacityCoefficient -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#FugacityCoefficient -->
 
     <owl:Class rdf:about="#FugacityCoefficient">
         <rdfs:subClassOf rdf:resource="#PhaseComponentProperty"/>
@@ -372,7 +372,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#IntensiveProperty -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#IntensiveProperty -->
 
     <owl:Class rdf:about="#IntensiveProperty">
         <rdfs:subClassOf rdf:resource="&system;PhysicalQuantity"/>
@@ -382,7 +382,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#IntensiveThermodynamicStateVariable -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#IntensiveThermodynamicStateVariable -->
 
     <owl:Class rdf:about="#IntensiveThermodynamicStateVariable">
         <owl:equivalentClass>
@@ -400,7 +400,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#Mass-BasedPhaseRatio -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#Mass-BasedPhaseRatio -->
 
     <owl:Class rdf:about="#Mass-BasedPhaseRatio">
         <rdfs:subClassOf rdf:resource="#PhaseRatio"/>
@@ -412,7 +412,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#MassFraction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#MassFraction -->
 
     <owl:Class rdf:about="#MassFraction">
         <rdfs:subClassOf rdf:resource="#PhaseComponentFraction"/>
@@ -430,7 +430,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#MolarPhaseRatio -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#MolarPhaseRatio -->
 
     <owl:Class rdf:about="#MolarPhaseRatio">
         <rdfs:subClassOf rdf:resource="#PhaseRatio"/>
@@ -441,7 +441,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#Molarity -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#Molarity -->
 
     <owl:Class rdf:about="#Molarity">
         <rdfs:subClassOf rdf:resource="#Volume-BasedConcentration"/>
@@ -453,7 +453,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#MoleFraction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#MoleFraction -->
 
     <owl:Class rdf:about="#MoleFraction">
         <rdfs:subClassOf rdf:resource="#PhaseComponentFraction"/>
@@ -470,7 +470,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#MultiphaseSystem -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#MultiphaseSystem -->
 
     <owl:Class rdf:about="#MultiphaseSystem">
         <owl:equivalentClass>
@@ -510,7 +510,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PartialDensity -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PartialDensity -->
 
     <owl:Class rdf:about="#PartialDensity">
         <rdfs:subClassOf rdf:resource="#Volume-BasedConcentration"/>
@@ -521,7 +521,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PartialMolarEnthalpy -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PartialMolarEnthalpy -->
 
     <owl:Class rdf:about="#PartialMolarEnthalpy">
         <rdfs:subClassOf rdf:resource="#PartialMolarQuantity"/>
@@ -532,7 +532,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PartialMolarQuantity -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PartialMolarQuantity -->
 
     <owl:Class rdf:about="#PartialMolarQuantity">
         <rdfs:subClassOf rdf:resource="#PhaseComponentProperty"/>
@@ -543,7 +543,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PartialMolarVolume -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PartialMolarVolume -->
 
     <owl:Class rdf:about="#PartialMolarVolume">
         <rdfs:subClassOf rdf:resource="#PartialMolarQuantity"/>
@@ -553,7 +553,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseComponent -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseComponent -->
 
     <owl:Class rdf:about="#PhaseComponent">
         <rdfs:subClassOf rdf:resource="&system;System"/>
@@ -605,7 +605,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseComponentConcentration -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseComponentConcentration -->
 
     <owl:Class rdf:about="#PhaseComponentConcentration">
         <rdfs:subClassOf rdf:resource="#PhaseComponentProperty"/>
@@ -615,7 +615,7 @@ The &#39;phase_system&#39; module uses the following classes, relations, and ind
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseComponentFraction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseComponentFraction -->
 
     <owl:Class rdf:about="#PhaseComponentFraction">
         <rdfs:subClassOf rdf:resource="#PhaseComponentConcentration"/>
@@ -627,7 +627,7 @@ Concretely, a PhaseComponentFraction subsumes the following concentration measur
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseComponentProperty -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseComponentProperty -->
 
     <owl:Class rdf:about="#PhaseComponentProperty">
         <owl:equivalentClass>
@@ -656,7 +656,7 @@ Concretely, a PhaseComponentFraction subsumes the following concentration measur
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseEquilibriumRatio -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseEquilibriumRatio -->
 
     <owl:Class rdf:about="#PhaseEquilibriumRatio">
         <rdfs:subClassOf rdf:resource="#PhaseComponentProperty"/>
@@ -666,7 +666,7 @@ Concretely, a PhaseComponentFraction subsumes the following concentration measur
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseInterface -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseInterface -->
 
     <owl:Class rdf:about="#PhaseInterface">
         <rdfs:subClassOf rdf:resource="&network_system;Connection"/>
@@ -701,7 +701,7 @@ Concretely, a PhaseComponentFraction subsumes the following concentration measur
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseInterfaceProperty -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseInterfaceProperty -->
 
     <owl:Class rdf:about="#PhaseInterfaceProperty">
         <owl:equivalentClass>
@@ -723,7 +723,7 @@ Concretely, a PhaseComponentFraction subsumes the following concentration measur
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseRatio -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseRatio -->
 
     <owl:Class rdf:about="#PhaseRatio">
         <owl:equivalentClass>
@@ -742,7 +742,7 @@ Concretely, a PhaseComponentFraction subsumes the following concentration measur
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseReactionProperty -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseReactionProperty -->
 
     <owl:Class rdf:about="#PhaseReactionProperty">
         <owl:disjointWith rdf:resource="#PhaseSystemProperty"/>
@@ -752,7 +752,7 @@ Concretely, a PhaseComponentFraction subsumes the following concentration measur
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseSystem -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseSystem -->
 
     <owl:Class rdf:about="#PhaseSystem">
         <owl:equivalentClass>
@@ -788,7 +788,7 @@ Concretely, a PhaseComponentFraction subsumes the following concentration measur
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseSystemProperty -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhaseSystemProperty -->
 
     <owl:Class rdf:about="#PhaseSystemProperty">
         <owl:equivalentClass>
@@ -814,7 +814,7 @@ Concretely, a PhaseComponentFraction subsumes the following concentration measur
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhysicalContext -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PhysicalContext -->
 
     <owl:Class rdf:about="#PhysicalContext">
         <rdfs:subClassOf rdf:resource="&system;PropertySet"/>
@@ -830,7 +830,7 @@ Concretely, a PhaseComponentFraction subsumes the following concentration measur
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#Pressure -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#Pressure -->
 
     <owl:Class rdf:about="#Pressure">
         <rdfs:subClassOf rdf:resource="#ThermodynamicStateProperty"/>
@@ -850,7 +850,7 @@ Concretely, a PhaseComponentFraction subsumes the following concentration measur
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#ReactionEquilibriumConstant -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#ReactionEquilibriumConstant -->
 
     <owl:Class rdf:about="#ReactionEquilibriumConstant">
         <rdfs:subClassOf rdf:resource="#PhaseReactionProperty"/>
@@ -862,7 +862,7 @@ where nu_i is the StoichiometricCoefficient of a reactant (negative) or product 
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#SinglePhase -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#SinglePhase -->
 
     <owl:Class rdf:about="#SinglePhase">
         <rdfs:subClassOf rdf:resource="#PhaseSystem"/>
@@ -920,7 +920,7 @@ where nu_i is the StoichiometricCoefficient of a reactant (negative) or product 
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#SinglePhaseInMultiphaseSystem -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#SinglePhaseInMultiphaseSystem -->
 
     <owl:Class rdf:about="#SinglePhaseInMultiphaseSystem">
         <owl:equivalentClass>
@@ -946,7 +946,7 @@ where nu_i is the StoichiometricCoefficient of a reactant (negative) or product 
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#SinglePhaseInMultiphaseSystemProperty -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#SinglePhaseInMultiphaseSystemProperty -->
 
     <owl:Class rdf:about="#SinglePhaseInMultiphaseSystemProperty">
         <rdfs:subClassOf rdf:resource="#PhaseSystemProperty"/>
@@ -964,7 +964,7 @@ where nu_i is the StoichiometricCoefficient of a reactant (negative) or product 
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#SpecificEnthalpy -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#SpecificEnthalpy -->
 
     <owl:Class rdf:about="#SpecificEnthalpy">
         <rdfs:subClassOf rdf:resource="#ThermodynamicStateProperty"/>
@@ -980,7 +980,7 @@ The SI unit for SpecificEnthalpy is joules per kilogram.</rdfs:comment>
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#SpecificGibbsFreeEnergy -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#SpecificGibbsFreeEnergy -->
 
     <owl:Class rdf:about="#SpecificGibbsFreeEnergy">
         <rdfs:subClassOf rdf:resource="#ThermodynamicStateProperty"/>
@@ -995,7 +995,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#SpecificVolume -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#SpecificVolume -->
 
     <owl:Class rdf:about="#SpecificVolume">
         <rdfs:subClassOf rdf:resource="#ThermodynamicStateProperty"/>
@@ -1006,7 +1006,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#StateOfAggregation -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#StateOfAggregation -->
 
     <owl:Class rdf:about="#StateOfAggregation">
         <rdfs:subClassOf rdf:resource="&system;ExtensibleValueSet"/>
@@ -1016,7 +1016,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#SurfaceTension -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#SurfaceTension -->
 
     <owl:Class rdf:about="#SurfaceTension">
         <rdfs:subClassOf rdf:resource="#PhaseInterfaceProperty"/>
@@ -1026,7 +1026,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#Temperature -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#Temperature -->
 
     <owl:Class rdf:about="#Temperature">
         <rdfs:subClassOf rdf:resource="#ThermodynamicStateProperty"/>
@@ -1042,7 +1042,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#ThermalConductivity -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#ThermalConductivity -->
 
     <owl:Class rdf:about="#ThermalConductivity">
         <rdfs:subClassOf rdf:resource="#TransportPhenomenaProperty"/>
@@ -1052,7 +1052,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#ThermodynamicStateProperty -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#ThermodynamicStateProperty -->
 
     <owl:Class rdf:about="#ThermodynamicStateProperty">
         <rdfs:subClassOf rdf:resource="#PhaseSystemProperty"/>
@@ -1063,7 +1063,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#TransportPhenomenaProperty -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#TransportPhenomenaProperty -->
 
     <owl:Class rdf:about="#TransportPhenomenaProperty">
         <rdfs:subClassOf rdf:resource="#PhaseSystemProperty"/>
@@ -1079,7 +1079,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#TypeOfSolid -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#TypeOfSolid -->
 
     <owl:Class rdf:about="#TypeOfSolid">
         <owl:equivalentClass>
@@ -1100,7 +1100,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#Volume-BasedConcentration -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#Volume-BasedConcentration -->
 
     <owl:Class rdf:about="#Volume-BasedConcentration">
         <rdfs:subClassOf rdf:resource="#PhaseComponentConcentration"/>
@@ -1110,7 +1110,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#Volume-VolumePercentage -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#Volume-VolumePercentage -->
 
     <owl:Class rdf:about="#Volume-VolumePercentage">
         <rdfs:subClassOf rdf:resource="#Volume-BasedConcentration"/>
@@ -1120,7 +1120,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#VolumeFraction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#VolumeFraction -->
 
     <owl:Class rdf:about="#VolumeFraction">
         <rdfs:subClassOf rdf:resource="#PhaseComponentFraction"/>
@@ -1136,7 +1136,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#VolumetricPhaseRatio -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#VolumetricPhaseRatio -->
 
     <owl:Class rdf:about="#VolumetricPhaseRatio">
         <rdfs:subClassOf rdf:resource="#PhaseRatio"/>
@@ -1146,7 +1146,7 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ChemicalReaction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/substance/reaction_mechanism.owl#ChemicalReaction -->
 
     <owl:Class rdf:about="&reaction_mechanism;ChemicalReaction">
         <rdfs:subClassOf>
@@ -1159,37 +1159,37 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/substance/substance.owl#ChemicalComponent -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/substance/substance.owl#ChemicalComponent -->
 
     <owl:Class rdf:about="&substance;ChemicalComponent"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/network_system.owl#Connection -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/network_system.owl#Connection -->
 
     <owl:Class rdf:about="&network_system;Connection"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#ExtensibleValueSet -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#ExtensibleValueSet -->
 
     <owl:Class rdf:about="&system;ExtensibleValueSet"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#PhysicalQuantity -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#PhysicalQuantity -->
 
     <owl:Class rdf:about="&system;PhysicalQuantity"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#PropertySet -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#PropertySet -->
 
     <owl:Class rdf:about="&system;PropertySet"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/upper_level/system.owl#System -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#System -->
 
     <owl:Class rdf:about="&system;System"/>
     
@@ -1212,79 +1212,79 @@ The SI unit for the SpecificGibbsFreeEnerty is joules per kilogram</rdfs:comment
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#HydrateH -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#HydrateH -->
 
     <TypeOfSolid rdf:about="#HydrateH"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#HydrateI -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#HydrateI -->
 
     <TypeOfSolid rdf:about="#HydrateI"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#HydrateII -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#HydrateII -->
 
     <TypeOfSolid rdf:about="#HydrateII"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#PureSolid -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#PureSolid -->
 
     <TypeOfSolid rdf:about="#PureSolid"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#SolidSolution -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#SolidSolution -->
 
     <TypeOfSolid rdf:about="#SolidSolution"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#gaseous -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#gaseous -->
 
     <StateOfAggregation rdf:about="#gaseous"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#liquid -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#liquid -->
 
     <StateOfAggregation rdf:about="#liquid"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/material/phase_system/phase_system.owl#solid -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/material/phase_system/phase_system.owl#solid -->
 
     <StateOfAggregation rdf:about="#solid"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#mass_fraction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#mass_fraction -->
 
     <rdf:Description rdf:about="&der_dim;mass_fraction"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molar_fraction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molar_fraction -->
 
     <rdf:Description rdf:about="&der_dim;molar_fraction"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#pressure -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#pressure -->
 
     <rdf:Description rdf:about="&der_dim;pressure"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#volume_fraction -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#volume_fraction -->
 
     <rdf:Description rdf:about="&der_dim;volume_fraction"/>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#thermodynamic_temperature -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#thermodynamic_temperature -->
 
     <rdf:Description rdf:about="&physical_dimension;thermodynamic_temperature"/>
     

@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#"
-     xml:base="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl"
+<rdf:RDF xmlns="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#"
+     xml:base="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     xmlns:root="file:/ontology/"
-     xmlns:maths="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#"
+     xmlns:root="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/"
+     xmlns:maths="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#"
      xmlns:terms="http://purl.org/dc/terms/"
-     xmlns:system="file:/ontology/OntoCAPE/upper_level/system.owl#"
-     xmlns:SI_unit="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#"
-     xmlns:der_dim="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#"
-     xmlns:phys_dim="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#"
+     xmlns:system="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#"
+     xmlns:SI_unit="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#"
+     xmlns:der_dim="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#"
+     xmlns:phys_dim="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#"
      xmlns:der_SI_units="&amp;root;OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl">
-    <owl:Ontology rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl">
-        <owl:imports rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl"/>
-        <owl:imports rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl"/>
+    <owl:Ontology rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl">
+        <owl:imports rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl"/>
+        <owl:imports rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl"/>
         <terms:license>Copyright (C) [2009] [Andreas Wiesner]
                 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
                 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -25,64 +25,64 @@
         <rdfs:comment>The ontology module &apos;derived_SI_units&apos; provides some common SI units.
 The following classes, relations, and individuals from other ontology modules are used within &apos;derived_SI_units&apos;:
 
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#BinaryOperator&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Leaf&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#ElectricityAndMagnetism&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#Heat&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#Mechanics&quot;/&gt; 
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#PeriodicPhenomena&quot;/&gt; 
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#SpaceAndTime&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#BaseDimension&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#DerivedDimension&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#PrefixedDerivedUnit&quot;/&gt;
-&lt;owl:Class rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#BinaryOperator&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Leaf&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#ElectricityAndMagnetism&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#Heat&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#Mechanics&quot;/&gt; 
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#PeriodicPhenomena&quot;/&gt; 
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#SpaceAndTime&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#BaseDimension&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#DerivedDimension&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#PrefixedDerivedUnit&quot;/&gt;
+&lt;owl:Class rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit&quot;/&gt;
 
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#hasLeftChild&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#hasNodeValue&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#hasRightChild&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#leftChildNodeValue&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#rightChildNodeValue&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#isDefinedBy&quot;/&gt;
-&lt;owl:ObjectProperty rdf:about=&quot;file:/ontology/OntoCAPE/upper_level/system.owl#hasDimension&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#hasLeftChild&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#hasNodeValue&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#hasRightChild&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#leftChildNodeValue&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#rightChildNodeValue&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#isDefinedBy&quot;/&gt;
+&lt;owl:ObjectProperty rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#hasDimension&quot;/&gt;
 
-&lt;maths:BinaryOperator rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide&quot;/&gt;
-&lt;maths:BinaryOperator rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#plus&quot;/&gt;
-&lt;maths:BinaryOperator rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#power&quot;/&gt;
-&lt;maths:BinaryOperator rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times&quot;/&gt;
-&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#AMOUNT_OF_SUBSTANCE&quot;/&gt;
-&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#CANDELA&quot;/&gt;
-&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KELVIN&quot;/&gt;
-&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_unit;#KILO-&quot;/&gt;
-&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_unit;#KILOGRAM&quot;/&gt;
-&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_unit;#METER&quot;/&gt;
-&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_unit;#MOLE&quot;/&gt;
-&lt;maths:Leaf rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_unit;#SECOND&quot;/&gt;
-&lt;phys_dim:DerivedDimension       rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molar_volume&quot;/&gt;
-&lt;phys_dim:DerivedDimension       rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molecular_mass&quot;/&gt;
-&lt;der_dim:ElectricityAndMagnetism rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#electric_charge&quot;/&gt;
-&lt;der_dim:Heat                    rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#entropy&quot;/&gt;
-&lt;der_dim:Heat                    rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#thermal_conductivity&quot;/&gt;
-&lt;der_dim:Mechanics               rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#density&quot;/&gt;
-&lt;der_dim:Mechanics               rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#dynamic_viscosity&quot;/&gt;
-&lt;der_dim:Mechanics               rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#force&quot;/&gt;
-&lt;der_dim:Mechanics               rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#moment_of_force&quot;/&gt;
-&lt;der_dim:Mechanics               rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#pressure&quot;/&gt;
-&lt;der_dim:Mechanics               rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#specific_volume&quot;/&gt;
-&lt;der_dim:Mechanics               rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#specific_entropy&quot;/&gt;
-&lt;der_dim:Mechanics               rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#surface_tension&quot;/&gt;
-&lt;der_dim:Mechanics               rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#work&quot;/&gt;
-&lt;der_dim:PeriodicPhenomena       rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#frequency&quot;/&gt;
-&lt;der_dim:PeriodicPhenomena       rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#oscillation_phase&quot;/&gt;
-&lt;der_dim:SpaceAndTime            rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#angular_acceleration&quot;/&gt;
-&lt;der_dim:SpaceAndTime            rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#angular_velocity&quot;/&gt;
-&lt;der_dim:SpaceAndTime            rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#area&quot;/&gt;
-&lt;der_dim:SpaceAndTime            rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#velocity&quot;/&gt;
-&lt;der_dim:SpaceAndTime            rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#volume&quot;/&gt;
-&lt;phys_dim:FundamentalDimension   rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money&quot;/&gt;
-&lt;phys_dim:BaseDimension          rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_substance&quot;/&gt;
-&lt;phys_dim:BaseDimension          rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#length&quot;/&gt;
-&lt;phys_dim:BaseDimension          rdf:about=&quot;file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#thermodynamic_temperature&quot;/&gt;
+&lt;maths:BinaryOperator rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide&quot;/&gt;
+&lt;maths:BinaryOperator rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#plus&quot;/&gt;
+&lt;maths:BinaryOperator rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#power&quot;/&gt;
+&lt;maths:BinaryOperator rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times&quot;/&gt;
+&lt;maths:Leaf rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#AMOUNT_OF_SUBSTANCE&quot;/&gt;
+&lt;maths:Leaf rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#CANDELA&quot;/&gt;
+&lt;maths:Leaf rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KELVIN&quot;/&gt;
+&lt;maths:Leaf rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_unit;#KILO-&quot;/&gt;
+&lt;maths:Leaf rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_unit;#KILOGRAM&quot;/&gt;
+&lt;maths:Leaf rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_unit;#METER&quot;/&gt;
+&lt;maths:Leaf rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_unit;#MOLE&quot;/&gt;
+&lt;maths:Leaf rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_unit;#SECOND&quot;/&gt;
+&lt;phys_dim:DerivedDimension       rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molar_volume&quot;/&gt;
+&lt;phys_dim:DerivedDimension       rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molecular_mass&quot;/&gt;
+&lt;der_dim:ElectricityAndMagnetism rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#electric_charge&quot;/&gt;
+&lt;der_dim:Heat                    rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#entropy&quot;/&gt;
+&lt;der_dim:Heat                    rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#thermal_conductivity&quot;/&gt;
+&lt;der_dim:Mechanics               rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#density&quot;/&gt;
+&lt;der_dim:Mechanics               rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#dynamic_viscosity&quot;/&gt;
+&lt;der_dim:Mechanics               rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#force&quot;/&gt;
+&lt;der_dim:Mechanics               rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#moment_of_force&quot;/&gt;
+&lt;der_dim:Mechanics               rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#pressure&quot;/&gt;
+&lt;der_dim:Mechanics               rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#specific_volume&quot;/&gt;
+&lt;der_dim:Mechanics               rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#specific_entropy&quot;/&gt;
+&lt;der_dim:Mechanics               rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#surface_tension&quot;/&gt;
+&lt;der_dim:Mechanics               rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#work&quot;/&gt;
+&lt;der_dim:PeriodicPhenomena       rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#frequency&quot;/&gt;
+&lt;der_dim:PeriodicPhenomena       rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#oscillation_phase&quot;/&gt;
+&lt;der_dim:SpaceAndTime            rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#angular_acceleration&quot;/&gt;
+&lt;der_dim:SpaceAndTime            rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#angular_velocity&quot;/&gt;
+&lt;der_dim:SpaceAndTime            rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#area&quot;/&gt;
+&lt;der_dim:SpaceAndTime            rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#velocity&quot;/&gt;
+&lt;der_dim:SpaceAndTime            rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#volume&quot;/&gt;
+&lt;phys_dim:FundamentalDimension   rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money&quot;/&gt;
+&lt;phys_dim:BaseDimension          rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_substance&quot;/&gt;
+&lt;phys_dim:BaseDimension          rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#length&quot;/&gt;
+&lt;phys_dim:BaseDimension          rdf:about=&quot;https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#thermodynamic_temperature&quot;/&gt;
 </rdfs:comment>
         <owl:versionInfo>2.0</owl:versionInfo>
     </owl:Ontology>
@@ -100,669 +100,669 @@ The following classes, relations, and individuals from other ontology modules ar
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#C -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#C -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#C">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#COULOMB"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#electric_charge"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#C">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#COULOMB"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#electric_charge"/>
         <rdfs:comment>The coulomb (symbol: C) is the SI unit of electric charge.</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CAD -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CAD -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CAD">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CAD">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
         <rdfs:comment>Canadian Dollar (currency used in Canada)</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CELSIUS -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CELSIUS -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CELSIUS">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KELVIN"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#plus"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CELSIUS">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KELVIN"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#plus"/>
         <maths:rightChildNodeValue>273.15</maths:rightChildNodeValue>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CHF -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CHF -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CHF">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CHF">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
         <rdfs:comment>Swiss Franc (currency used in Switzerland, Liechtenstein)</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CNY -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CNY -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CNY">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CNY">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
         <rdfs:comment>Yuan Renminbi (currency used in mainland China)</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#COULOMB -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#COULOMB -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#COULOMB">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#COULOMB">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#power"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#power"/>
         <maths:rightChildNodeValue>3</maths:rightChildNodeValue>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER_PER_KILOGRAM -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER_PER_KILOGRAM -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER_PER_KILOGRAM">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILOGRAM"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER_PER_KILOGRAM">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILOGRAM"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER_PER_MOLE -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER_PER_MOLE -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER_PER_MOLE">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#MOLE"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER_PER_MOLE">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#MOLE"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#Celsius -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#Celsius -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#Celsius">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CELSIUS"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#thermodynamic_temperature"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#Celsius">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CELSIUS"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#thermodynamic_temperature"/>
         <rdfs:comment>°C</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#EUR -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#EUR -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#EUR">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#EUR">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
         <rdfs:comment>Euro (currency used in Austria, Belgium, Finland, France [except Pacific territories using CFP franc], Germany, Greece, Ireland, Italy, Luxembourg, Netherlands [except Aruba and the Netherlands Antilles using Aruban florin and Antillean guilder respectively], Portugal, Slovenia, Spain, as well as Monaco, San Marino, Vatican City, Andorra, Montenegro, Kosovo)</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#GBP -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#GBP -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#GBP">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#GBP">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
         <rdfs:comment>Pound Sterling  (currency used in the United Kingdom)</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#HERTZ -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#HERTZ -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#HERTZ">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#HERTZ">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
         <maths:leftChildNodeValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</maths:leftChildNodeValue>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#Hz -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#Hz -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#Hz">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#HERTZ"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#frequency"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#Hz">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#HERTZ"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#frequency"/>
         <rdfs:comment>Hertz</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#J -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#J -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#J">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#work"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#J">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#work"/>
         <rdfs:comment>Joule</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KELVIN -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KELVIN -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KELVIN">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KELVIN"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KELVIN">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KELVIN"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KILOGRAM.KELVIN -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KILOGRAM.KELVIN -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KILOGRAM.KELVIN">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KELVIN"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILOGRAM"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KILOGRAM.KELVIN">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KELVIN"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILOGRAM"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JPY -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JPY -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JPY">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JPY">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
         <rdfs:comment>Japanese yen (currency used in Japan)</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#J_per_K -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#J_per_K -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#J_per_K">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KELVIN"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#entropy"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#J_per_K">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KELVIN"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#entropy"/>
         <rdfs:comment>Joule per Kelvin - J/K</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#J_per_kg.K -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#J_per_kg.K -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#J_per_kg.K">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KILOGRAM.KELVIN"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#specific_entropy"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#J_per_kg.K">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE_PER_KILOGRAM.KELVIN"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#specific_entropy"/>
         <rdfs:comment>Joule per kilogram Kelvin - J/(kg.K)</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_METER -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_METER -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_METER">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILOGRAM"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_METER">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILOGRAM"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_CUBIC_METER -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_CUBIC_METER -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_CUBIC_METER">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILOGRAM"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_CUBIC_METER">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILOGRAM"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_KILOMOLE -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_KILOMOLE -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_KILOMOLE">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILOGRAM"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMOLE"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_KILOMOLE">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILOGRAM"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMOLE"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_MOLE -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_MOLE -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_MOLE">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILOGRAM"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#MOLE"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_MOLE">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILOGRAM"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#MOLE"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOJOULE -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOJOULE -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOJOULE">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILO-"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOJOULE">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILO-"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMETER -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMETER -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMETER">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILO-"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMETER">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILO-"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMOLE -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMOLE -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMOLE">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILO-"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#MOLE"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMOLE">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILO-"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#MOLE"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOWATT -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOWATT -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOWATT">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILO-"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOWATT">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KILO-"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#METER_PER_SECOND -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#METER_PER_SECOND -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#METER_PER_SECOND">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#METER_PER_SECOND">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#N -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#N -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#N">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#force"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#N">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#force"/>
         <rdfs:comment>Newton</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#N.m -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#N.m -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#N.m">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON.METER"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#moment_of_force"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#N.m">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON.METER"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#moment_of_force"/>
         <rdfs:comment>Newton meter</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_METER"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#SECOND_SQUARED"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_METER"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#SECOND_SQUARED"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON.METER -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON.METER -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON.METER">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON.METER">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON_PER_METER -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON_PER_METER -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON_PER_METER">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON_PER_METER">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#N_per_m -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#N_per_m -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#N_per_m">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON_PER_METER"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#surface_tension"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#N_per_m">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON_PER_METER"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#surface_tension"/>
         <rdfs:comment>Newton per meter - N/m</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#PASCAL -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#PASCAL -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#PASCAL">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#SQUARE_METER"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#PASCAL">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#NEWTON"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#SQUARE_METER"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#PASCAL.SECOND -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#PASCAL.SECOND -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#PASCAL.SECOND">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#PASCAL"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#PASCAL.SECOND">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#PASCAL"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#times"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#Pa -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#Pa -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#Pa">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#PASCAL"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#pressure"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#Pa">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#PASCAL"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#pressure"/>
         <rdfs:comment>Pascal</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND_SQUARED -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND_SQUARED -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND_SQUARED">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND_SQUARED">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RUB -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RUB -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RUB">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RUB">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
         <rdfs:comment>Russian Ruble (currency used in Russia, Abkhazia, South Ossetia)</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#SECOND_SQUARED -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#SECOND_SQUARED -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#SECOND_SQUARED">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#power"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#SECOND_SQUARED">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#power"/>
         <maths:rightChildNodeValue>2</maths:rightChildNodeValue>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#SQUARE_METER -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#SQUARE_METER -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#SQUARE_METER">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#power"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#SQUARE_METER">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#power"/>
         <maths:rightChildNodeValue>2</maths:rightChildNodeValue>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#USD -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#USD -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#USD">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#USD">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_money"/>
         <rdfs:comment>US Dollar (currency used in American Samoa, British Indian Ocean Territory, Ecuador, El Salvador, Guam, Haiti, Marshall Islands, Micronesia, Northern Mariana Islands, Palau, Panama, Puerto Rico, East Timor, Turks and Caicos Islands, United States, Virgin Islands)</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#W -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#W -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#W">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#power"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#W">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#power"/>
         <rdfs:comment>Watt</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#JOULE"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SECOND"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT_PER_METER -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT_PER_METER -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT_PER_METER">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT_PER_METER">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#METER"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT_PER_METER.KELVIN -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT_PER_METER.KELVIN -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT_PER_METER.KELVIN">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
-        <maths:hasLeftChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT_PER_METER"/>
-        <maths:hasNodeValue rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
-        <maths:hasRightChild rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KELVIN"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT_PER_METER.KELVIN">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#Node"/>
+        <maths:hasLeftChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT_PER_METER"/>
+        <maths:hasNodeValue rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/mathematical_relation/mathematical_relation.owl#divide"/>
+        <maths:hasRightChild rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#KELVIN"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#W_per_m.K -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#W_per_m.K -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#W_per_m.K">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT_PER_METER.KELVIN"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#thermal_conductivity"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#W_per_m.K">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#WATT_PER_METER.KELVIN"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#thermal_conductivity"/>
         <rdfs:comment>Watt per meter Kelvin - W/(m.K)</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#cubic_m_per_kg -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#cubic_m_per_kg -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#cubic_m_per_kg">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER_PER_KILOGRAM"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#specific_volume"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#cubic_m_per_kg">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER_PER_KILOGRAM"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#specific_volume"/>
         <rdfs:comment>cubic meter per kilogram- (m.m.m)/kg</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kJ -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kJ -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kJ">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#PrefixedDerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOJOULE"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#work"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kJ">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#PrefixedDerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOJOULE"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#work"/>
         <rdfs:comment>kilojoule</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kW -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kW -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kW">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#PrefixedDerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOWATT"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#power"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kW">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#PrefixedDerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOWATT"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#power"/>
         <rdfs:comment>kilowatt</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kg_per_kmol -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kg_per_kmol -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kg_per_kmol">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_KILOMOLE"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molecular_mass"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kg_per_kmol">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_KILOMOLE"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molecular_mass"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kg_per_mol -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kg_per_mol -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kg_per_mol">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_MOLE"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molecular_mass"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kg_per_mol">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOGRAM_PER_MOLE"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molecular_mass"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#km -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#km -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#km">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#PrefixedDerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMETER"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#length"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#km">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#PrefixedDerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMETER"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#length"/>
         <rdfs:comment>kilometer</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kmol -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kmol -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kmol">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#PrefixedDerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMOLE"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_substance"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kmol">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#PrefixedDerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#KILOMOLE"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/physical_dimension.owl#amount_of_substance"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#m.m.m_per_mol -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#m.m.m_per_mol -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#m.m.m_per_mol">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER_PER_MOLE"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molar_volume"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#m.m.m_per_mol">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#CUBIC_METER_PER_MOLE"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#molar_volume"/>
         <rdfs:comment>cubic meter per mole</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#rad -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#rad -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#rad">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#oscillation_phase"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#rad">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#oscillation_phase"/>
         <rdfs:comment>Radian</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#rad_per_s -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#rad_per_s -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#rad_per_s">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#angular_velocity"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#rad_per_s">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#angular_velocity"/>
         <rdfs:comment>radian per second - rad/s</rdfs:comment>
     </owl:NamedIndividual>
     
 
 
-    <!-- file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#rad_per_s_squared -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#rad_per_s_squared -->
 
-    <owl:NamedIndividual rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#rad_per_s_squared">
-        <rdf:type rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
-        <SI_unit:isDefinedBy rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND_SQUARED"/>
-        <system:hasDimension rdf:resource="file:/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#angular_acceleration"/>
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#rad_per_s_squared">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#SI_DerivedUnit"/>
+        <SI_unit:isDefinedBy rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#RADIAN_PER_SECOND_SQUARED"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/physical_dimension/derived_dimensions.owl#angular_acceleration"/>
         <rdfs:comment>radian per second squared - rad/(s.s)</rdfs:comment>
     </owl:NamedIndividual>
     
@@ -779,10 +779,10 @@ The following classes, relations, and individuals from other ontology modules ar
     <rdf:Description>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDifferent"/>
         <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kJ"/>
-            <rdf:Description rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kW"/>
-            <rdf:Description rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#km"/>
-            <rdf:Description rdf:about="file:/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kmol"/>
+            <rdf:Description rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kJ"/>
+            <rdf:Description rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kW"/>
+            <rdf:Description rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#km"/>
+            <rdf:Description rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/derived_SI_units.owl#kmol"/>
         </owl:distinctMembers>
     </rdf:Description>
 </rdf:RDF>
