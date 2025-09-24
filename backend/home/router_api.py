@@ -33,13 +33,6 @@ def _load_case_context(case: str = "dushman", filename: str = "model_context.jso
     with open(context_file, "r", encoding="utf-8") as f:
         return json.load(f)
 
-# APIs for model
-# To remove.
-@blueprint.route("/api/model", methods=["GET"])
-def api_model():
-    entity = g.graphdb_handler.query(mode="sidebar")
-    return jsonify(entity)
-
 # API: post with JSON body to specify filename (extensible for future needs)
 # Body example:
 # {
@@ -60,22 +53,13 @@ def api_model_context():
     return jsonify(context)
 
 
-
-# APIs for structure
-
 # Get only the information block of a case context
-#    Body example (POST):
-@blueprint.route("/api/model/info", methods=["POST"])
+#    Body example (GET):
+@blueprint.route("/api/model/info", methods=["GET"])
 def api_model_information():
     context = request.get_json(silent=True) or {}
     info = g.graphdb_handler.query_info(context)
     return jsonify(info), 200
-
-# Get entity for the structure page (sidebar data)
-@blueprint.route("/api/structure", methods=["GET"])
-def api_structure():
-    entity = g.graphdb_handler.query(mode="sidebar")
-    return jsonify(entity)
 
 # Get structure context via POST with JSON body
 #    Body example:
@@ -83,7 +67,7 @@ def api_structure():
 #      "case": "dushman",
 #      "postfix": "model_context.json",   // optional
 #    }
-@blueprint.route("/api/structure/context", methods=["POST"])
+@blueprint.route("/api/structure/context", methods=["GET"])
 def api_structure_context():
     data = request.get_json(silent=True) or {}
     case = data.get("case", "dushman")
@@ -94,16 +78,6 @@ def api_structure_context():
     if context is None:
         return jsonify({"error": "Case or context not found"}), 404
     return jsonify(context)
-
-
-
-# APIs for application
-# To Remove
-# Sidebar entity data used by application page
-@blueprint.route("/api/application", methods=["GET"])
-def api_application():
-    entity = g.graphdb_handler.query(mode="sidebar")
-    return jsonify(entity)
 
 
 # Case context via POST body
@@ -129,7 +103,7 @@ def api_application_context():
 # Knowledge Graph APIs
 # 1) Get entity used by knowledge graph with mainpage
 #    Example: /api/knowledge_graph/mainpage
-@blueprint.route("/api/knowledge_graph/mainpage", methods=["GET"])
+@blueprint.route("/api/knowledge_graph", methods=["GET"])
 def api_knowledge_graph_entity():
     entity = g.graphdb_handler.query(mode="mainpage")
     return jsonify(entity)
@@ -381,220 +355,3 @@ def api_model_load():
         return jsonify({"error": f"Failed to load file '{latest.name}': {e}"}), 500
 
     return jsonify({"success": True, "file": latest.name, "data": data}), 200
-
-
-@blueprint.route("/api/model/pheno", methods=["GET"])
-def api_model_pheno():
-    # Query the database for the phenomenon
-    pheno_dict = g.graphdb_handler.query_pheno()
-    return jsonify(pheno_dict)
-
-@blueprint.route("/api/model/pheno/ac", methods=["GET"])
-def api_model_pheno_ac():
-    acs = g.graphdb_handler.query_ac()
-    return jsonify(acs)
-
-@blueprint.route("/api/model/pheno/fp", methods=["GET"])
-def api_model_pheno_fp():
-    try:
-        raw_ac = request.args.get("ac")
-        if raw_ac is None or str(raw_ac).strip() == "":
-            return jsonify({
-                "error": "Missing required query parameter 'method'. Allowed values: 'Batch', 'Continuous'.",
-                "hint": "Example: /api/model/phenomenon/fp?ac=Batch"
-            }), 400
-
-        ac_norm = str(raw_ac).strip().lower()
-        allowed = {"batch", "continuous"}
-        if ac_norm not in allowed:
-            return jsonify({
-                "error": "Invalid value for 'method'. Allowed values are 'Batch' or 'Continuous'.",
-                "received": raw_ac
-            }), 400
-
-        # Query the database for the phenomenon
-        fps = g.graphdb_handler.query_fp_by_ac(ac_norm)
-
-        # Handle empty result sets gracefully
-        if fps is None:
-            return jsonify({
-                "error": "No phenomenon found for the specified operating condition.",
-                "method": raw_ac
-            }), 404
-
-        # If it's a collection, also consider emptiness
-        if isinstance(fps, (list, dict)) and len(fps) == 0:
-            return jsonify({
-                "error": "No phenomenon found for the specified operating condition.",
-                "method": raw_ac
-            }), 404
-
-        return jsonify(fps), 200
-
-    except Exception as e:
-        # Unexpected error
-        return jsonify({
-            "error": "Internal server error while processing the request.",
-            "detail": str(e)
-        }), 500
-
-@blueprint.route("/api/model/pheno/mt", methods=["GET"])
-def api_model_pheno_mt():
-    try:
-        # Accept multiple aliases for the flow pattern parameter for flexibility
-        raw_fp = request.args.get("fp")
-        if raw_fp is None or str(raw_fp).strip() == "":
-            return jsonify({
-                "error": "Missing required query parameter 'pattern' (aliases: 'fp', 'flow_pattern').",
-                "hint": "Example: /api/model/phenomenon/mt?fp=Annular_Microflow"
-            }), 400
-
-        # Delegate to graphdb handler to get mass transfer phenomena linked to the FlowPattern
-        mts = g.graphdb_handler.query_mt_by_fp(raw_fp)
-
-        if mts is None or (isinstance(mts, (list, dict)) and len(mts) == 0):
-            return jsonify({
-                "error": "No mass transfer phenomenon found for the specified flow pattern.",
-                "pattern": raw_fp
-            }), 404
-
-        return jsonify(mts), 200
-
-    except Exception as e:
-        return jsonify({
-            "error": "Internal server error while processing the request.",
-            "detail": str(e)
-        }), 500
-
-@blueprint.route("/api/model/pheno/me", methods=["GET"])
-def api_model_pheno_me():
-    try:
-        # Primary mode: accept JSON body with an array of mass transfer names
-        payload = request.get_json(silent=True) or {}
-        mt_list = payload.get("mt") if isinstance(payload, dict) else None
-
-        if isinstance(mt_list, list) and len(mt_list) > 0:
-            mes = set()
-            for item in mt_list:
-                if item is None or str(item).strip() == "":
-                    continue
-                mt_mes = g.graphdb_handler.query_me_by_mt(item)
-                for me in (mt_mes or []):
-                    if me:
-                        mes.add(me)
-            if not mes:
-                return jsonify({
-                    "error": "No mass equilibrium found for the specified mass transfer phenomena.",
-                    "mt": mt_list
-                }), 404
-            return jsonify({"me": sorted(mes)}), 200
-
-    except Exception as e:
-        return jsonify({
-            "error": "Internal server error while processing the request.",
-            "detail": str(e)
-        }), 500
-
-@blueprint.route("/api/model/pheno/param_law", methods=["POST"])
-def api_model_param_law():
-    """
-    Retrieve parameter -> law mapping constrained by selected phenomena.
-    Accepts either:
-      - POST JSON body with any of keys: ac, fp, mt, me (string or list)
-      - GET query params: ac, fp, mt, me (can be repeated or comma-separated)
-
-    Response: {"param_law": {"<Parameter>": "<Law>", ...}}
-    """
-    try:
-        desc = request.get_json(silent=True) or {}
-        keys = ("ac", "fp", "mt", "me")
-
-        for k in keys:
-            val = desc.get(k) if isinstance(desc, dict) else None
-            if val is None and request.method == "GET":
-                # Support multiple via ?k=a&k=b or comma-separated ?k=a,b
-                lst = request.args.getlist(k)
-                if not lst:
-                    s = request.args.get(k)
-                    if s:
-                        lst = [part.strip() for part in s.split(",") if part.strip()]
-                val = lst if lst else None
-            if val is not None:
-                desc[k] = val
-
-        if not any(desc.get(k) for k in keys):
-            return jsonify({
-                "error": "Provide at least one of 'ac', 'fp', 'mt', or 'me' via JSON body or query params.",
-                "hint": {
-                    "POST": {"ac": "Batch", "fp": "Well_Mixed", "mt": ["Gas-Liquid_Mass_Transfer"], "me": ["Gas_Dissolution_Equilibrium"]},
-                    "GET": "/api/model/phenomenon/param_law?fp=Annular_Microflow&mt=Engulfment"
-                }
-            }), 400
-
-        ac = desc["ac"] if "ac" in desc else None
-        fp = desc["fp"] if "fp" in desc else None
-        mts = desc["mt"] if "mt" in desc else []
-        mes = desc["me"] if "me" in desc else []
-
-        param_law = {}
-        vars = g.graphdb_handler.query_var()
-        laws = g.graphdb_handler.query_law(mode="mainpage")
-
-        # flow pattern laws subsidiary to mass transport
-        for law_dict in laws.values():
-            if law_dict["pheno"] not in mts:
-                continue
-            for var in law_dict["vars"]:
-                if var == "Concentration":
-                    continue
-                if var in param_law or not vars[var]["laws"]:
-                    continue
-                var_laws = []
-                for var_law in vars[var]["laws"]:
-                    if laws[var_law]["pheno"] == fp:
-                        var_laws.append(var_law)
-                if var_laws:
-                    param_law[var] = var_laws
-
-        # flow pattern laws subsidiary to flow pattern
-        for law_dict in laws.values():
-            if law_dict["pheno"] != fp:
-                continue
-            for var in law_dict["vars"]:
-                if var == "Concentration":
-                    continue
-                if var in param_law or not vars[var]["laws"]:
-                    continue
-                var_laws = []
-                for var_law in vars[var]["laws"]:
-                    if laws[var_law]["pheno"] == fp:
-                        var_laws.append(var_law)
-                if var_laws:
-                    param_law[var] = var_laws
-        
-        # mass equilibrium laws
-        for law_dict in laws.values():
-            if law_dict["pheno"] not in mts:
-                continue
-            for var in law_dict["vars"]:
-                if var in param_law or not vars[var]["laws"]:
-                    continue
-                var_laws = []
-                for var_law in vars[var]["laws"]:
-                    if laws[var_law]["pheno"] in mes:
-                        var_laws.append(var_law)
-                if var_laws:
-                    param_law[var] = var_laws
-
-        return jsonify(param_law), 200
-
-    except Exception as e:
-        return jsonify({
-            "error": "Internal server error while processing the request.",
-            "detail": str(e)
-        }), 500
-
-@blueprint.route("/api/model/pheno/rxn", methods=["GET"])
-def api_model_rxn():
-    rxns = g.graphdb_handler.query_rxn()
-    return jsonify(rxns)
