@@ -56,3 +56,7 @@ Prerequisite: KG4DT is locally deployed successfully.
     - [Model ChatGPT](http://127.0.0.1:5000/chatgpt)
         - input your own <b>OpenAI API Key</b>. Find information <a href="https://platform.openai.com/settings/organization/api-keys">here</a>
         - click <b>Go</b> to get the answer
+
+## Ontology Customisation
+We develop [a script tool](https://github.com/sustainable-processes/KG4DT/tree/main/ontology/patch_onto.py) for adding custom Laws and Variables which are defined in JSON to the model ontology. [Example JSON files](https://github.com/sustainable-processes/KG4DT/tree/main/ontology/patches) for the addition of mixing rate and reaction rate Laws are provided to showcase how to create such JSON files. To generated the updated ontology, run `bash ./ontology/patch_onto.sh`. The workflow of this script can be shown as the following.
+![custom workflow](./frontend/assets/img/kg4dt/custom_workflow.jpg)

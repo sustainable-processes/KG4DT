@@ -1,0 +1,109 @@
+{
+  "Phenomenon": [
+    {
+      "name": "Eley-Rideal_Surface_Catalysis",
+      "cls": "ChemicalReactionPhenomenon",
+      "fps": [],
+      "mts": [],
+      "mes": []
+    }
+  ],
+  "Unit": [
+    {
+      "name": "l_per_mol",
+      "cls": "SI_DerivedUnit",
+      "sym": "<math><mtext>L</mtext><mtext>/</mtext><mtext>mol</mtext></math>",
+      "metr": null,
+      "rto": null,
+      "intcpt": null
+    },
+    {
+      "name": "g_per_l",
+      "cls": "SI_DerivedUnit",
+      "sym": "<math><mtext>g</mtext><mtext>/</mtext><mtext>L</mtext></math>",
+      "metr": null,
+      "rto": null,
+      "intcpt": null
+    },
+    {
+      "name": "mol_per_l",
+      "cls": "SI_DerivedUnit",
+      "sym": "<math><mrow><mtext>mol</mtext><mtext>/</mtext><mtext>L</mtext></mrow></math>",
+      "metr": null,
+      "rto": null,
+      "intcpt": null
+    }
+  ],
+  "Variable": [
+    {
+      "name": "Adsorption_Constant",
+      "cls": "PhysicalParameter",
+      "sym": "<math><mrow><mi>K</mi></mrow></math>",
+      "unit": "l_per_mol",
+      "dims": ["Species"],
+      "law": null
+    },
+    {
+      "name": "Catalyst_Mass_Concentration",
+      "cls": "OperatingParameter",
+      "sym": "<math><mrow><msub><mi>W</mi><mtext>cat</mtext></msub></mrow></math>",
+      "unit": "g_per_l",
+      "dims": [],
+      "law": null
+    },
+    {
+      "name": "Coefficient",
+      "cls": "ReactionParameter",
+      "sym": "<math><mrow><mi>ν</mi></mrow></math>",
+      "unit": null,
+      "dims": ["Reaction", "Species"],
+      "law": null
+    },
+    {
+      "name": "Concentration",
+      "cls": "StateVariable",
+      "sym": "<math><mrow><mi>c</mi></mrow></math>",
+      "unit": "mol_per_l",
+      "dims": ["Stream", "Species"],
+      "law": null
+    },
+    {
+      "name": "Partial_Order",
+      "cls": "ReactionParameter",
+      "sym": "<math><mrow><mi>n</mi></mrow></math>",
+      "unit": null,
+      "dims": ["Reaction", "Species"],
+      "law": null
+    },
+    {
+      "name": "Rate_Constant",
+      "cls": "ReactionParameter",
+      "sym": "<math><mrow><mi>k</mi></mrow></math>",
+      "unit": null,
+      "dims": ["Reaction", "Solvent"],
+      "law": null
+    },
+    {
+      "name": "Reaction_Rate",
+      "cls": "RateVariable",
+      "sym": "<math><mrow><msub><mi>r</mi><mtext>r</mtext></msub></mrow></math>",
+      "unit": null,
+      "dims": ["Stream", "Reaction"],
+      "law": "Reaction_Rate_Law_with_Eley-Rideal_Surface_Catalysis"
+    }
+  ],
+  "Law": {
+    "name": "Reaction_Rate_Law_with_Eley-Rideal_Surface_Catalysis",
+    "pheno": "Eley-Rideal_Surface_Catalysis",
+    "doi": null,
+    "fml": "<math><mrow><mfrac><mrow><mi>k</mi><msub><mi>W</mi><mtext>cat</mtext></msub><mrow><mo>∏</mo><mrow><mi>c</mi><mo>[</mo><mi>ν</mi><mo>&lt;</mo><mn>0</mn><mo>]</mo></mrow></mrow></mrow><mrow><mn>1</mn><mo>+</mo><mrow><mo>∑</mo><mrow><mi>K</mi><mi>c</mi></mrow></mrow></mrow></mfrac></mrow></math>",
+    "vars": [
+      "Coefficient",
+      "Concentration",
+      "Partial_Order",
+      "Rate_Constant",
+      "Adsorption_Constant",
+      "Catalyst_Mass_Concentration"
+    ]
+  }
+}

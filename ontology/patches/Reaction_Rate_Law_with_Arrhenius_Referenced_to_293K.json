@@ -1,0 +1,74 @@
+{
+  "Phenomenon": [
+    {
+      "name": "Arrhenius_Refereced_to_293K",
+      "cls": "ChemicalReactionPhenomenon",
+      "fps": [],
+      "mts": [],
+      "mes": []
+    }
+  ],
+  "Unit": [
+    {
+      "name": "oC",
+      "cls": "SI_DerivedUnit",
+      "sym": "<math><mrow><msup><mtext/><mtext>o</mtext></msup><mtext>C</mtext></mrow></math>",
+      "metr": "K",
+      "rto": null,
+      "intcpt": 273.15
+    },
+    {
+      "name": "kJ_per_mol",
+      "cls": "SI_DerivedUnit",
+      "sym": "<math><mtext>kJ</mtext><mtext>/</mtext><mtext>mol</mtext></math>",
+      "metr": null,
+      "rto": null,
+      "intcpt": null
+    }
+  ],
+  "Variable": [
+    {
+      "name": "Temperature",
+      "cls": "OperatingParameter",
+      "sym": "<math><mrow><mi>T</mi></mrow></math>",
+      "unit": "oC",
+      "dims": [],
+      "law": null
+    },
+    {
+      "name": "Activation_Energy",
+      "cls": "ReactionParameter",
+      "sym": "<math><mrow><msub><mi>E</mi><mtext>a</mtext></msub></mrow></math>",
+      "unit": "kJ_per_mol",
+      "dims": ["Solvent", "Reaction"],
+      "law": null
+    },
+    {
+      "name": "Pre-exponential_Factor",
+      "cls": "ReactionParameter",
+      "sym": "<math><mrow><mi>A</mi></mrow></math>",
+      "unit": null,
+      "dims": ["Solvent", "Reaction"],
+      "law": null
+    },
+    {
+      "name": "Reaction_Rate",
+      "cls": "RateVariable",
+      "sym": "<math><mrow><msub><mi>r</mi><mtext>r</mtext></msub></mrow></math>",
+      "unit": null,
+      "dims": ["Stream", "Reaction"],
+      "law": "Reaction_Rate_Law_with_Arrhenius_Refereced_to_293K"
+    }
+  ],
+  "Law": {
+    "name": "Reaction_Rate_Law_with_Arrhenius_Refereced_to_293K",
+    "pheno": "Arrhenius_Refereced_to_293K",
+    "doi": null,
+    "fml": "<math><mrow><mi>A</mi><mrow><mo>exp</mo><mrow><mo>(</mo><mfrac><msub><mi>E</mi><mtext>a</mtext></msub><mi>R</mi></mfrac><mrow><mo>(</mo><mfrac><mn>1</mn><mn>293</mn></mfrac><mo>−</mo><mfrac><mn>1</mn><mn>T</mn></mfrac><mo>)</mo></mrow><mo>)</mo></mrow></mrow></mrow></math>",
+    "vars": [
+      "Temperature",
+      "Activation_Energy",
+      "Pre-exponential_Factor"
+    ]
+  }
+}

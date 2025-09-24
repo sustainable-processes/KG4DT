@@ -1,0 +1,117 @@
+{
+  "Phenomenon": [
+    {
+      "name": "Continuous",
+      "cls": "Accumulation",
+      "fps": ["Plug_Flow"],
+      "mts": [],
+      "mes": []
+    },
+    {
+      "name": "Plug_Flow",
+      "cls": "FlowPattern",
+      "fps": [],
+      "mts": ["Diffusion"],
+      "mes": []
+    },
+    {
+      "name": "Diffusion",
+      "cls": "MolecularTransportPhenomenon",
+      "fps": [],
+      "mts": [],
+      "mes": []
+    }
+  ],
+  "Unit": [
+    {
+      "name": "per_s",
+      "cls": "SI_DerivedUnit",
+      "sym": "<math><msup><mtext>s</mtext><mn>−1</mn></msup></math>",
+      "metr": null,
+      "rto": null,
+      "intcpt": null
+    },
+    {
+      "name": "mol_per_l",
+      "cls": "SI_DerivedUnit",
+      "sym": "<math><mrow><mtext>mol</mtext><mtext>/</mtext><mtext>L</mtext></mrow></math>",
+      "metr": null,
+      "rto": null,
+      "intcpt": null
+    }
+  ],
+  "Variable": [
+    {
+      "name": "Overall_Mass_Transfer_Coefficient",
+      "cls": "MolecularTransportParameter",
+      "sym": "<math><mrow><msub><mi>K</mi><mtext>c</mtext></msub></mrow></math>",
+      "unit": "per_s",
+      "dims": ["Species"],
+      "law": null
+    },
+    {
+      "name": "Concentration",
+      "cls": "StateVariable",
+      "sym": "<math><mrow><mi>c</mi></mrow></math>",
+      "unit": "mol_per_l",
+      "dims": ["Stream", "Species"],
+      "law": null
+    },
+    {
+      "name": "Mixing_Rate",
+      "cls": "RateVariable",
+      "sym": "<math><mrow><msub><mi>r</mi><mtext>m</mtext></msub></mrow></math>",
+      "unit": null,
+      "dims": ["Stream", "Species"],
+      "law": "Mixing_Rate_Law_with_Diffusion"
+    }
+  ],
+  "ContextDescriptor": [
+    {
+      "name": "Is_Plug_Flow",
+      "cls": "InformationContextDescriptor",
+      "unit": null
+    },
+    {
+      "name": "Has_Multiple_Liquid_Streams",
+      "cls": "InformationContextDescriptor",
+      "unit": null
+    },
+    {
+      "name": "Is_Liquid_Phase_Miscible",
+      "cls": "InformationContextDescriptor",
+      "unit": null
+    }
+  ],
+  "Rule": {
+    "name": "Diffusion_Rule",
+    "doi": null,
+    "descs": ["Is_Plug_Flow", "Has_Multiple_Liquid_Streams", "Is_Liquid_Phase_Miscible"],
+    "phenos": ["Plug_Flow", "Diffusion"],
+    "sparql": [
+      "select ?is_rule_match where {\n",
+      "    bind({Is_Plug_Flow} as ?is_plug_flow).\n",
+      "    bind({Has_Multiple_Liquid_Streams} as ?has_multiple_liquid_streams).\n",
+      "    bind({Is_Liquid_Phase_Miscible} as ?is_liquid_phase_miscible).\n",
+      "    bind(\n",
+      "    if(\n",
+      "        ?is_plug_flow && \n",
+      "        ?has_multiple_liquid_streams && \n",
+      "        ?is_liquid_phase_miscible,\n",
+      "        true, \n",
+      "        false) as ?is_rule_match \n",
+      "    ).\n",
+      "}"
+    ]
+  },
+  "Law": {
+    "name": "Mixing_Rate_Law_with_Diffusion",
+    "pheno": "Diffusion",
+    "doi": null,
+    "fml": "<math><mrow><msub><mi>K</mi><mtext>c</mtext></msub><mi>Δc</mi></mrow><mrow><mi>Δc</mi><mo>=</mo><mfrac><mrow><mo>∑</mo><mi>c</mi><mi>q</mi></mrow><mrow><mo>∑</mo><mi>q</mi></mrow></mfrac><mo>−</mo><mi>c</mi></mrow></math>",
+    "vars": [
+      "Concentration",
+      "Overall_Mass_Transfer_Coefficient"
+    ]
+  }
+}

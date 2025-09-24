@@ -498,6 +498,7 @@
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Activation_Energy">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#ReactionParameter"/>
         <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Reaction_Dimension"/>
+        <system:hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Solvent_Dimension"/>
         <system:hasUnitOfMeasure rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#kJ_per_mol"/>
         <hasSymbol rdf:parseType="Literal"><math>
      <mrow>
@@ -1156,7 +1157,7 @@
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/model/process_model.owl#Law"/>
         <mathematical_model:hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Constant_Dispersion_Coefficient"/>
         <process_model:isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Flow"/>
-        <hasRule rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Flow_Rule_by_Plain"/>
+        <hasRule rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Flow_Rule"/>
         <hasFormula rdf:parseType="Literal"><math>
      <mrow>
          <msub>
@@ -2487,6 +2488,14 @@
     
 
 
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Has_Multiple_Liquid_Streams -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Has_Multiple_Liquid_Streams">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#InformationContextDescriptor"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Heating_Time -->
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Heating_Time">
@@ -2597,17 +2606,17 @@
     
 
 
-    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Liquid-liquid_Plug_Flow -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Liquid_Phase_Miscible -->
 
-    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Liquid-liquid_Plug_Flow">
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Liquid_Phase_Miscible">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#InformationContextDescriptor"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Liquid_Phase_Miscible -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Plug_Flow -->
 
-    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Liquid_Phase_Miscible">
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Plug_Flow">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#InformationContextDescriptor"/>
     </owl:NamedIndividual>
     
@@ -2647,31 +2656,37 @@
     
 
 
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Mass_Transfer_Rule -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Mass_Transfer_Rule">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Rule"/>
+        <process_model:isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Mass_Transfer"/>
+        <process_model:isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Plug_Flow"/>
+        <hasContextDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Has_Multiple_Liquid_Streams"/>
+        <hasContextDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Liquid_Phase_Miscible"/>
+        <hasContextDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Plug_Flow"/>
+        <hasSPARQL>select ?is_rule_match where {
+    bind({Is_Plug_Flow} as ?is_plug_flow).
+    bind({Has_Multiple_Liquid_Streams} as ?has_multiple_liquid_streams).
+    bind({Is_Liquid_Phase_Miscible} as ?is_liquid_phase_miscible).
+    bind(
+        if(
+            ?is_plug_flow &amp;amp;&amp;amp; 
+            ?has_multiple_liquid_streams &amp;amp;&amp;amp; 
+            !?is_liquid_phase_miscible,
+            true, 
+            false) as ?is_rule_match
+    ).
+}</hasSPARQL>
+    </owl:NamedIndividual>
+    
+
+
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Plug_Flow -->
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Plug_Flow">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#FlowPattern"/>
         <relatesToMolecularTransportPhenomenon rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Mass_Transfer"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Plug_Flow_Rule_by_Plain -->
-
-    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Plug_Flow_Rule_by_Plain">
-        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Rule"/>
-        <process_model:isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Mass_Transfer"/>
-        <process_model:isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Plug_Flow"/>
-        <hasContextDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Liquid-liquid_Plug_Flow"/>
-        <hasSPARQL>select ?is_rule_match where {
-    bind({Is_Liquid-liquid_Plug_Flow} as ?is_liquid_liquid_plug_flow).
-    bind(
-        if(
-            ?is_liquid_liquid_plug_flow,
-            true, 
-            false) as ?is_rule_match
-    ).
-}</hasSPARQL>
     </owl:NamedIndividual>
     
 
@@ -4233,6 +4248,32 @@
     
 
 
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Flow_Rule -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Flow_Rule">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Rule"/>
+        <process_model:isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Axial_Dispersion"/>
+        <process_model:isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Flow"/>
+        <hasContextDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Has_Gas_Phase"/>
+        <hasContextDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Liquid_Phase_Miscible"/>
+        <hasContextDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Reactor"/>
+        <hasSPARQL>select ?is_rule_match where {
+    bind({Taylor-Couette_Reactor} as ?taylor_couette_reactor).
+    bind({Has_Gas_Phase} as ?has_gas_phase).
+    bind({Is_Liquid_Phase_Miscible} as ?is_liquid_phase_miscible).
+    bind(
+        if(
+            ?taylor_couette_reactor &amp;&amp; 
+            !?has_gas_phase &amp;&amp; 
+            ?is_liquid_phase_miscible,
+            true, 
+            false) as ?is_rule_match
+    ).
+}</hasSPARQL>
+    </owl:NamedIndividual>
+    
+
+
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Flow_Rule_by_Moore_and_Conney -->
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Flow_Rule_by_Moore_and_Conney">
@@ -4268,32 +4309,6 @@
                 ((?ro - ?ri &gt; 0.0004 &amp;&amp; ?ro - ?ri &lt; 0.0038) || (?ri / ?ro &gt; 0.73 &amp;&amp; ?ri / ?ro &lt; 0.96)) || 
                 ((?ro - ?ri) * ?ω * ?ri * ?rho / ?mu &gt; 100)
             ), 
-            true, 
-            false) as ?is_rule_match
-    ).
-}</hasSPARQL>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Flow_Rule_by_Plain -->
-
-    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Flow_Rule_by_Plain">
-        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Rule"/>
-        <process_model:isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Axial_Dispersion"/>
-        <process_model:isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Flow"/>
-        <hasContextDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Has_Gas_Phase"/>
-        <hasContextDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Is_Liquid_Phase_Miscible"/>
-        <hasContextDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Taylor-Couette_Reactor"/>
-        <hasSPARQL>select ?is_rule_match where {
-    bind({Taylor-Couette_Reactor} as ?taylor_couette_reactor).
-    bind({Has_Gas_Phase} as ?has_gas_phase).
-    bind({Is_Liquid_Phase_Miscible} as ?is_liquid_phase_miscible).
-    bind(
-        if(
-            ?taylor_couette_reactor &amp;&amp; 
-            !?has_gas_phase &amp;&amp; 
-            ?is_liquid_phase_miscible,
             true, 
             false) as ?is_rule_match
     ).
@@ -4632,7 +4647,7 @@
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/model/process_model.owl#Law"/>
         <mathematical_model:hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Plain_Volumetric_Mass_Transfer_Coefficient"/>
         <process_model:isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Plug_Flow"/>
-        <hasRule rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Plug_Flow_Rule_by_Plain"/>
+        <hasRule rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#Liquid-liquid_Mass_Transfer_Rule"/>
         <hasFormula rdf:parseType="Literal"><math>
     <mrow>
         <msub>
