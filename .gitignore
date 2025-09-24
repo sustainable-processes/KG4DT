@@ -7,5 +7,6 @@ graphdb/dist/*zip
 .DS_Store
 docker-compose.yml
 .env
+.idea
 
 backend/cases/hydrogenation
