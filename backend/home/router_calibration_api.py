@@ -224,14 +224,10 @@ def api_model_operation_parameter():
         if not isinstance(payload, dict):
             return jsonify({"error": "Invalid JSON body; expected an object."}), 400
 
-        # Accept either top-level context or body-as-context
-        context = payload.get("context") if "context" in payload else payload
-        if not isinstance(context, dict):
-            return jsonify({"error": "Field 'context' must be an object when provided."}), 400
-
         # Normalize and validate shapes with minimal assumptions
-        basic = context.get("basic") or {}
-        desc = context.get("desc") or {}
+        basic = payload.get("basic") or {}
+        desc = payload.get("desc") or {}
+
         if not isinstance(basic, dict) or not isinstance(desc, dict):
             return jsonify({
                 "error": "Fields 'basic' and 'desc' (when provided) must be objects.",
@@ -266,6 +262,7 @@ def api_model_operation_parameter():
             "gas": _ensure_idx_map(_ensure_dict(basic.get("gas"))),
             "sld": _ensure_idx_map(_ensure_dict(basic.get("sld")))
         }
+
         # species list at the top-level (rarely used here) may be provided; keep if a list of strings
         if isinstance(basic.get("spc"), list):
             basic_norm["spc"] = [str(x).strip() for x in basic.get("spc") if x is not None and str(x).strip()]
@@ -367,6 +364,7 @@ def api_model_operation_parameter():
             except Exception:
                 continue
             out.append([name, idx1, idx2])
+        print(f"out: {out}")
 
         if not out:
             return jsonify({
@@ -386,75 +384,41 @@ def api_model_operation_parameter():
 
 
 
-@blueprint.route("/api/model/simulate", methods=["POST"])
+@blueprint.route("/api/model/simulate", methods=["GET"])
 def api_model_simulate():
     """
     Run simulation for a table of experiments and return tabular results.
 
-    Request JSON body:
-    {
-      "context": { ... },
-      "op_params": {
-        "ind": [
-          ["Experiment_No", null, null, null, null],
-          ["Batch_Time", null, null, null, null],
-          ["Initial_Mass", null, "Stream1", null, "water"],
-          ...
-        ],
-        "value": [
-          [1, 100, 0.5, ...],
-          ...
-        ]
-      }
-    }
-
-    Response (200):
-    [
-      {
-        "x": {
-          "var": "Time",
-          "mml": "<math><mrow><mi>t</mi></mrow></math>",
-          "unit": "<math><mrow><mtext>s</mtext></mrow></math>",
-          "stm": null,
-          "gas": null,
-          "sld": null,
-          "spc": null,
-          "data": [...]
-        },
-        "y": [
-          {
-            "var": "Mass",
-            "mml": "<math><mrow><mi>m</mi></mrow></math>",
-            "unit": "<math><mrow><mtext>kg</mtext></mrow></math>",
-            "stm": "Stream1",
-            "gas": null,
-            "sld": null,
-            "spc": "water",
-            "data": [...]
-          },
-          ...
-        ]
-      }
-    ]
+    Best-practice enhancements:
+    - Require application/json Content-Type.
+    - Validate request shape strictly.
+    - Support both 'val' and 'value' for data rows (backward compatible).
+    - Convert OP indices to tuples for internal processing.
     """
+    print("api_model_simulate")
     try:
+        if not request.is_json:
+            return jsonify({"error": "Unsupported Media Type. Use Content-Type: application/json."}), 415
+
         payload = request.get_json(silent=True) or {}
         if not isinstance(payload, dict):
             return jsonify({"error": "Invalid JSON body; expected an object."}), 400
 
         context = payload.get("context")
         op_params = payload.get("op_params")
-
-        if not context or not isinstance(context, dict):
+        if not isinstance(context, dict):
             return jsonify({"error": "Field 'context' is required and must be an object."}), 400
-        if not op_params or not isinstance(op_params, dict):
+        if not isinstance(op_params, dict):
             return jsonify({"error": "Field 'op_params' is required and must be an object."}), 400
 
-        # Build request for ModelSimulationAgent
-        op_params["ind"] = [tuple(ind) for ind in op_params["ind"]]
+        # Normalize op_params: support both 'val' and 'value'
+        norm_op = _normalize_dataset_section("op_params", op_params)
+        if isinstance(norm_op, tuple):  # (error_json, status)
+            return norm_op
+
         sim_req = {
             "context": context,
-            "op_params": op_params
+            "op_params": norm_op,
         }
 
         # Run simulation
@@ -471,43 +435,55 @@ def api_model_simulate():
         }), 500
 
 
-@blueprint.route("/api/model/cal_param", methods=["POST"])
+@blueprint.route("/api/model/cal_param", methods=["GET"])
 def api_model_calibration_parameter():
     """
-    POST body JSON may contain keys: {"basic", "desc"}
-    The "basic" value may contain keys: {"spc", "rxn", "stm", "gas", "sld"}.
-    The "desc" value may contain keys: {"ac", "fp", "mt", "me", "rxn", "param_law" }.
-    Returns operation parameters with dimensions of species and stream/solid/gas.
-    Response example: {"cal_param": [
-        ("Activation_Energy", None, "Stream1", "A + B > C", None), 
-        ...
-    ]}
-    - Returns 400 if no filters provided.
-    - Returns 404 if no parameters found for the given filters.
+    Retrieve candidate calibration parameters (reaction/mass-transfer) for a modeling context.
+
+    Best-practice enhancements:
+    - Require application/json Content-Type.
+    - Accept either full context at top-level or in a top-level 'context' field.
+    - Normalize shapes consistent with /api/model/op_param.
+    - Clear 400/404 errors with hints.
+    - Ensure deterministic, JSON-friendly output (lists, sorted).
     """
     try:
-        # TODO: preload check Jonathan
-        context = request.get_json(silent=True) or {}
-        # if not isinstance(payload, dict):
-        #     return jsonify({"error": "Invalid JSON body; expected an object."}), 400
+        if not request.is_json:
+            return jsonify({"error": "Unsupported Media Type. Use Content-Type: application/json."}), 415
 
-        # keys = ("ac", "fp", "mt", "me", "rxn", "param_law")
-        # filters = {k: payload.get(k) for k in keys if k in payload}
+        payload = request.get_json(silent=True) or {}
+        if not isinstance(payload, dict):
+            return jsonify({"error": "Invalid JSON body; expected an object."}), 400
 
-        # if not any(filters.get(k) for k in keys):
-        #     return jsonify({
-        #         "error": "Provide at least one of 'ac', 'fp', 'mt', 'me', 'rxn', or 'param_law' in the JSON body.",
-        #         "hint": {"example": {"fp": "Annular_Microflow", "param_law": ["Arrhenius"]}}
-        #     }), 400
+        context_in = payload.get("context") if "context" in payload else payload
+        if not isinstance(context_in, dict):
+            return jsonify({"error": "Field 'context' must be an object when provided."}), 400
 
-        cal_params = g.graphdb_handler.query_cal_param(context) or set()
+        normalized_context = _normalize_context(context_in)
+        desc_norm = normalized_context.get("desc", {})
+        if _desc_is_empty(desc_norm):
+            return jsonify({
+                "error": "Provide at least one descriptor in 'desc' (ac, fp, mt, me, rxn, or param_law).",
+                "hint": {"desc": {"fp": "Well_Mixed", "mt": ["Gas_Liquid_Mass_Transfer"]}}
+            }), 400
+
+        cal_params = g.graphdb_handler.query_cal_param(normalized_context) or set()
         if not cal_params:
             return jsonify({
                 "error": "No Reaction/MassTransport parameters found for the specified filters.",
-                "context": context
+                "context": normalized_context
             }), 404
 
-        return jsonify({"cal_param": list(cal_params)}), 200
+        # Convert to a deterministic, JSON-serializable list of lists
+        def _as_list(x):
+            return list(x) if isinstance(x, (list, tuple)) else x
+        out = [ _as_list(x) for x in cal_params ]
+        try:
+            out.sort(key=lambda x: tuple(str(i) for i in x))
+        except Exception:
+            pass
+
+        return jsonify({"cal_param": out, "count": len(out)}), 200
 
     except Exception as e:
         return jsonify({
@@ -516,88 +492,55 @@ def api_model_calibration_parameter():
         }), 500
 
 
-@blueprint.route("/api/model/calibrate", methods=["POST"])
+@blueprint.route("/api/model/calibrate", methods=["GET"])
 def api_model_calibrate():
     """
-    Run calibration using a table of experiments where some result columns may be missing.
-    Accepts a simplified JSON and returns optimized parameter mapping.
+    Run calibration using a table of experiments with possibly missing result columns.
 
-    Request JSON body:
-    {
-      "context": { ... },
-      "op_params": {
-        "ind": [
-          ["Experiment_No", null, null, null, null],
-          ["Batch_Time", null, null, null, null],
-          ["Initial_Mass", null, "Stream1", null, "water"],
-          ...
-        ],
-        "val": [
-          ...
-        ]
-      },
-      "reals: {
-        "ind": [
-          ["Initial_Mass", null, "Stream1", null, "water"],
-          ...
-        ],
-        "val": [
-          ...
-        ]
-      }
-      "cal_params": {
-        "ind": [
-          ["Activation_Energy", null, "Stream1", "A + B > C", null],
-          ...
-        ],
-        "val": [
-          ...
-        ]
-      }
-    }
-
-    Response (200):
-    [
-      {
-        "x": {
-          "ind": [...],
-          "val": [...]
-        },
-        "y": {
-          "ind": [[...], [...], ...],
-          "val": [[...], [...], ...],
-      },
-      ...
-    ]
+    Best-practice enhancements:
+    - Require application/json Content-Type.
+    - Validate and normalize shapes.
+    - Support both 'val' and 'value' for dataset arrays (backward compatible).
+    - Ensure bounds pairs for 'cal_params'.
     """
     try:
+        if not request.is_json:
+            return jsonify({"error": "Unsupported Media Type. Use Content-Type: application/json."}), 415
+
         payload = request.get_json(silent=True) or {}
         if not isinstance(payload, dict):
             return jsonify({"error": "Invalid JSON body; expected an object."}), 400
 
         context = payload.get("context")
-        op_params = payload.get("op_params")
-        reals = payload.get("reals")
-        cal_params = payload.get("cal_params")
+        op_params_in = payload.get("op_params")
+        reals_in = payload.get("reals")
+        cal_params_in = payload.get("cal_params")
 
-        if not context or not isinstance(context, dict):
+        if not isinstance(context, dict):
             return jsonify({"error": "Field 'context' is required and must be an object."}), 400
-        if not op_params or not isinstance(op_params, dict):
+        if not isinstance(op_params_in, dict):
             return jsonify({"error": "Field 'op_params' is required and must be an object."}), 400
-        if not reals or not isinstance(reals, dict):
+        if not isinstance(reals_in, dict):
             return jsonify({"error": "Field 'reals' is required and must be an object."}), 400
-        if not cal_params or not isinstance(cal_params, dict):
+        if not isinstance(cal_params_in, dict):
             return jsonify({"error": "Field 'cal_params' is required and must be an object."}), 400
 
-        # Build request for ModelSimulationAgent
-        op_params["ind"] = [tuple(ind) for ind in op_params["ind"]]
-        reals["ind"] = [tuple(ind) for ind in reals["ind"]]
-        cal_params["ind"] = [tuple(ind) for ind in cal_params["ind"]]
+        # Normalize sections
+        op_params = _normalize_dataset_section("op_params", op_params_in)
+        if isinstance(op_params, tuple):
+            return op_params
+        reals = _normalize_dataset_section("reals", reals_in)
+        if isinstance(reals, tuple):
+            return reals
+        cal_params = _normalize_bounds_section("cal_params", cal_params_in)
+        if isinstance(cal_params, tuple):
+            return cal_params
+
         cal_req = {
             "context": context,
             "op_params": op_params,
             "reals": reals,
-            "cal_params": cal_params
+            "cal_params": cal_params,
         }
 
         # Run calibration
@@ -613,3 +556,176 @@ def api_model_calibrate():
             "detail": str(e)
         }), 500
 
+
+
+# ----------------------
+# Helper utilities (request validation/normalization)
+# ----------------------
+
+def _json_error(message, status=400, detail=None, hint=None):
+    payload = {"error": message}
+    if detail is not None:
+        payload["detail"] = detail
+    if hint is not None:
+        payload["hint"] = hint
+    return jsonify(payload), status
+
+
+def _normalize_dataset_section(name, section):
+    """Normalize a dataset-like section with keys: {"ind": [...], "val"|"value": [[...], ...]}.
+    - Ensures indices are tuples for internal processing.
+    - Validates that each row has the same number of elements as indices length.
+    Returns a normalized dict or (json_error, status) tuple on error.
+    """
+    if not isinstance(section, dict):
+        return _json_error(f"Field '{name}' must be an object with 'ind' and 'val' fields.", 400)
+
+    inds = section.get("ind")
+    vals = section.get("val")
+    if vals is None and "value" in section:
+        vals = section.get("value")
+
+    if not isinstance(inds, list) or not all(isinstance(x, (list, tuple)) for x in inds):
+        return _json_error(f"Field '{name}.ind' must be a list of index tuples/lists.", 400)
+    if not isinstance(vals, list) or not all(isinstance(row, list) for row in vals):
+        return _json_error(f"Field '{name}.val' must be a list of rows (lists).", 400,
+                           hint={name: {"ind": [["Name", None, None, None, None]], "val": [[1.0]]}})
+
+    n_cols = len(inds)
+    for i, row in enumerate(vals):
+        if len(row) != n_cols:
+            return _json_error(
+                f"Row {i} in '{name}.val' has length {len(row)} but expected {n_cols} per '{name}.ind'.",
+                400
+            )
+
+    return {"ind": [tuple(ind) for ind in inds], "val": vals}
+
+
+def _normalize_bounds_section(name, section):
+    """Normalize a bounds-like section with keys: {"ind": [...], "val": [[lo, hi], ...]}.
+    Returns normalized dict or (json_error, status) on error.
+    """
+    if not isinstance(section, dict):
+        return _json_error(f"Field '{name}' must be an object with 'ind' and 'val' fields.", 400)
+
+    inds = section.get("ind")
+    vals = section.get("val")
+    if vals is None and "value" in section:
+        vals = section.get("value")
+
+    if not isinstance(inds, list) or not all(isinstance(x, (list, tuple)) for x in inds):
+        return _json_error(f"Field '{name}.ind' must be a list of index tuples/lists.", 400)
+    if not isinstance(vals, list) or not all(isinstance(b, (list, tuple)) and len(b) == 2 for b in vals):
+        return _json_error(f"Field '{name}.val' must be a list of [lo, hi] pairs.", 400,
+                           hint={name: {"ind": [["Activation_Energy", None, "S1", "R1", None]], "val": [[0.0, 10.0]]}})
+    if len(vals) != len(inds):
+        return _json_error(
+            f"'{name}.val' must have the same length as '{name}.ind' (got {len(vals)} vs {len(inds)}).",
+            400
+        )
+
+    return {"ind": [tuple(ind) for ind in inds], "val": [list(b) for b in vals]}
+
+
+def _normalize_context(context):
+    """Normalize modeling context into a stable structure used by graphdb handler.
+    Accepts a dict possibly with keys 'basic' and 'desc'.
+    Returns a dict {"basic": {...}, "desc": {...}}.
+    """
+    def _ensure_dict(d):
+        return d if isinstance(d, dict) else {}
+
+    def _ensure_idx_map(m):
+        if not isinstance(m, dict):
+            return {}
+        out = {}
+        for k, v in m.items():
+            if not isinstance(v, dict):
+                continue
+            spc = v.get("spc")
+            if spc is None:
+                out[k] = {"spc": []}
+            elif isinstance(spc, list):
+                out[k] = {"spc": [str(x).strip() for x in spc if x is not None and str(x).strip() != ""]}
+            else:
+                s = str(spc).strip()
+                out[k] = {"spc": [s] if s else []}
+        return out
+
+    def _norm_str(x):
+        return str(x).strip() if isinstance(x, (str, int, float)) else None
+
+    def _norm_list(val):
+        if val is None:
+            return []
+        if isinstance(val, list):
+            items = val
+        else:
+            items = [val]
+        out = []
+        for x in items:
+            s = _norm_str(x)
+            if s:
+                out.append(s)
+        return out
+
+    basic = _ensure_dict(context.get("basic"))
+    desc = _ensure_dict(context.get("desc"))
+
+    basic_norm = {
+        "stm": _ensure_idx_map(_ensure_dict(basic.get("stm"))),
+        "gas": _ensure_idx_map(_ensure_dict(basic.get("gas"))),
+        "sld": _ensure_idx_map(_ensure_dict(basic.get("sld"))),
+    }
+    if isinstance(basic.get("spc"), list):
+        basic_norm["spc"] = [str(x).strip() for x in basic.get("spc") if x is not None and str(x).strip()]
+
+    desc_norm = {
+        "ac": _norm_str(desc.get("ac")),
+        "fp": _norm_str(desc.get("fp")),
+        "mt": _norm_list(desc.get("mt")),
+        "me": _norm_list(desc.get("me")),
+        "rxn": {},
+        "param_law": {},
+    }
+
+    rxn = desc.get("rxn")
+    if isinstance(rxn, dict):
+        for rk, rv in rxn.items():
+            lst = _norm_list(rv)
+            if lst:
+                desc_norm["rxn"][str(rk).strip()] = lst
+    elif isinstance(rxn, list):
+        for item in rxn:
+            if isinstance(item, (list, tuple)) and len(item) >= 2:
+                r = _norm_str(item[0])
+                ph = _norm_str(item[1])
+                if r and ph:
+                    desc_norm["rxn"].setdefault(r, []).append(ph)
+    elif isinstance(rxn, (str, int, float)):
+        r = _norm_str(rxn)
+        if r:
+            desc_norm["rxn"][r] = []
+
+    pl = desc.get("param_law")
+    if isinstance(pl, dict):
+        for pk, pv in pl.items():
+            ps = _norm_str(pk)
+            ls = _norm_str(pv)
+            if ps and ls:
+                desc_norm["param_law"][ps] = ls
+    elif isinstance(pl, list):
+        for item in pl:
+            if isinstance(item, dict):
+                for pk, pv in item.items():
+                    ps = _norm_str(pk)
+                    ls = _norm_str(pv)
+                    if ps and ls:
+                        desc_norm["param_law"][ps] = ls
+
+    return {"basic": basic_norm, "desc": desc_norm}
+
+
+def _desc_is_empty(desc_norm):
+    return not (desc_norm.get("ac") or desc_norm.get("fp") or desc_norm.get("mt") or desc_norm.get("me") or desc_norm.get("rxn") or desc_norm.get("param_law"))
