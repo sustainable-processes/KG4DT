@@ -274,9 +274,13 @@ def api_model_unit():
 
 @blueprint.route("/api/model/save", methods=["POST"])
 def api_model_save():
+    # Enforce JSON input
+    if not request.is_json:
+        return jsonify({"error": "Unsupported Media Type. Use Content-Type: application/json."}), 415
+
     payload = request.get_json(silent=True)
-    if not payload:
-        return jsonify({"error": "Invalid or missing JSON body"}), 400
+    if not isinstance(payload, dict):
+        return jsonify({"error": "Invalid or missing JSON body; expected a JSON object."}), 400
 
     users = payload.get("users") or {}
     if not isinstance(users, dict):
@@ -287,31 +291,64 @@ def api_model_save():
         if key in payload and not isinstance(payload[key], list):
             return jsonify({"error": f"Field '{key}' must be a list"}), 400
 
-    # Prepare save directory: <project_root>/save
-    save_dir = Path(current_app.root_path) / "save"
-    save_dir.mkdir(parents=True, exist_ok=True)
-
-    # Build a descriptive, collision-resistant filename
-    user_id = users.get("id", "unknown")
-    project_name = users.get("project_name", "project")
-    model_name = users.get("model", "model")
-
-    # Sanitize components and append UTC timestamp
-    def _safe(s):
-        return str(s).replace(os.sep, "_").replace(" ", "_")
-
-    timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
-    filename = f"{_safe(project_name)}_{_safe(model_name)}_{_safe(user_id)}_{timestamp}.json"
-    file_path = save_dir / filename
-
-    # Write the full payload to JSON
+    # Persist to database using Project model
     try:
-        with open(file_path, "w", encoding="utf-8") as f:
-            json.dump(payload, f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        return jsonify({"error": f"Failed to save file: {e}"}), 500
+        from ..models import get_session
+        from ..models.project import Project
 
-    return jsonify({"success": True, "file": filename, "path": str(file_path.relative_to(current_app.root_path))}), 200
+        session = get_session()
+        name = users.get("project_name") or users.get("name") or "project"
+        model_name = users.get("model")
+        try:
+            user_id = int(users.get("id")) if users.get("id") is not None else None
+        except Exception:
+            user_id = None
+
+        # Upsert: replace content when a project exists with same (name, model, user_id)
+        existing = (
+            session.query(Project)
+            .filter(
+                Project.name == name,
+                Project.model == model_name,
+                Project.user_id == user_id,
+            )
+            .one_or_none()
+        )
+
+        # Store payload without the 'users' field
+        payload_no_users = {k: v for k, v in payload.items() if k != "users"}
+
+        if existing is not None:
+            existing.content = payload_no_users
+            # last_update will auto-update via onupdate; flush to generate UPDATE
+            session.commit()
+            return jsonify({
+                "success": True,
+                "id": existing.id,
+                "name": existing.name,
+                "model": existing.model,
+                "user_id": existing.user_id,
+                "replaced": True,
+            }), 200
+        else:
+            project_row = Project(name=name, user_id=user_id, model=model_name, content=payload_no_users)
+            session.add(project_row)
+            session.commit()
+            return jsonify({
+                "success": True,
+                "id": project_row.id,
+                "name": project_row.name,
+                "model": project_row.model,
+                "user_id": user_id,
+                "replaced": False,
+            }), 200
+    except Exception as e:
+        # Attempt rollback if session exists
+        try:
+            session.rollback()
+        except Exception:
+            pass
+        return jsonify({"error": f"Failed to save to database: {e}"}), 500
 
 @blueprint.route("/api/model/load", methods=["GET"])
 def api_model_load():
@@ -321,37 +358,129 @@ def api_model_load():
     if not project_name:
         return jsonify({"error": "Missing required query parameter 'project_name'"}), 400
 
-    save_dir = Path(current_app.root_path) / "save"
-    if not save_dir.exists() or not save_dir.is_dir():
-        return jsonify({"error": "No saved data directory found"}), 404
+    try:
+        from ..models import get_session
+        from ..models.project import Project
+        session = get_session()
 
-    # Use the same sanitization that save used
-    def _safe(s):
-        return str(s).replace(os.sep, "_").replace(" ", "_")
-
-    # Build search pattern: {project}_{model}_{user_id}_{timestamp}.json
-    # If model/user_id not provided, use wildcard to match any.
-    proj = _safe(project_name)
-    mdl = _safe(model) if model else "*"
-    uid = _safe(user_id) if user_id else "*"
-    pattern = f"{proj}_{mdl}_{uid}_*.json"
-
-    candidates = [p for p in save_dir.glob(pattern) if p.is_file()]
-    if not candidates:
-        detail = {"project_name": project_name}
+        q = session.query(Project).filter(Project.name == project_name)
         if model:
-            detail["model"] = model
-        if user_id:
-            detail["user_id"] = user_id
-        return jsonify({"error": "No saved files found for given filters", "filters": detail}), 404
+            q = q.filter(Project.model == model)
+        if user_id is not None and str(user_id).strip() != "":
+            try:
+                q = q.filter(Project.user_id == int(user_id))
+            except Exception:
+                # If user_id not an int, return 400
+                return jsonify({"error": "Query parameter 'user_id' must be an integer"}), 400
 
-    # Pick the most recently modified file
-    latest = max(candidates, key=lambda p: p.stat().st_mtime)
+        # Order by last_update desc then datetime desc to get latest
+        q = q.order_by(Project.last_update.desc(), Project.datetime.desc())
+        row = q.first()
+        if not row:
+            detail = {"project_name": project_name}
+            if model:
+                detail["model"] = model
+            if user_id:
+                detail["user_id"] = user_id
+            return jsonify({"error": "No saved records found for given filters", "filters": detail}), 404
+
+        # Return the payload as saved (which excludes 'users');
+        # for backward compatibility, also strip 'users' if present in older records.
+        content = row.content
+        try:
+            if isinstance(content, dict) and 'users' in content:
+                content = {k: v for k, v in content.items() if k != 'users'}
+        except Exception:
+            pass
+        return jsonify(content), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to load from database: {e}"}), 500
+
+
+@blueprint.route("/api/model/list_project", methods=["GET"])
+def api_model_list_project():
+    """List all projects for a given user.
+
+    Query parameters:
+    - user_id (required, int): The user ID to list projects for.
+    - model (optional, str): Filter by model name.
+    - limit (optional, int >= 0, default 100): Max number of rows to return.
+    - offset (optional, int >= 0, default 0): Number of rows to skip.
+
+    Response (200):
+    {
+      "projects": [
+        {"id": 1, "name": "ProjA", "model": "Well_Mixed", "datetime": "...", "last_update": "..."},
+        ...
+      ],
+      "count": <int>  // number of items returned in this page
+    }
+
+    Errors:
+    - 400: missing/invalid user_id
+    - 500: server/database error
+    """
+    user_id = request.args.get("user_id")
+    if user_id is None or str(user_id).strip() == "":
+        return jsonify({"error": "Missing required query parameter 'user_id'"}), 400
 
     try:
-        with open(latest, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception as e:
-        return jsonify({"error": f"Failed to load file '{latest.name}': {e}"}), 500
+        uid = int(user_id)
+    except Exception:
+        return jsonify({"error": "Query parameter 'user_id' must be an integer"}), 400
 
-    return jsonify({"success": True, "file": latest.name, "data": data}), 200
+    model = request.args.get("model")
+
+    def _get_int_qp(name, default):
+        val = request.args.get(name)
+        if val is None or str(val).strip() == "":
+            return default
+        try:
+            num = int(val)
+            return num if num >= 0 else default
+        except Exception:
+            return default
+
+    limit = _get_int_qp("limit", 100)
+    offset = _get_int_qp("offset", 0)
+
+    try:
+        from ..models import get_session
+        from ..models.project import Project
+        session = get_session()
+
+        q = session.query(Project).filter(Project.user_id == uid)
+        if model:
+            q = q.filter(Project.model == model)
+
+        # Order latest-first for usability
+        q = q.order_by(Project.last_update.desc(), Project.datetime.desc(), Project.id.desc())
+
+        if offset:
+            q = q.offset(offset)
+        if limit:
+            q = q.limit(limit)
+
+        rows = q.all()
+
+        def _iso(dt):
+            try:
+                return dt.isoformat() if dt is not None else None
+            except Exception:
+                return None
+
+        projects = [
+            {
+                "id": row.id,
+                "name": row.name,
+                "model": row.model,
+                "datetime": _iso(row.datetime),
+                "last_update": _iso(row.last_update),
+            }
+            for row in rows
+        ]
+
+        return jsonify({"projects": projects, "count": len(projects)}), 200
+
+    except Exception as e:
+        return jsonify({"error": "Failed to list projects from database.", "detail": str(e)}), 500
