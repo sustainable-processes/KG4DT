@@ -11,3 +11,5 @@ scipy==1.13.1
 openai==1.52.2
 python-dotenv==1.1.1
 PyJWT
+SQLAlchemy==2.0.32
+psycopg2-binary==2.9.9

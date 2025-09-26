@@ -21,7 +21,17 @@ def register_blueprint(app):
 
 def register_extension(app):
     # Initialize any additional extensions if needed.
-    pass
+    # Initialize SQLAlchemy models/engine
+    try:
+        from . import models
+        models.init_app(app)
+        print("[Init] Database models initialized.")
+    except Exception as e:
+        print(f"[Init] Database init failed: {e}")
+        # Defer failure to first use; app can still start without DB.
+        # Alternatively, re-raise to make DB mandatory.
+        # raise
+        pass
 
 # Setup Flask App with Frontend and Backend
 def create_app(config):
