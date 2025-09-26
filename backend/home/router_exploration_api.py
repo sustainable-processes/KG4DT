@@ -30,15 +30,15 @@ def api_model_pheno_fp():
         raw_ac = request.args.get("ac")
         if raw_ac is None or str(raw_ac).strip() == "":
             return jsonify({
-                "error": "Missing required query parameter 'method'. Allowed values: 'Batch', 'Continuous'.",
-                "hint": "Example: /api/model/phenomenon/fp?ac=Batch"
+                "error": "Missing required query parameter 'ac'. Allowed values: 'Batch', 'Continuous'.",
+                "hint": "Example: /api/model/pheno/fp?ac=Batch"
             }), 400
 
         ac_norm = str(raw_ac).strip().lower()
-        allowed = {"batch", "continuous"}
+        allowed = {"batch", "continuous", "cstr"}
         if ac_norm not in allowed:
             return jsonify({
-                "error": "Invalid value for 'method'. Allowed values are 'Batch' or 'Continuous'.",
+                "error": "Invalid value for 'ac'. Allowed values are 'Batch' or 'Continuous' or 'CSTR'.",
                 "received": raw_ac
             }), 400
 
@@ -101,25 +101,42 @@ def api_model_pheno_mt():
 @blueprint.route("/api/model/pheno/me", methods=["GET"])
 def api_model_pheno_me():
     try:
-        # Primary mode: accept JSON body with an array of mass transfer names
+        # Accept 'mt' from JSON body (POST/GET) or from query params when GET
+        if request.method == "POST" and not request.is_json:
+            return jsonify({"error": "Unsupported Media Type. Use Content-Type: application/json."}), 415
+
         payload = request.get_json(silent=True) or {}
         mt_list = payload.get("mt") if isinstance(payload, dict) else None
 
-        if isinstance(mt_list, list) and len(mt_list) > 0:
-            mes = set()
-            for item in mt_list:
-                if item is None or str(item).strip() == "":
-                    continue
-                mt_mes = g.graphdb_handler.query_me_by_mt(item)
-                for me in (mt_mes or []):
-                    if me:
-                        mes.add(me)
-            if not mes:
-                return jsonify({
-                    "error": "No mass equilibrium found for the specified mass transfer phenomena.",
-                    "mt": mt_list
-                }), 404
-            return jsonify({"me": sorted(mes)}), 200
+        if (not mt_list) and request.method == "GET":
+            lst = request.args.getlist("mt")
+            if not lst:
+                s = request.args.get("mt")
+                if s:
+                    lst = [p.strip() for p in s.split(",") if p.strip()]
+            mt_list = lst if lst else None
+
+        # Validate input
+        if not mt_list or not isinstance(mt_list, list):
+            return jsonify({
+                "error": "Provide one or more 'mt' (mass transport) names in JSON body or query params.",
+                "hint": {"POST": {"mt": ["Engulfment"]}, "GET": "/api/model/pheno/me?mt=Engulfment"}
+            }), 400
+
+        mes = set()
+        for item in mt_list:
+            if item is None or str(item).strip() == "":
+                continue
+            mt_mes = g.graphdb_handler.query_me_by_mt(item)
+            for me in (mt_mes or []):
+                if me:
+                    mes.add(me)
+        if not mes:
+            return jsonify({
+                "error": "No mass equilibrium found for the specified mass transport phenomena.",
+                "mt": mt_list
+            }), 404
+        return jsonify({"me": sorted(mes)}), 200
 
     except Exception as e:
         return jsonify({
@@ -133,12 +150,13 @@ def api_model_param_law():
     """
     Retrieve parameter -> law mapping constrained by selected phenomena.
     Accepts either:
-      - POST JSON body with any of keys: ac, fp, mt, me (string or list)
-      - GET query params: ac, fp, mt, me (can be repeated or comma-separated)
+      - GET JSON body with any of keys: ac, fp, mt, me (string or list)
 
     Response: {"param_law": {"<Parameter>": "<Law>", ...}}
     """
     try:
+        if request.method == "POST" and not request.is_json:
+            return jsonify({"error": "Unsupported Media Type. Use Content-Type: application/json."}), 415
         desc = request.get_json(silent=True) or {}
         keys = ("ac", "fp", "mt", "me")
 
@@ -251,6 +269,8 @@ def api_model_rxn():
       - POST body {"mt": ["Engulfment"], "me": ["Gas_Dissolution_Equilibrium"]}
     """
     try:
+        if request.method == "POST" and not request.is_json:
+            return jsonify({"error": "Unsupported Media Type. Use Content-Type: application/json."}), 415
         body = request.get_json(silent=True) or {}
 
         # Reject use of query parameters for filters
