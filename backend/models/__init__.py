@@ -53,6 +53,8 @@ def init_app(app=None, *, echo: bool = False):
     # Import models so that Base.metadata knows about them before create_all
     from .project import Project  # noqa: F401
     from .basic import Basic      # noqa: F401
+    from .reactor import Reactor  # noqa: F401
+    from .species_role import SpeciesRole  # noqa: F401
 
     # Optionally create tables on startup (idempotent)
     try:
