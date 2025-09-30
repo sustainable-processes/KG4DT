@@ -395,7 +395,6 @@ def api_model_simulate():
     - Support both 'val' and 'value' for data rows (backward compatible).
     - Convert OP indices to tuples for internal processing.
     """
-    print("api_model_simulate")
     try:
         if not request.is_json:
             return jsonify({"error": "Unsupported Media Type. Use Content-Type: application/json."}), 415

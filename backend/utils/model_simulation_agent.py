@@ -49,13 +49,15 @@ class ModelSimulationAgent:
                 f.write("if __name__ == '__main__':\n")
                 f.write("    import os\n")
                 f.write("    import pickle\n")
-                f.write("    from multiprocessing import Pool\n")
-                f.write("    with Pool(8) as pool:\n")
-                f.write("        res = pool.map(simulate, param_dicts)\n")
-                f.write("        pickle.dump(res, open(os.path.join("
-                        "os.path.dirname(__file__), 'res.pkl'), 'wb'))\n")
+                f.write("    res = []\n")
+                f.write("    for pd in param_dicts:\n")
+                f.write("        res.append(simulate(pd))\n")
+                f.write("    pickle.dump(res, open(os.path.join(os.path.dirname(__file__), 'res.pkl'), 'wb'))\n")
             # with open(os.path.join(temp_dir, "simulate.py"), "r") as f:
             #     print("".join(f.readlines()))
             os.system(f"python {temp_dir}/simulate.py")
-            res = pickle.load(open(f"{temp_dir}/res.pkl", "rb"))
+            res_path = os.path.join(temp_dir, 'res.pkl')
+            if not os.path.exists(res_path):
+                raise FileNotFoundError("Simulation failed to produce results file 'res.pkl'.")
+            res = pickle.load(open(res_path, "rb"))
         return res
