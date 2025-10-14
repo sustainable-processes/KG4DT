@@ -182,60 +182,62 @@ def api_model_param_law():
                 }
             }), 400
 
-        ac = desc["ac"] if "ac" in desc else None
-        fp = desc["fp"] if "fp" in desc else None
-        mts = desc["mt"] if "mt" in desc else []
-        mes = desc["me"] if "me" in desc else []
+        param_law = g.graphdb_handler.query_param_law(desc)
 
-        param_law = {}
-        vars = g.graphdb_handler.query_var()
-        laws = g.graphdb_handler.query_law(mode="mainpage")
+        # ac = desc["ac"] if "ac" in desc else None
+        # fp = desc["fp"] if "fp" in desc else None
+        # mts = desc["mt"] if "mt" in desc else []
+        # mes = desc["me"] if "me" in desc else []
 
-        # flow pattern laws subsidiary to mass transport
-        for law_dict in laws.values():
-            if law_dict["pheno"] not in mts:
-                continue
-            for var in law_dict["vars"]:
-                if var == "Concentration":
-                    continue
-                if var in param_law or not vars[var]["laws"]:
-                    continue
-                var_laws = []
-                for var_law in vars[var]["laws"]:
-                    if laws[var_law]["pheno"] == fp:
-                        var_laws.append(var_law)
-                if var_laws:
-                    param_law[var] = var_laws
+        # param_law = {}
+        # vars = g.graphdb_handler.query_var()
+        # laws = g.graphdb_handler.query_law(mode="mainpage")
 
-        # flow pattern laws subsidiary to flow pattern
-        for law_dict in laws.values():
-            if law_dict["pheno"] != fp:
-                continue
-            for var in law_dict["vars"]:
-                if var == "Concentration":
-                    continue
-                if var in param_law or not vars[var]["laws"]:
-                    continue
-                var_laws = []
-                for var_law in vars[var]["laws"]:
-                    if laws[var_law]["pheno"] == fp:
-                        var_laws.append(var_law)
-                if var_laws:
-                    param_law[var] = var_laws
+        # # flow pattern laws subsidiary to mass transport
+        # for law_dict in laws.values():
+        #     if law_dict["pheno"] not in mts:
+        #         continue
+        #     for var in law_dict["vars"]:
+        #         if var == "Concentration":
+        #             continue
+        #         if var in param_law or not vars[var]["laws"]:
+        #             continue
+        #         var_laws = []
+        #         for var_law in vars[var]["laws"]:
+        #             if laws[var_law]["pheno"] == fp:
+        #                 var_laws.append(var_law)
+        #         if var_laws:
+        #             param_law[var] = var_laws
 
-        # mass equilibrium laws
-        for law_dict in laws.values():
-            if law_dict["pheno"] not in mts:
-                continue
-            for var in law_dict["vars"]:
-                if var in param_law or not vars[var]["laws"]:
-                    continue
-                var_laws = []
-                for var_law in vars[var]["laws"]:
-                    if laws[var_law]["pheno"] in mes:
-                        var_laws.append(var_law)
-                if var_laws:
-                    param_law[var] = var_laws
+        # # flow pattern laws subsidiary to flow pattern
+        # for law_dict in laws.values():
+        #     if law_dict["pheno"] != fp:
+        #         continue
+        #     for var in law_dict["vars"]:
+        #         if var == "Concentration":
+        #             continue
+        #         if var in param_law or not vars[var]["laws"]:
+        #             continue
+        #         var_laws = []
+        #         for var_law in vars[var]["laws"]:
+        #             if laws[var_law]["pheno"] == fp:
+        #                 var_laws.append(var_law)
+        #         if var_laws:
+        #             param_law[var] = var_laws
+
+        # # mass equilibrium laws
+        # for law_dict in laws.values():
+        #     if law_dict["pheno"] not in mts:
+        #         continue
+        #     for var in law_dict["vars"]:
+        #         if var in param_law or not vars[var]["laws"]:
+        #             continue
+        #         var_laws = []
+        #         for var_law in vars[var]["laws"]:
+        #             if laws[var_law]["pheno"] in mes:
+        #                 var_laws.append(var_law)
+        #         if var_laws:
+        #             param_law[var] = var_laws
 
         return jsonify(param_law), 200
 

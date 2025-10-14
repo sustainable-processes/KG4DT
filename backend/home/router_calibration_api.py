@@ -356,15 +356,14 @@ def api_model_operation_parameter():
         else:
             keys = []
 
-        # Ensure all items are 3-tuples and JSON-serializable
+        # Ensure all items are 5-tuples and JSON-serializable
         out = []
         for k in keys:
             try:
-                name, idx1, idx2 = k if isinstance(k, (list, tuple)) else (k, None, None)
+                name, idx1, idx2, idx3, idx4 = k if isinstance(k, (list, tuple)) else (k, None, None, None, None)
             except Exception:
                 continue
-            out.append([name, idx1, idx2])
-        print(f"out: {out}")
+            out.append([name, idx1, idx2, idx3, idx4])
 
         if not out:
             return jsonify({
@@ -373,7 +372,13 @@ def api_model_operation_parameter():
             }), 404
 
         # Sort for deterministic output
-        out.sort(key=lambda x: (str(x[0]), str(x[1]) if x[1] is not None else "", str(x[2]) if x[2] is not None else ""))
+        out.sort(key=lambda x: (
+            str(x[0]), 
+            str(x[1]) if x[1] is not None else "", 
+            str(x[2]) if x[2] is not None else "",
+            str(x[3]) if x[3] is not None else "",
+            str(x[4]) if x[4] is not None else ""
+        ))
         return jsonify({"op_param": out, "count": len(out)}), 200
 
     except Exception as e:

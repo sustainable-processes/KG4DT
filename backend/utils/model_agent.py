@@ -101,7 +101,6 @@ class ModelAgent:
         - concentration derivative
     """
 
-    dynamic_segs = 200
     rxn_pattern = r"^((\d+ )?.+ \+ )*(\d+ )?.+ > ((\d+ )?.+ \+ )*(\d+ )?.+$"
     sym_patterns = [
         ("^[sym]$", "[sym]"), # alone
@@ -118,6 +117,7 @@ class ModelAgent:
         ("[sym](\[[^ <>\[\]]+(\[[:0-9]+\])* [<>] 0\])", "[sym]\\\\1"), # index
     ]
     dim2pos = {"Solid": 0, "Gas": 0, "Stream": 1, "Reaction": 2, "Species": 3}
+    dynamic_op_params = ["Temperature", "Pressure", "Batch_Time", "Mass_Flow_Rate_Gas"]
 
     def __init__(self, entity, context, param_dict=None):
         self.entity = entity
@@ -762,6 +762,7 @@ class ModelAgent:
                     mt_vars.extend(self.entity["law"][law]["vars"])
         
         assoc_gas_laws, assoc_sld_laws = [], []
+        assoc_gas_vars, assoc_sld_vars = [], []
         for mt_law in mt_laws:
             assoc_gas_law = self.entity["law"][mt_law]["assoc_gas_law"]
             if assoc_gas_law and assoc_gas_law not in assoc_gas_laws:
@@ -773,10 +774,12 @@ class ModelAgent:
             raise ValueError("Multiple associated gas law associated with mass transport.")
         else:
             assoc_gas_law = assoc_gas_laws[0] if assoc_gas_laws else None
+            assoc_gas_vars.extend(self.entity["law"][assoc_gas_law]["vars"])
         if len(assoc_sld_laws) > 1:
             raise ValueError("Multiple associated solid law associated with mass transport.")
         else:
             assoc_sld_law = assoc_sld_laws[0] if assoc_sld_laws else None
+            assoc_sld_vars.extend(self.entity["law"][assoc_sld_law]["vars"])
 
         # c_g_star, c_s_star
         me_laws, me_vars = [], []
@@ -830,6 +833,8 @@ class ModelAgent:
         model_vars.extend(me_vars)
         model_vars.extend(fp_vars)
         model_vars.extend(sub_fp_vars)
+        model_vars.extend(assoc_gas_vars)
+        model_vars.extend(assoc_sld_vars)
         model_vars.extend(conc_vars)
         for rxn in rxn_vars:
             for var in rxn_vars[rxn]:
@@ -870,16 +875,21 @@ class ModelAgent:
         if self.context["type"] not in ["dynamic", "steady"]:
             raise ValueError(f"Unknown operation type: {self.context['type']}")
         model.add("def simulate(param_dict):", 0)
+        model.add("param_dict = param_dict.copy()", 1)
         model.add("# parameter", 1)
         model.add("p = list(param_dict.values())", 1)
 
         # Parameter setup
-        op_vars = [v for v in model_vars if self.entity["var"][v]["cls"] 
-                    == "OperationParameter" and all([
-                    d is None for d in self.entity["var"][v]["dims"]])]
-        op_syms = [MMLExpression(self.entity["var"][v]
-                                 ["sym"]).to_numpy() for v in op_vars]
+        op_vars = [v for v in model_vars 
+            if self.entity["var"][v]["cls"] == "OperationParameter" and 
+            (
+                set(self.entity["var"][v]["dims"]) == set([]) or 
+                set(self.entity["var"][v]["dims"]) == set(["Gas", "Species"])
+            ) and v in self.dynamic_op_params
+        ]
+        op_syms = [MMLExpression(self.entity["var"][v]["sym"]).to_numpy() for v in op_vars]
         iul_var = self.entity["law"][ac_law]["int_up_lim"]
+        iul_ind = tuple([iul_var, None, None, None, None])
         iul_sym = MMLExpression(self.entity["var"][iul_var]["sym"]).to_numpy()
         keys = list(param_dict.keys())
         for var in model_vars:
@@ -887,118 +897,155 @@ class ModelAgent:
             sym = MMLExpression(var_dict["sym"]).to_numpy()
             dims = var_dict["dims"]
             
-            if var_dict["cls"] == "Constant":
-                model.add(f'{sym} = {var_dict["val"]}', 1)            
-            if "Parameter" not in var_dict["cls"]:
-                continue
-            if var_dict["laws"]:
-                continue
-
-            if set(dims) == set([]):
-                ind = keys.index((var, None, None, None, None))
-                model.add(f'{sym} = p[{ind}]', 1)
-            elif set(dims) == set(["Species"]):
-                model.add(f"{sym} = np.zeros({nspc}, dtype=np.float64)", 1)
-                for i, spc in enumerate(spcs):
-                    ind = keys.index((var, None, None, None, spc))
-                    model.add(f'{sym}[{i}] = p[{ind}]', 1)
-            elif set(dims) == set(["Reaction"]):
-                model.add(f"{sym} = np.zeros({nrxn}, dtype=np.float64)", 1)
-                for i, rxn in enumerate(rxns):
-                    if (var, None, None, rxn, None) in keys:
-                        ind = keys.index((var, None, None, rxn, None))
-                        model.add(f'{sym}[{i}] = p[{ind}]', 1)
-            elif set(dims) == set(["Stream"]):
-                model.add(f"{sym} = np.zeros({nstm}, dtype=np.float64)", 1)
-                for i, stm in enumerate(stms):
-                    ind = keys.index((var, None, stm, None, None))
-                    model.add(f"{sym}[{i}] = p[{ind}]", 1)
-            elif set(dims) == set(["Gas"]):
-                model.add(f"{sym} = np.zeros({ngas}, dtype=np.float64)", 1)
-                for i, gas in enumerate(gass):
-                    ind = keys.index((var, gas, None, None, None))
-                    model.add(f"{sym}[{i}] = p[{ind}]", 1)
-            elif set(dims) == set(["Solid"]):
-                model.add(f"{sym} = np.zeros({nsld}, dtype=np.float64)", 1)
-                for i, sld in enumerate(slds):
-                    ind = keys.index((var, sld, None, None, None))
-                    model.add(f"{sym}[{i}] = p[{ind}]", 1)
-            elif set(dims) == set(["Species", "Reaction"]):
-                model.add(f"{sym} = np.zeros({nrxn, nspc}, dtype=np.float64)", 1)
-                for i, rxn in enumerate(rxns):
-                    for j, spc in enumerate(spcs):
-                        if (var, None, None, rxn, spc) in keys:
-                            ind = keys.index((var, None, None, rxn, spc))
-                            model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
-            elif set(dims) == set(["Species", "Stream"]):
-                model.add(f"{sym} = np.zeros({nstm, nspc}, dtype=np.float64)", 1)
-                for i, stm in enumerate(stms):
-                    for j, spc in enumerate(spcs):
-                        if (var, None, stm, None, spc) in keys:
-                            ind = keys.index((var, None, stm, None, spc))
-                            model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
-            elif set(dims) == set(["Species", "Gas"]):
-                model.add(f"{sym} = np.zeros({ngas, nspc}, dtype=np.float64)", 1)
-                for i, gas in enumerate(gass):
-                    for j, spc in enumerate(spcs):
-                        if (var, gas, None, None, spc) in keys:
-                            ind = keys.index((var, gas, None, None, spc))
-                            model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
-            elif set(dims) == set(["Species", "Solid"]):
-                model.add(f"{sym} = np.zeros({nsld, nspc}, dtype=np.float64)", 1)
-                for i, sld in enumerate(slds):
-                    for j, spc in enumerate(spcs):
-                        if (var, sld, None, None, spc) in keys:
-                            ind = keys.index((var, sld, None, None, spc))
-                            model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
-            elif set(dims) == set(["Reaction", "Stream"]):
-                model.add(f"{sym} = np.zeros({nstm, nrxn}, dtype=np.float64)", 1)
-                for i, stm in enumerate(stms):
-                    for j, rxn in enumerate(rxns):
-                        if (var, None, stm, rxn, None) in keys:
-                            ind = keys.index((var, None, stm, rxn, None))
-                            model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
-            elif set(dims) == set(["Species", "Stream", "Gas"]):
-                model.add(f"{sym} = np.zeros({ngas, nstm, nrxn}, dtype=np.float64)", 1)
-                for i, gas in enumerate(gass):
-                    for j, stm in enumerate(stms):
-                        for k, spc in enumerate(spcs):
-                            if (var, gas, stm, None, spc) in keys:
-                                ind = keys.index((var, gas, stm, None, spc))
-                                model.add(f'{sym}[{i}, {j}, {k}] = p[{ind}]', 1)
-            elif set(dims) == set(["Species", "Stream", "Solid"]):
-                model.add(f"{sym} = np.zeros({nsld, nstm, nrxn}, dtype=np.float64)", 1)
-                for i, sld in enumerate(slds):
-                    for j, stm in enumerate(stms):
-                        for k, spc in enumerate(spcs):
-                            if (var, sld, stm, None, spc) in keys:
-                                ind = keys.index((var, sld, stm, None, spc))
-                                model.add(f'{sym}[{i}, {j}, {k}] = p[{ind}]', 1)
+            if self.context["type"] == "dynamic" and var in self.dynamic_op_params:
+                if var == iul_var:
+                    ind = keys.index((var, None, None, None, None))
+                    model.add(f'{sym} = p[{ind}]', 1)
+                elif set(dims) == set([]):
+                    model.add(f"{sym} = np.array(0, dtype=np.float64)", 1)
+                elif set(dims) == set(["Species", "Gas"]):
+                    model.add(f"{sym} = np.zeros({ngas, nspc}, dtype=np.float64)", 1)
+                else:
+                    raise ValueError(f"Unknown parameter {var} with dimensions: {dims}")
+            
             else:
-                raise ValueError(f"Unknown parameter {var} with dimensions: {dims}")
+                if var_dict["cls"] == "Constant":
+                    model.add(f'{sym} = {var_dict["val"]}', 1)            
+                if "Parameter" not in var_dict["cls"]:
+                    continue
+                if var_dict["laws"]:
+                    continue
+
+                if set(dims) == set([]):
+                    ind = keys.index((var, None, None, None, None))
+                    model.add(f'{sym} = p[{ind}]', 1)
+                elif set(dims) == set(["Species"]):
+                    model.add(f"{sym} = np.zeros({nspc}, dtype=np.float64)", 1)
+                    for i, spc in enumerate(spcs):
+                        ind = keys.index((var, None, None, None, spc))
+                        model.add(f'{sym}[{i}] = p[{ind}]', 1)
+                elif set(dims) == set(["Reaction"]):
+                    model.add(f"{sym} = np.zeros({nrxn}, dtype=np.float64)", 1)
+                    for i, rxn in enumerate(rxns):
+                        if (var, None, None, rxn, None) in keys:
+                            ind = keys.index((var, None, None, rxn, None))
+                            model.add(f'{sym}[{i}] = p[{ind}]', 1)
+                elif set(dims) == set(["Stream"]):
+                    model.add(f"{sym} = np.zeros({nstm}, dtype=np.float64)", 1)
+                    for i, stm in enumerate(stms):
+                        ind = keys.index((var, None, stm, None, None))
+                        model.add(f"{sym}[{i}] = p[{ind}]", 1)
+                elif set(dims) == set(["Gas"]):
+                    model.add(f"{sym} = np.zeros({ngas}, dtype=np.float64)", 1)
+                    for i, gas in enumerate(gass):
+                        ind = keys.index((var, gas, None, None, None))
+                        model.add(f"{sym}[{i}] = p[{ind}]", 1)
+                elif set(dims) == set(["Solid"]):
+                    model.add(f"{sym} = np.zeros({nsld}, dtype=np.float64)", 1)
+                    for i, sld in enumerate(slds):
+                        ind = keys.index((var, sld, None, None, None))
+                        model.add(f"{sym}[{i}] = p[{ind}]", 1)
+                elif set(dims) == set(["Species", "Reaction"]):
+                    model.add(f"{sym} = np.zeros({nrxn, nspc}, dtype=np.float64)", 1)
+                    for i, rxn in enumerate(rxns):
+                        for j, spc in enumerate(spcs):
+                            if (var, None, None, rxn, spc) in keys:
+                                ind = keys.index((var, None, None, rxn, spc))
+                                model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
+                elif set(dims) == set(["Species", "Stream"]):
+                    model.add(f"{sym} = np.zeros({nstm, nspc}, dtype=np.float64)", 1)
+                    for i, stm in enumerate(stms):
+                        for j, spc in enumerate(spcs):
+                            if (var, None, stm, None, spc) in keys:
+                                ind = keys.index((var, None, stm, None, spc))
+                                model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
+                elif set(dims) == set(["Species", "Gas"]):
+                    model.add(f"{sym} = np.zeros({ngas, nspc}, dtype=np.float64)", 1)
+                    for i, gas in enumerate(gass):
+                        for j, spc in enumerate(spcs):
+                            if (var, gas, None, None, spc) in keys:
+                                ind = keys.index((var, gas, None, None, spc))
+                                model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
+                elif set(dims) == set(["Species", "Solid"]):
+                    model.add(f"{sym} = np.zeros({nsld, nspc}, dtype=np.float64)", 1)
+                    for i, sld in enumerate(slds):
+                        for j, spc in enumerate(spcs):
+                            if (var, sld, None, None, spc) in keys:
+                                ind = keys.index((var, sld, None, None, spc))
+                                model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
+                elif set(dims) == set(["Reaction", "Stream"]):
+                    model.add(f"{sym} = np.zeros({nstm, nrxn}, dtype=np.float64)", 1)
+                    for i, stm in enumerate(stms):
+                        for j, rxn in enumerate(rxns):
+                            if (var, None, stm, rxn, None) in keys:
+                                ind = keys.index((var, None, stm, rxn, None))
+                                model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
+                elif set(dims) == set(["Species", "Stream", "Gas"]):
+                    model.add(f"{sym} = np.zeros({ngas, nstm, nrxn}, dtype=np.float64)", 1)
+                    for i, gas in enumerate(gass):
+                        for j, stm in enumerate(stms):
+                            for k, spc in enumerate(spcs):
+                                if (var, gas, stm, None, spc) in keys:
+                                    ind = keys.index((var, gas, stm, None, spc))
+                                    model.add(f'{sym}[{i}, {j}, {k}] = p[{ind}]', 1)
+                elif set(dims) == set(["Species", "Stream", "Solid"]):
+                    model.add(f"{sym} = np.zeros({nsld, nstm, nrxn}, dtype=np.float64)", 1)
+                    for i, sld in enumerate(slds):
+                        for j, stm in enumerate(stms):
+                            for k, spc in enumerate(spcs):
+                                if (var, sld, stm, None, spc) in keys:
+                                    ind = keys.index((var, sld, stm, None, spc))
+                                    model.add(f'{sym}[{i}, {j}, {k}] = p[{ind}]', 1)
+                else:
+                    raise ValueError(f"Unknown parameter {var} with dimensions: {dims}")
             
             unit = self.entity["var"][var]["unit"]
             if unit:
                 rto = self.entity["unit"][unit]["rto"]
                 intcpt = self.entity["unit"][unit]["intcpt"]
-                if self.context["type"] == "dynamic" and var in op_vars:
-                    if rto:
-                        model.add(f"{sym} = [_{sym} * {rto} for _{sym} in {sym}]", 1)
-                    if intcpt:
-                        model.add(f"{sym} = [_{sym} + {intcpt} for _{sym} in {sym}]", 1)
+                if self.context["type"] == "dynamic" and var in self.dynamic_op_params:
+                    if var == iul_var:
+                        if rto:
+                            model.add(f"{sym} = [_{sym} * {rto} for _{sym} in {sym}]", 1)
+                        if intcpt:
+                            model.add(f"{sym} = [_{sym} + {intcpt} for _{sym} in {sym}]", 1)
+                    elif set(dims) == set([]):
+                        ind = (var, None, None, None, None)
+                        if rto:
+                            model.add(f"param_dict[{ind}] = [_{sym} * {rto} for _{sym} in param_dict[{ind}]]", 1)
+                        if intcpt:
+                            model.add(f"param_dict[{ind}] = [_{sym} + {intcpt} for _{sym} in param_dict[{ind}]]", 1)
+                    elif set(dims) == set(["Species", "Gas"]):
+                        for gas in self.context["basic"]["gas"]:
+                            for spc in self.context["basic"]["gas"][gas]["spc"]:
+                                ind = (var, gas, None, None, spc)
+                                if rto:
+                                    model.add(f"param_dict[{ind}] = [_{sym} * {rto} for _{sym} in param_dict[{ind}]]", 1)
+                                if intcpt:
+                                    model.add(f"param_dict[{ind}] = [_{sym} + {intcpt} for _{sym} in param_dict[{ind}]]", 1)
                 else:
                     if rto:
                         model.add(f"{sym} *= {rto}", 1)
                     if intcpt:
                         model.add(f"{sym} += {intcpt}", 1)
-        model.add("", 0)
 
         model.add("# dynamic parameter interpolation", 1)
         if self.context["type"] == "dynamic":
             model.add("interps = {}", 1)
-            for op_sym in op_syms:
-                if op_sym != iul_sym:
-                    model.add(f"interps['{op_sym}'] = interp1d({iul_sym}, {op_sym})", 1)
+            for op_var in op_vars:
+                if op_var == iul_var:
+                    continue
+                op_dims = set(self.entity["var"][op_var]["dims"])
+                for k, v in param_dict.items():
+                    if k[0] == op_var:
+                        if op_dims == set([]):
+                            op_ind = (op_var, None, None, None, None)
+                            model.add(f"interps[{op_ind}] = interp1d({iul_sym}, param_dict[{op_ind}])", 1)
+                        if op_dims == set(["Gas", "Species"]):
+                            for gas in gass:
+                                for spc in self.context["basic"]["gas"][gas]["spc"]:
+                                    op_ind = (op_var, gas, None, None, spc)
+                                    model.add(f"interps[{op_ind}] = interp1d({iul_sym}, param_dict[{op_ind}])", 1)
         model.add("", 0)
 
         # Flow pattern
@@ -1028,27 +1075,43 @@ class ModelAgent:
             dsym = MMLExpression(dmml).to_numpy()
             model.add(f"def derivative({dsym}, {isym}):", 1)
             if self.context["type"] == "dynamic":
-                for op_sym in op_syms:
+                for op_var, op_sym in zip(op_vars, op_syms):
                     if op_sym != iul_sym:
-                        model.add(f"{op_sym} = interps['{op_sym}']({dsym})", 2)
+                        op_dims = self.entity["var"][op_var]["dims"]
+                        if set(op_dims) == set([]):
+                            op_ind = (op_var, None, None, None, None)
+                            model.add(f"{op_sym} = interps[{op_ind}]({dsym})", 2)
+                        if set(op_dims) == set(["Gas", "Species"]):
+                            for i, gas in enumerate(gass):
+                                for spc in self.context["basic"]["gas"][gas]["spc"]:
+                                    j = spcs.index(spc)
+                                    op_ind = (op_var, gas, None, None, spc)
+                                    model.add(f"{op_sym}[{i}][{j}] = interps[{op_ind}]({dsym})", 2)
             if fia:
                 ivar_shape = (len(stms), len(spcs) * 2)
                 ivar_num = len(stms) * len(spcs) * 2
             else:
                 ivar_shape = (len(stms), len(spcs))
                 ivar_num = len(stms) * len(spcs)
+            i = ivar_num
             if assoc_gas_law and ngas:
                 gvar = self.entity["law"][assoc_gas_law]["int_var"]
                 gmml = self.entity["var"][gvar]["sym"]
                 gsym = MMLExpression(gmml).to_numpy()
-                gind = f"[{ivar_num}:{ivar_num + ngas}]"
-                model.add(f"{gsym} = np.array({isym}{gind}, dtype=np.float64)", 2)
+                model.add(f"{gsym} = np.zeros({(ngas, nspc)}, dtype=np.float64)", 2)
+                for gas in gass:
+                    for spc in self.context["basic"]["gas"][gas]["spc"]:
+                        model.add(f"{gsym}[{gass.index(gas)}, {spcs.index(spc)}] = {isym}[{i}]", 2)
+                        i += 1
             if assoc_sld_law and nsld:
                 svar = self.entity["law"][assoc_sld_law]["int_var"]
                 smml = self.entity["var"][svar]["sym"]
                 ssym = MMLExpression(smml).to_numpy()
-                sind = f"[{ivar_num + ngas}:{ivar_num + ngas + nsld}]"
-                model.add(f"{ssym} = np.array({isym}{sind}, dtype=np.float64)", 2)
+                model.add(f"{ssym} = np.zeros({(nsld, nspc)}, dtype=np.float64)", 2)
+                for sld in slds:
+                    for spc in self.context["basic"]["sld"][sld]["spc"]:
+                        model.add(f"{ssym}[{slds.index(sld)}, {spcs.index(spc)}] = {isym}[{i}]", 2)
+                        i += 1
             model.add(f"{isym} = np.array({isym}[:{ivar_num}], dtype=np.float64)", 2)
             model.add(f"{isym} = {isym}.reshape({ivar_shape})", 2)
         model.add("", 0)
@@ -1189,7 +1252,7 @@ class ModelAgent:
             var = law2var[law]
             sym = MMLExpression(self.entity["var"][var]["sym"]).to_numpy()
             vars = self.entity["law"][law]["vars"]
-            mass_vars = ["Mass", "Mass_Solid", "Mass_Used_Gas"]
+            mass_vars = ["Mass"]
             vars = [var for var in vars if var not in mass_vars]
             dims = self.entity["var"][var]["dims"]
             dims = sorted(dims, key=lambda d: self.dim2pos[d])
@@ -1216,7 +1279,7 @@ class ModelAgent:
                         mass_var = "Mass_Solid"
                         mass_sym = self.entity["var"][mass_var]["sym"]
                         mass_sym = MMLExpression(mass_sym).to_numpy()
-                        model.add(f"if {mass_sym}[{ind[0]}] < 1e-3:", 2)
+                        model.add(f"if {mass_sym}[{ind[0]}, {ind[2]}] < 1e-3:", 2)
                         model.add(f"{ind_sym} = 0", 3)
             model.add("", 0)
 
@@ -1357,35 +1420,21 @@ class ModelAgent:
                       f"np.array([{', '.join([str(v) for v in assoc_ivals])}]"
                       ", dtype=np.float64)])", 1)
             if self.context["type"] == "steady":
-                model.add(
-                    f"{dsym}_eval = np.linspace(0, {iul_sym}, 201, dtype=np.float64)", 1
-                )
+                model.add(f"{dsym}_eval = np.linspace(0, {iul_sym}, 201, dtype=np.float64)", 1)
                 model.add(
                     f"res = solve_ivp(derivative, (0, {iul_sym}), "
                     f"{isym}_0, t_eval={dsym}_eval, method='LSODA', atol=1e-12)", 1
                 )
-                model.add(f"if res.success:", 1)
-                model.add(f"if np.isnan(res.y).any():", 2)
-                model.add(f"return None", 3)
-                model.add(f"else:", 2)
             if self.context["type"] == "dynamic":
-                model.add(f"t_span = {iul_sym}[-1] / {self.dynamic_segs}", 1)
-                model.add("res = {'x': [], 'y': []}", 1)
-                model.add("res['x'].append(0)", 1)
-                model.add(f"res['y'].append({isym}_0.round(6).tolist())", 1)
-                model.add(f"for i in range({self.dynamic_segs}):", 1)
+                model.add(f"{dsym}_eval = np.linspace(0, {iul_sym}[-1], 201, dtype=np.float64)", 1)
                 model.add(
-                    "seg_res = solve_ivp(derivative, (t_span * i, t_span * (i+1)), "
-                    f"{isym}_0, t_eval=[t_span * i, t_span * (i+1)], method='LSODA', "
-                    "atol=1e-12)", 2
+                    f"res = solve_ivp(derivative, (0, {iul_sym}[-1]), "
+                    f"{isym}_0, t_eval={dsym}_eval, method='LSODA', atol=1e-12)", 1
                 )
-                model.add("if np.isnan(seg_res.y).any():", 2)
-                model.add("return None", 3)
-                model.add("res['x'].append(t_span * (i+1))", 2)
-                model.add(f"res['y'].append(seg_res.y[:, -1].round(6).tolist())", 2)
-                model.add(f"{isym}_0 = seg_res.y[:, -1]", 2)
-                model.add(f"res['x'] = np.array(res['x'])", 1)
-                model.add(f"res['y'] = np.stack(res['y'], axis=-1)", 1)
+            model.add(f"if res.success:", 1)
+            model.add(f"if np.isnan(res.y).any():", 2)
+            model.add(f"return None", 3)
+            model.add(f"else:", 2)
                 
         
         if fia:
@@ -1393,87 +1442,48 @@ class ModelAgent:
             model.add(f"else:", 1)
             model.add(f"return None", 2)
         else:
-            if self.context["type"] == "steady":
-                iul_unit = self.entity["var"][iul_var]["unit"]
-                if iul_unit and self.entity["unit"][iul_unit]["intcpt"]:
-                    intcpt = self.entity["unit"][iul_unit]["intcpt"]
-                    model.add(f"res.t -= {intcpt}", 3)
-                if iul_unit and self.entity["unit"][iul_unit]["rto"]:
-                    rto = self.entity["unit"][iul_unit]["rto"]
-                    model.add(f"res.t /= {rto}", 3)
-                # TODO
-                # if self.context["desc"]["ac"] == "Continuous":
-                #     model.add(f"return {{'x': {{'{dsym}': res.t.round(6).tolist()}}}}", 3)
-                #     # model.add(f"return [res.t.round(6), res.y.round(6), q]", 3)
-                if self.context["desc"]["ac"] == "Batch":
-                    model.add("res_dict = {"
-                        "'x': {'ind': None, 'val': None}, "
-                        "'y': {'ind': [], 'val': []}, "
-                    "}", 3)
-                    model.add(f"res_dict['x']['ind'] = {(dvar, None, None, None, None)}", 3)
-                    model.add(f"res_dict['x']['val'] = res.t.round(6).tolist()", 3)
-                    out_ind = 0
-                    for i, stm in enumerate(stms):
-                        for j, spc in enumerate(spcs):
-                            model.add(f"res_dict['y']['ind'].append({(ivar, None, stm, None, spc)})", 3)
+            iul_unit = self.entity["var"][iul_var]["unit"]
+            if iul_unit and self.entity["unit"][iul_unit]["intcpt"]:
+                intcpt = self.entity["unit"][iul_unit]["intcpt"]
+                model.add(f"res.t -= {intcpt}", 3)
+            if iul_unit and self.entity["unit"][iul_unit]["rto"]:
+                rto = self.entity["unit"][iul_unit]["rto"]
+                model.add(f"res.t /= {rto}", 3)
+            # TODO
+            # if self.context["desc"]["ac"] == "Continuous":
+            #     model.add(f"return {{'x': {{'{dsym}': res.t.round(6).tolist()}}}}", 3)
+            #     # model.add(f"return [res.t.round(6), res.y.round(6), q]", 3)
+            if self.context["desc"]["ac"] == "Batch":
+                model.add("res_dict = {"
+                    "'x': {'ind': None, 'val': None}, "
+                    "'y': {'ind': [], 'val': []}, "
+                "}", 3)
+                model.add(f"res_dict['x']['ind'] = {(dvar, None, None, None, None)}", 3)
+                model.add(f"res_dict['x']['val'] = res.t.round(6).tolist()", 3)
+                out_ind = 0
+                for i, stm in enumerate(stms):
+                    for j, spc in enumerate(spcs):
+                        model.add(f"res_dict['y']['ind'].append({(ivar, None, stm, None, spc)})", 3)
+                        model.add(f"res_dict['y']['val'].append(res.y[{out_ind}].round(6).tolist())", 3)
+                        out_ind += 1
+                for j, spc in enumerate(spcs):
+                    model.add(f"res_dict['y']['ind'].append({(ivar, None, 'Overall', None, spc)})", 3)
+                    model.add(f"res_dict['y']['val'].append(res.y[:{nstm*nspc}].reshape("
+                                f"{nstm},{nspc},-1)[:,{j}].sum(axis=0).round(6).tolist())", 3)
+                if assoc_gas_law and ngas:
+                    for i, gas in enumerate(gass):
+                        for j, spc in enumerate(self.context["basic"]["gas"][gas]["spc"]):
+                            model.add(f"res_dict['y']['ind'].append({(gvar, gas, None, None, spc)})", 3)
                             model.add(f"res_dict['y']['val'].append(res.y[{out_ind}].round(6).tolist())", 3)
                             out_ind += 1
-                    for j, spc in enumerate(spcs):
-                        model.add(f"res_dict['y']['ind'].append({(ivar, None, 'Overall', None, spc)})", 3)
-                        model.add(f"res_dict['y']['val'].append(res.y[:{nstm*nspc}].reshape("
-                                  f"{nstm},{nspc},-1)[:,{j}].sum(axis=0).round(6).tolist())", 3)
-                    if assoc_gas_law and ngas:
-                        for i, gas in enumerate(gass):
-                            for j, spc in enumerate(self.context["basic"]["gas"][gas]["spc"]):
-                                model.add(f"res_dict['y']['ind'].append({(gvar, gas, None, None, spc)})", 3)
-                                model.add(f"res_dict['y']['val'].append(res.y[{out_ind}].round(6).tolist())", 3)
-                                out_ind += 1
-                    if assoc_sld_law and nsld:
-                        for i, sld in enumerate(slds):
-                            for j, spc in enumerate(self.context["basic"]["sld"][sld]["spc"]):
-                                model.add(f"res_dict['y']['ind'].append({(svar, sld, None, None, spc)})", 3)
-                                model.add(f"res_dict['y']['val'].append(res.y[{out_ind}].round(6).tolist())", 3)
-                                out_ind += 1
-                    model.add("return res_dict", 3)
-                model.add(f"else:", 1)
-                model.add(f"return None", 2)
-            if self.context["type"] == "dynamic":
-                iul_unit = self.entity["var"][iul_var]["unit"]
-                if iul_unit and self.entity["unit"][iul_unit]["intcpt"]:
-                    intcpt = self.entity["unit"][iul_unit]["intcpt"]
-                    model.add(f"res['x'] -= {intcpt}", 1)
-                if iul_unit and self.entity["unit"][iul_unit]["rto"]:
-                    rto = self.entity["unit"][iul_unit]["rto"]
-                    model.add(f"res['x'] /= {rto}", 1)
-                if self.context["desc"]["ac"] == "Batch":
-                    model.add("res_dict = {"
-                        "'x': {'ind': None, 'val': None}, "
-                        "'y': {'ind': [], 'val': []}, "
-                    "}", 1)
-                    model.add(f"res_dict['x']['ind'] = {(dvar, None, None, None, None)}", 1)
-                    model.add(f"res_dict['x']['val'] = res['x'].round(6).tolist()", 1)
-                    out_ind = 0
-                    for i, stm in enumerate(stms):
-                        for j, spc in enumerate(spcs):
-                            model.add(f"res_dict['y']['ind'].append({(ivar, None, stm, None, spc)})", 1)
-                            model.add(f"res_dict['y']['val'].append(res['y'][{out_ind}].round(6).tolist())", 1)
+                if assoc_sld_law and nsld:
+                    for i, sld in enumerate(slds):
+                        for j, spc in enumerate(self.context["basic"]["sld"][sld]["spc"]):
+                            model.add(f"res_dict['y']['ind'].append({(svar, sld, None, None, spc)})", 3)
+                            model.add(f"res_dict['y']['val'].append(res.y[{out_ind}].round(6).tolist())", 3)
                             out_ind += 1
-                    for j, spc in enumerate(spcs):
-                        model.add(f"res_dict['y']['ind'].append({(ivar, None, 'Overall', None, spc)})", 1)
-                        model.add(f"res_dict['y']['val'].append(res['y'][:{nstm*nspc}].reshape("
-                                  f"{nstm},{nspc},-1)[:,{j}].sum(axis=0).round(6).tolist())", 1)
-                    if assoc_gas_law and ngas:
-                        for i, gas in enumerate(gass):
-                            for j, spc in enumerate(self.context["basic"]["gas"][gas]["spc"]):
-                                model.add(f"res_dict['y']['ind'].append({(gvar, gas, None, None, spc)})", 1)
-                                model.add(f"res_dict['y']['val'].append(res['y'][{out_ind}].round(6).tolist())", 1)
-                                out_ind += 1
-                    if assoc_sld_law and nsld:
-                        for i, sld in enumerate(slds):
-                            for j, spc in enumerate(self.context["basic"]["sld"][sld]["spc"]):
-                                model.add(f"res_dict['y']['ind'].append({(svar, sld, None, None, spc)})", 1)
-                                model.add(f"res_dict['y']['val'].append(res['y'][{out_ind}].round(6).tolist())", 1)
-                                out_ind += 1
-                    model.add("return res_dict", 1)
+                model.add("return res_dict", 3)
+            model.add(f"else:", 1)
+            model.add(f"return None", 2)
         
         return model.get_model()

@@ -141,9 +141,9 @@
     
 
 
-    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#relatesToMassEqulibriumPhenomenon -->
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#relatesToMassEquilibriumPhenomenon -->
 
-    <owl:ObjectProperty rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#relatesToMassEqulibriumPhenomenon">
+    <owl:ObjectProperty rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#relatesToMassEquilibriumPhenomenon">
         <rdfs:range rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#MassEquilibriumPhenomenon"/>
     </owl:ObjectProperty>
     
@@ -494,7 +494,7 @@
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ReactionParameter"/>
         <hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Reaction_Dimension"/>
         <hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Stream_Dimension"/>
-        <hasUnit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#kJ_per_mol"/>
+        <hasUnit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#J_per_mol"/>
         <hasSymbol rdf:parseType="Literal"><math><mrow><msub><mi>E</mi><mtext>a</mtext></msub></mrow></math></hasSymbol>
     </owl:NamedIndividual>
     
@@ -887,7 +887,7 @@
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Mass_Transfer">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#MassTransportPhenomenon"/>
-        <relatesToMassEqulibriumPhenomenon rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dissolution_Equilibrium"/>
+        <relatesToMassEquilibriumPhenomenon rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dissolution_Equilibrium"/>
     </owl:NamedIndividual>
     
 
@@ -913,6 +913,7 @@
         <hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Species_Dimension"/>
         <hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Stream_Dimension"/>
         <hasLaw rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Volumetric_Mass_Transfer_Rate_Law_with_Gas-Liquid_Mass_Transfer"/>
+        <hasLaw rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Volumetric_Mass_Transfer_Rate_Law_with_Mass-Controlled_Gas-Liquid_Mass_Transfer"/>
         <hasUnit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#mol_per_L.s"/>
         <hasSymbol rdf:parseType="Literal"><math><mrow><msub><mi>r</mi><mtext>t,g</mtext></msub></mrow></math></hasSymbol>
     </owl:NamedIndividual>
@@ -928,6 +929,20 @@
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Volumetric_Mass_Transfer_Coefficient"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dissolution_Saturated_Concentration"/>
         <isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Mass_Transfer"/>
+        <hasFormula rdf:parseType="Literal"><math><mrow><mrow><msub><mi>k</mi><mtext>L</mtext></msub><mspace nspace="0"></mspace><mi>a</mi></mrow><mrow><mo>(</mo><msup><msub><mi>c</mi><mtext>g</mtext></msub><mtext>*</mtext></msup><mo>−</mo><mi>c</mi><mo>)</mo></mrow></mrow></math></hasFormula>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Volumetric_Mass_Transfer_Rate_Law_with_Mass-Controlled_Gas-Liquid_Mass_Transfer -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Volumetric_Mass_Transfer_Rate_Law_with_Mass-Controlled_Gas-Liquid_Mass_Transfer">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Law"/>
+        <hasAssociatedGasLaw rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Gas_Derivative_Law_with_Mass-Controlled_Gas-Liquid_Mass_Transfer"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Concentration"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Volumetric_Mass_Transfer_Coefficient"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dissolution_Saturated_Concentration"/>
+        <isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass-Controlled_Gas-Liquid_Mass_Transfer"/>
         <hasFormula rdf:parseType="Literal"><math><mrow><mrow><msub><mi>k</mi><mtext>L</mtext></msub><mspace nspace="0"></mspace><mi>a</mi></mrow><mrow><mo>(</mo><msup><msub><mi>c</mi><mtext>g</mtext></msub><mtext>*</mtext></msup><mo>−</mo><mi>c</mi><mo>)</mo></mrow></mrow></math></hasFormula>
     </owl:NamedIndividual>
     
@@ -967,6 +982,7 @@
         <hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Species_Dimension"/>
         <hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Stream_Dimension"/>
         <hasLaw rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dissolution_Saturated_Concentration_Law_with_Gas_Dissolution_Equilibrium_by_Henry"/>
+        <hasLaw rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dissolution_Saturated_Concentration_Law_with_Mass-Controlled_Gas_Dissolution_Equilibrium_by_Henry"/>
         <hasUnit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#mol_per_L"/>
         <hasSymbol rdf:parseType="Literal"><math><mrow><msup><msub><mi>c</mi><mtext>g</mtext></msub><mtext>*</mtext></msup></mrow></math></hasSymbol>
     </owl:NamedIndividual>
@@ -984,6 +1000,30 @@
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Henry&apos;s_Constant"/>
         <isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dissolution_Equilibrium"/>
         <hasFormula rdf:parseType="Literal"><math><mrow><mfrac><mrow><mi>P</mi><msub><mi>x</mi><mtext>g</mtext></msub></mrow><mrow><mn>1000</mn><mi>R</mi><mi>T</mi><msub><mi>k</mi><mtext>H</mtext></msub></mrow></mfrac></mrow></math></hasFormula>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dissolution_Saturated_Concentration_Law_with_Mass-Controlled_Gas_Dissolution_Equilibrium_by_Henry -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dissolution_Saturated_Concentration_Law_with_Mass-Controlled_Gas_Dissolution_Equilibrium_by_Henry">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Law"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Headspace_Volume"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Gas"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Molecular_Weight"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Henry&apos;s_Constant"/>
+        <isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass-Controlled_Gas_Dissolution_Equilibrium"/>
+        <hasFormula rdf:parseType="Literal"><math><mrow><mfrac><msub><mi>m</mi><mtext>g</mtext></msub><mrow><mi>M</mi><msub><mi>V</mi><mtext>H</mtext></msub><msub><mi>k</mi><mtext>H</mtext></msub></mrow></mfrac></mrow></math></hasFormula>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Headspace_Volume -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Headspace_Volume">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#OperationParameter"/>
+        <hasUnit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#cubic_m"/>
+        <hasSymbol rdf:parseType="Literal"><math><mrow><msub><mi>V</mi><mtext>H</mtext></msub></mrow></math></hasSymbol>
     </owl:NamedIndividual>
     
 
@@ -1072,6 +1112,15 @@
     
 
 
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#J_per_mol -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#J_per_mol">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Unit"/>
+        <hasSymbol rdf:parseType="Literal"><math><mrow><mtext>J</mtext><mtext>/</mtext><mtext>mol</mtext></mrow></math></hasSymbol>
+    </owl:NamedIndividual>
+    
+
+
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#K -->
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#K">
@@ -1135,6 +1184,23 @@
     
 
 
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass-Controlled_Gas-Liquid_Mass_Transfer -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass-Controlled_Gas-Liquid_Mass_Transfer">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#MassTransportPhenomenon"/>
+        <relatesToMassEquilibriumPhenomenon rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass-Controlled_Gas_Dissolution_Equilibrium"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass-Controlled_Gas_Dissolution_Equilibrium -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass-Controlled_Gas_Dissolution_Equilibrium">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#MassEquilibriumPhenomenon"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Derivative_Law_with_Batch -->
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Derivative_Law_with_Batch">
@@ -1167,6 +1233,47 @@
         <hasLaw rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Derivative_Law_with_Batch"/>
         <hasUnit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#kg_per_s"/>
         <hasSymbol rdf:parseType="Literal"><math><mrow><mfrac><mrow><mo>d</mo><mi>m</mi></mrow><mrow><mo>d</mo><mi>t</mi></mrow></mfrac></mrow></math></hasSymbol>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Flow_Rate_Gas -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Flow_Rate_Gas">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#OperationParameter"/>
+        <hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dimension"/>
+        <hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Species_Dimension"/>
+        <hasUnit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#kg_per_h"/>
+        <hasSymbol rdf:parseType="Literal"><math><mrow><msub><mi>q</mi><mtext>m,g</mtext></msub></mrow></math></hasSymbol>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Gas -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Gas">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#StateVariable"/>
+        <hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dimension"/>
+        <hasDimension rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Species_Dimension"/>
+        <hasLaw rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Gas_Derivative_Law_with_Mass-Controlled_Gas-Liquid_Mass_Transfer"/>
+        <hasUnit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#kg"/>
+        <hasSymbol rdf:parseType="Literal"><math><mrow><msub><mi>m</mi><mtext>g</mtext></msub></mrow></math></hasSymbol>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Gas_Derivative_Law_with_Mass-Controlled_Gas-Liquid_Mass_Transfer -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Gas_Derivative_Law_with_Mass-Controlled_Gas-Liquid_Mass_Transfer">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Law"/>
+        <hasIntegralModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Gas"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Density"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Volumetric_Mass_Transfer_Rate"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Flow_Rate_Gas"/>
+        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Molecular_Weight"/>
+        <isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass-Controlled_Gas-Liquid_Mass_Transfer"/>
+        <hasFormula rdf:parseType="Literal"><math><mrow><mo>-</mo><mfrac><mrow><mo>∑</mo><mi>m</mi></mrow><mi>ρ</mi></mfrac><mrow><mo>(</mo><mrow><mo>∑</mo><msub><mi>r</mi><mtext>t,g</mtext></msub></mrow><mi>M</mi><mo>)</mo></mrow><mo>+</mo><msub><mi>q</mi><mtext>m,g</mtext></msub></mrow></math></hasFormula>
     </owl:NamedIndividual>
     
 
@@ -1574,7 +1681,7 @@
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Solid-Liquid_Mass_Transfer">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#MassTransportPhenomenon"/>
-        <relatesToMassEqulibriumPhenomenon rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Solid-Liquid_Mass_Transfer"/>
+        <relatesToMassEquilibriumPhenomenon rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Solid_Dissolution_Equilibrium"/>
     </owl:NamedIndividual>
     
 
@@ -1616,11 +1723,10 @@
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Density_Solid"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass_Solid"/>
-        <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mole_Solid_Fraction"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Solid-Liquid_Volumetric_Mass_Transfer_Coefficient"/>
         <hasModelVariable rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Solid_Dissolution_Saturated_Concentration"/>
         <isAssociatedWith rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Solid-Liquid_Mass_Transfer"/>
-        <hasFormula rdf:parseType="Literal"><math><mrow><mrow><msub><mi>k</mi><mtext>S</mtext></msub><mspace nspace="0"></mspace><mi>a</mi></mrow><mfrac><mrow><mrow><mo>∑</mo><msub><mi>m</mi><mtext>s</mtext></msub></mrow><mi>ρ</mi><msub><mi>x</mi><mtext>s</mtext></msub></mrow><mrow><mrow><mo>∑</mo><mi>m</mi></mrow><msub><mi>ρ</mi><mtext>s</mtext></msub></mrow></mfrac><mrow><mo>(</mo><msup><msub><mi>c</mi><mtext>s</mtext></msub><mtext>*</mtext></msup><mo>−</mo><mi>c</mi><mo>)</mo></mrow></mrow></math></hasFormula>
+        <hasFormula rdf:parseType="Literal"><math><mrow><mrow><msub><mi>k</mi><mtext>S</mtext></msub><mspace nspace="0"></mspace><mi>a</mi></mrow><mfrac><mrow><msub><mi>m</mi><mtext>s</mtext></msub><mi>ρ</mi></mrow><mrow><mrow><mo>∑</mo><mi>m</mi></mrow><msub><mi>ρ</mi><mtext>s</mtext></msub></mrow></mfrac><mrow><mo>(</mo><msup><msub><mi>c</mi><mtext>s</mtext></msub><mtext>*</mtext></msup><mo>−</mo><mi>c</mi><mo>)</mo></mrow></mrow></math></hasFormula>
     </owl:NamedIndividual>
     
 
@@ -1805,6 +1911,8 @@
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Well_Mixed">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#FlowPattern"/>
         <relatesToMassTransportPhenomenon rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas-Liquid_Mass_Transfer"/>
+        <relatesToMassTransportPhenomenon rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Mass-Controlled_Gas-Liquid_Mass_Transfer"/>
+        <relatesToMassTransportPhenomenon rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Solid-Liquid_Mass_Transfer"/>
     </owl:NamedIndividual>
     
 
@@ -1860,6 +1968,8 @@
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#kJ_per_mol">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Unit"/>
+        <hasMetric rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#J_per_mol"/>
+        <hasRatio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1000.0</hasRatio>
         <hasSymbol rdf:parseType="Literal"><math><mrow><mtext>kJ</mtext><mtext>/</mtext><mtext>mol</mtext></mrow></math></hasSymbol>
     </owl:NamedIndividual>
     
@@ -1879,6 +1989,17 @@
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#kg_per_cubic_m">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Unit"/>
         <hasSymbol rdf:parseType="Literal"><math><mrow><mtext>kg</mtext><mtext>/</mtext><msup><mtext>m</mtext><mn>3</mn></msup></mrow></math></hasSymbol>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#kg_per_h -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#kg_per_h">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Unit"/>
+        <hasMetric rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#kg_per_s"/>
+        <hasRatio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">2.7777778E-4</hasRatio>
+        <hasSymbol rdf:parseType="Literal"><math><mrow><mtext>kg</mtext><mtext>/</mtext><mtext>h</mtext></mrow></math></hasSymbol>
     </owl:NamedIndividual>
     
 

@@ -185,6 +185,7 @@ class PhenomenonService:
             f"?mt rdf:type ontomo:MassTransportPhenomenon. " \
             f"FILTER(regex(str(?mt), '#{mt_str}$', 'i')). " \
             f"?me rdf:type ontomo:MassEquilibriumPhenomenon. " \
+            f"?mt ontomo:relatesToMassEquilibriumPhenomenon ?me. " \
             "}"
 
         try:
@@ -487,117 +488,58 @@ class PhenomenonService:
         """
         if not isinstance(desc, dict):
             return {}
+        
+        param_law = {}
+        vars = self.h.query_var()
+        laws = self.h.query_law(mode="mainpage")
 
-        def _norm(v):
-            if v is None:
-                return []
-            if isinstance(v, list):
-                items = v
-            else:
-                items = [v]
-            out = []
-            for s in items:
-                if s is None:
+        # flow pattern laws subsidiary to mass transport
+        for law_dict in laws.values():
+            if law_dict["pheno"] not in desc["mt"]:
+                continue
+            for var in law_dict["vars"]:
+                if var == "Concentration":
                     continue
-                s2 = str(s).strip()
-                if s2:
-                    out.append(s2)
-            return out
+                if var in param_law or not vars[var]["laws"]:
+                    continue
+                var_laws = []
+                for var_law in vars[var]["laws"]:
+                    if laws[var_law]["pheno"] == desc["fp"]:
+                        var_laws.append(var_law)
+                if var_laws:
+                    param_law[var] = var_laws
 
-        ac_list = _norm(desc.get("ac"))
-        fp_list = _norm(desc.get("fp"))
-        mt_list = _norm(desc.get("mt"))
-        me_list = _norm(desc.get("me"))
-
-        if not (ac_list or fp_list or mt_list or me_list):
-            return {}
-
-        union_blocks = []
-
-        def _regex_union(names):
-            esc = [re.escape(n) for n in names]
-            return "|".join(esc)
-
-        if ac_list:
-            p = _regex_union(ac_list)
-            union_blocks.append(
-                "{"
-                f"?d ontomo:isAssociatedWith ?ac. "
-                f"?ac rdf:type ontomo:Accumulation. "
-                f"FILTER(regex(str(?ac), '#({p})$', 'i')). "
-                "}"
-            )
-        if fp_list:
-            p = _regex_union(fp_list)
-            union_blocks.append(
-                "{"
-                f"?d ontomo:isAssociatedWith ?fp. "
-                f"?fp rdf:type ontomo:FlowPattern. "
-                f"FILTER(regex(str(?fp), '#({p})$', 'i')). "
-                "}"
-            )
-        if mt_list:
-            p = _regex_union(mt_list)
-            union_blocks.append(
-                "{"
-                f"?d ontomo:isAssociatedWith ?mt. "
-                f"?mt rdf:type ontomo:MassTransportPhenomenon. "
-                f"FILTER(regex(str(?mt), '#({p})$', 'i')). "
-                "}"
-            )
-        if me_list:
-            p = _regex_union(me_list)
-            union_blocks.append(
-                "{"
-                f"?d ontomo:isAssociatedWith ?me. "
-                f"?me rdf:type ontomo:MassEquilibriumPhenomenon. "
-                f"FILTER(regex(str(?me), '#({p})$', 'i')). "
-                "}"
-            )
-
-        param_types = [
-            "FlowParameter",
-            "ReactorParameter",
-            "ReactionParameter",
-            "PhysicalParameter",
-            "OperatingParameter",
-            "MolecularTransportParameter",
-        ]
-        values_param_types = " ".join([f"ontomo:{t}" for t in param_types])
-
-        sparql = self.h.prefix + \
-            "select ?v ?d where {" \
-            f"?d rdf:type ontomo:Law. " \
-            f"{{ ?d ontomo:hasModelVariable ?v }} UNION {{ ?d ontomo:hasOptionalModelVariable ?v }}. " \
-            f"?v rdf:type ?pt. VALUES ?pt {{{values_param_types}}}. "
-
-        if union_blocks:
-            sparql += "(" + " UNION ".join(union_blocks) + ") . "
-
-        sparql += "}"
-
-        try:
-            sparql_res = self.h.cur.execute(sparql)
-        except Exception:
-            return {}
-
-        mapping = {}
-        for res in sparql_res.split("\r\n")[1:-1]:
-            parts = res.split(",")
-            if len(parts) < 2:
+        # flow pattern laws subsidiary to flow pattern
+        for law_dict in laws.values():
+            if law_dict["pheno"] != desc["fp"]:
                 continue
-            var_iri, law_iri = parts[0], parts[1]
-            var_name = var_iri.split("#")[-1]
-            law_name = law_iri.split("#")[-1]
-            if not var_name or not law_name:
+            for var in law_dict["vars"]:
+                if var == "Concentration":
+                    continue
+                if var in param_law or not vars[var]["laws"]:
+                    continue
+                var_laws = []
+                for var_law in vars[var]["laws"]:
+                    if laws[var_law]["pheno"] == desc["fp"]:
+                        var_laws.append(var_law)
+                if var_laws:
+                    param_law[var] = var_laws
+        
+        # mass equilibrium laws
+        for law_dict in laws.values():
+            if law_dict["pheno"] not in desc["mt"]:
                 continue
-            if var_name in mapping:
-                if law_name < mapping[var_name]:
-                    mapping[var_name] = law_name
-            else:
-                mapping[var_name] = law_name
+            for var in law_dict["vars"]:
+                if var in param_law or not vars[var]["laws"]:
+                    continue
+                var_laws = []
+                for var_law in vars[var]["laws"]:
+                    if laws[var_law]["pheno"] in desc["me"]:
+                        var_laws.append(var_law)
+                if var_laws:
+                    param_law[var] = var_laws
 
-        return dict(sorted(mapping.items(), key=lambda x: x[0]))
+        return dict(sorted(param_law.items(), key=lambda x: x[0]))
 
     def query_symbol(self, unit):
         """
@@ -705,6 +647,26 @@ class PhenomenonService:
                 if law_dict["pheno"] in mes:
                     for var in law_dict["vars"]:
                         me_vars.add(var)
+        
+        assoc_gas_vars = set()
+        for law, law_dict in laws.items():
+            for ac_opt_var in ac_opt_vars:
+                if law in vars[ac_opt_var]["laws"]:
+                    if law_dict["pheno"] in mts:
+                        assoc_gas_law = law_dict["assoc_gas_law"]
+                        if assoc_gas_law and basic["gas"]:
+                            for var in laws[assoc_gas_law]["vars"]:
+                                assoc_gas_vars.add(var)
+        
+        assoc_sld_vars = set()
+        for law, law_dict in laws.items():
+            for ac_opt_var in ac_opt_vars:
+                if law in vars[ac_opt_var]["laws"]:
+                    if law_dict["pheno"] in mts:
+                        assoc_sld_law = law_dict["assoc_sld_law"]
+                        if assoc_sld_law and basic["sld"]:
+                            for var in laws[assoc_sld_law]["vars"]:
+                                assoc_sld_vars.add(var)
 
         param_law_vars = set()
         for law in param_law.values():
@@ -727,6 +689,8 @@ class PhenomenonService:
         desc_vars.update(fp_vars)
         desc_vars.update(mt_vars)
         desc_vars.update(me_vars)
+        desc_vars.update(assoc_gas_vars)
+        desc_vars.update(assoc_sld_vars)
         desc_vars.update(param_law_vars)
         for rxn_vars in rxn_var_dict.values():
             desc_vars.update(rxn_vars)
