@@ -1,0 +1,15 @@
+# Ignore real env file for the FastAPI service
+__pycache__
+.pytest_cache
+.venv
+*.egg-info
+buildspec.yml
+graphdb/dist/*zip
+.DS_Store
+docker-compose.yml
+.env
+.idea
+
+
+# Keep the example file tracked
+!.env.example
