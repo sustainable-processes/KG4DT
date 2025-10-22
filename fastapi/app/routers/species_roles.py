@@ -8,7 +8,7 @@ from ..dependencies import DbSessionDep
 from ..models.species_role import SpeciesRole
 from ..schemas.species_role import SpeciesRoleCreate, SpeciesRoleUpdate, SpeciesRoleRead
 
-router = APIRouter(prefix="/models/species-roles", tags=["models", "species_roles"])
+router = APIRouter(prefix="/models/species-roles", tags=["species_roles"])
 
 
 @router.get("/", response_model=List[SpeciesRoleRead])

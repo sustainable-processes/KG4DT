@@ -8,7 +8,7 @@ from ..dependencies import DbSessionDep
 from ..models.reactor import Reactor
 from ..schemas.reactor import ReactorCreate, ReactorUpdate, ReactorRead
 
-router = APIRouter(prefix="/models/reactors", tags=["models", "reactors"])
+router = APIRouter(prefix="/models/reactors", tags=["reactors"])
 
 
 @router.get("/", response_model=List[ReactorRead])

@@ -9,7 +9,7 @@ from ..dependencies import DbSessionDep
 from ..models.basic import Basic
 from ..schemas.basic import BasicCreate, BasicUpdate, BasicRead
 
-router = APIRouter(prefix="/models/basics", tags=["models", "basics"])
+router = APIRouter(prefix="/models/basics", tags=["basics"])
 
 
 def _pagination_params(limit: Optional[int] = Query(100, ge=0, le=500), offset: Optional[int] = Query(0, ge=0)) -> tuple[int, int]:

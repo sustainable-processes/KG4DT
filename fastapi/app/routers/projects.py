@@ -8,7 +8,7 @@ from ..dependencies import DbSessionDep
 from ..models.project import Project
 from ..schemas.project import ProjectCreate, ProjectUpdate, ProjectRead
 
-router = APIRouter(prefix="/models/projects", tags=["models", "projects"])
+router = APIRouter(prefix="/models/projects", tags=["projects"])
 
 
 @router.get("/", response_model=List[ProjectRead])
