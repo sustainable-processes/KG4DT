@@ -63,9 +63,11 @@ from .routers import basics as basics_router  # noqa: E402
 from .routers import projects as projects_router  # noqa: E402
 from .routers import reactors as reactors_router  # noqa: E402
 from .routers import species_roles as species_roles_router  # noqa: E402
+from .routers import model as model_router  # noqa: E402
 
 app.include_router(health_router.router)
 app.include_router(basics_router.router)
 app.include_router(projects_router.router)
 app.include_router(reactors_router.router)
 app.include_router(species_roles_router.router)
+app.include_router(model_router.router)

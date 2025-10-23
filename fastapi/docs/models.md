@@ -92,6 +92,14 @@ curl -X PATCH http://localhost:8001/models/basics/1 \
   -H "Content-Type: application/json" \
   -d '{"temperature":35.0}'
 
+5) Ontology queries (GraphDB)
+- Variables: GET /api/model/var
+- Units: GET /api/model/unit
+
+Examples
+- curl http://localhost:8001/api/model/var
+- curl http://localhost:8001/api/model/unit
+
 Notes
 - All PATCH updates are partial; only provided fields are changed.
 - Pagination: limit is capped at 500; offset >= 0.
