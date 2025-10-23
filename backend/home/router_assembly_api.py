@@ -190,7 +190,7 @@ def api_assembly_list_species_role():
         return jsonify({"error": "Internal server error while listing species roles.", "detail": str(e)}), 500
 
 
-@blueprint.route("/api/model/assembly/compute_reactor", methods=["POST"]) 
+@blueprint.route("/api/model/assembly/compute_reactor", methods=["GET"])
 def api_assembly_compute_reactor():
     """
     Perform a lightweight computation using the provided JSON structure of inputs and a reactor.
