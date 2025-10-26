@@ -1,0 +1,156 @@
+-- KG4DT seed SQL for PostgreSQL
+-- Generated: 2025-10-06 15:22 local time
+-- Purpose: Populate species_role and basic tables with example data.
+-- Notes:
+--  - These statements assume the tables already exist (created by SQLAlchemy models).
+--  - JSON literals use ::json casts for PostgreSQL.
+--  - Uncomment TRUNCATE or DELETE statements if you want a clean slate before inserting.
+
+BEGIN;
+
+-- Optional cleanup (use with caution)
+-- TRUNCATE TABLE species_role RESTART IDENTITY CASCADE;
+-- TRUNCATE TABLE basic RESTART IDENTITY CASCADE;
+-- or, for selective cleanup:
+-- DELETE FROM species_role;
+-- DELETE FROM basic;
+
+-- Seed species_role entries
+-- Using explicit IDs for deterministic references; UPSERT on primary key id
+INSERT INTO species_role (id, name, attribute) VALUES
+    (1, 'Reactant', 'consumed'),
+    (2, 'Product', 'formed'),
+    (3, 'Catalyst', 'accelerates'),
+    (4, 'Inhibitor', 'slows'),
+    (5, 'Solvent', 'medium'),
+    (6, 'Inert', 'nonreactive')
+ON CONFLICT (id) DO UPDATE SET
+    name = EXCLUDED.name,
+    attribute = EXCLUDED.attribute;
+
+-- Example seed data for basic table
+-- Columns: name, size, substance, time, pressure, temperature, structure(JSON)
+INSERT INTO basic (name, size, substance, time, pressure, temperature, structure) VALUES
+    (
+        'Test Run 1',
+        1.5,
+        'Water',
+        12.0,
+        1.0,
+        298.15,
+        '{
+            "density": 997,
+            "viscosity": 0.00089,
+            "units": {"density": "kg/m3", "viscosity": "Pa·s"}
+        }'::json
+    ),
+    (
+        'Test Run 2',
+        0.5,
+        'Ethanol',
+        6.0,
+        1.2,
+        298.15,
+        '{
+            "density": 789,
+            "viscosity": 0.0012,
+            "composition": {"ethanol": 1.0},
+            "notes": "Pure ethanol"
+        }'::json
+    ),
+    (
+        'Batch A',
+        NULL,
+        'Mixture',
+        24.0,
+        2.0,
+        310.0,
+        '{
+            "components": [
+                {"name": "Water", "fraction": 0.7},
+                {"name": "Ethanol", "fraction": 0.3}
+            ],
+            "metadata": {"operator": "auto", "tag": "A-001"}
+        }'::json
+    );
+
+-- Seed reactor entries
+-- Optional cleanup for reactor table
+-- TRUNCATE TABLE reactor RESTART IDENTITY CASCADE;
+-- DELETE FROM reactor;
+
+-- Reactor data with species JSON composed from "basic" table example values.
+-- For reactors with number_of_input = 2, the species JSON includes 2 basic entries.
+INSERT INTO reactor (id, name, number_of_input, number_of_output, created_date, icon, species) VALUES
+    (
+        1,
+        'Two-Input Batch Reactor',
+        2,
+        1,
+        NOW(),
+        'beaker.svg',
+        '{
+            "Test Run 1": {
+                "size": 1.5,
+                "substance": "Water",
+                "time": 12.0,
+                "pressure": 1.0,
+                "temperature": 298.15,
+                "structure": {
+                    "density": 997,
+                    "viscosity": 0.00089,
+                    "units": {"density": "kg/m3", "viscosity": "Pa·s"}
+                }
+            },
+            "Test Run 2": {
+                "size": 0.5,
+                "substance": "Ethanol",
+                "time": 6.0,
+                "pressure": 1.2,
+                "temperature": 298.15,
+                "structure": {
+                    "density": 789,
+                    "viscosity": 0.0012,
+                    "composition": {"ethanol": 1.0},
+                    "notes": "Pure ethanol"
+                }
+            }
+        }'::json
+    ),
+    (
+        2,
+        'Single-Input CSTR',
+        1,
+        1,
+        NOW(),
+        'cstr.svg',
+        '{
+            "Batch A": {
+                "size": null,
+                "substance": "Mixture",
+                "time": 24.0,
+                "pressure": 2.0,
+                "temperature": 310.0,
+                "structure": {
+                    "components": [
+                        {"name": "Water", "fraction": 0.7},
+                        {"name": "Ethanol", "fraction": 0.3}
+                    ],
+                    "metadata": {"operator": "auto", "tag": "A-001"}
+                }
+            }
+        }'::json
+    )
+ON CONFLICT (id) DO UPDATE SET
+    name = EXCLUDED.name,
+    number_of_input = EXCLUDED.number_of_input,
+    number_of_output = EXCLUDED.number_of_output,
+    created_date = EXCLUDED.created_date,
+    icon = EXCLUDED.icon,
+    species = EXCLUDED.species;
+
+COMMIT;
+
+-- How to run (examples):
+--   psql "$DATABASE_URL" -f sql_query.txt
+--   psql -h localhost -U postgres -d your_db -f sql_query.txt
