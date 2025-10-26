@@ -372,6 +372,29 @@ class GraphdbHandler:
         rule_dict = dict(sorted(rule_dict.items(), key=lambda x: x[0]))
         for r in rule_dict:
             rule_dict[r]["descs"] = sorted(rule_dict[r]["descs"])
+        return rule_dict
+
+    def query_role(self):
+        """Queries Roles from GraphDB.
+
+        Returns:
+            list: A list of species roles in reaction.
+        """
+        roles = []
+        sparql = (
+            f"{self.prefix}"
+            "select ?r where {"
+            "?r rdf:type ontomo:SpeciesRole. "
+            "}"
+        )
+        sparql_res = self.cur.execute(sparql)
+        for res in sparql_res.split("\r\n")[1:-1]:
+            r = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)[0]
+            r = r.split("#")[-1]
+            if r not in roles:
+                roles.append(r)
+        roles = sorted(roles)
+        return roles
 
     def query_pheno(self):
         """Delegates to PhenomenonService.query_pheno"""
@@ -415,6 +438,65 @@ class GraphdbHandler:
     def query_cal_param(self, context=None):
         """Delegates to PhenomenonService.query_cal_param"""
         return self.pheno_service.query_cal_param(context)
+
+    def query_context_template(self):
+        """Queries context templates from GraphDB.
+
+        Returns:
+            dict: A dictionary of context templates.
+        """
+        context_template_dict = {}
+        sparql = (
+            f"{self.prefix}"
+            "select ?c ?s ?d where {"
+            "?c rdf:type ontomo:Context. "
+            "?s rdf:type ontomo:ContextSection. "
+            "?d rdf:type ontomo:Descriptor. "
+            "?c ontomo:hasStructureSection ?s. "
+            "?s ontomo:hasDescriptor ?d. "
+            "}"
+        )
+        sparql_res = self.cur.execute(sparql)
+        for res in sparql_res.split("\r\n")[1:-1]:
+            c, s, d = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
+            c = c.split("#")[-1].replace("_Context", "")
+            s = s.split("#")[-1]
+            d = d.split("#")[-1]
+            if c not in context_template_dict:
+                context_template_dict[c] = {}
+            if "structure" not in context_template_dict[c]:
+                context_template_dict[c]["structure"] = []
+            if d not in context_template_dict[c]["structure"]:
+                context_template_dict[c]["structure"].append(d)
+        
+        sparql = (
+            f"{self.prefix}"
+            "select ?c ?s ?d where {"
+            "?c rdf:type ontomo:Context. "
+            "?s rdf:type ontomo:ContextSection. "
+            "?d rdf:type ontomo:Descriptor. "
+            "?c ontomo:hasOperationSection ?s. "
+            "?s ontomo:hasDescriptor ?d. "
+            "}"
+        )
+        sparql_res = self.cur.execute(sparql)
+        for res in sparql_res.split("\r\n")[1:-1]:
+            c, s, d = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
+            c = c.split("#")[-1].replace("_Context", "")
+            s = s.split("#")[-1]
+            d = d.split("#")[-1]
+            if c not in context_template_dict:
+                context_template_dict[c] = {}
+            if "operation" not in context_template_dict[c]:
+                context_template_dict[c]["operation"] = []
+            if d not in context_template_dict[c]["operation"]:
+                context_template_dict[c]["operation"].append(d)
+
+        context_template_dict = dict(sorted(context_template_dict.items(), key=lambda x: x[0]))
+        for c in context_template_dict:
+            for s in context_template_dict[c]:
+                context_template_dict[c][s] = sorted(context_template_dict[c][s])
+        return context_template_dict
 
     def get_pheno_sparql(self):
         """Return the list of SPARQL queries executed by the last call to query_pheno().
