@@ -981,7 +981,7 @@ class ModelAgent:
                                 ind = keys.index((var, None, stm, rxn, None))
                                 model.add(f'{sym}[{i}, {j}] = p[{ind}]', 1)
                 elif set(dims) == set(["Species", "Stream", "Gas"]):
-                    model.add(f"{sym} = np.zeros({ngas, nstm, nrxn}, dtype=np.float64)", 1)
+                    model.add(f"{sym} = np.zeros({ngas, nstm, nspc}, dtype=np.float64)", 1)
                     for i, gas in enumerate(gass):
                         for j, stm in enumerate(stms):
                             for k, spc in enumerate(spcs):
@@ -989,7 +989,7 @@ class ModelAgent:
                                     ind = keys.index((var, gas, stm, None, spc))
                                     model.add(f'{sym}[{i}, {j}, {k}] = p[{ind}]', 1)
                 elif set(dims) == set(["Species", "Stream", "Solid"]):
-                    model.add(f"{sym} = np.zeros({nsld, nstm, nrxn}, dtype=np.float64)", 1)
+                    model.add(f"{sym} = np.zeros({nsld, nstm, nspc}, dtype=np.float64)", 1)
                     for i, sld in enumerate(slds):
                         for j, stm in enumerate(stms):
                             for k, spc in enumerate(spcs):

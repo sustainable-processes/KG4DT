@@ -1,7 +1,7 @@
 import datetime as dt
 from typing import Any, Dict, List, Set, Tuple
 
-from flask import jsonify, request
+from flask import g, jsonify, request
 
 from . import blueprint
 
@@ -153,32 +153,33 @@ def api_assembly_list_species_role():
             order_dir = "asc"
 
         items: List[Dict[str, Any]] = []
-        source = "db"
+        source = "kg"
+        items = g.graphdb_handler.query_role()
 
-        if get_session and SpeciesRole:
-            session = get_session()
-            try:
-                q = session.query(SpeciesRole)  # type: ignore[attr-defined]
-                col = getattr(SpeciesRole, order_by)
-                q = q.order_by(col.desc() if order_dir == "desc" else col.asc())
-                q = q.offset(offset).limit(limit)
-                rows = q.all()
-                for r in rows:
-                    items.append({
-                        "id": r.id,
-                        "name": r.name,
-                        "attribute": r.attribute,
-                    })
-            except Exception:
-                source = "unavailable"
-                items = []
-            finally:
-                try:
-                    session.close()
-                except Exception:
-                    pass
-        else:
-            source = "unavailable"
+        # if get_session and SpeciesRole:
+        #     session = get_session()
+        #     try:
+        #         q = session.query(SpeciesRole)  # type: ignore[attr-defined]
+        #         col = getattr(SpeciesRole, order_by)
+        #         q = q.order_by(col.desc() if order_dir == "desc" else col.asc())
+        #         q = q.offset(offset).limit(limit)
+        #         rows = q.all()
+        #         for r in rows:
+        #             items.append({
+        #                 "id": r.id,
+        #                 "name": r.name,
+        #                 "attribute": r.attribute,
+        #             })
+        #     except Exception:
+        #         source = "unavailable"
+        #         items = []
+        #     finally:
+        #         try:
+        #             session.close()
+        #         except Exception:
+        #             pass
+        # else:
+        #     source = "unavailable"
 
         return jsonify({
             "species_roles": items,
@@ -188,6 +189,24 @@ def api_assembly_list_species_role():
 
     except Exception as e:
         return jsonify({"error": "Internal server error while listing species roles.", "detail": str(e)}), 500
+
+
+@blueprint.route("/api/model/assembly/context_template", methods=["GET"])  
+def api_assembly_list_context_template():
+    """
+    List context template for stream, gases, and reactors.
+    """
+    try:
+        source = "kg"
+        items = g.graphdb_handler.query_context_template()
+        return jsonify({
+            "context_templates": items,
+            "count": len(items),
+            "source": source
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": "Internal server error while listing context templates.", "detail": str(e)}), 500
 
 
 @blueprint.route("/api/model/assembly/compute_reactor", methods=["GET"])
