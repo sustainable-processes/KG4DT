@@ -30,6 +30,15 @@ Project layout (under this folder)
     - graphdb.py: GraphDB SPARQL client (minimal wrapper).
   - routers/
     - health.py: Health endpoints (basic and deep checks).
+    - model.py: Ontology variable/unit endpoints (GraphDB-backed).
+    - exploration.py: Phenomena exploration endpoints (ac/fp/mt/me, param_law, rxn).
+    - calibration.py: Law/symbol/triplets, op_param, simulate (and placeholders for cal_param/calibrate).
+    - info.py: Aggregated info endpoint.
+  - utils/
+    - graphdb_model_utils.py: SPARQL helpers for variables/units.
+    - graphdb_exploration_utils.py: SPARQL helpers for phenomena queries.
+    - graphdb_calibration_utils.py: Law metadata, op_param derivation, triplets.
+    - simulation.py: Lightweight table simulation helper.
 - requirements.txt: Python dependencies for this FastAPI service.
 
 Quick start
@@ -120,3 +129,31 @@ Database initialization
 - The DB initializer fastapi.app.db.init_db accepts settings and echo:
   init_db(echo=settings.database_echo, settings=settings)
 - This ensures all env resolution flows through one place (Settings), avoiding surprises with os.getenv.
+
+Operation parameters (op_param) — logic overview
+- Purpose: determine which OperationParameter variables are needed in a model context and their indexing (global, per-stream, per-gas, per-solid, per-species-in-<index>).
+- Inputs (context):
+  - basic: lists/index maps for streams (stm), gases (gas), solids (sld), and their species memberships.
+  - desc: selected phenomena (ac/fp/mt/me), optional reaction-to-phenomena map (rxn), and parameter-to-law map (param_law).
+- Algorithm (high level):
+  - Query GraphDB for laws and variables; build sets of variables tied to selected phenomena (accumulation, flow pattern, mass transfer, mass equilibrium).
+  - Include variables from associated gas/solid laws when selected MTs imply them and basic context declares gases/solids.
+  - Include variables referenced via reaction→phenomenon relationships and variables of laws those variables participate in.
+  - Filter for variables that are OperationParameter and have no own laws (pure inputs), then expand by their dimensions to indices:
+    - [] → global OP: [name, null, null, null, null]
+    - [Stream] → for each stream: [name, null, stream, null, null]
+    - [Gas] → for each gas: [name, gas, null, null, null]
+    - [Solid] → for each solid: [name, solid, null, null, null]
+    - [Species, Stream] → for each stream×species-in-stream: [name, null, stream, null, species]
+    - [Species, Gas] → for each gas×species-in-gas: [name, gas, null, null, species]
+    - [Species, Solid] → for each solid×species-in-solid: [name, solid, null, null, species]
+- Output: deterministic, sorted list of [name, idx1, idx2, idx3, idx4].
+- File: fastapi/app/utils/graphdb_calibration_utils.py (query_op_param and helpers). Use via POST /api/model/op_param.
+
+Simulation — logic overview
+- Endpoint: POST /api/model/simulate
+- Inputs: JSON body with 'context' and 'op_params' (dataset object with 'ind' and 'val').
+- Behavior: a lightweight, deterministic computation that returns one simulated scalar per experiment row by summing numeric cells in that row. Non-numeric cells are ignored. This provides a stable API surface while decoupled from Flask agents.
+- Output: { "simulated": { "ind": same-as-op_params.ind, "val": [[y1], ...] }, "count": N }
+- Extensibility: replace fastapi/app/utils/simulation.py:simulate_table with a physics-based solver that uses the 'context' and GraphDB-derived model structure. Keep the input/output contract for backward compatibility.
+- Security: request validation ensures shapes; no code execution from inputs; numerical operations only.
