@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, HTTPException, Query, Request
+from fastapi import APIRouter, HTTPException, Query, Request, Body
 
 from ..services.graphdb import GraphDBClient
 from ..utils import graphdb_exploration_utils as gxu
+from ..schemas.exploration import ParamLawFilters, RxnFilters
 
 router = APIRouter(prefix="/api/model", tags=["exploration"])  # keep paths aligned with Flask
 
@@ -107,119 +108,61 @@ async def get_pheno_me(request: Request, mt: Optional[List[str]] = Query(None, d
     return {"me": sorted(mes)}
 
 
-@router.get("/pheno/param_law")
-async def get_param_law(request: Request):
+def _build_param_law_desc(filters_model: ParamLawFilters | None) -> Dict[str, Any]:
+    body: Dict[str, Any] = filters_model.model_dump(exclude_none=True) if isinstance(filters_model, ParamLawFilters) else {}
+    desc: Dict[str, Any] = {}
+    for k in ("ac", "fp", "mt", "me"):
+        if k in body and body[k] is not None:
+            desc[k] = body[k]
+    return desc
+
+
+
+
+@router.post("/pheno/param_law")
+async def post_param_law(request: Request, filters: ParamLawFilters = Body(..., description="Phenomenon selections to constrain parameter-to-law mapping")):
     client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
     if not client:
         raise HTTPException(status_code=503, detail="GraphDB client is not available")
 
-    # Read JSON body if provided (FastAPI allows body for GET but needs explicit usage via Request)
-    try:
-        body: Dict[str, Any] = await request.json()
-    except Exception:
-        body = {}
-
-    desc: Dict[str, Any] = {}
-    keys = ("ac", "fp", "mt", "me")
-    for k in keys:
-        val = body.get(k) if isinstance(body, dict) else None
-        if val is None:
-            # also from query params
-            qvals = request.query_params.getlist(k)
-            if qvals:
-                val = qvals
-            else:
-                single = request.query_params.get(k)
-                if single:
-                    val = [p.strip() for p in single.split(",") if p.strip()]
-        if val is not None:
-            desc[k] = val
-
-    if not any(desc.get(k) for k in keys):
+    # Reject query parameters for filters even on POST (body only)
+    forbidden_keys = ["ac", "fp", "mt", "me"]
+    forbidden_in_args = {k: request.query_params.getlist(k) for k in forbidden_keys if request.query_params.getlist(k)}
+    if forbidden_in_args:
         raise HTTPException(status_code=400, detail={
-            "error": "Provide at least one of 'ac', 'fp', 'mt', or 'me' via JSON body or query params.",
-            "hint": {"GET": "/api/model/pheno/param_law?fp=Annular_Microflow&mt=Engulfment"}
+            "error": "Provide filters in the JSON body only. Query parameters are not supported for this endpoint.",
+            "forbidden_query_params": forbidden_in_args,
+        })
+
+    # Content-Type is enforced by FastAPI when Body(...) is present; additional manual check is optional.
+    desc = _build_param_law_desc(filters)
+    if not any(desc.get(k) for k in ("ac", "fp", "mt", "me")):
+        raise HTTPException(status_code=400, detail={
+            "error": "Provide at least one of 'ac', 'fp', 'mt', or 'me' in the JSON body.",
+            "example": {"fp": "Annular_Microflow", "mt": ["Engulfment"]}
         })
 
     data = gxu.query_param_law(client, desc)
-    if isinstance(data, dict) and data.get("error") == "NotImplemented":
-        raise HTTPException(status_code=501, detail=data)
     return data
+
+
 
 
 @router.get("/pheno/rxn")
 async def get_rxn(request: Request):
+    """Return ReactionPhenomenon names from the knowledge graph.
+
+    This GET endpoint accepts no parameters or body and simply lists reactions
+    discovered in GraphDB. Use the POST variant for filtered queries if needed.
+    """
     client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
     if not client:
         raise HTTPException(status_code=503, detail="GraphDB client is not available")
 
-    # Filters are only allowed in the JSON body, not query params, to match Flask behavior
-    forbidden_keys = [
-        "ac", "accumulation",
-        "fp", "flow_pattern",
-        "mt", "mass_transport",
-        "me", "mass_equilibrium",
-        "param", "parameter",
-        "law", "law_name", "laws",
-        "param_law",
-    ]
-    forbidden_in_args = {k: request.query_params.getlist(k) for k in forbidden_keys if request.query_params.getlist(k)}
-    if forbidden_in_args:
-        raise HTTPException(status_code=400, detail={
-            "error": "Pass filters in the request JSON body. Query parameters are not supported for this endpoint.",
-            "forbidden_query_params": forbidden_in_args,
-        })
-
-    try:
-        body: Dict[str, Any] = await request.json()
-    except Exception:
-        body = {}
-
-    def _collect_list(primary: str, aliases: Optional[List[str]] = None) -> List[str]:
-        aliases = aliases or []
-        val = body.get(primary) if isinstance(body, dict) else None
-        if val is None:
-            for a in aliases:
-                if isinstance(body, dict) and a in body:
-                    val = body.get(a)
-                    break
-        if val is None:
-            return []
-        if isinstance(val, list):
-            return [str(x).strip() for x in val if x is not None and str(x).strip() != ""]
-        return [str(val).strip()] if str(val).strip() != "" else []
-
-    filters: Dict[str, Any] = {}
-    ac_list = _collect_list("ac", ["accumulation"])  # Batch / Continuous
-    fp_list = _collect_list("fp", ["flow_pattern"])  # Flow pattern
-    mt_list = _collect_list("mt", ["mass_transport"])  # Mass transport phenomenon
-    me_list = _collect_list("me", ["mass_equilibrium"])  # Mass equilibrium phenomenon
-    param_list = _collect_list("param", ["parameter"])  # Variables used in laws
-    law_list = _collect_list("law", ["law_name", "laws"])  # Law names
-
-    if ac_list:
-        filters["ac"] = ac_list
-    if fp_list:
-        filters["fp"] = fp_list
-    if mt_list:
-        filters["mt"] = mt_list
-    if me_list:
-        filters["me"] = me_list
-    if param_list:
-        filters["param"] = param_list
-    if law_list:
-        filters["law"] = law_list
-
-    if isinstance(body, dict) and "param_law" in body and body.get("param_law") is not None:
-        filters["param_law"] = body.get("param_law")
-
-    if not filters:
-        data = gxu.query_rxn(client, None)
-    else:
-        data = gxu.query_rxn(client, filters)
-
+    data = gxu.query_rxn(client)
     if isinstance(data, dict) and data.get("error") == "NotImplemented":
         raise HTTPException(status_code=501, detail=data)
-    if not data:
-        raise HTTPException(status_code=404, detail={"error": "No reaction phenomenon matched the provided filters.", "filters": filters})
+    # Always return 200 with the list (possibly empty)
     return data
+
+

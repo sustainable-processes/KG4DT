@@ -100,6 +100,12 @@ Examples
 - curl http://localhost:8001/api/model/var
 - curl http://localhost:8001/api/model/unit
 
+6) Assembly (knowledge graph)
+- Species roles (from KG): GET /api/model/assembly/list_species_role?limit=100&offset=0&order_dir=asc|desc
+  - Returns: {"species_roles": ["Catalyst","Reactant",...], "count": N, "source": "kg"}
+  - Example:
+    curl "http://localhost:8001/api/model/assembly/list_species_role?limit=50&order_dir=asc"
+
 Notes
 - All PATCH updates are partial; only provided fields are changed.
 - Pagination: limit is capped at 500; offset >= 0.

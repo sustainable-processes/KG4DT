@@ -1,0 +1,15 @@
+{
+  "hosted-zone:account=124355682815:domainName=kg.cdi-sg.com:region=us-east-1": {
+    "Id": "/hostedzone/Z04415203MVT0MKNV7I96",
+    "Name": "kg.cdi-sg.com."
+  },
+  "hosted-zone:account=124355682815:domainName=kg.cdi-sg.com:region=ap-southeast-1": {
+    "Id": "/hostedzone/Z04415203MVT0MKNV7I96",
+    "Name": "kg.cdi-sg.com."
+  },
+  "availability-zones:account=124355682815:region=ap-southeast-1": [
+    "ap-southeast-1a",
+    "ap-southeast-1b",
+    "ap-southeast-1c"
+  ]
+}
