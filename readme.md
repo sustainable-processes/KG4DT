@@ -21,6 +21,15 @@ docker-compose up
 ```
 Find deployed KG4DT and example cases at http://127.0.0.1:5000/index
 
+### Having trouble starting Docker Desktop?
+If Docker Desktop fails to start with errors like:
+- com.docker.virtualization: process terminated unexpectedly: use of closed network connection
+
+See the troubleshooting guide:
+- docs/TROUBLESHOOTING_DOCKER.md
+
+You can also run KG4DT without Docker using a Python virtual environment; see the next section for instructions.
+
 ### Local setup with Python virtual environment (.venv)
 If you prefer to run without Docker:
 
@@ -49,74 +58,30 @@ Note: The backend expects a running GraphDB instance with the specified credenti
 ## API Reference
 Base URL: `http://127.0.0.1:5000`
 
+- For a complete, up-to-date list of FastAPI endpoints and examples, see fastapi/docs/api.md
+
 Notes:
 - JSON request bodies should be sent with `Content-Type: application/json`.
 - Some routes are marked as deprecated in code comments but are currently available; treat them as subject to change.
 
-### Model
-- GET `/api/model` (deprecated)
-  - Returns entity data for sidebar.
-  - Example: `curl http://127.0.0.1:5000/api/model`
+### Quick links
+- Variables: GET `/api/model/var`
+- Units: GET `/api/model/unit`
+- Model info: POST `/api/model/info`
+- Phenomena: see `/api/model/pheno*` (details in fastapi/docs/api.md)
+- Operation parameters: POST `/api/model/op_param`
+- Simulation: POST `/api/model/simulate`
 
-- GET/POST `/api/model/context`
-  - Body (JSON): `{ "case": "dushman" | "esterification", "postfix": "model_context.json" | "<suffix>" }`
-  - If `postfix` lacks `.json`, file name becomes `model_context_<postfix>.json`.
-  - Loads file from `backend/cases/<case>/<postfix>`.
-  - 404 if case or file missing.
-  - Example: `curl -X POST http://127.0.0.1:5000/api/model/context -H 'Content-Type: application/json' -d '{"case":"dushman","postfix":"model_context.json"}'`
+Additional legacy Flask endpoints (structure, application, knowledge_graph, solvent) may still be available in the Flask app paths and are documented below for reference, but the FastAPI layer is preferred going forward.
 
-- GET/POST `/api/model/var`
-  - Returns model variables from GraphDB.
-  - Example: `curl http://127.0.0.1:5000/api/model/var`
-
-- GET/POST `/api/model/unit`
-  - Returns units from GraphDB.
-  - Example: `curl http://127.0.0.1:5000/api/model/unit`
-
-- POST `/api/model/save`
-  - Saves the provided payload as JSON under `backend/save/` with a timestamped filename.
-  - Body (JSON): must be an object. `users` must be an object; optional list fields `s`, `v`, `p` must be lists.
-  - Response: `{ "success": true, "file": "<name>.json", "path": "save/<name>.json" }`
-  - Example:
-    ```
-    curl -X POST http://127.0.0.1:5000/api/model/save \
-      -H 'Content-Type: application/json' \
-      -d '{
-            "users": {"id": "u1", "project_name": "proj", "model": "m"},
-            "s": [], "v": [], "p": []
-          }'
-    ```
-
-- GET `/api/model/load?project_name=<name>`
-  - Loads the most recent saved file for the given project_name.
-  - Query param: `project_name` (required).
-  - Response: `{ "success": true, "file": "...", "data": { ... } }`
-  - Example: `curl 'http://127.0.0.1:5000/api/model/load?project_name=proj'`
-
-### Structure
-- GET `/api/structure`
-  - Returns entity data for sidebar.
-  - Example: `curl http://127.0.0.1:5000/api/structure`
-
-- GET/POST `/api/structure/context`
-  - Body (JSON): `{ "case": "dushman", "postfix": "model_context.json" }`
-  - If `postfix` lacks `.json`, file name becomes `model_context_<postfix>.json`.
-  - Example: `curl -X POST http://127.0.0.1:5000/api/structure/context -H 'Content-Type: application/json' -d '{"case":"dushman"}'`
-
-### Application (deprecated)
-- GET `/api/application`
-  - Returns entity data for sidebar.
-- GET/POST `/api/application/context`
-  - Same contract as `/api/structure/context`.
-
-### Knowledge Graph
+### Knowledge Graph (legacy Flask)
 - GET `/api/knowledge_graph/mainpage`
   - Returns entity data for knowledge graph main page.
   - Example: `curl http://127.0.0.1:5000/api/knowledge_graph/mainpage`
 
 - GET `/api/knowledge_graph/sidebar` (deprecated)
   - Computes knowledge graph data from sidebar entity.
-
+  
 - GET `/api/knowledge_graph/context/<case>`
   - Loads `top_down_rule_model_context.json` for the given case directory.
   - 404 if missing.
@@ -126,7 +91,7 @@ Notes:
   - Body (JSON): `{ "case": "esterification", "postfix": "top_down_rule_model_context.json" | "<suffix>" }`
   - If `postfix` lacks `.json`, file becomes `top_down_<postfix>_model_context.json`.
 
-### Solvent Properties and Miscibility
+### Solvent Properties and Miscibility (legacy Flask)
 - POST `/api/solvent`
   - Body (JSON):
     - `solvents` (list, required): e.g., `["water", "ethanol", "acetone"]`

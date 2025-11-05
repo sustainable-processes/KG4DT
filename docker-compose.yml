@@ -5,6 +5,17 @@ services:
       dockerfile: Dockerfile-flask
     ports:
       - 5000:5000
+    environment:
+      # AWS Cognito settings
+      COGNITO_REGION: "ap-southeast-2"
+      COGNITO_DOMAIN: "ap-southeast-2idn1n7oxh.auth.ap-southeast-2.amazoncognito.com"
+      COGNITO_USER_POOL_ID: "ap-southeast-2_IDN1n7OXh"
+      COGNITO_APP_CLIENT_ID: "5u0v5imc96rg3i4baf5sff44ug"
+      COGNITO_APP_CLIENT_SECRET: "1aguktpu8o4hdq3i52ahj3ldkknrffk9vtecnb9u14kcg83gjdfl"
+      COGNITO_CALLBACK_URL: "http://localhost:5000/index"
+      COGNITO_SIGNOUT_URL: "http://localhost:5000/index"
+      COGNITO_SCOPE: "email openid"
+      SECRET_KEY: "your_super_secret_key"
     depends_on:
       - graphdb
     restart: unless-stopped
