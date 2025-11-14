@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  # --------------------- FastAPI service (standalone) ---------------------
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile-fastapi
+    environment:
+      # Point FastAPI to GraphDB inside the shared Docker network
+      FASTAPI_GRAPHDB_BASE_URL: http://graphdb:7200
+      FASTAPI_GRAPHDB_REPOSITORY: kg4dt
+      # Add other FASTAPI_* env vars here as needed (see fastapi/app/settings.py)
+    ports:
+      # Bind FastAPI only to localhost; fronted by host Nginx
+      - "127.0.0.1:8000:8000"
+    networks:
+      - kg4dt_net
+    container_name: fastapi
+    restart: unless-stopped
+
+# Shared external network so this stack can discover GraphDB
+networks:
+  kg4dt_net:
+    external: true
