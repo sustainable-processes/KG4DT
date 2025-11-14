@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  # --------------------- FastAPI service ---------------------
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile-fastapi
+    environment:
+      # Point FastAPI to GraphDB inside the Docker network
+      FASTAPI_GRAPHDB_BASE_URL: http://graphdb:7200
+      FASTAPI_GRAPHDB_REPOSITORY: kg4dt
+      # Add other FASTAPI_* env vars here as needed (see fastapi/app/settings.py)
+    depends_on:
+      - graphdb
+    ports:
+      # Bind FastAPI only to localhost; fronted by host Nginx
+      - "127.0.0.1:8000:8000"
+    networks:
+      - web
+    restart: unless-stopped
+
+  # --------------------- GraphDB service ---------------------
+  graphdb:
+    image: ontotext/graphdb:10.6.3-free
+    environment:
+      # Tune memory as needed for your EC2 instance
+      GDB_HEAP_SIZE: 2g
+      GDB_MIN_MEM: 1g
+      GDB_MAX_MEM: 2g
+    volumes:
+      # Persistent GraphDB home (repositories, config)
+      - graphdb-data:/opt/graphdb/home
+      # Optional: logs/work if you want them persisted separately
+      - graphdb-logs:/opt/graphdb/logs
+      - graphdb-work:/opt/graphdb/work
+      # Ontology bind mount for easy server-side import via Workbench (Import > Server files)
+      # GraphDB Workbench shows files from /opt/graphdb/home/import
+      - ./ontology:/opt/graphdb/home/import/ontology:rw
+    ports:
+      # Bind GraphDB only to localhost; fronted by host Nginx
+      - "127.0.0.1:7200:7200"
+    networks:
+      - web
+    restart: unless-stopped
+
+volumes:
+  graphdb-data:
+  graphdb-logs:
+  graphdb-work:
+
+networks:
+  web:
+    driver: bridge
