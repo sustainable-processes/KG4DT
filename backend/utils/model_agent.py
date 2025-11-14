@@ -144,12 +144,12 @@ class ModelAgent:
         param_dict = {}
 
         # Structure
-        if "st" not in self.context["info"]:
+        if "st" in self.context["info"]:
             for p in self.context["info"]["st"]:
                 if p not in self.entity["var"]:
                     continue
                 dims = self.entity["var"][p]["dims"]
-                if set(dims) == set([""]):
+                if set(dims) == set([]):
                     v = self.context["info"]["st"][p]
                     param_dict[(p, None, None, None, None)] = v
                 else:
@@ -353,6 +353,12 @@ class ModelAgent:
             elif set(dims) == set(["Stream"]):
                 for stm in self.context["basic"]["stm"]:
                     param_dict[(p, None, stm, None, None)] = None
+            elif set(dims) == set(["Gas"]):
+                for gas in self.context["basic"]["gas"]:
+                    param_dict[(p, gas, None, None, None)] = None
+            elif set(dims) == set(["Solid"]):
+                for sld in self.context["basic"]["solid"]:
+                    param_dict[(p, sld, None, None, None)] = None
             elif set(dims) == set(["Species", "Stream"]):
                 for stm in self.context["basic"]["stm"]:
                     for spc in self.context["basic"]["stm"][stm]["spc"]:
@@ -773,13 +779,19 @@ class ModelAgent:
         if len(assoc_gas_laws) > 1:
             raise ValueError("Multiple associated gas law associated with mass transport.")
         else:
-            assoc_gas_law = assoc_gas_laws[0] if assoc_gas_laws else None
-            assoc_gas_vars.extend(self.entity["law"][assoc_gas_law]["vars"])
+            if assoc_gas_laws:
+                assoc_gas_law = assoc_gas_laws[0]
+                assoc_gas_vars.extend(self.entity["law"][assoc_gas_law]["vars"])
+            else:
+                assoc_gas_law = None
         if len(assoc_sld_laws) > 1:
             raise ValueError("Multiple associated solid law associated with mass transport.")
         else:
-            assoc_sld_law = assoc_sld_laws[0] if assoc_sld_laws else None
-            assoc_sld_vars.extend(self.entity["law"][assoc_sld_law]["vars"])
+            if assoc_sld_laws:
+                assoc_sld_law = assoc_sld_laws[0]
+                assoc_sld_vars.extend(self.entity["law"][assoc_sld_law]["vars"])
+            else:
+                assoc_sld_law = None
 
         # c_g_star, c_s_star
         me_laws, me_vars = [], []
@@ -787,7 +799,7 @@ class ModelAgent:
             if var != "Concentration" and self.entity["var"][var]["laws"]:
                 law = self.context["desc"]["param_law"][var]
                 law_dict = self.entity["law"][law]
-                if law_dict["pheno"] in self.context["desc"]["me"]:
+                if "me" in self.context["desc"] and law_dict["pheno"] in self.context["desc"]["me"]:
                     me_laws.append(law)
                     me_vars.extend(law_dict["vars"])
 
@@ -806,6 +818,7 @@ class ModelAgent:
                 if law_dict["pheno"] == self.context["desc"]["fp"]:
                     fp_laws.append(law)
                     fp_vars.extend(law_dict["vars"])
+        fp_vars = list(set(fp_vars))
 
         # film_thickness
         sub_fp_laws, sub_fp_vars = [], []
@@ -1134,7 +1147,7 @@ class ModelAgent:
 
         # Concentration derivative: definition
         model.add("# definition", 2)
-        for var in vars:
+        for var in model_vars:
             var_dict = self.entity["var"][var]
             if var_dict["cls"] != "PhysicsParameter":
                 continue
@@ -1150,6 +1163,7 @@ class ModelAgent:
             fml = MMLExpression(law_dict["fml"]).to_numpy()
             dims = ["Stream"]
             sizes = [dim2size[dim] for dim in dims]
+            model.add(f"{sym} = np.zeros({tuple(sizes)}, dtype=np.float64)", 2)
             for ind in itertools.product(*[list(range(size)) for size in sizes]):
                 ind_sym = self.index_fml(sym, [var], dims, ind)
                 ind_fml = self.index_fml(fml, vars, dims, ind)
@@ -1176,10 +1190,9 @@ class ModelAgent:
                         sub_syms = [self.entity["var"][v]["sym"] for v in sub_vars]
                         sub_syms = [MMLExpression(s).to_numpy() for s in sub_syms]
                         sub_pheno = sub_law_dict["pheno"]
-                        sub_pheno = f"{sub_pheno.lower().replace('-', '_')}"
-                        sub_head = f"calc_{sub_pheno}_term({', '.join(sub_syms)})"
+                        sub_head = f"calc_{sub_pheno.lower().replace('-', '_')}_term({', '.join(sub_syms)})"
                         model.add(f"def {sub_head}:", 2)
-                        codes = self.context["info"]["rxn"][rxn][sub_law]
+                        codes = self.context["info"]["rxn"][sub_pheno][rxn]
                         codes = self.process_codes(codes)
                         for code in codes:
                             model.add(code, 3)
@@ -1242,6 +1255,7 @@ class ModelAgent:
                         ind_fml = self.index_fml(fml, vars, dims, ind)
                         model.add(f"{ind_sym} = {ind_fml}", 2)
             model.add("", 0)
+        model.add("", 0)
 
         # Concentration derivative: mass transport
         model.add("# mass transport", 2)
@@ -1254,33 +1268,46 @@ class ModelAgent:
             vars = self.entity["law"][law]["vars"]
             mass_vars = ["Mass"]
             vars = [var for var in vars if var not in mass_vars]
+            syms = [self.entity["var"][var]["sym"] for var in vars]
+            syms = [MMLExpression(sym).to_numpy() for sym in syms]
             dims = self.entity["var"][var]["dims"]
             dims = sorted(dims, key=lambda d: self.dim2pos[d])
-            if set(dims) == set(["Gas", "Stream", "Species"]):
+            if set(dims) == set(["Stream", "Species"]):
+                pha_dim, pha_dim_short, phas = None, None, None
+            elif set(dims) == set(["Gas", "Stream", "Species"]):
                 pha_dim, pha_dim_short, phas = "Gas", "gas", gass
             elif set(dims) == set(["Solid", "Stream", "Species"]):
                 pha_dim, pha_dim_short, phas = "Solid", "sld", slds
             else:
-                msg = f"Invalid dimensions for mass equilibrium parameter {var}: {dims}"
+                msg = f"Invalid dimensions for mass transport parameter {var}: {dims}"
                 return False, msg
-            model.add(f"{sym} = np.zeros({len(phas), nstm, nspc}, dtype=np.float64)", 2)
-            fml = MMLExpression(self.entity["law"][law]["fml"]).to_numpy()
-            for pha in phas:
-                me_spcs = self.context["basic"][pha_dim_short][pha]["spc"]
-                prod = itertools.product([pha], stms, me_spcs)
-                for pha, stm, spc in prod:
-                    ind = [phas.index(pha), stms.index(stm), spcs.index(spc)]
-                    ind_sym = self.index_fml(sym, [var], dims, ind)
-                    ind_fml = self.index_fml(fml, vars, dims, ind)
-                    ind_fml = self.index_fml(ind_fml, mass_vars, [pha_dim], [ind[0]])
-                    ind_fml = self.index_fml(ind_fml, mass_vars, ["Stream"], [ind[1]])
-                    model.add(f"{ind_sym} = {ind_fml}", 2)
-                    if "Solid" in dims:
-                        mass_var = "Mass_Solid"
-                        mass_sym = self.entity["var"][mass_var]["sym"]
-                        mass_sym = MMLExpression(mass_sym).to_numpy()
-                        model.add(f"if {mass_sym}[{ind[0]}, {ind[2]}] < 1e-3:", 2)
-                        model.add(f"{ind_sym} = 0", 3)
+            if not pha_dim:
+                model.add(f"{sym} = np.zeros({nstm, nspc}, dtype=np.float64)", 2)
+                codes = MMLExpression(self.entity["law"][law]["fml"]).to_numpy()
+                head = model.add_func(var, syms, codes, 2)
+                for i, spc in enumerate(spcs):
+                    ind_sym = self.index_fml(sym, [var], ["Species"], [i])
+                    ind_head = self.index_fml(head, vars, ["Species"], [i])
+                    model.add(f"{ind_sym} = {ind_head}", 2)
+            else:
+                model.add(f"{sym} = np.zeros({len(phas), nstm, nspc}, dtype=np.float64)", 2)
+                fml = MMLExpression(self.entity["law"][law]["fml"]).to_numpy()
+                for pha in phas:
+                    me_spcs = self.context["basic"][pha_dim_short][pha]["spc"]
+                    prod = itertools.product([pha], stms, me_spcs)
+                    for pha, stm, spc in prod:
+                        ind = [phas.index(pha), stms.index(stm), spcs.index(spc)]
+                        ind_sym = self.index_fml(sym, [var], dims, ind)
+                        ind_fml = self.index_fml(fml, vars, dims, ind)
+                        ind_fml = self.index_fml(ind_fml, mass_vars, [pha_dim], [ind[0]])
+                        ind_fml = self.index_fml(ind_fml, mass_vars, ["Stream"], [ind[1]])
+                        model.add(f"{ind_sym} = {ind_fml}", 2)
+                        if "Solid" in dims:
+                            mass_var = "Mass_Solid"
+                            mass_sym = self.entity["var"][mass_var]["sym"]
+                            mass_sym = MMLExpression(mass_sym).to_numpy()
+                            model.add(f"if {mass_sym}[{ind[0]}, {ind[2]}] < 1e-3:", 2)
+                            model.add(f"{ind_sym} = 0", 3)
             model.add("", 0)
 
         # Concentration derivative: accumulation
@@ -1449,10 +1476,36 @@ class ModelAgent:
             if iul_unit and self.entity["unit"][iul_unit]["rto"]:
                 rto = self.entity["unit"][iul_unit]["rto"]
                 model.add(f"res.t /= {rto}", 3)
-            # TODO
-            # if self.context["desc"]["ac"] == "Continuous":
-            #     model.add(f"return {{'x': {{'{dsym}': res.t.round(6).tolist()}}}}", 3)
-            #     # model.add(f"return [res.t.round(6), res.y.round(6), q]", 3)
+            if self.context["desc"]["ac"] == "Continuous":
+                model.add("res_dict = {"
+                    "'x': {'ind': None, 'val': None}, "
+                    "'y': {'ind': [], 'val': []}, "
+                "}", 3)
+                model.add(f"res_dict['x']['ind'] = {(dvar, None, None, None, None)}", 3)
+                model.add(f"res_dict['x']['val'] = res.t.round(6).tolist()", 3)
+                out_ind = 0
+                for i, stm in enumerate(stms):
+                    for j, spc in enumerate(spcs):
+                        model.add(f"res_dict['y']['ind'].append({(ivar, None, stm, None, spc)})", 3)
+                        model.add(f"res_dict['y']['val'].append(res.y[{out_ind}].round(6).tolist())", 3)
+                        out_ind += 1
+                for j, spc in enumerate(spcs):
+                    model.add(f"res_dict['y']['ind'].append({(ivar, None, 'Overall', None, spc)})", 3)
+                    model.add(f"res_dict['y']['val'].append(((res.y[:{nstm*nspc}].reshape("
+                                f"{nstm},{nspc},-1)[:,{j}] * q.reshape({nstm}, 1)).sum(axis=0) / q.sum()).round(6).tolist())", 3)
+                if assoc_gas_law and ngas:
+                    for i, gas in enumerate(gass):
+                        for j, spc in enumerate(self.context["basic"]["gas"][gas]["spc"]):
+                            model.add(f"res_dict['y']['ind'].append({(gvar, gas, None, None, spc)})", 3)
+                            model.add(f"res_dict['y']['val'].append(res.y[{out_ind}].round(6).tolist())", 3)
+                            out_ind += 1
+                if assoc_sld_law and nsld:
+                    for i, sld in enumerate(slds):
+                        for j, spc in enumerate(self.context["basic"]["sld"][sld]["spc"]):
+                            model.add(f"res_dict['y']['ind'].append({(svar, sld, None, None, spc)})", 3)
+                            model.add(f"res_dict['y']['val'].append(res.y[{out_ind}].round(6).tolist())", 3)
+                            out_ind += 1
+                model.add("return res_dict", 3)
             if self.context["desc"]["ac"] == "Batch":
                 model.add("res_dict = {"
                     "'x': {'ind': None, 'val': None}, "
