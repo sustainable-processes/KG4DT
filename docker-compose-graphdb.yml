@@ -20,7 +20,7 @@ services:
       - graphdb-work:/opt/graphdb/work
       # Ontology bind mount for easy server-side import via Workbench (Import > Server files)
       # GraphDB Workbench shows files from /opt/graphdb/home/import
-      - ./ontology:/opt/graphdb/home/import/ontology:rw
+      - ./ontology:/root/graphdb-import/ontology:rw
     ports:
       # Bind GraphDB only to localhost; fronted by host Nginx
       - "7200:7200"
