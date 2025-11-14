@@ -5,7 +5,7 @@ services:
   graphdb:
     # Use a valid public tag. "latest" generally points to the current GraphDB Free image.
     # If you prefer a pinned version, change to a specific tag (e.g., 10.6.4) that exists on Docker Hub.
-    image: ontotext/graphdb:11.1.3
+    image: ontotext/graphdb:11.0.0-free
     environment:
       # Tune memory as needed for your EC2 instance
       GDB_HEAP_SIZE: 512m
