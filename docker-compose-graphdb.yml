@@ -8,9 +8,10 @@ services:
     image: ontotext/graphdb:11.1.3
     environment:
       # Tune memory as needed for your EC2 instance
-      GDB_HEAP_SIZE: 2g
-      GDB_MIN_MEM: 1g
-      GDB_MAX_MEM: 2g
+      GDB_HEAP_SIZE: 512m
+#      GDB_HEAP_SIZE: 2g
+#      GDB_MIN_MEM: 1g
+#      GDB_MAX_MEM: 2g
     volumes:
       # Persistent GraphDB home (repositories, config)
       - graphdb-data:/opt/graphdb/home
@@ -22,7 +23,7 @@ services:
       - ./ontology:/opt/graphdb/home/import/ontology:rw
     ports:
       # Bind GraphDB only to localhost; fronted by host Nginx
-      - "127.0.0.1:7200:7200"
+      - "7200:7200"
     networks:
       - kg4dt_net
     container_name: graphdb
