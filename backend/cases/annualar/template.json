@@ -1,0 +1,454 @@
+{
+  "Template": [
+    {
+      "name": "Fedbatch Reactor",
+      "icon": "beaker.svg",
+      "created_date": "2025-10-06T15:30:38.952041+08:00",
+      "number_of_input": 2,
+      "number_of_utility_input": 1,
+      "input": {
+        "Stream 1": {
+          "structure": {
+            "Radius": 0.0005
+          },
+          "operation": {
+            "Flow Rate": {
+              "min": 0,
+              "max": 1000
+            },
+            "Temperature Range": {
+              "min": 0,
+              "max": 300
+            },
+            "Flow Regime": "Constant",
+            "Pressure Range": {
+              "min": 0,
+              "max": 1000
+            }
+          },
+          "phases": {},
+          "chemistry": {
+            "Reaction": []
+          },
+          "source": [],
+          "destination": [
+            "Fedbatch Reactor"
+          ]
+        },
+        "Gas 1": {
+          "structure": {
+            "Radius": 0.0005
+          },
+          "operation": {
+            "Flow Rate": {
+              "min": 0,
+              "max": 1000
+            },
+            "Temperature Range": {
+              "min": 0,
+              "max": 300
+            },
+            "Flow Regime": "Constant",
+            "Pressure Range": {
+              "min": 0,
+              "max": 1000
+            }
+          },
+          "chemistry": {
+            "Reaction": []
+          },
+          "source": [],
+          "destination": [
+            "Fedbatch Reactor"
+          ]
+        }
+      },
+      "utility": {
+        "Energy streams": {
+          "structure": {
+            "Radius": 0.0005,
+            "Heat exchange area": 1
+          },
+          "operation": {
+            "Heating medium": "Water",
+            "Temperature Range": {
+              "min": 0,
+              "max": 300
+            },
+            "pressure": {
+              "min": 0,
+              "max": 1000
+            }
+          },
+          "source": [],
+          "destination": [
+            "Fedbatch Reactor"
+          ]
+        }
+      },
+      "reactor": {
+        "Fedbatch Reactor": {
+          "structure": {
+            "volume": 25,
+            "radius": 5,
+            "height": 10
+          },
+          "operation": {
+            "Pressure": {
+              "min": 1,
+              "max": 10
+            },
+            "Temperature": {
+              "min": -3,
+              "max": 298.15
+            },
+            "Agitation speed (rpm)": {
+              "min": 1,
+              "max": 100
+            },
+            "Heat transfer": [
+              "UA",
+              "jacket medium"
+            ]
+          },
+          "chemistry": {},
+          "phenomenon": {
+            "Mass Accumulation": "Batch",
+            "Flow pattern": "Well_Mixed"
+          },
+          "source": [
+            "Stream 1",
+            "Gas 1"
+          ],
+          "utility": [
+            "Energy streams"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Annular Microreactor",
+      "icon": "beaker.svg",
+      "created_date": "2025-10-06T15:30:38.952041+08:00",
+      "number_of_input": 1,
+      "number_of_utility_input": 1,
+      "input": {
+        "Stream 1": {
+          "structure": {
+            "Radius": 0.0005
+          },
+          "operation": {
+            "Flow Rate": {
+              "min": 0,
+              "max": 1000
+            },
+            "Temperature Range": {
+              "min": 0,
+              "max": 300
+            },
+            "Flow Regime": "Constant",
+            "Pressure Range": {
+              "min": 0,
+              "max": 1000
+            }
+          },
+          "phases": {},
+          "chemistry": {
+            "Reaction": []
+          },
+          "source": [],
+          "destination": [
+            "Annular Microreactor"
+          ]
+        }
+      },
+      "utility": {
+        "Cooling streams": {
+          "structure": {
+            "Radius": 0.0005,
+            "Heat exchange area": 1
+          },
+          "operation": {
+            "Heating medium": "Water",
+            "Temperature Range": {
+              "min": 0,
+              "max": 300
+            },
+            "pressure": {
+              "min": 0,
+              "max": 1000
+            }
+          },
+          "source": [],
+          "destination": [
+            "Annular Microreactor"
+          ]
+        }
+      },
+      "reactor": {
+        "Annular Microreactor": {
+          "structure": {
+            "volume": 25,
+            "radius": 5,
+            "height": 10
+          },
+          "operation": {
+            "Pressure": {
+              "min": 1,
+              "max": 10
+            },
+            "Temperature": {
+              "min": -3,
+              "max": 298.15
+            },
+            "Agitation speed (rpm)": {
+              "min": 1,
+              "max": 100
+            },
+            "Heat transfer": [
+              "UA",
+              "jacket medium"
+            ]
+          },
+          "chemistry": {},
+          "phenomenon": {
+            "Mass Accumulation": "Batch",
+            "Flow pattern": "Well_Mixed"
+          },
+          "source": [
+            "Stream 1"
+          ],
+          "utility": [
+            "Cooling streams"
+          ]
+        }
+      }
+    }
+  ],
+  "Tutorial": [
+    {
+      "name": "Fedbatch Hydrogenation",
+      "icon": "beaker.svg",
+      "created_date": "2025-10-06T15:30:38.952041+08:00",
+      "number_of_input": 1,
+      "number_of_utility_input": 1,
+      "input": {
+        "Stream 1": {
+          "structure": {
+            "Radius": 0.0005
+          },
+          "operation": {
+            "Flow Rate": {
+              "min": 1.00005,
+              "max": 1000
+            },
+            "Temperature Range": {
+              "min": 293,
+              "max": 350
+            },
+            "Flow Regime": "Constant",
+            "Pressure Range": {
+              "min": 0,
+              "max": 10
+            }
+          },
+          "phases": {},
+          "chemistry": {
+            "Reaction": ["NB_Hydrogenation"]
+          },
+          "source": [],
+          "destination": [
+            "Fedbatch Hydrogenation"
+          ]
+        }
+      },
+      "utility": {
+        "Energy streams": {
+          "structure": {
+            "Radius": 0.0005,
+            "Heat exchange area": 0.08
+          },
+          "operation": {
+            "Heating medium": "Water",
+            "Temperature Range": {
+              "min": 283,
+              "max": 330
+            },
+            "pressure": {
+              "min": 0,
+              "max": 1000
+            }
+          },
+          "source": [],
+          "destination": [
+            "Fedbatch Hydrogenation"
+          ]
+        }
+      },
+      "reactor": {
+        "Fedbatch Hydrogenation": {
+          "structure": {
+            "volume": 1,
+            "radius": 0.06,
+            "height": 0.15
+          },
+          "operation": {
+            "Pressure": {
+              "min": 1,
+              "max": 10
+            },
+            "Temperature": {
+              "min": 293,
+              "max": 350
+            },
+            "Agitation speed (rpm)": {
+              "min": 200,
+              "max": 1200
+            },
+            "Heat transfer": [
+              "UA"
+            ]
+          },
+          "chemistry": {},
+          "phenomenon": {
+            "Mass Accumulation": "Batch",
+            "Flow pattern": "Well_Mixed"
+          },
+          "source": [
+            "Stream 1"
+          ],
+          "utility": [
+            "Energy streams"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Mixing in Annular Microreactor",
+      "icon": "beaker.svg",
+      "created_date": "2025-10-06T15:30:38.952041+08:00",
+      "number_of_input": 2,
+      "number_of_utility_input": 1,
+      "input": {
+        "Stream 1": {
+          "structure": {
+            "Radius": 0.0005
+          },
+          "operation": {
+            "Flow Rate": {
+              "min": 0,
+              "max": 1.0e-3
+            },
+            "Temperature Range": {
+              "min": 273,
+              "max": 350
+            },
+            "Flow Regime": "Constant",
+            "Pressure Range": {
+              "min": 1,
+              "max": 10
+            }
+          },
+          "phases": {},
+          "chemistry": {
+            "Reaction": []
+          },
+          "source": [],
+          "destination": [
+            "Mixing in Annular Microreactor"
+          ]
+        },
+        "Stream 2": {
+          "structure": {
+            "Radius": 0.0005
+          },
+          "operation": {
+            "Flow Rate": {
+              "min": 0,
+              "max": 1.0e-3
+            },
+            "Temperature Range": {
+              "min": 273,
+              "max": 350
+            },
+            "Flow Regime": "Constant",
+            "Pressure Range": {
+              "min": 1,
+              "max": 10
+            }
+          },
+          "phases": {},
+          "chemistry": {
+            "Reaction": []
+          },
+          "source": [],
+          "destination": [
+            "Mixing in Annular Microreactor"
+          ]
+        }
+      },
+      "utility": {
+        "Cooling streams": {
+          "structure": {
+            "Radius": 0.0005,
+            "Heat exchange area": 1
+          },
+          "operation": {
+            "Heating medium": "Water",
+            "Temperature Range": {
+              "min": 0,
+              "max": 300
+            },
+            "pressure": {
+              "min": 0,
+              "max": 1000
+            }
+          },
+          "source": [],
+          "destination": [
+            "Mixing in Annular Microreactor"
+          ]
+        }
+      },
+      "reactor": {
+        "Mixing in Annular Microreactor": {
+          "structure": {
+            "volume": 25,
+            "radius": 5,
+            "height": 10
+          },
+          "operation": {
+            "Pressure": {
+              "min": 1,
+              "max": 10
+            },
+            "Temperature": {
+              "min": -3,
+              "max": 298.15
+            },
+            "Agitation speed (rpm)": {
+              "min": 1,
+              "max": 100
+            },
+            "Heat transfer": [
+              "UA",
+              "jacket medium"
+            ]
+          },
+          "chemistry": {},
+          "phenomenon": {
+            "Mass Accumulation": "Batch",
+            "Flow pattern": "Well_Mixed"
+          },
+          "source": [
+            "Stream 1",
+            "Stream 2"
+          ],
+          "utility": [
+            "Cooling streams"
+          ]
+        }
+      }
+    }
+  ]
+}

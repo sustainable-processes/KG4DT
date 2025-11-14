@@ -1,18 +1,14 @@
 from aws_cdk import (
     Duration,
     Stack,
-    Fn,
-    RemovalPolicy,
-    CfnOutput,
     Environment,
     aws_ec2 as ec2,
-    aws_autoscaling as autoscaling,
     aws_ecs as ecs,
     aws_elasticloadbalancingv2 as elbv2,
-    aws_cognito as cognito,
+    aws_elasticloadbalancingv2_targets as elbv2_targets,
     aws_logs as logs,
     aws_route53 as route53,
-    aws_iam as iam
+    aws_route53_targets as route53_targets,
 )
 from constructs import Construct
 from stacks.zone_stack import ZoneStack
@@ -37,30 +33,13 @@ class WorkbenchStack(Stack):
             kg_stack: KnowledgeGraphStack,
             cert_stack,
             shared_alb: elbv2.IApplicationLoadBalancer,
-            shared_alb_listener: elbv2.ApplicationListener
+            shared_alb_listener: elbv2.ApplicationListener,
+            fastapi_target_group: elbv2.ApplicationTargetGroup
         ) -> None:
         super().__init__(scope, "Workbench" + env_name, env=env)
 
         webui_base_url = "https://" + webui_domain_name_prefix + "." + dns_zone_name
 
-        # ===============================
-        # Cognito authentication settings
-        # ===============================
-
-        user_pool_id = Fn.import_value("userPoolId")
-        user_pool = cognito.UserPool.from_user_pool_id(self, "UserPool", user_pool_id)
-        
-        user_pool_client = user_pool.add_client("UserPoolClient",
-            generate_secret=True,
-            o_auth=cognito.OAuthSettings(
-                flows=cognito.OAuthFlows(authorization_code_grant=True),
-                scopes=[cognito.OAuthScope.OPENID, cognito.OAuthScope.PROFILE],
-                callback_urls=[webui_base_url + "/app/authorize"],
-                logout_urls=[webui_base_url + "/app/index"]
-            )
-        )
-
-        CfnOutput(self, "UserPoolClientId", value=user_pool_client.user_pool_client_id)
 
         # ===============================
         # Auto Scaling Group Configuration
@@ -99,30 +78,20 @@ class WorkbenchStack(Stack):
 
         container = task_definition.add_container("BackendContainer",
             image=ecs.ContainerImage.from_ecr_repository(app_stack.workbench_repo, image_tag),
-            memory_limit_mib=4096,  # 2 GiB
-            cpu=2048,               # 1 vCPU
+            memory_limit_mib=2048,
+            cpu=1024,
             logging=ecs.LogDrivers.aws_logs(
-                stream_prefix="WorkbenchBackend",
+                stream_prefix="FastAPI",
                 log_group=logs.LogGroup(self, "LogGroup")
             ),
             environment={
                 "GRAPHDB_HOST": "graphdb.default",
-                "GRAPHDB_PORT": "7200",
-                "COGNITO_REGION": user_pool.stack.region,
-                "COGNITO_DOMAIN": Fn.import_value("userPoolDomain"),
-                "COGNITO_USER_POOL_ID": user_pool.user_pool_id,
-                "COGNITO_APP_CLIENT_ID": user_pool_client.user_pool_client_id,
-                "COGNITO_APP_CLIENT_SECRET": user_pool_client.user_pool_client_secret.unsafe_unwrap(),
-                "COGNITO_CALLBACK_URL": webui_base_url + "/app/authorize",
-                "COGNITO_SIGNOUT_URL": webui_base_url + "/app/index",
-                "SECRET_KEY": "b83c90d4ff22ef58c3aa184c1723a02f994c93d75583e3c7d48ae2d1ce05e61e",
-                "COGNITO_SCOPE": "openid profile",
-                "APP_PREFIX": "app"
+                "GRAPHDB_PORT": "7200"
             }
         )
 
         container.add_port_mappings(
-            ecs.PortMapping(container_port=5000, name="backend-port")
+            ecs.PortMapping(container_port=8000, name="backend-port")
         )
 
         # ===============================
@@ -140,10 +109,11 @@ class WorkbenchStack(Stack):
             "Allow ALB to ECS dynamic ports"
         )
 
+        # Allow ALB to reach FastAPI on 8000
         backend_sg.connections.allow_from(
-            other=ec2.Peer.ipv4(zone_stack.vpc.vpc_cidr_block),
-            port_range=ec2.Port.tcp(5000),
-            description="Allow internal access to Workbench backend"
+            other=shared_alb.connections.security_groups[0],
+            port_range=ec2.Port.tcp(8000),
+            description="Allow ALB access to FastAPI"
         )
 
         # ===============================
@@ -174,27 +144,14 @@ class WorkbenchStack(Stack):
 
         alb = shared_alb
 
-        # HTTPS listener with certificate
-        https_listener = shared_alb_listener
-
-        workbench_tg = https_listener.add_targets("WorkbenchTargetGroup",
-            port=5000,
-            protocol=elbv2.ApplicationProtocol.HTTP,
-            targets=[service],
-            health_check=elbv2.HealthCheck(
-                path="/app/health",
-                port="traffic-port",
-                protocol=elbv2.Protocol.HTTP,
-                interval=Duration.seconds(30),
-                timeout=Duration.seconds(10),
-                healthy_http_codes="200-399",
-                unhealthy_threshold_count=2,
-                healthy_threshold_count=2
-            )
+        # Register FastAPI ECS service into the shared FastAPI Target Group (default listener action)
+        fastapi_target_group.add_target(
+            elbv2_targets.EcsTarget(service, container_name="BackendContainer", port=8000)
         )
 
-        https_listener.add_action("WorkbenchPathRule",
-            priority=10,
-            conditions=[elbv2.ListenerCondition.path_patterns(["/app*"])],
-            action=elbv2.ListenerAction.forward([workbench_tg])
+        # DNS record: kg4dt.cdi-sg.com -> ALB
+        route53.ARecord(self, "Kg4dtAlias",
+            zone=hosted_zone,
+            # record_name=webui_domain_name_prefix,  # "kg4dt"
+            target=route53.RecordTarget.from_alias(route53_targets.LoadBalancerTarget(shared_alb))
         )

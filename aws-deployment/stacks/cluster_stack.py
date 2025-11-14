@@ -56,12 +56,27 @@ class ClusterStack(Stack):
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC)
         )
 
+        # Default FastAPI target group for root domain
+        self.fastapi_tg = elbv2.ApplicationTargetGroup(self, "FastApiTargetGroup",
+            vpc=zone_stack.vpc,
+            port=8000,
+            protocol=elbv2.ApplicationProtocol.HTTP,
+            target_type=elbv2.TargetType.IP,
+            health_check=elbv2.HealthCheck(
+                path="/health",
+                port="traffic-port",
+                protocol=elbv2.Protocol.HTTP,
+                interval=Duration.seconds(30),
+                timeout=Duration.seconds(10),
+                healthy_http_codes="200-399",
+                unhealthy_threshold_count=2,
+                healthy_threshold_count=2
+            )
+        )
+
+        # HTTPS listener forwards to FastAPI by default
         self.shared_alb_listener = self.shared_alb.add_listener("Listener",
             port=443,
             certificates=[cert_stack.web_cert],
-            default_action=elbv2.ListenerAction.fixed_response(
-                status_code=200,
-                message_body="Shared ALB HTTPS listener active",
-                content_type="text/plain"
-            )
+            default_action=elbv2.ListenerAction.forward([self.fastapi_tg])
         )

@@ -14,6 +14,6 @@ class CertStack(Stack):
         hosted_zone = route53.HostedZone.from_lookup(self, "DNSZone", domain_name=dns_zone_name)
 
         self.web_cert = acm.Certificate(self, "WorkbenchWebUICert",
-            domain_name="kg4dt.kg.cdi-sg.com",
+            domain_name="kg4dt.cdi-sg.com",
             validation=acm.CertificateValidation.from_dns(hosted_zone)
         )

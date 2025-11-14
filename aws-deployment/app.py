@@ -16,7 +16,7 @@ env = cdk.Environment(account='124355682815', region='ap-southeast-1')
 app = cdk.App()
 
 # DNS Stack
-dns_stack = DnsStack(app, "DNSZone", env=env, dns_zone_name="kg.cdi-sg.com")
+dns_stack = DnsStack(app, "DNSZone", env=env, dns_zone_name="kg4dt.cdi-sg.com")
 
 # Cognito User Pool Stack
 user_pool_stack = UserPoolStack(app, "Users",
