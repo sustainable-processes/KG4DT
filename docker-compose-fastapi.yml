@@ -13,7 +13,7 @@ services:
       # Add other FASTAPI_* env vars here as needed (see fastapi/app/settings.py)
     ports:
       # Bind FastAPI only to localhost; fronted by host Nginx
-      - "127.0.0.1:8000:8000"
+      - "8000:8000"
     networks:
       - kg4dt_net
     container_name: fastapi
