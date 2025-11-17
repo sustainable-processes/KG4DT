@@ -448,35 +448,68 @@ class GraphdbHandler:
         context_template_dict = {}
         sparql = (
             f"{self.prefix}"
-            "select ?c ?s ?d where {"
+            "select ?c ?s ?d ?v where {"
             "?c rdf:type ontomo:Context. "
             "?s rdf:type ontomo:ContextSection. "
             "?d rdf:type ontomo:Descriptor. "
             "?c ontomo:hasStructureSection ?s. "
             "?s ontomo:hasDescriptor ?d. "
+            "optional{{?d ontomo:hasDefaultValue ?v.}} "
             "}"
         )
         sparql_res = self.cur.execute(sparql)
         for res in sparql_res.split("\r\n")[1:-1]:
-            c, s, d = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
+            c, s, d, v = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
             c = c.split("#")[-1].replace("_Context", "")
             s = s.split("#")[-1]
             d = d.split("#")[-1]
+            v = v.split("#")[-1]
             if c not in context_template_dict:
                 context_template_dict[c] = {}
-            if "structure" not in context_template_dict[c]:
-                context_template_dict[c]["structure"] = []
-            if d not in context_template_dict[c]["structure"]:
-                context_template_dict[c]["structure"].append(d)
+            if "st" not in context_template_dict[c]:
+                context_template_dict[c]["st"] = {}
+            if d not in context_template_dict[c]["st"]:
+                if v == "":
+                    context_template_dict[c]["st"][d] = None
+                else:
+                    context_template_dict[c]["st"][d] = float(v)
         
         sparql = (
             f"{self.prefix}"
-            "select ?c ?s ?d where {"
+            "select ?c ?s ?d ?v where {"
             "?c rdf:type ontomo:Context. "
             "?s rdf:type ontomo:ContextSection. "
             "?d rdf:type ontomo:Descriptor. "
             "?c ontomo:hasOperationSection ?s. "
             "?s ontomo:hasDescriptor ?d. "
+            "optional{{?d ontomo:hasDefaultValue ?v.}} "
+            "}"
+        )
+        sparql_res = self.cur.execute(sparql)
+        for res in sparql_res.split("\r\n")[1:-1]:
+            c, s, d, v = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
+            c = c.split("#")[-1].replace("_Context", "")
+            s = s.split("#")[-1]
+            d = d.split("#")[-1]
+            v = v.split("#")[-1]
+            if c not in context_template_dict:
+                context_template_dict[c] = {}
+            if "op" not in context_template_dict[c]:
+                context_template_dict[c]["op"] = {}
+            if d not in context_template_dict[c]["op"]:
+                if v == "":
+                    context_template_dict[c]["op"][d] = None
+                else:
+                    context_template_dict[c]["op"][d] = float(v)
+
+        sparql = (
+            f"{self.prefix}"
+            "select ?c ?s ?d where {"
+            "?c rdf:type ontomo:Context. "
+            "?s rdf:type ontomo:ContextSection. "
+            "?d rdf:type ontomo:Dimension. "
+            "?c ontomo:hasSolidFeedSection ?s. "
+            "?s ontomo:hasDimension ?d. "
             "}"
         )
         sparql_res = self.cur.execute(sparql)
@@ -487,15 +520,41 @@ class GraphdbHandler:
             d = d.split("#")[-1]
             if c not in context_template_dict:
                 context_template_dict[c] = {}
-            if "operation" not in context_template_dict[c]:
-                context_template_dict[c]["operation"] = []
-            if d not in context_template_dict[c]["operation"]:
-                context_template_dict[c]["operation"].append(d)
+            if "sld" not in context_template_dict[c]:
+                context_template_dict[c]["sld"] = []
+            if d not in context_template_dict[c]["sld"]:
+                context_template_dict[c]["sld"].append(d.split("_")[0])
+
+        sparql = (
+            f"{self.prefix}"
+            "select ?c ?s ?d where {"
+            "?c rdf:type ontomo:Context. "
+            "?s rdf:type ontomo:ContextSection. "
+            "?d rdf:type ontomo:Dimension. "
+            "?c ontomo:hasLiquidFeedSection ?s. "
+            "?s ontomo:hasDimension ?d. "
+            "}"
+        )
+        sparql_res = self.cur.execute(sparql)
+        for res in sparql_res.split("\r\n")[1:-1]:
+            c, s, d = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
+            c = c.split("#")[-1].replace("_Context", "")
+            s = s.split("#")[-1]
+            d = d.split("#")[-1]
+            if c not in context_template_dict:
+                context_template_dict[c] = {}
+            if "liq" not in context_template_dict[c]:
+                context_template_dict[c]["liq"] = []
+            if d not in context_template_dict[c]["liq"]:
+                context_template_dict[c]["liq"].append(d.split("_")[0])
 
         context_template_dict = dict(sorted(context_template_dict.items(), key=lambda x: x[0]))
         for c in context_template_dict:
             for s in context_template_dict[c]:
-                context_template_dict[c][s] = sorted(context_template_dict[c][s])
+                if isinstance(context_template_dict[c][s], list):
+                    context_template_dict[c][s] = sorted(context_template_dict[c][s])
+                if isinstance(context_template_dict[c][s], dict):
+                    context_template_dict[c][s] = dict(sorted(context_template_dict[c][s].items(), key=lambda x: x[0]))
         return context_template_dict
 
     def get_pheno_sparql(self):
