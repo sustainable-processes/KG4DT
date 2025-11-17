@@ -32,9 +32,11 @@ def create_reactor(payload: ReactorCreate, db: DbSessionDep):
     obj = Reactor(
         name=payload.name,
         number_of_input=payload.number_of_input,
-        number_of_output=payload.number_of_output,
+        number_of_utility_input=payload.number_of_utility_input,
         icon=payload.icon,
-        species=payload.species,
+        json_data=payload.json_data,
+        chemistry=payload.chemistry,
+        phenomenon=payload.phenomenon,
     )
     db.add(obj)
     db.commit()

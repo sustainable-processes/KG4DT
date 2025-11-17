@@ -56,12 +56,55 @@ Example payload (create)
 {
   "name": "CSTR",
   "number_of_input": 2,
-  "number_of_output": 1,
+  "number_of_utility_input": 1,
   "icon": "cstr.svg",
-  "species": {"species": ["A", "B"], "reactions": ["A+B->C"]}
+  "json_data": {"notes": "free-form structure"},
+  "chemistry": {"species": ["A", "B"], "reactions": ["A+B->C"]},
+  "phenomenon": {"ac": "Batch", "fp": "Well_Mixed"}
 }
 
-4) SpeciesRole
+4) Template
+- List: GET /models/templates?limit=100&offset=0
+- Get: GET /models/templates/{id}
+- Create: POST /models/templates
+- Update: PATCH /models/templates/{id}
+- Delete: DELETE /models/templates/{id}
+
+Example payload (create)
+{
+  "category": "Well_Mixed_Default",
+  "reactor_id": 1
+}
+
+5) Assembly Templates (grouped view)
+- Get grouped templates with embedded reactor data: GET /models/assembly_templates
+
+Response shape
+{
+  "<Category>": [
+    {
+      "name": "<reactor name>",
+      "icon": "<icon file>",
+      "created_date": "<ISO timestamp>",
+      "number_of_input": <int>,
+      "number_of_utility_input": <int>,
+      "chemistry": {},
+      "phenomenon": {},
+      "input": { ... },
+      "utility": { ... },
+      "reactor": { ... }
+    }
+  ]
+}
+
+Notes
+- The sections input/utility/reactor are taken from Reactor.json_data if present.
+- Categories correspond to Template.category values (e.g., "Template", "Tutorial").
+
+Example
+curl "http://localhost:8001/models/assembly_templates"
+
+5) SpeciesRole
 - List: GET /models/species-roles?limit=100&offset=0&order_by=id&order_dir=asc
 - Get: GET /models/species-roles/{id}
 - Create: POST /models/species-roles
@@ -87,6 +130,11 @@ curl "http://localhost:8001/models/projects?user_id=1&limit=50"
 - Get a Reactor
 curl http://localhost:8001/models/reactors/1
 
+- Create a Template referencing a Reactor
+curl -X POST http://localhost:8001/models/templates \
+  -H "Content-Type: application/json" \
+  -d '{"category":"Well_Mixed_Default","reactor_id":1}'
+
 - Update a Basic (partial)
 curl -X PATCH http://localhost:8001/models/basics/1 \
   -H "Content-Type: application/json" \
@@ -109,6 +157,6 @@ Examples
 Notes
 - All PATCH updates are partial; only provided fields are changed.
 - Pagination: limit is capped at 500; offset >= 0.
-- JSON fields (content, species, structure) accept arbitrary objects; keep payload small.
+- JSON fields (content, json_data, chemistry, phenomenon, structure) accept arbitrary objects; keep payload small.
 - Timestamps are server-generated where applicable (Project.datetime, Project.last_update, Reactor.created_date).
 - Error responses follow standard HTTP codes (404 when not found, 400 for validation issues).
