@@ -9,8 +9,12 @@ services:
     environment:
       # Point FastAPI to GraphDB inside the shared Docker network
       FASTAPI_GRAPHDB_BASE_URL: http://graphdb:7200
-      FASTAPI_GRAPHDB_REPOSITORY: kg4dt
+      FASTAPI_GRAPHDB_REPOSITORY: ontomo
       # Add other FASTAPI_* env vars here as needed (see fastapi/app/settings.py)
+    volumes:
+      - ./fastapi/.env:/app/fastapi/.env:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # lets you use host.docker.internal for DB
     ports:
       # Bind FastAPI only to localhost; fronted by host Nginx
       - "8000:8000"
