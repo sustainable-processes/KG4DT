@@ -36,7 +36,7 @@ def create_reactor(payload: ReactorCreate, db: DbSessionDep):
         icon=payload.icon,
         json_data=payload.json_data,
         chemistry=payload.chemistry,
-        phenomenon=payload.phenomenon,
+        kinetics=payload.kinetics,
     )
     db.add(obj)
     db.commit()

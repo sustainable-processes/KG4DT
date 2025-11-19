@@ -22,7 +22,7 @@ class Reactor(Base):
     json_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     # new JSON columns
     chemistry: Mapped[dict | None] = mapped_column(JSON, nullable=True)
-    phenomenon: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    kinetics: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
     def __repr__(self) -> str:
         return f"<Reactor id={self.id} name={self.name!r}>" 

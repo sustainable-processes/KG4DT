@@ -73,7 +73,7 @@ def get_assembly_templates(db: DbSessionDep) -> Dict[str, List[Dict[str, Any]]]:
             "number_of_input": r.number_of_input,
             "number_of_utility_input": r.number_of_utility_input,
             "chemistry": r.chemistry or {},
-            "phenomenon": r.phenomenon or {},
+            "Kinetics": r.phenomenon or {},
             # Sections from json_data when provided
             "input": jd.get("input", {} if isinstance(jd, dict) else {}),
             "utility": jd.get("utility", {} if isinstance(jd, dict) else {}),
