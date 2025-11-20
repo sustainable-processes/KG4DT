@@ -15,7 +15,7 @@ class ReactorBase(BaseModel):
     icon: Optional[str] = Field(default=None, max_length=255)
     json_data: Optional[dict[str, Any]] = None
     chemistry: Optional[dict[str, Any]] = None
-    phenomenon: Optional[dict[str, Any]] = None
+    kinetics: Optional[dict[str, Any]] = None
 
 
 class ReactorCreate(ReactorBase):
