@@ -27,25 +27,24 @@ def _get_project_by_name_or_error(db: DbSessionDep, name: str) -> Project:
     return matches[0]
 
 
-@router.get("/", response_model=List[ProjectRead])
+@router.get("/", response_model=List[str])
 def list_projects(
     db: DbSessionDep,
     limit: int = Query(100, ge=0, le=500),
     offset: int = Query(0, ge=0),
     user_id: Optional[int] = Query(None),
-    name: Optional[str] = Query(None, description="Filter by exact project name"),
 ):
     q = db.query(Project)
     if user_id is not None:
         q = q.filter(Project.user_id == user_id)
-    if name is not None:
-        q = q.filter(Project.name == name)
     q = q.order_by(Project.last_update.desc(), Project.datetime.desc(), Project.id.desc())
     if offset:
         q = q.offset(offset)
     if limit:
         q = q.limit(limit)
-    return q.all()
+    # Return only the list of project names
+    rows = q.with_entities(Project.name).all()
+    return [r[0] for r in rows]
 
 
 @router.get("/{project_name}", response_model=ProjectRead)
