@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, HTTPException, Query
 
@@ -9,6 +9,21 @@ from ..models.reactor import Reactor
 from ..schemas.reactor import ReactorCreate, ReactorUpdate, ReactorRead
 
 router = APIRouter(prefix="/models/reactors", tags=["reactors"])
+
+
+def _deep_merge(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]:
+    """Deep merge dict b into dict a and return a new dict.
+
+    - For nested dicts, merge recursively.
+    - For other values, b wins (replace).
+    """
+    out: Dict[str, Any] = dict(a or {})
+    for k, v in (b or {}).items():
+        if isinstance(v, dict) and isinstance(out.get(k), dict):
+            out[k] = _deep_merge(out[k], v)
+        else:
+            out[k] = v
+    return out
 
 
 @router.get("/", response_model=List[ReactorRead])
@@ -51,6 +66,14 @@ def update_reactor(reactor_id: int, payload: ReactorUpdate, db: DbSessionDep):
         raise HTTPException(status_code=404, detail="Reactor not found")
 
     data = payload.model_dump(exclude_unset=True)
+
+    # Special handling: allow partial (deep) updates for chemistry and kinetics JSON columns
+    if "chemistry" in data and isinstance(data["chemistry"], dict):
+        obj.chemistry = _deep_merge(obj.chemistry or {}, data.pop("chemistry"))
+    if "kinetics" in data and isinstance(data["kinetics"], dict):
+        obj.kinetics = _deep_merge(obj.kinetics or {}, data.pop("kinetics"))
+
+    # Apply remaining simple field updates
     for k, v in data.items():
         setattr(obj, k, v)
 
