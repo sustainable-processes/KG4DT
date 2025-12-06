@@ -20,34 +20,23 @@
   },
   "description": {
     "accumulation": "Continuous",
-    "flow_pattern": "Taylor-Couette_Flow",
+    "flow_pattern": "Taylor-Couette_Vortex_Flow",
     "molecular_transport": [
       "Axial_Dispersion"
     ],
     "parameter_law": {
-      "Dispersion_Coefficient": "Dispersion_Coefficient_Law_with_Taylor-Couette_Flow_by_Plain"
+      "Dispersion_Coefficient": "Dispersion_Coefficient_Law_with_Taylor-Couette_Vortex_Flow_by_Ohmura_et_al."
     },
     "reaction": {
       "2-Bromobenzyl Alcohol + Acetic Anhydride > 2-Bromobenzyl Acetate": [
-        "Exponential_Concentration",
+        "Concentration_Power_Dependence",
         "Plain_Rate_Constant"
       ]
     }
   },
   "information": {
     "molecular_transport": {
-      "Constant_Dispersion_Coefficient": 1e-5
-    },
-    "reactions": {
-      "2-Bromobenzyl Alcohol + Acetic Anhydride > 2-Bromobenzyl Acetate": {
-        "Partial_Order": {
-          "2-Bromobenzyl Alcohol": 1,
-          "Acetic Anhydride": 1
-        },
-        "Rate_Constant": {
-          "Acetonitrile": 0.057
-        }
-      }
+      "Dispersion_Coefficient_Slope": 1e-16
     },
     "reactor": {
       "Reactor_Inner_Radius": 0.00875,
@@ -64,7 +53,18 @@
         "state": "liquid",
         "Viscosity": 0.00035
       }
-    }
-  },
-  "type": "bottom-up"
+    },
+    "reactions": {
+      "2-Bromobenzyl Alcohol + Acetic Anhydride > 2-Bromobenzyl Acetate": {
+        "Partial_Order": {
+          "2-Bromobenzyl Alcohol": 1,
+          "Acetic Anhydride": 1
+        },
+        "Rate_Constant": {
+          "Acetonitrile": 0.051
+        }
+      }
+    },
+    "type": "bottom-up"
+  }
 }

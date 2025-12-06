@@ -23,11 +23,11 @@ Find deployed KG4DT and example cases at [http://127.0.0.1:5000/index](http://12
 
 ## Features
 ### Metagraph
-![metagraph](./frontend/assets/img/kg4dt/kg.jpg)
+![metagraph](./app/static/assets/img/kg4dt/kg.jpg)
 Inspired by the pioneering schema [OntoCAPE](https://www.avt.rwth-aachen.de/cms/avt/forschung/sonstiges/software/~ipts/ontocape/?lidx=1), OntoModel and OntoProcess as ontologies are designed to bridge the gap between model and process knowledge for developing physical model-based chemical process digital twins.
 
 ### Agents
-![agent](./frontend/assets/img/kg4dt/agent.jpg)
+![agent](./app/static/assets/img/kg4dt/agent.jpg)
 Multiple functional agents are developed to harness the knowledge graph for model assembly, model calibration, rule inference, database access, AI model invocation, and LLM utilisation.
 - Available databases: [PubChem](https://pubchem.ncbi.nlm.nih.gov), [ChemSpider](https://www.chemspider.com), and [Wikipedia](https://www.wikipedia.org)
 - Example solubility prediction model from the [RMG Group](https://rmg.mit.edu/database/solvation/searchSolubility/)
@@ -58,5 +58,5 @@ Prerequisite: KG4DT is locally deployed successfully.
         - click <b>Go</b> to get the answer
 
 ## Ontology Customisation
-We develop [a script tool](https://github.com/sustainable-processes/KG4DT/tree/main/ontology/patch_onto.py) for adding custom Laws and Variables which are defined in JSON to the model ontology. [Example JSON files](https://github.com/sustainable-processes/KG4DT/tree/main/ontology/patches) for the addition of mixing rate and reaction rate Laws are provided to showcase how to create such JSON files. To generated the updated ontology, run `bash ./ontology/patch_onto.sh`. The workflow of this script can be shown as the following.
-![custom workflow](./frontend/assets/img/kg4dt/custom_workflow.jpg)
+We develop [a script tool](https://github.com/sustainable-processes/KG4DT/tree/main/ontology/patch_onto.py) for adding custom Laws and Variables which are defined in JSON to the model ontology. [Example JSON files](https://github.com/sustainable-processes/KG4DT/tree/main/ontology/patches) for the addition of mixing rate and reaction rate Laws are provided to showcase how to create such JSON files. To generated the updated ontology, run `bash ./graphdb/ontology/patch_onto.sh`. The workflow of this script can be shown as the following.
+![custom workflow](./app/static/assets/img/kg4dt/custom_workflow.jpg)

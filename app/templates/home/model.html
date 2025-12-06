@@ -1084,9 +1084,10 @@
         $(parameters).each(function(_, parameter) {
           var laws = [];
           $.each(entity['model_variable'][parameter]['laws'], function(_, law) {
-            var lawRule = entity['law'][law]['rule'];
-            var lawRulePhenomena = new Set(entity['rule'][lawRule]['phenomena']);
-            if (lawRulePhenomena.isSubsetOf(phenomena)) {
+            // var lawRule = entity['law'][law]['rule'];
+            // var lawRulePhenomena = new Set(entity['rule'][lawRule]['phenomena']);
+            var lawPhenomenon = entity['law'][law]['phenomenon'];
+            if (phenomena.has(lawPhenomenon)) {
               laws.push(law);
             }
           });

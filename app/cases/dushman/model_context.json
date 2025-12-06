@@ -27,28 +27,28 @@
     },
     "description": {
         "accumulation": "Continuous",
-        "flow_pattern": "Annular_Microflow",
+        "flow_pattern": "Gas-induced_Annular_Flow",
         "molecular_transport": [
             "Engulfment"
         ],
         "parameter_law": {
-            "Film_Thickness": "Film_Thickness_Law_with_Annular_Microflow_by_Youngbae_et_al.",
-            "Mixing_Time": "Mixing_Time_Law_with_Annular_Microflow_by_Youngbae_et_al."
+            "Film_Thickness": "Film_Thickness_Law_with_Gas-induced_Annular_Flow_by_Youngbae_et_al.",
+            "Mixing_Time": "Mixing_Time_Law_with_Gas-induced_Annular_Flow_by_Youngbae_et_al."
         },
         "reaction": {
             "6 H<sup>+</sup> + 5 I<sup>-</sup> + IO<sub>3</sub><sup>-</sup> > 3 I<sub>2</sub>": [
-                "Exponential_Concentration",
+                "Concentration_Power_Dependence",
                 "Ionicity-Related_Rate_Constant"
             ],
             "H<sup>+</sup> + H<sub>2</sub>BO<sub>3</sub><sup>-</sup> > H<sub>3</sub>BO<sub>3</sub>": [
                 "Instantaneous"
             ],
             "I<sub>3</sub><sup>-</sup> > I<sup>-</sup> + I<sub>2</sub>": [
-                "Exponential_Concentration",
+                "Concentration_Power_Dependence",
                 "Plain_Rate_Constant"
             ],
             "I<sup>-</sup> + I<sub>2</sub> > I<sub>3</sub><sup>-</sup>": [
-                "Exponential_Concentration",
+                "Concentration_Power_Dependence",
                 "Plain_Rate_Constant"
             ]
         }

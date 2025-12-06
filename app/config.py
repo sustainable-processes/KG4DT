@@ -11,12 +11,12 @@ class Config:
     ASSETS_ROOT =       os.getenv('ASSETS_ROOT', '/static/assets')
 
     PREFIX_RDF =                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
-    PREFIX_ONTOMO =             "PREFIX ontomo: <file:/ontology/OntoMo.owl#>"
-    PREFIX_SYSTEM =             "PREFIX system: <file:/ontology/OntoCAPE/upper_level/system.owl#>"
-    PREFIX_SIUNIT =             "PREFIX SI_unit: <file:/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#>"
-    PREFIX_BEHAVIOR =           "PREFIX behavior: <file:/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#>"
-    PREFIX_PROCESS_MODEL =      "PREFIX process_model: <file:/ontology/OntoCAPE/model/process_model.owl#>"
-    PREFIX_MATHEMATICAL_MODEL = "PREFIX mathematical_model: <file:/ontology/OntoCAPE/model/mathematical_model.owl#>"
+    PREFIX_ONTOMO =             "PREFIX ontomo: <https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoMo.owl#>"
+    PREFIX_SYSTEM =             "PREFIX system: <https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/upper_level/system.owl#>"
+    PREFIX_SIUNIT =             "PREFIX SI_unit: <https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/supporting_concepts/SI_unit/SI_unit.owl#>"
+    PREFIX_BEHAVIOR =           "PREFIX behavior: <https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/chemical_process_system/CPS_behavior/behavior.owl#>"
+    PREFIX_PROCESS_MODEL =      "PREFIX process_model: <https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/model/process_model.owl#>"
+    PREFIX_MATHEMATICAL_MODEL = "PREFIX mathematical_model: <https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/main/ontology/OntoCAPE/model/mathematical_model.owl#>"
     PREFIX = "\n".join([PREFIX_RDF, PREFIX_ONTOMO, PREFIX_SYSTEM, PREFIX_SIUNIT, PREFIX_BEHAVIOR, PREFIX_PROCESS_MODEL, PREFIX_MATHEMATICAL_MODEL, ""])
 
     PHENOMENON_CLASSES = [

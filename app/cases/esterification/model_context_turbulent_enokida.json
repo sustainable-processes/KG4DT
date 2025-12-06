@@ -20,23 +20,24 @@
   },
   "description": {
     "accumulation": "Continuous",
-    "flow_pattern": "Taylor-Couette_Vortex_Flow",
+    "flow_pattern": "Taylor-Couette_Turbulent_Flow",
     "molecular_transport": [
       "Axial_Dispersion"
     ],
     "parameter_law": {
-      "Dispersion_Coefficient": "Dispersion_Coefficient_Law_with_Taylor-Couette_Vortex_Flow_by_Ohmura_et_al."
+      "Dispersion_Coefficient": "Dispersion_Coefficient_Law_with_Taylor-Couette_Turbulent_Flow_by_Enokida_et_al."
     },
     "reaction": {
       "2-Bromobenzyl Alcohol + Acetic Anhydride > 2-Bromobenzyl Acetate": [
-        "Exponential_Concentration",
+        "Concentration_Power_Dependence",
         "Plain_Rate_Constant"
       ]
     }
   },
   "information": {
     "molecular_transport": {
-      "Dispersion_Coefficient_Slope": 1e-16
+      "Dispersion_Coefficient_Slope_1": 1e-8,
+      "Dispersion_Coefficient_Slope_2": 1e-9
     },
     "reactor": {
       "Reactor_Inner_Radius": 0.00875,
