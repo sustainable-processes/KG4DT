@@ -1,6 +1,7 @@
-import os
-import pickle
-import tempfile
+from functools import lru_cache
+import copy
+from typing import Any, Dict, List
+from scipy.optimize import differential_evolution
 
 from .model_agent import ModelAgent
 
@@ -30,6 +31,68 @@ class ModelCalibrationAgent:
             for op_param_ind, val in zip(self.request["op_params"]["ind"], vals):
                 op_param_dict[op_param_ind] = val
             op_param_dicts.append(op_param_dict)
+
+        # New: In-process calibration (avoid temp files and subprocess)
+        cal_param_inds: List[Any] = self.request["cal_params"]["ind"]
+        cal_param_bounds: List[List[float]] = self.request["cal_params"]["val"]
+
+        model_str = self.model_agent.to_scipy_model()
+        env: Dict[str, Any] = {}
+        exec(model_str, env)
+
+        base_param_dict = env.get("param_dict")
+        simulate = env.get("simulate")
+        if base_param_dict is None or simulate is None:
+            raise RuntimeError("Generated model missing 'param_dict' or 'simulate' function.")
+
+        # Prepare concrete param_dicts per operation case
+        param_dicts: List[Dict[Any, Any]] = []
+        for op_param_dict in op_param_dicts:
+            pd = base_param_dict.copy()
+            for ind, val in op_param_dict.items():
+                pd[ind] = val
+            param_dicts.append(pd)
+
+        # Cache simulate for (op_idx, p_tuple)
+        @lru_cache(maxsize=4096)
+        def _simulate_for(op_idx: int, p_tuple: tuple):
+            pd = copy.deepcopy(param_dicts[op_idx])
+            for ind, val in zip(cal_param_inds, p_tuple):
+                pd[ind] = val
+            return simulate(pd)
+
+        reals = self.request["reals"]
+        real_inds = reals["ind"]
+
+        def calc_mse(p):
+            p_tuple = tuple(float(x) for x in p)
+            error = 0.0
+            for op_idx in range(len(param_dicts)):
+                pred = _simulate_for(op_idx, p_tuple)
+                pred_inds = pred["y"]["ind"]
+                pred_vals = pred["y"]["val"]
+                for real_vals in reals["val"]:
+                    for real_ind, real_val in zip(real_inds, real_vals):
+                        if (real_ind in pred_inds) and (real_val is not None):
+                            pred_val = pred_vals[pred_inds.index(real_ind)][-1]
+                            diff = pred_val - real_val
+                            error += diff * diff
+            return error
+
+        res = differential_evolution(
+            calc_mse,
+            bounds=cal_param_bounds,
+            seed=42,
+            maxiter=20,
+            popsize=8,
+            atol=1e-8,
+            updating='deferred',
+            workers=8,
+            polish=False,
+            disp=True,
+        )
+
+        return {"key": cal_param_inds, "val": res.x.round(6).tolist()}
         
         # pheno2law = {}
         # for pheno in self.entity["pheno"]:

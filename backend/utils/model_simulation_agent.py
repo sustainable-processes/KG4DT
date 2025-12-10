@@ -1,6 +1,5 @@
-import os
-import pickle
-import tempfile
+from functools import lru_cache
+import copy
 
 from .model_agent import ModelAgent
 
@@ -27,6 +26,7 @@ class ModelSimulationAgent:
             - `data`: represents input operating parameters
         """
 
+        # Build per-run operating parameter dicts
         op_param_dicts = []
         for vals in self.request["op_params"]["val"]:
             op_param_dict = {}
@@ -34,30 +34,30 @@ class ModelSimulationAgent:
                 op_param_dict[op_param_ind] = val
             op_param_dicts.append(op_param_dict)
 
+        # Generate model code and execute in-process
         model_str = self.model_agent.to_scipy_model()
-        with tempfile.TemporaryDirectory() as temp_dir:
-            with open(os.path.join(temp_dir, "simulate.py"), "w") as f:
-                f.write(model_str)
-                f.write("\n\n")
-                f.write(f"op_param_dicts = {op_param_dicts}\n")
-                f.write("param_dicts = []\n")
-                f.write("for op_param_dict in op_param_dicts:\n")
-                f.write("    _param_dict = param_dict.copy()\n")
-                f.write("    for ind, val in op_param_dict.items():\n")
-                f.write("        _param_dict[ind] = val\n")
-                f.write("    param_dicts.append(_param_dict)\n\n")
-                f.write("if __name__ == '__main__':\n")
-                f.write("    import os\n")
-                f.write("    import pickle\n")
-                f.write("    res = []\n")
-                f.write("    for pd in param_dicts:\n")
-                f.write("        res.append(simulate(pd))\n")
-                f.write("    pickle.dump(res, open(os.path.join(os.path.dirname(__file__), 'res.pkl'), 'wb'))\n")
-            # with open(os.path.join(temp_dir, "simulate.py"), "r") as f:
-            #     print("".join(f.readlines()))
-            os.system(f"python {temp_dir}/simulate.py")
-            res_path = os.path.join(temp_dir, 'res.pkl')
-            if not os.path.exists(res_path):
-                raise FileNotFoundError("Simulation failed to produce results file 'res.pkl'.")
-            res = pickle.load(open(res_path, "rb"))
-        return res
+        env = {}
+        exec(model_str, env)
+
+        base_param_dict = env.get("param_dict")
+        simulate = env.get("simulate")
+        if base_param_dict is None or simulate is None:
+            raise RuntimeError("Generated model missing 'param_dict' or 'simulate' function.")
+
+        # Prepare concrete param_dicts per operation case
+        param_dicts = []
+        for op_param_dict in op_param_dicts:
+            pd = base_param_dict.copy()
+            for ind, val in op_param_dict.items():
+                pd[ind] = val
+            param_dicts.append(pd)
+
+        # Optional: small cache for repeated simulate calls
+        @lru_cache(maxsize=512)
+        def _simulate_cached(idx: int):
+            return simulate(copy.deepcopy(param_dicts[idx]))
+
+        results = []
+        for i in range(len(param_dicts)):
+            results.append(_simulate_cached(i))
+        return results

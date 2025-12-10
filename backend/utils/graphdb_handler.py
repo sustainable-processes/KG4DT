@@ -37,6 +37,11 @@ class GraphdbHandler:
         # Phenomenon service (delegation for helper queries)
         self.pheno_service = PhenomenonService(self)
 
+        # Lightweight per-instance caches to avoid repeated full scans within a flow
+        # Keys: mode string for laws; single snapshot for vars
+        self._cache_law_by_mode = {}
+        self._cache_var = None
+
     def query(self, mode=None):
         """Queries GraphDB and returns model ontology in a dictionary.
 
@@ -79,6 +84,10 @@ class GraphdbHandler:
         Returns:
             dict: A dictionary of Laws.
         """
+        # Serve from cache when available for the same formatting mode
+        if mode in self._cache_law_by_mode:
+            return self._cache_law_by_mode[mode]
+
         law_dict = {}
         sparql = (
             f"{self.prefix}"
@@ -128,8 +137,9 @@ class GraphdbHandler:
                     "assoc_gas_law": None,
                     "assoc_sld_law": None,
                     "fml_int_with_accum": None,
-                    "vars": [],
-                    "opt_vars": [],
+                    # Use sets during construction for O(1) membership
+                    "_vars_set": set(),
+                    "_opt_vars_set": set(),
                 }
             f = re.sub(r'("*)"', r'\1', f[1:-1])
             f = re.sub(r" xmlns=[^\>]*", "", f)
@@ -161,14 +171,23 @@ class GraphdbHandler:
                 law_dict[l]["assoc_sld_law"] = asl
             if fia:
                 law_dict[l]["fml_int_with_accum"] = fia
-            if v not in law_dict[l]["vars"]:
-                law_dict[l]["vars"].append(v)
-            if ov and ov not in law_dict[l]["opt_vars"]:
-                law_dict[l]["opt_vars"].append(ov)
+            law_dict[l]["_vars_set"].add(v)
+            if ov:
+                law_dict[l]["_opt_vars_set"].add(ov)
+        # Finalize: sort and convert sets to lists; drop internal fields
         law_dict = dict(sorted(law_dict.items(), key=lambda x: x[0]))
-        for l in law_dict:
-            law_dict[l]["vars"] = sorted(law_dict[l]["vars"])
-            law_dict[l]["opt_vars"] = sorted(law_dict[l]["opt_vars"])
+        for l in list(law_dict.keys()):
+            vars_sorted = sorted(law_dict[l].get("_vars_set", set()))
+            opt_vars_sorted = sorted(law_dict[l].get("_opt_vars_set", set()))
+            law_dict[l]["vars"] = vars_sorted
+            law_dict[l]["opt_vars"] = opt_vars_sorted
+            if "_vars_set" in law_dict[l]:
+                del law_dict[l]["_vars_set"]
+            if "_opt_vars_set" in law_dict[l]:
+                del law_dict[l]["_opt_vars_set"]
+
+        # Cache the result for this mode
+        self._cache_law_by_mode[mode] = law_dict
         return law_dict
 
     def query_src(self):
@@ -203,6 +222,10 @@ class GraphdbHandler:
         Returns:
             dict: A dictionary of ModelVariables.
         """
+        # Serve from cache if available
+        if self._cache_var is not None:
+            return self._cache_var
+
         var_dict = {}
         for var_class in self.var_classes:
             sparql = (
@@ -233,22 +256,32 @@ class GraphdbHandler:
                         "sym": None,
                         "val": None,
                         "unit": None,
-                        "dims": [],
-                        "laws": [],
+                        # Use sets during build for O(1) membership
+                        "_dims_set": set(),
+                        "_laws_set": set(),
                     }
                 var_dict[v]["sym"] = s
                 if val:
                     var_dict[v]["val"] = val
                 if u:
                     var_dict[v]["unit"] = u
-                if d and d not in var_dict[v]["dims"]:
-                    var_dict[v]["dims"].append(d)
-                if l and l not in var_dict[v]["laws"]:
-                    var_dict[v]["laws"].append(l)
+                if d:
+                    var_dict[v]["_dims_set"].add(d)
+                if l:
+                    var_dict[v]["_laws_set"].add(l)
         var_dict = dict(sorted(var_dict.items(), key=lambda x: x[0]))
-        for v in var_dict:
-            var_dict[v]["dims"] = sorted(var_dict[v]["dims"])
-            var_dict[v]["laws"] = sorted(var_dict[v]["laws"])
+        for v in list(var_dict.keys()):
+            dims_sorted = sorted(var_dict[v].get("_dims_set", set()))
+            laws_sorted = sorted(var_dict[v].get("_laws_set", set()))
+            var_dict[v]["dims"] = dims_sorted
+            var_dict[v]["laws"] = laws_sorted
+            if "_dims_set" in var_dict[v]:
+                del var_dict[v]["_dims_set"]
+            if "_laws_set" in var_dict[v]:
+                del var_dict[v]["_laws_set"]
+
+        # Cache snapshot
+        self._cache_var = var_dict
         return var_dict
 
     def query_desc(self):

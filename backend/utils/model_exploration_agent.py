@@ -5,7 +5,8 @@ from .model_calibration_agent import ModelCalibrationAgent
 
 
 def _calibration_scipy(model_calibration_agent):
-    return model_calibration_agent.calibration_scipy()
+    # Fixed method name: call calibrate_scipy (was calibration_scipy)
+    return model_calibration_agent.calibrate_scipy()
 
 
 class ModelExplorationAgent:
@@ -125,7 +126,9 @@ class ModelExplorationAgent:
 
         # FOR MULTIPROCESSING
         pool = multiprocessing.Pool(8)
-        model_calibration_results = pool.map(_calibration_scipy, model_calibration_agents)
+        # Use a small chunksize to reduce IPC overhead for many small tasks
+        chunksize = 4 if len(model_calibration_agents) > 32 else 1
+        model_calibration_results = pool.map(_calibration_scipy, model_calibration_agents, chunksize)
         pool.close()
 
         # FOR SINGLE PROCESSING

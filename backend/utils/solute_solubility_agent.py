@@ -14,23 +14,33 @@ class SoluteSolubilityAgent():
         self.entity = entity
         self.rmg_url = "https://rmg.mit.edu/database/solvation/searchSolubility/" \
             "solv={solv}__solu={solu}__T={temperature}__refSolv={ref_solv}__refS={ref_s}__refT={ref_t}__Hsub={h_sub}__Cpg={c_pg}__Cps={c_ps}"
+        # In-memory cache for PubChem lookups; reuse a single HTTP session
+        self._compound_cache = {}
+        self._session = requests.Session()
+        self._timeout = (5, 20)  # (connect, read) seconds
 
 
     def get_compound(self, item):
-        search_item = re.sub(r"<[^<>]*>", "", item)
+        # Normalize and cache to avoid repeated PubChem queries
+        search_item = re.sub(r"<[^<>]*>", "", str(item or "")).strip()
+        key = search_item.lower()
+        if not key:
+            return "-"
+        if key in self._compound_cache:
+            return self._compound_cache[key]
+
         compounds = []
         try:
             compounds.extend(pcp.get_compounds(search_item, namespace="formula"))
-        except:
+        except Exception:
             try:
                 compounds.extend(pcp.get_compounds(search_item, namespace="name"))
-            except:
-                pass
+            except Exception:
+                compounds = []
 
-        if compounds:
-            return compounds[0]
-        else:
-            return "-"
+        res = compounds[0] if compounds else "-"
+        self._compound_cache[key] = res
+        return res
 
 
     def query_rmg(self, solution):
@@ -53,7 +63,9 @@ class SoluteSolubilityAgent():
             .replace("{h_sub}", none_span).replace("{c_pg}", none_span).replace("{c_ps}", none_span) \
             .replace("#", "%23")
         print(url)
-        soup = BeautifulSoup(requests.get(url).text, features="lxml")
+        resp = self._session.get(url, timeout=self._timeout)
+        resp.raise_for_status()
+        soup = BeautifulSoup(resp.text, features="lxml")
         solubility = [tr.find_all("td")[11].text for tr in soup.find_all("tr")[1:]]
         solubility = [
             [
