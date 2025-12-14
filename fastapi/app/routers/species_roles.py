@@ -2,31 +2,34 @@ from __future__ import annotations
 
 from typing import Any, List, Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 
 from ..dependencies import DbSessionDep
 from ..models.species_role import SpeciesRole
 from ..schemas.species_role import SpeciesRoleCreate, SpeciesRoleUpdate, SpeciesRoleRead
+from ..services.graphdb import GraphDBClient
+from ..utils import graphdb_exploration_utils as gxu
 
 router = APIRouter(prefix="/models/species-roles", tags=["species_roles"])
 
 
-@router.get("/", response_model=List[SpeciesRoleRead])
-def list_species_roles(db: DbSessionDep, limit: int = Query(100, ge=0, le=500), offset: int = Query(0, ge=0), order_by: str = Query("id"), order_dir: str = Query("asc")):
-    allowed_fields = {"id", "name", "attribute"}
-    if order_by not in allowed_fields:
-        order_by = "id"
-    order_dir = order_dir.lower()
-    if order_dir not in {"asc", "desc"}:
-        order_dir = "asc"
+@router.get("/", response_model=List[str])
+def list_species_roles(request: Request):
+    """List SpeciesRole names from the knowledge graph (GraphDB), ascending by name.
 
-    q = db.query(SpeciesRole)
-    col = getattr(SpeciesRole, order_by)
-    q = q.order_by(col.desc() if order_dir == "desc" else col.asc())
-    q = q.offset(offset)
-    if limit:
-        q = q.limit(limit)
-    return q.all()
+    Returns a plain array of strings (role names). No id, no attribute, no pagination.
+    """
+
+    client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
+    if not client:
+        raise HTTPException(status_code=503, detail="GraphDB client is not available")
+
+    try:
+        roles = gxu.query_species_roles(client)  # already unique and sorted ascending
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={"error": "Failed to query SpeciesRole from GraphDB", "detail": str(e)})
+
+    return roles
 
 
 @router.get("/{role_id}", response_model=SpeciesRoleRead)

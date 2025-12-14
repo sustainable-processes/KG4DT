@@ -69,6 +69,16 @@ from .routers import info as info_router  # noqa: E402
 from .routers import calibration as calibration_router  # noqa: E402
 from .routers import assembly as assembly_router  # noqa: E402
 from .routers import templates as templates_router  # noqa: E402
+from .routers import validation as validation_router  # noqa: E402
+# v2 routers (plural snake_case schema)
+from .routers.v2 import users as v2_users_router  # noqa: E402
+from .routers.v2 import projects as v2_projects_router  # noqa: E402
+from .routers.v2 import reactors as v2_reactors_router  # noqa: E402
+from .routers.v2 import basics as v2_basics_router  # noqa: E402
+from .routers.v2 import categories as v2_categories_router  # noqa: E402
+from .routers.v2 import templates as v2_templates_router  # noqa: E402
+from .routers.v2 import experiment_data as v2_experiment_router  # noqa: E402
+from .routers.v2 import models as v2_models_router  # noqa: E402
 from .routers import assembly_templates as assembly_templates_router  # noqa: E402
 
 app.include_router(health_router.router)
@@ -83,3 +93,14 @@ app.include_router(calibration_router.router)
 app.include_router(assembly_router.router)
 app.include_router(templates_router.router)
 app.include_router(assembly_templates_router.router)
+app.include_router(validation_router.router)
+
+# v2 endpoints
+app.include_router(v2_users_router.router)
+app.include_router(v2_projects_router.router)
+app.include_router(v2_reactors_router.router)
+app.include_router(v2_basics_router.router)
+app.include_router(v2_categories_router.router)
+app.include_router(v2_templates_router.router)
+app.include_router(v2_experiment_router.router)
+app.include_router(v2_models_router.router)
