@@ -69,7 +69,7 @@ Quick start
    - FASTAPI_DATABASE_ECHO (default: false)
 
 3) Run the development server from the repository root
-   uvicorn fastapi.app.main:app --reload --port 8001
+   uvicorn app.main:app --reload --port 8001
 
    Notes:
    - The FastAPI backend maintains its own SQLAlchemy models (fastapi/app/models) and engine/session setup (fastapi/app/db). They are initialized on startup independently of the Flask backend.

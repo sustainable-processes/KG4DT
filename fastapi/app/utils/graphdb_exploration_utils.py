@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Set
 
 from ..services.graphdb import GraphDBClient
 
@@ -238,6 +238,49 @@ def _normalize_list(val: Any) -> List[str]:
     return [s] if s else []
 
 
+# ------------------------------
+# Complexity: set-based indices
+# ------------------------------
+def _build_indices(
+    laws_dict: Dict[str, Dict[str, Any]],
+    vars_dict: Dict[str, Dict[str, Any]],
+) -> Tuple[
+    Dict[str, Set[str]],  # laws_by_pheno
+    Dict[str, Set[str]],  # vars_by_law
+    Dict[str, Set[str]],  # laws_by_var
+    Dict[str, Set[str]],  # vars_by_pheno
+]:
+    """Build fast set-based indices for O(1) membership and fast unions.
+
+    laws_by_pheno: pheno -> set(law)
+    vars_by_law:   law   -> set(var)
+    laws_by_var:   var   -> set(law)
+    vars_by_pheno: pheno -> set(var)
+    """
+    laws_by_pheno: Dict[str, Set[str]] = {}
+    vars_by_law: Dict[str, Set[str]] = {}
+    laws_by_var: Dict[str, Set[str]] = {}
+
+    for law, ld in laws_dict.items():
+        p = ld.get("pheno")
+        if p:
+            laws_by_pheno.setdefault(p, set()).add(law)
+        vars_by_law[law] = set(ld.get("vars", []) or [])
+
+    for v, vd in vars_dict.items():
+        laws_by_var[v] = set(vd.get("laws", []) or [])
+
+    vars_by_pheno: Dict[str, Set[str]] = {}
+    for p, law_set in laws_by_pheno.items():
+        # union vars for all laws in this pheno
+        agg: Set[str] = set()
+        for l in law_set:
+            agg |= vars_by_law.get(l, set())
+        vars_by_pheno[p] = agg
+
+    return laws_by_pheno, vars_by_law, laws_by_var, vars_by_pheno
+
+
 def query_param_law(client: GraphDBClient, desc: Dict[str, Any]) -> Dict[str, Any]:
     """Compute parameter->law mapping constrained by selected phenomena.
 
@@ -259,6 +302,13 @@ def query_param_law(client: GraphDBClient, desc: Dict[str, Any]) -> Dict[str, An
     vars_dict = _query_var(client)  # var -> {laws: [...], ...}
     laws_dict = _query_laws_basic(client)  # law -> {pheno, vars}
 
+    # Build indices for faster set operations (complexity improvement)
+    laws_by_pheno, vars_by_law, laws_by_var, vars_by_pheno = _build_indices(laws_dict, vars_dict)
+
+    fp_set = set(fp_list)
+    mt_set = set(mt_list)
+    me_set = set(me_list)
+
     param_law: Dict[str, List[str]] = {}
 
     # Helper to add mapping ensuring determinism and uniqueness
@@ -272,53 +322,39 @@ def query_param_law(client: GraphDBClient, desc: Dict[str, Any]) -> Dict[str, An
         else:
             param_law[var] = selected
 
-    # 1) Flow pattern laws subsidiary to mass transport (Flask parity)
-    if mt_list:
-        for law_name, law_meta in laws_dict.items():
-            if law_meta.get("pheno") not in mt_list:
+    # 1) Flow pattern laws subsidiary to mass transport
+    #    For each MT pheno, get its vars, then keep only those vars whose own laws intersect FP phenos.
+    if mt_set:
+        mt_vars = set().union(*(vars_by_pheno.get(p, set()) for p in mt_set)) if mt_set else set()
+        for var in mt_vars:
+            if var == "Concentration":
                 continue
-            for var in law_meta.get("vars", []):
-                if var == "Concentration":
-                    continue
-                var_meta = vars_dict.get(var)
-                if not var_meta or not var_meta.get("laws"):
-                    continue
-                # choose var laws whose pheno equals any selected flow pattern
-                selected_var_laws = [vn for vn in var_meta["laws"] if laws_dict.get(vn, {}).get("pheno") in fp_list]
-                if selected_var_laws and var not in param_law:
-                    add_mapping(var, selected_var_laws)
+            var_laws = laws_by_var.get(var, set())
+            fp_laws_for_var = [l for l in var_laws if laws_dict.get(l, {}).get("pheno") in fp_set]
+            if fp_laws_for_var and var not in param_law:
+                add_mapping(var, fp_laws_for_var)
 
     # 2) Flow pattern laws subsidiary to flow pattern
-    if fp_list:
-        for law_name, law_meta in laws_dict.items():
-            if law_meta.get("pheno") not in fp_list:
+    if fp_set:
+        fp_vars = set().union(*(vars_by_pheno.get(p, set()) for p in fp_set))
+        for var in fp_vars:
+            if var == "Concentration" or var in param_law:
                 continue
-            for var in law_meta.get("vars", []):
-                if var == "Concentration":
-                    continue
-                if var in param_law:
-                    continue
-                var_meta = vars_dict.get(var)
-                if not var_meta or not var_meta.get("laws"):
-                    continue
-                selected_var_laws = [vn for vn in var_meta["laws"] if laws_dict.get(vn, {}).get("pheno") in fp_list]
-                if selected_var_laws:
-                    add_mapping(var, selected_var_laws)
+            var_laws = laws_by_var.get(var, set())
+            fp_laws_for_var = [l for l in var_laws if laws_dict.get(l, {}).get("pheno") in fp_set]
+            if fp_laws_for_var:
+                add_mapping(var, fp_laws_for_var)
 
-    # 3) Mass equilibrium laws (subsidiary to ME filtered from MT)
-    if mt_list and me_list:
-        for law_name, law_meta in laws_dict.items():
-            if law_meta.get("pheno") not in mt_list:
+    # 3) Mass equilibrium laws filtered from MT
+    if mt_set and me_set:
+        mt_vars = set().union(*(vars_by_pheno.get(p, set()) for p in mt_set))
+        for var in mt_vars:
+            if var in param_law:
                 continue
-            for var in law_meta.get("vars", []):
-                if var in param_law:
-                    continue
-                var_meta = vars_dict.get(var)
-                if not var_meta or not var_meta.get("laws"):
-                    continue
-                selected_var_laws = [vn for vn in var_meta["laws"] if laws_dict.get(vn, {}).get("pheno") in me_list]
-                if selected_var_laws:
-                    add_mapping(var, selected_var_laws)
+            var_laws = laws_by_var.get(var, set())
+            me_laws_for_var = [l for l in var_laws if laws_dict.get(l, {}).get("pheno") in me_set]
+            if me_laws_for_var:
+                add_mapping(var, me_laws_for_var)
 
     # Sort keys deterministically
     return {k: param_law[k] for k in sorted(param_law.keys())}

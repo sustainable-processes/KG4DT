@@ -68,6 +68,8 @@ from .routers import exploration as exploration_router  # noqa: E402
 from .routers import info as info_router  # noqa: E402
 from .routers import calibration as calibration_router  # noqa: E402
 from .routers import assembly as assembly_router  # noqa: E402
+from .routers import templates as templates_router  # noqa: E402
+from .routers import assembly_templates as assembly_templates_router  # noqa: E402
 
 app.include_router(health_router.router)
 app.include_router(basics_router.router)
@@ -79,3 +81,5 @@ app.include_router(exploration_router.router)
 app.include_router(info_router.router)
 app.include_router(calibration_router.router)
 app.include_router(assembly_router.router)
+app.include_router(templates_router.router)
+app.include_router(assembly_templates_router.router)
