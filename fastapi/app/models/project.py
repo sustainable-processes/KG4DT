@@ -1,23 +1,27 @@
-import datetime as dt
+from __future__ import annotations
 
-from sqlalchemy import Integer, String, DateTime, JSON
-from sqlalchemy.orm import Mapped, mapped_column
+from datetime import datetime
 
-from ..db import Base
+from sqlalchemy import BigInteger, CheckConstraint, ForeignKey, String, TIMESTAMP, func
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from . import V1Base
 
 
-class Project(Base):
-    __tablename__ = "project"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String(255), nullable=False)
-    user_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    model: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    content: Mapped[dict | None] = mapped_column(JSON, nullable=True)
-    datetime: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=dt.datetime.utcnow, nullable=False)
-    last_update: Mapped[dt.datetime] = mapped_column(
-        DateTime(timezone=True), default=dt.datetime.utcnow, onupdate=dt.datetime.utcnow, nullable=False
+class Project(V1Base):
+    __tablename__ = "projects"
+    __table_args__ = (
+        CheckConstraint("char_length(name) > 0", name="name_not_empty"),
     )
 
-    def __repr__(self) -> str:
-        return f"<Project id={self.id} name={self.name!r}>" 
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    content: Mapped[dict] = mapped_column(JSONB, server_default="{}", nullable=False)
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
+
+    user: Mapped["User"] = relationship(back_populates="projects")
+    models: Mapped[list["Model"]] = relationship(back_populates="project", cascade="all, delete-orphan")
+    experiments: Mapped[list["ExperimentData"]] = relationship(back_populates="project", cascade="all, delete-orphan")

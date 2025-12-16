@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from typing import List
+from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 
-from ...dependencies import DbSessionDep
-from ...models.v2 import models as m
-from ...schemas.v2.models import ModelCreate, ModelRead, ModelUpdate
+from ..dependencies import DbSessionDep
+from .. import models as m
+from ..schemas.models import ModelCreate, ModelRead, ModelUpdate
 
-router = APIRouter(prefix="/api/v2/models", tags=["v2: models"])
+router = APIRouter(prefix="/api/v1/models", tags=["v1: models"])
 
 
 def _get_or_404(db: DbSessionDep, model_id: int) -> m.Model:
@@ -19,8 +19,21 @@ def _get_or_404(db: DbSessionDep, model_id: int) -> m.Model:
 
 
 @router.get("/", response_model=List[ModelRead])
-def list_models(db: DbSessionDep):
-    return db.query(m.Model).order_by(m.Model.updated_at.desc(), m.Model.id.desc()).all()
+def list_models(
+    db: DbSessionDep,
+    project_id: Optional[int] = Query(None),
+    limit: int = Query(100, ge=0, le=500),
+    offset: int = Query(0, ge=0),
+):
+    q = db.query(m.Model)
+    if project_id is not None:
+        q = q.filter(m.Model.project_id == project_id)
+    q = q.order_by(m.Model.updated_at.desc(), m.Model.id.desc())
+    if offset:
+        q = q.offset(offset)
+    if limit:
+        q = q.limit(limit)
+    return q.all()
 
 
 @router.get("/{model_id}", response_model=ModelRead)
@@ -30,6 +43,7 @@ def get_model(model_id: int, db: DbSessionDep):
 
 @router.post("/", response_model=ModelRead, status_code=201)
 def create_model(payload: ModelCreate, db: DbSessionDep):
+    # Ensure project exists
     if not db.get(m.Project, payload.project_id):
         raise HTTPException(status_code=400, detail="Invalid project_id")
     obj = m.Model(

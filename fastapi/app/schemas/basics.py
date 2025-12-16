@@ -1,18 +1,19 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Optional
 from pydantic import Field
 
-from .types import V2BaseModel, BasicMatterType, BasicUsage
+from .types import V1BaseModel, BasicMatterType, BasicUsage, JsonDict
 
 
-class BasicBase(V2BaseModel):
+class BasicBase(V1BaseModel):
     name: Optional[str] = Field(default=None, max_length=100)
     type: Optional[BasicMatterType] = None
     usage: Optional[BasicUsage] = None
-    structure: Optional[str] = Field(default=None, max_length=100)
-    phase: Optional[str] = Field(default=None, max_length=50)
-    operation: Optional[str] = Field(default=None, max_length=50)
+    structure: JsonDict | None = None
+    phase: JsonDict | None = None
+    operation: JsonDict | None = None
 
 
 class BasicCreate(BasicBase):
@@ -27,5 +28,5 @@ class BasicUpdate(BasicBase):
 
 class BasicRead(BasicBase):
     id: int
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime

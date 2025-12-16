@@ -3,10 +3,10 @@ from __future__ import annotations
 from typing import Optional
 from pydantic import Field
 
-from .types import V2BaseModel
+from .types import V1BaseModel
 
 
-class CategoryBase(V2BaseModel):
+class CategoryBase(V1BaseModel):
     name: Optional[str] = Field(default=None, max_length=50)
 
 

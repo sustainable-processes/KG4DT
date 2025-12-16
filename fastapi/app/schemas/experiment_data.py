@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Optional
 from pydantic import Field
 
-from .types import V2BaseModel, JsonDict
+from .types import V1BaseModel, JsonDict
 
 
-class ExperimentDataBase(V2BaseModel):
+class ExperimentDataBase(V1BaseModel):
     project_id: Optional[int] = None
     data: JsonDict | None = None
 
@@ -22,5 +23,5 @@ class ExperimentDataUpdate(ExperimentDataBase):
 
 class ExperimentDataRead(ExperimentDataBase):
     id: int
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime

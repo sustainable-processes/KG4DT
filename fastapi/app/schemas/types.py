@@ -6,7 +6,7 @@ from typing import Any, Optional
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class V2BaseModel(BaseModel):
+class V1BaseModel(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 

@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from typing import Any, Optional
+from datetime import datetime
+from typing import Optional
 from pydantic import Field
 
-from .types import V2BaseModel, JsonDict
+from .types import V1BaseModel, JsonDict
 
 
-class ProjectBase(V2BaseModel):
+class ProjectBase(V1BaseModel):
     name: Optional[str] = Field(default=None, max_length=100)
     user_id: Optional[int] = None
     content: JsonDict | None = None
@@ -23,5 +24,5 @@ class ProjectUpdate(ProjectBase):
 
 class ProjectRead(ProjectBase):
     id: int
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime

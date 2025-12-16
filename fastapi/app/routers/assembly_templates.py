@@ -6,8 +6,6 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter
 
 from ..dependencies import DbSessionDep
-from ..models.template import Template
-from ..models.reactor import Reactor
 
 
 router = APIRouter(prefix="/models", tags=["assembly_templates"])  # under /models per request
@@ -65,7 +63,8 @@ def get_assembly_templates(db: DbSessionDep) -> Dict[str, List[Dict[str, Any]]]:
             # Skip broken FK to avoid null-heavy objects
             continue
 
-        jd = r.json_data or {}
+        # Compose json_data-like dict from persisted reactor block; input/utility not stored
+        jd = {"reactor": (r.reactor or {})}
         item: Dict[str, Any] = {
             "name": r.name,
             "icon": r.icon,

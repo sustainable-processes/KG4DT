@@ -53,15 +53,28 @@ def init_db(*, echo: bool | None = None, settings: Settings | None = None):
     _engine = create_engine(db_url, echo=echo_val, future=True)
     _SessionFactory = scoped_session(sessionmaker(bind=_engine, autoflush=False, autocommit=False, future=True))
 
-    # Import models so that Base.metadata knows about them before create_all
-    from ..models.basic import Basic  # noqa: F401
+    # Import v2 models so that their metadata is registered before create_all
+    # (imports are intentionally unused; they ensure model classes are imported)
+    from ..models.user import User  # noqa: F401
     from ..models.project import Project  # noqa: F401
+    from ..models.experiment_data import ExperimentData  # noqa: F401
+    from ..models.model import Model  # noqa: F401
     from ..models.reactor import Reactor  # noqa: F401
-    from ..models.species_role import SpeciesRole  # noqa: F401
+    from ..models.basic import Basic  # noqa: F401
+    from ..models.reactor_basic_junction import ReactorBasicJunction  # noqa: F401
+    from ..models.category import Category  # noqa: F401
     from ..models.template import Template  # noqa: F401
 
-    # Create tables idempotently
+    # Create tables idempotently for both legacy Base and v2 V1Base
     Base.metadata.create_all(_engine)
+    try:
+        # V1Base is the declarative base used by the v2 relational schema
+        from ..models import V1Base
+
+        V1Base.metadata.create_all(_engine)
+    except Exception:
+        # If models package is unavailable or misconfigured, skip silently
+        pass
 
     # Perform lightweight, idempotent startup migrations to keep legacy DBs in sync
     _apply_startup_migrations()

@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Optional
 from pydantic import Field
 
-from .types import V2BaseModel
+from .types import V1BaseModel
 
 
-class TemplateBase(V2BaseModel):
+class TemplateBase(V1BaseModel):
     category_id: Optional[int] = None
     reactor_id: Optional[int] = None
 
@@ -22,5 +23,5 @@ class TemplateUpdate(TemplateBase):
 
 class TemplateRead(TemplateBase):
     id: int
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime

@@ -4,11 +4,11 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException
 
-from ...dependencies import DbSessionDep
-from ...models.v2 import models as m
-from ...schemas.v2.categories import CategoryCreate, CategoryRead, CategoryUpdate
+from ..dependencies import DbSessionDep
+from .. import models as m
+from ..schemas.categories import CategoryCreate, CategoryRead, CategoryUpdate
 
-router = APIRouter(prefix="/api/v2/categories", tags=["v2: categories"])
+router = APIRouter(prefix="/api/v1/categories", tags=["v1: categories"])
 
 
 def _get_or_404(db: DbSessionDep, category_id: int) -> m.Category:

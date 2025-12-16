@@ -5,11 +5,11 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 from sqlalchemy.orm import Session
 
-from ...dependencies import DbSessionDep
-from ...models.v2.models import User as UserModel
-from ...schemas.v2.users import UserCreate, UserRead, UserUpdate
+from ..dependencies import DbSessionDep
+from ..models import User as UserModel
+from ..schemas.users import UserCreate, UserRead, UserUpdate
 
-router = APIRouter(prefix="/api/v2/users", tags=["v2: users"])
+router = APIRouter(prefix="/api/v1/users", tags=["v1: users"])
 
 
 @router.get("/", response_model=List[UserRead])

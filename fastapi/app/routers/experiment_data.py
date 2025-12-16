@@ -4,15 +4,15 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException
 
-from ...dependencies import DbSessionDep
-from ...models.v2 import models as m
-from ...schemas.v2.experiment_data import (
+from ..dependencies import DbSessionDep
+from .. import models as m
+from ..schemas.experiment_data import (
     ExperimentDataCreate,
     ExperimentDataRead,
     ExperimentDataUpdate,
 )
 
-router = APIRouter(prefix="/api/v2/experiment-data", tags=["v2: experiment_data"])
+router = APIRouter(prefix="/api/v1/experiment-data", tags=["v1: experiment_data"])
 
 
 def _get_or_404(db: DbSessionDep, exp_id: int) -> m.ExperimentData:

@@ -1,15 +1,21 @@
-from sqlalchemy import Integer, String, ForeignKey
+from __future__ import annotations
+
+from datetime import datetime
+
+from sqlalchemy import BigInteger, ForeignKey, TIMESTAMP, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column
 
-from ..db import Base
+from . import V1Base
 
 
-class Template(Base):
-    __tablename__ = "template"
+class Template(V1Base):
+    __tablename__ = "templates"
+    __table_args__ = (
+        UniqueConstraint("category_id", "reactor_id", name="uq_templates_category_reactor"),
+    )
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    category: Mapped[str] = mapped_column(String(255), nullable=False)
-    reactor_id: Mapped[int] = mapped_column(Integer, ForeignKey("reactor.id", ondelete="CASCADE"), nullable=False)
-
-    def __repr__(self) -> str:
-        return f"<Template id={self.id} category={self.category!r} reactor_id={self.reactor_id}>"
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id", ondelete="RESTRICT"), nullable=False)
+    reactor_id: Mapped[int] = mapped_column(ForeignKey("reactors.id", ondelete="RESTRICT"), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)

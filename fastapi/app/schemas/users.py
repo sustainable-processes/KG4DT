@@ -1,13 +1,13 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Optional
-
 from pydantic import Field
 
-from .types import V2BaseModel
+from .types import V1BaseModel
 
 
-class UserBase(V2BaseModel):
+class UserBase(V1BaseModel):
     username: Optional[str] = Field(default=None, max_length=255)
     email: Optional[str] = Field(default=None, max_length=255)
 
@@ -23,5 +23,5 @@ class UserUpdate(UserBase):
 
 class UserRead(UserBase):
     id: int
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime

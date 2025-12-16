@@ -18,7 +18,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # Import the v2 metadata for autogenerate
-from app.models.v2 import V2Base  # noqa: E402
+from appmodels import V2Base  # noqa: E402
 
 target_metadata = V2Base.metadata
 
