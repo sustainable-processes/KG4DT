@@ -479,107 +479,147 @@ class GraphdbHandler:
             dict: A dictionary of context templates.
         """
         context_template_dict = {}
-        sparql = (
-            f"{self.prefix}"
-            "select ?c ?s ?d ?v where {"
-            "?c rdf:type ontomo:Context. "
-            "?s rdf:type ontomo:ContextSection. "
-            "?d rdf:type ontomo:Descriptor. "
-            "?c ontomo:hasStructureSection ?s. "
-            "?s ontomo:hasDescriptor ?d. "
-            "optional{{?d ontomo:hasDefaultValue ?v.}} "
-            "}"
-        )
-        sparql_res = self.cur.execute(sparql)
-        for res in sparql_res.split("\r\n")[1:-1]:
-            c, s, d, v = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
-            c = c.split("#")[-1].replace("_Context", "")
-            s = s.split("#")[-1]
-            d = d.split("#")[-1]
-            v = v.split("#")[-1]
-            if c not in context_template_dict:
-                context_template_dict[c] = {}
-            if "st" not in context_template_dict[c]:
-                context_template_dict[c]["st"] = {}
-            if d not in context_template_dict[c]["st"]:
-                if v == "":
-                    context_template_dict[c]["st"][d] = None
-                else:
-                    context_template_dict[c]["st"][d] = float(v)
         
         sparql = (
             f"{self.prefix}"
-            "select ?c ?s ?d ?v where {"
+            "select ?c ?p ?ss ?os where {"
             "?c rdf:type ontomo:Context. "
-            "?s rdf:type ontomo:ContextSection. "
-            "?d rdf:type ontomo:Descriptor. "
-            "?c ontomo:hasOperationSection ?s. "
-            "?s ontomo:hasDescriptor ?d. "
-            "optional{{?d ontomo:hasDefaultValue ?v.}} "
+            "optional{{?c ontomo:hasPhenomenon ?p. }}"
+            "optional{{?c ontomo:hasStructureSection ?ss. }}"
+            "optional{{?c ontomo:hasOperationSection ?os. }}"
             "}"
         )
         sparql_res = self.cur.execute(sparql)
         for res in sparql_res.split("\r\n")[1:-1]:
-            c, s, d, v = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
+            c, p, ss, os  = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
+            c = c.split("#")[-1].replace("_Context", "")
+            p = p.split("#")[-1]
+            ss = ss.split("#")[-1]
+            os = os.split("#")[-1]
+            if c not in context_template_dict:
+                context_template_dict[c] = {}
+            if p:
+                context_template_dict[c]["accumulation"] = p
+            if ss:
+                context_template_dict[c]["st"] = {}
+            if os:
+                context_template_dict[c]["op"] = {}
+
+        sparql = (
+            f"{self.prefix}"
+            "select ?c ?s ?d ?v ?lb ?ub ?o ?do ?u ?us where {"
+            "?c rdf:type ontomo:Context. "
+            "?s rdf:type ontomo:ContextSection. "
+            "?c ontomo:hasStructureSection ?s. "
+            "?d rdf:type ontomo:Descriptor. "
+            "?s ontomo:hasDescriptor ?d. "
+            "optional{{?d ontomo:hasDefaultValue ?v.}} "
+            "optional{{?d ontomo:hasLowerBound ?lb.}} "
+            "optional{{?d ontomo:hasUpperBound ?ub.}} "
+            "optional{{?d ontomo:hasOption ?o.}} "
+            "optional{{?d ontomo:hasDefaultOption ?do.}} "
+            "optional{{?d ontomo:hasUnit ?u. ?u ontomo:hasSymbol ?us. filter(bound(?u) && bound(?us))}}"
+            "}"
+        )
+        sparql_res = self.cur.execute(sparql)
+        for res in sparql_res.split("\r\n")[1:-1]:
+            c, s, d, v, lb, ub, o, do, u, us = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
             c = c.split("#")[-1].replace("_Context", "")
             s = s.split("#")[-1]
             d = d.split("#")[-1]
             v = v.split("#")[-1]
-            if c not in context_template_dict:
-                context_template_dict[c] = {}
-            if "op" not in context_template_dict[c]:
-                context_template_dict[c]["op"] = {}
-            if d not in context_template_dict[c]["op"]:
-                if v == "":
-                    context_template_dict[c]["op"][d] = None
+            lb = lb.split("#")[-1]
+            ub = ub.split("#")[-1]
+            o = o.split("#")[-1]
+            do = do.split("#")[-1]
+            u = u.split("#")[-1]
+            if d not in context_template_dict[c]["st"]:
+                context_template_dict[c]["st"][d] = {}
+            if v:
+                if v != "true":
+                    context_template_dict[c]["st"][d]["type"] = "value"
+                    context_template_dict[c]["st"][d]["default"] = float(v)
                 else:
-                    context_template_dict[c]["op"][d] = float(v)
+                    context_template_dict[c]["st"][d]["type"] = "bool"
+                    context_template_dict[c]["st"][d]["default"] = True
+            elif lb and ub:
+                context_template_dict[c]["st"][d]["type"] = "range"
+                context_template_dict[c]["st"][d]["lower_bound"] = float(lb)
+                context_template_dict[c]["st"][d]["upper_bound"] = float(ub)
+            elif o:
+                context_template_dict[c]["st"][d]["type"] = "option"
+                if "options" not in context_template_dict[c]["st"][d]:
+                    context_template_dict[c]["st"][d]["options"] = [o]
+                else:
+                    context_template_dict[c]["st"][d]["options"].append(o)
+            else:
+                context_template_dict[c]["st"][d]["type"] = "value"
+            if do:
+                context_template_dict[c]["st"][d]["default_option"] = do
+            if u:
+                context_template_dict[c]["st"][d]["unit"] = u
+            if us:
+                us = re.sub(r'("*)"', r'\1', us[1:-1])
+                us = re.sub(r" xmlns=[^\>]*", "", us)
+                context_template_dict[c]["st"][d]["unit_symbol"] = us
 
         sparql = (
             f"{self.prefix}"
-            "select ?c ?s ?d where {"
+            "select ?c ?s ?d ?v ?lb ?ub ?o ?do ?u ?us where {"
             "?c rdf:type ontomo:Context. "
             "?s rdf:type ontomo:ContextSection. "
-            "?d rdf:type ontomo:Dimension. "
-            "?c ontomo:hasSolidFeedSection ?s. "
-            "?s ontomo:hasDimension ?d. "
+            "?c ontomo:hasOperationSection ?s. "
+            "?d rdf:type ontomo:Descriptor. "
+            "?s ontomo:hasDescriptor ?d. "
+            "optional{{?d ontomo:hasDefaultValue ?v.}} "
+            "optional{{?d ontomo:hasLowerBound ?lb.}} "
+            "optional{{?d ontomo:hasUpperBound ?ub.}} "
+            "optional{{?d ontomo:hasOption ?o.}} "
+            "optional{{?d ontomo:hasDefaultOption ?do.}} "
+            "optional{{?d ontomo:hasUnit ?u. ?u ontomo:hasSymbol ?us. filter(bound(?u) && bound(?us))}}"
             "}"
         )
         sparql_res = self.cur.execute(sparql)
         for res in sparql_res.split("\r\n")[1:-1]:
-            c, s, d = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
+            c, s, d, v, lb, ub, o, do, u, us = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
             c = c.split("#")[-1].replace("_Context", "")
             s = s.split("#")[-1]
             d = d.split("#")[-1]
-            if c not in context_template_dict:
-                context_template_dict[c] = {}
-            if "sld" not in context_template_dict[c]:
-                context_template_dict[c]["sld"] = []
-            if d not in context_template_dict[c]["sld"]:
-                context_template_dict[c]["sld"].append(d.split("_")[0])
-
-        sparql = (
-            f"{self.prefix}"
-            "select ?c ?s ?d where {"
-            "?c rdf:type ontomo:Context. "
-            "?s rdf:type ontomo:ContextSection. "
-            "?d rdf:type ontomo:Dimension. "
-            "?c ontomo:hasLiquidFeedSection ?s. "
-            "?s ontomo:hasDimension ?d. "
-            "}"
-        )
-        sparql_res = self.cur.execute(sparql)
-        for res in sparql_res.split("\r\n")[1:-1]:
-            c, s, d = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
-            c = c.split("#")[-1].replace("_Context", "")
-            s = s.split("#")[-1]
-            d = d.split("#")[-1]
-            if c not in context_template_dict:
-                context_template_dict[c] = {}
-            if "liq" not in context_template_dict[c]:
-                context_template_dict[c]["liq"] = []
-            if d not in context_template_dict[c]["liq"]:
-                context_template_dict[c]["liq"].append(d.split("_")[0])
+            v = v.split("#")[-1]
+            lb = lb.split("#")[-1]
+            ub = ub.split("#")[-1]
+            o = o.split("#")[-1]
+            do = do.split("#")[-1]
+            u = u.split("#")[-1]
+            if d not in context_template_dict[c]["op"]:
+                context_template_dict[c]["op"][d] = {}
+            if v:
+                if v != "true":
+                    context_template_dict[c]["op"][d]["type"] = "value"
+                    context_template_dict[c]["op"][d]["default"] = float(v)
+                else:
+                    context_template_dict[c]["op"][d]["type"] = "bool"
+                    context_template_dict[c]["op"][d]["default"] = True
+            elif lb and ub:
+                context_template_dict[c]["op"][d]["type"] = "range"
+                context_template_dict[c]["op"][d]["lower_bound"] = float(lb)
+                context_template_dict[c]["op"][d]["upper_bound"] = float(ub)
+            elif o:
+                context_template_dict[c]["op"][d]["type"] = "option"
+                if "options" not in context_template_dict[c]["op"][d]:
+                    context_template_dict[c]["op"][d]["options"] = [o]
+                else:
+                    context_template_dict[c]["op"][d]["options"].append(o)
+            else:
+                context_template_dict[c]["op"][d]["type"] = "value"
+            if do:
+                context_template_dict[c]["op"][d]["default_option"] = do
+            if u:
+                context_template_dict[c]["op"][d]["unit"] = u
+            if us:
+                us = re.sub(r'("*)"', r'\1', us[1:-1])
+                us = re.sub(r" xmlns=[^\>]*", "", us)
+                context_template_dict[c]["op"][d]["unit_symbol"] = us
 
         context_template_dict = dict(sorted(context_template_dict.items(), key=lambda x: x[0]))
         for c in context_template_dict:
