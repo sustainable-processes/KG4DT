@@ -9,13 +9,13 @@ from .types import V1BaseModel, JsonDict
 
 class ProjectBase(V1BaseModel):
     name: Optional[str] = Field(default=None, max_length=100)
-    user_id: Optional[int] = None
     content: JsonDict | None = None
 
 
 class ProjectCreate(ProjectBase):
     name: str = Field(max_length=100)
-    user_id: int
+    # Create by email only
+    email: str = Field(min_length=1)
 
 
 class ProjectUpdate(ProjectBase):
@@ -24,5 +24,11 @@ class ProjectUpdate(ProjectBase):
 
 class ProjectRead(ProjectBase):
     id: int
+    user_id: int
     created_at: datetime
     updated_at: datetime
+
+
+class ProjectListItem(V1BaseModel):
+    id: int
+    name: str

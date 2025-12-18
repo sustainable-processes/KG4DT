@@ -2,13 +2,20 @@ from __future__ import annotations
 
 from typing import List, Dict
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 
 from ..dependencies import DbSessionDep
 from .. import models as m
-from ..schemas.templates import TemplateCreate, TemplateRead, TemplateUpdate
-from ..schemas.reactors import ReactorBrief
+from ..schemas.templates import (
+    TemplateCreate,
+    TemplateRead,
+    TemplateUpdate,
+    AssemblyTemplatesResponse,
+    GeneralTemplateItem,
+    ReactorTile,
+)
 from sqlalchemy import func
+from ..utils.graphdb_assembly_utils import list_context_templates_with_icons
 
 router = APIRouter(prefix="/api/v1/assembly_templates", tags=["v1: assembly_templates"])
 
@@ -20,23 +27,40 @@ def _get_or_404(db: DbSessionDep, template_id: int) -> m.Template:
     return obj
 
 
-@router.get("/", response_model=List[Dict[str, List[ReactorBrief]]])
-def list_templates(db: DbSessionDep):
-    # Group templates by category name and list their reactors (id, name)
+@router.get("/", response_model=AssemblyTemplatesResponse)
+def list_templates(db: DbSessionDep, request: Request):
+    # Pull category, reactor info including icon
     rows = (
-        db.query(m.Category.name, m.Reactor.id, m.Reactor.name)
+        db.query(m.Category.name, m.Reactor.id, m.Reactor.name, m.Reactor.icon_url)
         .join(m.Template, m.Template.category_id == m.Category.id)
         .join(m.Reactor, m.Template.reactor_id == m.Reactor.id)
         .order_by(m.Category.name.asc(), m.Reactor.name.asc())
         .all()
     )
 
-    grouped: dict[str, list[dict[str, object]]] = {}
-    for category_name, reactor_id, reactor_name in rows:
-        grouped.setdefault(category_name, []).append({"id": reactor_id, "name": reactor_name})
+    templates_list: List[ReactorTile] = []
+    tutorials_list: List[ReactorTile] = []
 
-    # Convert mapping to requested list-of-single-key-objects format
-    return [{category: reactors} for category, reactors in grouped.items()]
+    for category_name, reactor_id, reactor_name, icon_url in rows:
+        item = ReactorTile(id=reactor_id, name=reactor_name, icon=icon_url)
+        if str(category_name).strip().lower() == "templates":
+            templates_list.append(item)
+        elif str(category_name).strip().lower() == "tutorials":
+            tutorials_list.append(item)
+
+    # Build 'general' list from GraphDB context template names
+    client = getattr(request.app.state, "graphdb", None)
+    general_list: List[GeneralTemplateItem] = []
+    if client is not None:
+        name_icons = list_context_templates_with_icons(client)
+        # Sorted by name for stable output
+        general_list = [GeneralTemplateItem(name=n, icon=name_icons.get(n)) for n in sorted(name_icons.keys())]
+
+    return {
+        "Templates": templates_list,
+        "Tutorials": tutorials_list,
+        "General": general_list,
+    }
 
 
 def _get_by_category_and_reactor_or_404(db: DbSessionDep, category_name: str, reactor_id: int) -> m.Template:

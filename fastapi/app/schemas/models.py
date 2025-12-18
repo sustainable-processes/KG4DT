@@ -28,3 +28,8 @@ class ModelRead(ModelBase):
     id: int
     created_at: datetime
     updated_at: datetime
+
+
+class ModelListItem(V1BaseModel):
+    id: int
+    name: str

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List, Dict
 from pydantic import Field
 
 from .types import V1BaseModel
+from .reactors import ReactorBrief
 
 
 class TemplateBase(V1BaseModel):
@@ -25,3 +26,25 @@ class TemplateRead(TemplateBase):
     id: int
     created_at: datetime
     updated_at: datetime
+
+
+class GeneralTemplateName(V1BaseModel):
+    name: str
+
+
+class ReactorTile(V1BaseModel):
+    id: int
+    name: str
+    icon: Optional[str] = None
+
+
+class GeneralTemplateItem(V1BaseModel):
+    name: str
+    icon: Optional[str] = None
+
+
+class AssemblyTemplatesResponse(V1BaseModel):
+    # Top-level keys as requested by the client
+    Templates: List[ReactorTile]
+    Tutorials: List[ReactorTile]
+    General: List[GeneralTemplateItem]

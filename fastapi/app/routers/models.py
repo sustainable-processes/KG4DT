@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import List
 
 from fastapi import APIRouter, HTTPException, Query
 
 from ..dependencies import DbSessionDep
 from .. import models as m
-from ..schemas.models import ModelCreate, ModelRead, ModelUpdate
+from ..schemas.models import ModelCreate, ModelRead, ModelUpdate, ModelListItem
 
 router = APIRouter(prefix="/api/v1/models", tags=["v1: models"])
 
@@ -18,21 +18,25 @@ def _get_or_404(db: DbSessionDep, model_id: int) -> m.Model:
     return obj
 
 
-@router.get("/", response_model=List[ModelRead])
+@router.get("/", response_model=List[ModelListItem])
 def list_models(
     db: DbSessionDep,
-    project_id: Optional[int] = Query(None),
+    project_id: int = Query(..., ge=1),
     limit: int = Query(100, ge=0, le=500),
     offset: int = Query(0, ge=0),
 ):
-    q = db.query(m.Model)
-    if project_id is not None:
-        q = q.filter(m.Model.project_id == project_id)
+    # Ensure project exists
+    project = db.get(m.Project, project_id)
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    q = db.query(m.Model).filter(m.Model.project_id == project_id)
     q = q.order_by(m.Model.updated_at.desc(), m.Model.id.desc())
     if offset:
         q = q.offset(offset)
     if limit:
         q = q.limit(limit)
+    # Returning full Model rows; response_model will serialize only id and name
     return q.all()
 
 
