@@ -20,19 +20,12 @@ def _get_reactor_or_404(db: DbSessionDep, reactor_id: int) -> m.Reactor:
     return obj
 
 
-def _get_reactor_by_name_or_404(db: DbSessionDep, name: str) -> m.Reactor:
-    obj = db.query(m.Reactor).filter(m.Reactor.name == name).first()
-    if not obj:
-        raise HTTPException(status_code=404, detail="Reactor not found")
-    return obj
-
-
 # NOTE: Listing reactors endpoint intentionally removed to simplify frontend usage per requirements.
 
 
-@router.get("/{name}", response_model=ReactorRead)
-def get_reactor(name: str, db: DbSessionDep):
-    obj = _get_reactor_by_name_or_404(db, name)
+@router.get("/{reactor_id}", response_model=ReactorRead)
+def get_reactor(reactor_id: int, db: DbSessionDep):
+    obj = _get_reactor_or_404(db, reactor_id)
 
     # Load associated basics via junction
     basics = (
@@ -116,9 +109,9 @@ def create_reactor(payload: ReactorCreate, db: DbSessionDep):
     }
 
 
-@router.patch("/{name}", response_model=ReactorRead)
-def update_reactor(name: str, payload: ReactorUpdate, db: DbSessionDep):
-    obj = _get_reactor_by_name_or_404(db, name)
+@router.patch("/{reactor_id}", response_model=ReactorRead)
+def update_reactor(reactor_id: int, payload: ReactorUpdate, db: DbSessionDep):
+    obj = _get_reactor_or_404(db, reactor_id)
     data = payload.model_dump(exclude_unset=True)
     # Update reactor block directly if provided
     if "reactor" in data:

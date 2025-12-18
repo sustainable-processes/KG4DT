@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from typing import Any, Dict, Iterable, List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Query, Request
 
 from ..schemas.types import JsonDict
+from ..utils.graphdb_assembly_utils import query_context_template
+from ..utils.kg_translation import build_frontend_from_kg_context
 
 
 router = APIRouter(prefix="/api/v1", tags=["v1: translate"])
@@ -132,3 +134,9 @@ def translate_frontend_json(payload: JsonDict) -> Dict[str, Any]:
     """
     basic = build_basic_context_from_frontend(payload)
     return {"context": {"type": "dynamic", "basic": basic}}
+
+
+# ---------------------- KG -> Frontend translation ----------------------
+"""Reusable KG→Frontend translator is implemented in fastapi.app.utils.kg_translation.
+This router keeps only frontend→backend translation endpoint. The KG→Frontend
+endpoint is now exposed under /api/v1/kg_components/{name}."""

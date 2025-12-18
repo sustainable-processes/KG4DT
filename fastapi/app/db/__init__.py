@@ -64,6 +64,7 @@ def init_db(*, echo: bool | None = None, settings: Settings | None = None):
     from ..models.reactor_basic_junction import ReactorBasicJunction  # noqa: F401
     from ..models.category import Category  # noqa: F401
     from ..models.template import Template  # noqa: F401
+    from ..models.kg_component import KgComponent  # noqa: F401
 
     # Create tables idempotently for both legacy Base and v2 V1Base
     Base.metadata.create_all(_engine)

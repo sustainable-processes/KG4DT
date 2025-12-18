@@ -25,6 +25,7 @@ from .basic import Basic, BasicMatterType, BasicUsageEnum  # noqa: E402
 from .reactor_basic_junction import ReactorBasicJunction  # noqa: E402
 from .category import Category  # noqa: E402
 from .template import Template  # noqa: E402
+from .kg_component import KgComponent  # noqa: E402
 
 __all__ = [
     "V1Base",
@@ -41,4 +42,5 @@ __all__ = [
     "ReactorBasicJunction",
     "Category",
     "Template",
+    "KgComponent",
 ]

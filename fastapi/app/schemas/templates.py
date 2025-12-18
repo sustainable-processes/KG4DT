@@ -39,6 +39,7 @@ class ReactorTile(V1BaseModel):
 
 
 class GeneralTemplateItem(V1BaseModel):
+    id: Optional[int] = None
     name: str
     icon: Optional[str] = None
 

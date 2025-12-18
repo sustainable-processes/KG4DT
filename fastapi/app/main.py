@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import logging.config
 from typing import List
 
 from fastapi import FastAPI
@@ -11,6 +12,41 @@ from .services.graphdb import GraphDBClient, GraphDBConfig
 
 # Initialize SQLAlchemy for the FastAPI backend (independent from Flask)
 from .db import init_db
+
+def _ensure_root_logging_configured() -> None:
+    """Ensure the root logger prints to stdout at INFO level.
+
+    Under Uvicorn's default logging, only the `uvicorn.*` loggers have handlers.
+    Our module loggers (e.g., fastapi.app.routers.templates) may be silent unless
+    the root logger has a StreamHandler. Configure it only if no handlers exist
+    to avoid duplicating Uvicorn's setup.
+    """
+    root = logging.getLogger()
+    if root.handlers:
+        return
+    logging.config.dictConfig(
+        {
+            "version": 1,
+            "disable_existing_loggers": False,
+            "formatters": {
+                "default": {
+                    "()": "uvicorn.logging.DefaultFormatter",
+                    "fmt": "%(levelprefix)s %(message)s",
+                }
+            },
+            "handlers": {
+                "default": {
+                    "class": "logging.StreamHandler",
+                    "formatter": "default",
+                    "stream": "ext://sys.stdout",
+                }
+            },
+            "root": {"handlers": ["default"], "level": "INFO"},
+        }
+    )
+
+
+_ensure_root_logging_configured()
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +64,7 @@ app = FastAPI(
         {"name": "v1: basics"},
         {"name": "v1: categories"},
         {"name": "v1: assembly_templates"},
+        {"name": "v1: kg_components"},
         {"name": "v1: experiment_data"},
         {"name": "assembly"},
         # {"name": "assembly_templates"},  # removed non-v1 router
@@ -97,6 +134,7 @@ from .routers import experiment_data as v1_experiment_router  # noqa: E402
 from .routers import models as v1_models_router  # noqa: E402
 # translation tools
 from .routers import translation as v1_translation_router  # noqa: E402
+from .routers import kg_components as v1_kg_components_router  # noqa: E402
 # from .routers import assembly_templates as assembly_templates_router  # removed non-v1 router
 
 app.include_router(health_router.router)
@@ -119,3 +157,4 @@ app.include_router(v1_templates_router.router)
 app.include_router(v1_experiment_router.router)
 app.include_router(v1_models_router.router)
 app.include_router(v1_translation_router.router)
+app.include_router(v1_kg_components_router.router)
