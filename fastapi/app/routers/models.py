@@ -9,6 +9,8 @@ from .. import models as m
 from ..schemas.models import ModelCreate, ModelRead, ModelUpdate, ModelListItem
 
 router = APIRouter(prefix="/api/v1/models", tags=["v1: models"])
+# Non-versioned duplicate under /api/models
+router_nv = APIRouter(prefix="/api/models", tags=["models"])
 
 
 def _get_or_404(db: DbSessionDep, model_id: int) -> m.Model:
@@ -40,9 +42,24 @@ def list_models(
     return q.all()
 
 
+@router_nv.get("/", response_model=List[ModelListItem])
+def list_models_nv(
+    db: DbSessionDep,
+    project_id: int = Query(..., ge=1),
+    limit: int = Query(100, ge=0, le=500),
+    offset: int = Query(0, ge=0),
+):
+    return list_models(db=db, project_id=project_id, limit=limit, offset=offset)
+
+
 @router.get("/{model_id}", response_model=ModelRead)
 def get_model(model_id: int, db: DbSessionDep):
     return _get_or_404(db, model_id)
+
+
+@router_nv.get("/{model_id}", response_model=ModelRead)
+def get_model_nv(model_id: int, db: DbSessionDep):
+    return get_model(model_id, db)
 
 
 @router.post("/", response_model=ModelRead, status_code=201)
@@ -63,6 +80,11 @@ def create_model(payload: ModelCreate, db: DbSessionDep):
     return obj
 
 
+@router_nv.post("/", response_model=ModelRead, status_code=201)
+def create_model_nv(payload: ModelCreate, db: DbSessionDep):
+    return create_model(payload, db)
+
+
 @router.patch("/{model_id}", response_model=ModelRead)
 def update_model(model_id: int, payload: ModelUpdate, db: DbSessionDep):
     obj = _get_or_404(db, model_id)
@@ -75,9 +97,19 @@ def update_model(model_id: int, payload: ModelUpdate, db: DbSessionDep):
     return obj
 
 
+@router_nv.patch("/{model_id}", response_model=ModelRead)
+def update_model_nv(model_id: int, payload: ModelUpdate, db: DbSessionDep):
+    return update_model(model_id, payload, db)
+
+
 @router.delete("/{model_id}", status_code=204)
 def delete_model(model_id: int, db: DbSessionDep):
     obj = _get_or_404(db, model_id)
     db.delete(obj)
     db.commit()
     return None
+
+
+@router_nv.delete("/{model_id}", status_code=204)
+def delete_model_nv(model_id: int, db: DbSessionDep):
+    return delete_model(model_id, db)

@@ -11,7 +11,7 @@ class V1BaseModel(BaseModel):
 
 
 class BasicMatterType(str, Enum):
-    steam = "steam"
+    stream = "stream"
     solid = "solid"
     gas = "gas"
 

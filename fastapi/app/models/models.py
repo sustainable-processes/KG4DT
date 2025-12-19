@@ -21,7 +21,7 @@ from . import V1Base
 from sqlalchemy import Enum as SAEnum
 
 
-BasicMatterType = SAEnum("steam", "solid", "gas", name="basic_matter_type", native_enum=True)
+BasicMatterType = SAEnum("stream", "solid", "gas", name="basic_matter_type", native_enum=True)
 BasicUsageEnum = SAEnum("inlet", "outlet", "utilities", name="basic_usage", native_enum=True)
 
 
@@ -126,8 +126,10 @@ class Basic(V1Base):
 class ReactorBasicJunction(V1Base):
     __tablename__ = "reactor_basic_junction"
 
-    reactor_id: Mapped[int] = mapped_column(ForeignKey("reactors.id", ondelete="CASCADE"), primary_key=True)
-    basic_id: Mapped[int] = mapped_column(ForeignKey("basics.id", ondelete="CASCADE"), primary_key=True)
+    # Surrogate primary key to allow duplicate (reactor_id, basic_id) pairs
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    reactor_id: Mapped[int] = mapped_column(ForeignKey("reactors.id", ondelete="CASCADE"), nullable=False)
+    basic_id: Mapped[int] = mapped_column(ForeignKey("basics.id", ondelete="CASCADE"), nullable=False)
     association_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
 
 

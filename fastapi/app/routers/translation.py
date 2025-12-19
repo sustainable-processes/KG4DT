@@ -96,7 +96,7 @@ def build_basic_context_from_frontend(payload: JsonDict) -> Dict[str, Any]:
         if rxn_local:
             entry["rxn"] = _unique_preserve(rxn_local)
 
-        if typ == "steam":
+        if typ == "stream":
             stm[name] = entry
         elif typ == "solid":
             sld[name] = entry

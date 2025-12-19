@@ -11,6 +11,8 @@ from ..schemas.reactors import ReactorCreate, ReactorRead, ReactorUpdate
 from ..schemas.basics import BasicRead
 
 router = APIRouter(prefix="/api/v1/reactors", tags=["v1: reactors"])
+# Non-versioned duplicate under /api/reactors
+router_nv = APIRouter(prefix="/api/reactors", tags=["reactors"])
 
 
 def _get_reactor_or_404(db: DbSessionDep, reactor_id: int) -> m.Reactor:
@@ -27,31 +29,52 @@ def _get_reactor_or_404(db: DbSessionDep, reactor_id: int) -> m.Reactor:
 def get_reactor(reactor_id: int, db: DbSessionDep):
     obj = _get_reactor_or_404(db, reactor_id)
 
-    # Load associated basics via junction
-    basics = (
-        db.query(m.Basic)
-        .join(m.ReactorBasicJunction, m.ReactorBasicJunction.basic_id == m.Basic.id)
+    # Load associated basics via junction (preserve duplicates by iterating junction rows)
+    junction_rows = (
+        db.query(m.ReactorBasicJunction, m.Basic)
+        .join(m.Basic, m.ReactorBasicJunction.basic_id == m.Basic.id)
         .filter(m.ReactorBasicJunction.reactor_id == obj.id)
+        .order_by(m.ReactorBasicJunction.id.asc())
         .all()
     )
 
-    # Build input and utility sections from associated basics
+    # Build input and utility sections from associated basics (keeping duplicates)
     input_section: dict[str, dict] = {}
     utility_section: dict[str, dict] = {}
 
-    for b in basics:
+    # Inputs: label by type with numbering per type duplicates.
+    # Mapping rule: gas → "carrier gas"; others (steam, solid) → "stream"
+    inlet_rows = [(j, b) for (j, b) in junction_rows if (b.usage or '').lower() == "inlet"]
+    # First pass: count occurrences per base label
+    counts: dict[str, int] = {}
+    for _j, b in inlet_rows:
+        t = (b.type or '').lower()
+        base = "carrier gas" if t == "gas" else "stream"
+        counts[base] = counts.get(base, 0) + 1
+    # Second pass: emit entries with numbering only when count > 1 for that base
+    emitted: dict[str, int] = {}
+    for _j, b in inlet_rows:
+        t = (b.type or '').lower()
+        base = "carrier gas" if t == "gas" else "stream"
+        if counts.get(base, 0) > 1:
+            emitted[base] = emitted.get(base, 0) + 1
+            key = f"{base} {emitted[base]}"
+        else:
+            key = base
+        input_section[key] = {
+            "id": b.id,
+            "type": b.type,
+            "phases": b.phase or {},
+            "source": [],
+            "chemistry": {"reaction": []},
+            "operation": b.operation or {},
+            "structure": b.structure or {},
+            "destination": ["reactor vessel"],
+        }
+
+    for _j, b in junction_rows:
         usage = (b.usage or '').lower()
-        if usage == "inlet":
-            input_section[b.name] = {
-                "type": b.type,
-                "phases": b.phase or {},
-                "source": [],
-                "chemistry": {"reaction": []},
-                "operation": b.operation or {},
-                "structure": b.structure or {},
-                "destination": ["reactor vessel"],
-            }
-        elif usage == "utilities":
+        if usage == "utilities":
             utility_section[b.name] = {
                 "source": [],
                 "operation": b.operation or {},
@@ -75,6 +98,13 @@ def get_reactor(reactor_id: int, db: DbSessionDep):
         "created_at": obj.created_at,
         "updated_at": obj.updated_at,
     }
+
+
+# -------- Non-versioned wrappers (/api/reactors) --------
+
+@router_nv.get("/{reactor_id}", response_model=ReactorRead)
+def get_reactor_nv(reactor_id: int, db: DbSessionDep):
+    return get_reactor(reactor_id, db)
 
 
 @router.post("/", response_model=ReactorRead, status_code=201)
@@ -109,6 +139,11 @@ def create_reactor(payload: ReactorCreate, db: DbSessionDep):
     }
 
 
+@router_nv.post("/", response_model=ReactorRead, status_code=201)
+def create_reactor_nv(payload: ReactorCreate, db: DbSessionDep):
+    return create_reactor(payload, db)
+
+
 @router.patch("/{reactor_id}", response_model=ReactorRead)
 def update_reactor(reactor_id: int, payload: ReactorUpdate, db: DbSessionDep):
     obj = _get_reactor_or_404(db, reactor_id)
@@ -122,28 +157,44 @@ def update_reactor(reactor_id: int, payload: ReactorUpdate, db: DbSessionDep):
     db.commit()
     db.refresh(obj)
 
-    # Recompute input/utility from current associations
-    basics = (
-        db.query(m.Basic)
-        .join(m.ReactorBasicJunction, m.ReactorBasicJunction.basic_id == m.Basic.id)
+    # Recompute input/utility from current associations (preserve duplicates)
+    junction_rows = (
+        db.query(m.ReactorBasicJunction, m.Basic)
+        .join(m.Basic, m.ReactorBasicJunction.basic_id == m.Basic.id)
         .filter(m.ReactorBasicJunction.reactor_id == obj.id)
+        .order_by(m.ReactorBasicJunction.id.asc())
         .all()
     )
     input_section: dict[str, dict] = {}
     utility_section: dict[str, dict] = {}
-    for b in basics:
+    inlet_rows = [(j, b) for (j, b) in junction_rows if (b.usage or '').lower() == "inlet"]
+    counts: dict[str, int] = {}
+    for _j, b in inlet_rows:
+        t = (b.type or '').lower()
+        base = "carrier gas" if t == "gas" else "stream"
+        counts[base] = counts.get(base, 0) + 1
+    emitted: dict[str, int] = {}
+    for _j, b in inlet_rows:
+        t = (b.type or '').lower()
+        base = "carrier gas" if t == "gas" else "stream"
+        if counts.get(base, 0) > 1:
+            emitted[base] = emitted.get(base, 0) + 1
+            key = f"{base} {emitted[base]}"
+        else:
+            key = base
+        input_section[key] = {
+            "id": b.id,
+            "type": b.type,
+            "phases": b.phase or {},
+            "source": [],
+            "chemistry": {"reaction": []},
+            "operation": b.operation or {},
+            "structure": b.structure or {},
+            "destination": ["reactor vessel"],
+        }
+    for _j, b in junction_rows:
         usage = (b.usage or '').lower()
-        if usage == "inlet":
-            input_section[b.name] = {
-                "type": b.type,
-                "phases": b.phase or {},
-                "source": [],
-                "chemistry": {"reaction": []},
-                "operation": b.operation or {},
-                "structure": b.structure or {},
-                "destination": ["reactor vessel"],
-            }
-        elif usage == "utilities":
+        if usage == "utilities":
             utility_section[b.name] = {
                 "source": [],
                 "operation": b.operation or {},
@@ -166,12 +217,22 @@ def update_reactor(reactor_id: int, payload: ReactorUpdate, db: DbSessionDep):
     }
 
 
+@router_nv.patch("/{reactor_id}", response_model=ReactorRead)
+def update_reactor_nv(reactor_id: int, payload: ReactorUpdate, db: DbSessionDep):
+    return update_reactor(reactor_id, payload, db)
+
+
 @router.delete("/{reactor_id}", status_code=204)
 def delete_reactor(reactor_id: int, db: DbSessionDep):
     obj = _get_reactor_or_404(db, reactor_id)
     db.delete(obj)
     db.commit()
     return None
+
+
+@router_nv.delete("/{reactor_id}", status_code=204)
+def delete_reactor_nv(reactor_id: int, db: DbSessionDep):
+    return delete_reactor(reactor_id, db)
 
 
 # Junction management: reactors ↔ basics
@@ -189,21 +250,26 @@ def list_reactor_basics(reactor_id: int, db: DbSessionDep):
     return basics
 
 
+@router_nv.get("/{reactor_id}/basics", response_model=List[BasicRead])
+def list_reactor_basics_nv(reactor_id: int, db: DbSessionDep):
+    return list_reactor_basics(reactor_id, db)
+
+
 @router.post("/{reactor_id}/basics/{basic_id}", status_code=204)
 def link_basic(reactor_id: int, basic_id: int, db: DbSessionDep):
     _ = _get_reactor_or_404(db, reactor_id)
     basic = db.get(m.Basic, basic_id)
     if not basic:
         raise HTTPException(status_code=404, detail="Basic not found")
-    exists = (
-        db.query(m.ReactorBasicJunction)
-        .filter(and_(m.ReactorBasicJunction.reactor_id == reactor_id, m.ReactorBasicJunction.basic_id == basic_id))
-        .first()
-    )
-    if not exists:
-        db.add(m.ReactorBasicJunction(reactor_id=reactor_id, basic_id=basic_id))
-        db.commit()
+    # Allow duplicate links: always create a new junction row
+    db.add(m.ReactorBasicJunction(reactor_id=reactor_id, basic_id=basic_id))
+    db.commit()
     return None
+
+
+@router_nv.post("/{reactor_id}/basics/{basic_id}", status_code=204)
+def link_basic_nv(reactor_id: int, basic_id: int, db: DbSessionDep):
+    return link_basic(reactor_id, basic_id, db)
 
 
 @router.delete("/{reactor_id}/basics/{basic_id}", status_code=204)
@@ -217,3 +283,8 @@ def unlink_basic(reactor_id: int, basic_id: int, db: DbSessionDep):
         db.delete(exists)
         db.commit()
     return None
+
+
+@router_nv.delete("/{reactor_id}/basics/{basic_id}", status_code=204)
+def unlink_basic_nv(reactor_id: int, basic_id: int, db: DbSessionDep):
+    return unlink_basic(reactor_id, basic_id, db)

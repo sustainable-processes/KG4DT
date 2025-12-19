@@ -158,3 +158,33 @@ app.include_router(v1_experiment_router.router)
 app.include_router(v1_models_router.router)
 app.include_router(v1_translation_router.router)
 app.include_router(v1_kg_components_router.router)
+
+# non-versioned duplicate endpoints under /api/*
+try:
+    app.include_router(v1_users_router.router_nv)
+except Exception:
+    pass
+try:
+    app.include_router(v1_projects_router.router_nv)
+except Exception:
+    pass
+try:
+    app.include_router(v1_reactors_router.router_nv)
+except Exception:
+    pass
+try:
+    app.include_router(v1_templates_router.router_nv)
+except Exception:
+    pass
+try:
+    app.include_router(v1_experiment_router.router_nv)
+except Exception:
+    pass
+try:
+    app.include_router(v1_models_router.router_nv)
+except Exception:
+    pass
+try:
+    app.include_router(v1_kg_components_router.router_nv)
+except Exception:
+    pass
