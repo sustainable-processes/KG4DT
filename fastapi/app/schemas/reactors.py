@@ -24,7 +24,7 @@ class ReactorBase(V1BaseModel):
     name: Optional[str] = Field(default=None, max_length=100)
     number_of_input: Optional[int] = 0
     number_of_output: Optional[int] = 0
-    icon_url: Optional[str] = Field(default=None, max_length=255)
+    icon: Optional[str] = Field(default=None, max_length=255)
     reactor: JsonDict | None = Field(default=None, description="Reactor block persisted in DB")
     chemistry: JsonDict | None = None
     kinetics: JsonDict | None = None
@@ -43,7 +43,7 @@ class ReactorRead(V1BaseModel):
     name: str
     number_of_input: int
     number_of_output: int
-    icon_url: Optional[str] = None
+    icon: Optional[str] = None
     # Flattened fields (no json_data wrapper in read responses)
     reactor: JsonDict = Field(default_factory=dict, description="Reactor block stored in DB")
     input: JsonDict | None = Field(default=None, description="Computed from associated Basics with usage='inlet'")

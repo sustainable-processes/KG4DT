@@ -36,7 +36,7 @@ def _get_or_404(db: DbSessionDep, template_id: int) -> m.Template:
 def list_templates(db: DbSessionDep, request: Request):
     # Pull category, reactor info including icon
     rows = (
-        db.query(m.Category.name, m.Reactor.id, m.Reactor.name, m.Reactor.icon_url)
+        db.query(m.Category.name, m.Reactor.id, m.Reactor.name, m.Reactor.icon)
         .join(m.Template, m.Template.category_id == m.Category.id)
         .join(m.Reactor, m.Template.reactor_id == m.Reactor.id)
         .order_by(m.Category.name.asc(), m.Reactor.name.asc())
@@ -46,8 +46,8 @@ def list_templates(db: DbSessionDep, request: Request):
     templates_list: List[ReactorTile] = []
     tutorials_list: List[ReactorTile] = []
 
-    for category_name, reactor_id, reactor_name, icon_url in rows:
-        item = ReactorTile(id=reactor_id, name=reactor_name, icon=icon_url)
+    for category_name, reactor_id, reactor_name, icon in rows:
+        item = ReactorTile(id=reactor_id, name=reactor_name, icon=icon)
         if str(category_name).strip().lower() == "templates":
             templates_list.append(item)
         elif str(category_name).strip().lower() == "tutorials":
