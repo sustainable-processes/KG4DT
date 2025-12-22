@@ -8,7 +8,7 @@ from ..dependencies import DbSessionDep
 from ..models import Project as ProjectModel
 from ..models import User as UserModel
 from ..schemas.projects import ProjectCreate, ProjectRead, ProjectUpdate, ProjectListItem
-from ..utils.db import apply_updates, validate_uniqueness
+from ..utils.db import apply_updates, validate_uniqueness, verify_project_ownership
 
 router = APIRouter()
 """Project endpoints (ID-based for get/patch/delete)."""
@@ -48,20 +48,7 @@ def get_project_by_id(
     db: DbSessionDep,
     email: str = Query(..., min_length=1),
 ):
-    # Resolve user
-    email_lower = email.strip().lower()
-    user = db.query(UserModel).filter(UserModel.email == email_lower).first()
-    if not user:
-        raise HTTPException(status_code=403, detail="Not authorized to access this project")
-
-    project = db.get(ProjectModel, project_id)
-    if not project:
-        raise HTTPException(status_code=404, detail="Project not found")
-
-    if project.user_id != user.id:
-        raise HTTPException(status_code=403, detail="Not authorized to access this project")
-
-    return project
+    return verify_project_ownership(db, project_id, email, ProjectModel, UserModel)
 
 
 
@@ -101,20 +88,8 @@ def update_project(
     payload: ProjectUpdate,
     email: str = Query(..., min_length=1),
 ):
-    # Resolve user
-    email_lower = email.strip().lower()
-    user = db.query(UserModel).filter(UserModel.email == email_lower).first()
-    if not user:
-        raise HTTPException(status_code=403, detail="Not authorized to edit this project")
-
-    # Find existing project by id
-    obj = db.get(ProjectModel, project_id)
-    if not obj:
-        raise HTTPException(status_code=404, detail="Project not found")
-
     # Verify ownership
-    if obj.user_id != user.id:
-        raise HTTPException(status_code=403, detail="Not authorized to edit this project")
+    obj = verify_project_ownership(db, project_id, email, ProjectModel, UserModel)
 
     data = payload.model_dump(exclude_unset=True)
     if not data:
@@ -149,19 +124,7 @@ def delete_project_by_id(
     db: DbSessionDep,
     email: str = Query(..., min_length=1),
 ):
-    # Resolve user
-    email_lower = email.strip().lower()
-    user = db.query(UserModel).filter(UserModel.email == email_lower).first()
-    if not user:
-        raise HTTPException(status_code=403, detail="Not authorized to delete this project")
-
-    obj = db.get(ProjectModel, project_id)
-    if not obj:
-        raise HTTPException(status_code=404, detail="Project not found")
-
-    # Verify ownership
-    if obj.user_id != user.id:
-        raise HTTPException(status_code=403, detail="Not authorized to delete this project")
+    obj = verify_project_ownership(db, project_id, email, ProjectModel, UserModel)
 
     db.delete(obj)
     db.commit()

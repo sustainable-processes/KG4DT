@@ -32,3 +32,30 @@ def validate_uniqueness(
     
     if query.first():
         raise HTTPException(status_code=409, detail=error_message)
+
+def verify_project_ownership(
+    db: Session,
+    project_id: int,
+    email: str,
+    Project: Type[Any],
+    User: Type[Any],
+) -> Any:
+    """
+    Verifies that a user with the given email owns the project with project_id.
+    Raises 403 if user not found or doesn't own the project.
+    Raises 404 if project not found.
+    Returns the project object.
+    """
+    email_lower = email.strip().lower()
+    user = db.query(User).filter(User.email == email_lower).first()
+    if not user:
+        raise HTTPException(status_code=403, detail="Not authorized to access this project")
+
+    project = db.get(Project, project_id)
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    if project.user_id != user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to access this project")
+
+    return project
