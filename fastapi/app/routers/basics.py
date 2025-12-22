@@ -9,7 +9,7 @@ from .. import models as m
 from ..schemas.basics import BasicCreate, BasicRead, BasicUpdate
 from ..schemas.types import BasicMatterType, BasicUsage
 
-router = APIRouter(prefix="/api/v1/basics", tags=["v1: basics"])
+router = APIRouter()
 
 
 def _get_basic_or_404(db: DbSessionDep, basic_id: int) -> m.Basic:

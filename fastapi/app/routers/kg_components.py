@@ -8,9 +8,7 @@ from ..dependencies import DbSessionDep
 from .. import models as m
 
 
-router = APIRouter(prefix="/api/v1/kg_components", tags=["v1: kg_components"])
-# Non-versioned duplicate under /api/kg_components
-router_nv = APIRouter(prefix="/api/kg_components", tags=["kg_components"])
+router = APIRouter()
 
 
 @router.get("/{component_id:int}")
@@ -86,13 +84,3 @@ def get_translated_component(request: Request, name: str):
     return _translate_by_name(request, name)
 
 
-# -------- Non-versioned wrappers (/api/kg_components) --------
-
-@router_nv.get("/{component_id:int}")
-def get_component_translated_by_id_nv(component_id: int, db: DbSessionDep, request: Request):
-    return get_component_translated_by_id(component_id, db, request)
-
-
-@router_nv.get("/{name}")
-def get_translated_component_nv(request: Request, name: str):
-    return get_translated_component(request, name)

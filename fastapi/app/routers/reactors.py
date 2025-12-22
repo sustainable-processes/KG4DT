@@ -10,9 +10,7 @@ from .. import models as m
 from ..schemas.reactors import ReactorCreate, ReactorRead, ReactorUpdate
 from ..schemas.basics import BasicRead
 
-router = APIRouter(prefix="/api/v1/reactors", tags=["v1: reactors"])
-# Non-versioned duplicate under /api/reactors
-router_nv = APIRouter(prefix="/api/reactors", tags=["reactors"])
+router = APIRouter()
 
 
 def _get_reactor_or_404(db: DbSessionDep, reactor_id: int) -> m.Reactor:
@@ -100,11 +98,6 @@ def get_reactor(reactor_id: int, db: DbSessionDep):
     }
 
 
-# -------- Non-versioned wrappers (/api/reactors) --------
-
-@router_nv.get("/{reactor_id}", response_model=ReactorRead)
-def get_reactor_nv(reactor_id: int, db: DbSessionDep):
-    return get_reactor(reactor_id, db)
 
 
 @router.post("/", response_model=ReactorRead, status_code=201)
@@ -139,9 +132,6 @@ def create_reactor(payload: ReactorCreate, db: DbSessionDep):
     }
 
 
-@router_nv.post("/", response_model=ReactorRead, status_code=201)
-def create_reactor_nv(payload: ReactorCreate, db: DbSessionDep):
-    return create_reactor(payload, db)
 
 
 @router.patch("/{reactor_id}", response_model=ReactorRead)
@@ -217,9 +207,6 @@ def update_reactor(reactor_id: int, payload: ReactorUpdate, db: DbSessionDep):
     }
 
 
-@router_nv.patch("/{reactor_id}", response_model=ReactorRead)
-def update_reactor_nv(reactor_id: int, payload: ReactorUpdate, db: DbSessionDep):
-    return update_reactor(reactor_id, payload, db)
 
 
 @router.delete("/{reactor_id}", status_code=204)
@@ -230,9 +217,6 @@ def delete_reactor(reactor_id: int, db: DbSessionDep):
     return None
 
 
-@router_nv.delete("/{reactor_id}", status_code=204)
-def delete_reactor_nv(reactor_id: int, db: DbSessionDep):
-    return delete_reactor(reactor_id, db)
 
 
 # Junction management: reactors ↔ basics
@@ -250,9 +234,6 @@ def list_reactor_basics(reactor_id: int, db: DbSessionDep):
     return basics
 
 
-@router_nv.get("/{reactor_id}/basics", response_model=List[BasicRead])
-def list_reactor_basics_nv(reactor_id: int, db: DbSessionDep):
-    return list_reactor_basics(reactor_id, db)
 
 
 @router.post("/{reactor_id}/basics/{basic_id}", status_code=204)
@@ -267,9 +248,6 @@ def link_basic(reactor_id: int, basic_id: int, db: DbSessionDep):
     return None
 
 
-@router_nv.post("/{reactor_id}/basics/{basic_id}", status_code=204)
-def link_basic_nv(reactor_id: int, basic_id: int, db: DbSessionDep):
-    return link_basic(reactor_id, basic_id, db)
 
 
 @router.delete("/{reactor_id}/basics/{basic_id}", status_code=204)
@@ -285,6 +263,3 @@ def unlink_basic(reactor_id: int, basic_id: int, db: DbSessionDep):
     return None
 
 
-@router_nv.delete("/{reactor_id}/basics/{basic_id}", status_code=204)
-def unlink_basic_nv(reactor_id: int, basic_id: int, db: DbSessionDep):
-    return unlink_basic(reactor_id, basic_id, db)

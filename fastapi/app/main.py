@@ -57,23 +57,25 @@ app = FastAPI(
     debug=settings.debug,
     openapi_tags=[
         {"name": "health"},
+        {"name": "assembly"},
+        {"name": "assembly: projects"},
+        {"name": "assembly: reactors"},
+        {"name": "assembly: templates"},
+        {"name": "exploration"},
+        {"name": "calibration"},
+        {"name": "v1: assembly"},
+        {"name": "v1: assembly: projects"},
+        {"name": "v1: assembly: reactors"},
+        {"name": "v1: assembly: templates"},
+        {"name": "v1: exploration"},
+        {"name": "v1: calibration"},
         {"name": "v1: users"},
-        {"name": "v1: projects"},
-        {"name": "v1: models"},
-        {"name": "v1: reactors"},
         {"name": "v1: basics"},
         {"name": "v1: categories"},
-        {"name": "v1: assembly_templates"},
-        {"name": "v1: kg_components"},
         {"name": "v1: experiment_data"},
-        {"name": "assembly"},
-        # {"name": "assembly_templates"},  # removed non-v1 router
-        {"name": "exploration"},
+        {"name": "v1: models"},
         {"name": "info"},
-        {"name": "calibration"},
-        {"name": "validation"},
         {"name": "knowledge graph: model"},
-        {"name": "knowledge graph: species-roles"},
         {"name": "knowledge_graph"},
     ],
 )
@@ -116,13 +118,11 @@ async def root() -> dict:
 
 # Routers
 from .routers import health as health_router  # noqa: E402
-from .routers import kg_species_roles as species_roles_router  # noqa: E402
 from .routers import kg_model as model_router  # noqa: E402
 from .routers import exploration as exploration_router  # noqa: E402
 from .routers import info as info_router  # noqa: E402
 from .routers import calibration as calibration_router  # noqa: E402
 from .routers import assembly as assembly_router  # noqa: E402
-from .routers import validation as validation_router  # noqa: E402
 # v1 routers (plural snake_case schema)
 from .routers import users as v1_users_router  # noqa: E402
 from .routers import projects as v1_projects_router  # noqa: E402
@@ -135,56 +135,33 @@ from .routers import models as v1_models_router  # noqa: E402
 # translation tools
 from .routers import translation as v1_translation_router  # noqa: E402
 from .routers import kg_components as v1_kg_components_router  # noqa: E402
-# from .routers import assembly_templates as assembly_templates_router  # removed non-v1 router
+
+# Exploration and Calibration (versioned and unversioned)
+for prefix in ["/api/v1", "/api"]:
+    v = "v1: " if "v1" in prefix else ""
+    app.include_router(exploration_router.router, prefix=f"{prefix}/exploration", tags=[f"{v}exploration"])
+    app.include_router(calibration_router.router, prefix=f"{prefix}/calibration", tags=[f"{v}calibration"])
 
 app.include_router(health_router.router)
-app.include_router(species_roles_router.router)
 app.include_router(model_router.router)
-app.include_router(exploration_router.router)
 app.include_router(info_router.router)
-app.include_router(calibration_router.router)
-app.include_router(assembly_router.router)
-# app.include_router(assembly_templates_router.router)  # removed non-v1 router
-app.include_router(validation_router.router)
 
-# v1 endpoints
-app.include_router(v1_users_router.router)
-app.include_router(v1_projects_router.router)
-app.include_router(v1_reactors_router.router)
-app.include_router(v1_basics_router.router)
-app.include_router(v1_categories_router.router)
-app.include_router(v1_templates_router.router)
-app.include_router(v1_experiment_router.router)
-app.include_router(v1_models_router.router)
+# Assembly endpoints (versioned and unversioned)
+for prefix in ["/api/v1/assembly", "/api/assembly"]:
+    v = "v1: " if "v1" in prefix else ""
+    app.include_router(assembly_router.router, prefix=prefix, tags=[f"{v}assembly"])
+    app.include_router(v1_projects_router.router, prefix=f"{prefix}/projects", tags=[f"{v}assembly: projects"])
+    app.include_router(v1_reactors_router.router, prefix=f"{prefix}/reactors", tags=[f"{v}assembly: reactors"])
+    app.include_router(v1_templates_router.router, prefix=f"{prefix}/templates", tags=[f"{v}assembly: templates"])
+
+# Other endpoints with v1 and non-versioned duplicates
+for prefix in ["/api/v1", "/api"]:
+    app.include_router(v1_users_router.router, prefix=f"{prefix}/users", tags=["v1: users" if "v1" in prefix else "users"])
+    app.include_router(v1_basics_router.router, prefix=f"{prefix}/basics", tags=["v1: basics" if "v1" in prefix else "basics"])
+    app.include_router(v1_categories_router.router, prefix=f"{prefix}/categories", tags=["v1: categories" if "v1" in prefix else "categories"])
+    app.include_router(v1_experiment_router.router, prefix=f"{prefix}/experiment_data", tags=["v1: experiment_data" if "v1" in prefix else "experiment_data"])
+    app.include_router(v1_models_router.router, prefix=f"{prefix}/models", tags=["v1: models" if "v1" in prefix else "models"])
+    app.include_router(v1_kg_components_router.router, prefix=f"{prefix}/kg_components", tags=["v1: kg_components" if "v1" in prefix else "kg_components"])
+
+# translation tools
 app.include_router(v1_translation_router.router)
-app.include_router(v1_kg_components_router.router)
-
-# non-versioned duplicate endpoints under /api/*
-try:
-    app.include_router(v1_users_router.router_nv)
-except Exception:
-    pass
-try:
-    app.include_router(v1_projects_router.router_nv)
-except Exception:
-    pass
-try:
-    app.include_router(v1_reactors_router.router_nv)
-except Exception:
-    pass
-try:
-    app.include_router(v1_templates_router.router_nv)
-except Exception:
-    pass
-try:
-    app.include_router(v1_experiment_router.router_nv)
-except Exception:
-    pass
-try:
-    app.include_router(v1_models_router.router_nv)
-except Exception:
-    pass
-try:
-    app.include_router(v1_kg_components_router.router_nv)
-except Exception:
-    pass

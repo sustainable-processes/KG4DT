@@ -8,7 +8,7 @@ from ..dependencies import DbSessionDep
 from .. import models as m
 from ..schemas.categories import CategoryCreate, CategoryRead, CategoryUpdate
 
-router = APIRouter(prefix="/api/v1/categories", tags=["v1: categories"])
+router = APIRouter()
 
 
 def _get_or_404(db: DbSessionDep, category_id: int) -> m.Category:

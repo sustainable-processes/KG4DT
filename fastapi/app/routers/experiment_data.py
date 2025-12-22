@@ -12,9 +12,7 @@ from ..schemas.experiment_data import (
     ExperimentDataUpdate,
 )
 
-router = APIRouter(prefix="/api/v1/experiment-data", tags=["v1: experiment_data"])
-# Non-versioned duplicate under /api/experiment_data
-router_nv = APIRouter(prefix="/api/experiment_data", tags=["experiment_data"])
+router = APIRouter()
 
 
 def _get_or_404(db: DbSessionDep, exp_id: int) -> m.ExperimentData:
@@ -29,9 +27,6 @@ def list_experiment_data(db: DbSessionDep):
     return db.query(m.ExperimentData).order_by(m.ExperimentData.id.desc()).all()
 
 
-@router_nv.get("/", response_model=List[ExperimentDataRead])
-def list_experiment_data_nv(db: DbSessionDep):
-    return list_experiment_data(db)
 
 
 @router.get("/{exp_id}", response_model=ExperimentDataRead)
@@ -39,9 +34,6 @@ def get_experiment(exp_id: int, db: DbSessionDep):
     return _get_or_404(db, exp_id)
 
 
-@router_nv.get("/{exp_id}", response_model=ExperimentDataRead)
-def get_experiment_nv(exp_id: int, db: DbSessionDep):
-    return get_experiment(exp_id, db)
 
 
 @router.post("/", response_model=ExperimentDataRead, status_code=201)
@@ -56,9 +48,6 @@ def create_experiment(payload: ExperimentDataCreate, db: DbSessionDep):
     return obj
 
 
-@router_nv.post("/", response_model=ExperimentDataRead, status_code=201)
-def create_experiment_nv(payload: ExperimentDataCreate, db: DbSessionDep):
-    return create_experiment(payload, db)
 
 
 @router.patch("/{exp_id}", response_model=ExperimentDataRead)
@@ -73,9 +62,6 @@ def update_experiment(exp_id: int, payload: ExperimentDataUpdate, db: DbSessionD
     return obj
 
 
-@router_nv.patch("/{exp_id}", response_model=ExperimentDataRead)
-def update_experiment_nv(exp_id: int, payload: ExperimentDataUpdate, db: DbSessionDep):
-    return update_experiment(exp_id, payload, db)
 
 
 @router.delete("/{exp_id}", status_code=204)
@@ -86,6 +72,3 @@ def delete_experiment(exp_id: int, db: DbSessionDep):
     return None
 
 
-@router_nv.delete("/{exp_id}", status_code=204)
-def delete_experiment_nv(exp_id: int, db: DbSessionDep):
-    return delete_experiment(exp_id, db)

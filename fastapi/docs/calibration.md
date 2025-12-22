@@ -1,37 +1,38 @@
 Calibration and Knowledge Graph APIs (FastAPI)
 
 Base path
-- /api/model
+- /api/calibration
+- /api/v1/calibration
 
 Summary
 - This router ports selected endpoints from Flask router_calibration_api.py to FastAPI.
 - Endpoints that require complex simulation/calibration agents are provided as POST-only with 501 Not Implemented until those agents are migrated.
 
 Endpoints
-1) GET /api/model/law
+1) GET /api/calibration/law
 - Returns law metadata from GraphDB.
 - Example:
-  curl http://localhost:8001/api/model/law
+  curl http://localhost:8001/api/calibration/law
 
-2) POST /api/model/sym
+2) POST /api/calibration/sym
 - Resolve symbols for one or more Unit individuals.
 - Body examples:
   {"unit": "Pa"}
   {"units": ["Pa", "m", "s"]}
 - Example:
-  curl -X POST http://localhost:8001/api/model/sym \
+  curl -X POST http://localhost:8001/api/calibration/sym \
     -H "Content-Type: application/json" \
     -d '{"units":["Pa","m","s"]}'
 
-3) GET /api/knowledge_graph/triplets
+3) GET /api/calibration/triplets
 - Returns a minimal triplets representation built from variables and laws.
 - Example:
-  curl http://localhost:8001/api/knowledge_graph/triplets
+  curl http://localhost:8001/api/calibration/triplets
 
-4) POST /api/model/op_param
+4) POST /api/calibration/op_param
 - Derive candidate operation parameters for the given modeling context. Send JSON in the body.
 - Example:
-  curl -X POST http://localhost:8001/api/model/op_param \
+  curl -X POST http://localhost:8001/api/calibration/op_param \
     -H "Content-Type: application/json" \
     -d '{
   "basic": {
@@ -78,7 +79,7 @@ Endpoints
   }
 }'
 
-5) POST /api/model/simulate
+5) POST /api/calibration/simulate
 - Run a lightweight deterministic table simulation. Accepts JSON body with 'context' and 'op_params'.
 - Input shape:
   {
@@ -97,17 +98,17 @@ Endpoints
     "count": 3
   }
 - Example:
-  curl -X POST http://localhost:8001/api/model/simulate \
+  curl -X POST http://localhost:8001/api/calibration/simulate \
     -H "Content-Type: application/json" \
     -d '{
       "context": {"desc": {"fp": "Well_Mixed"}},
       "op_params": {"ind": [["Stirring_Speed", null, null, null, null]], "val": [[300],[450],[600]]}
     }'
 
-6) POST /api/model/cal_param
+6) POST /api/calibration/calibrate_param
 - Placeholder (501). Expects JSON body. Depends on GraphDB query_cal_param migration.
 
-7) POST /api/model/calibrate
+7) POST /api/calibration/calibrate
 - Placeholder (501). Expects JSON body. Depends on ModelCalibrationAgent migration.
 
 Configuration

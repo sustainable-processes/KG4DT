@@ -22,9 +22,7 @@ from ..utils.graphdb_assembly_utils import (
     query_context_template,
 )
 
-router = APIRouter(prefix="/api/v1/assembly_templates", tags=["v1: assembly_templates"])
-# Non-versioned duplicate under /api/assembly_templates
-router_nv = APIRouter(prefix="/api/assembly_templates", tags=["assembly_templates"])
+router = APIRouter()
 
 
 def _get_or_404(db: DbSessionDep, template_id: int) -> m.Template:
@@ -119,9 +117,6 @@ def list_templates(db: DbSessionDep, request: Request):
     }
 
 
-@router_nv.get("/", response_model=AssemblyTemplatesResponse)
-def list_templates_nv(db: DbSessionDep, request: Request):
-    return list_templates(db, request)
 
 
 def _get_by_category_and_reactor_or_404(db: DbSessionDep, category_name: str, reactor_id: int) -> m.Template:
@@ -159,9 +154,6 @@ def create_template(payload: TemplateCreate, db: DbSessionDep):
     return obj
 
 
-@router_nv.post("/", response_model=TemplateRead, status_code=201)
-def create_template_nv(payload: TemplateCreate, db: DbSessionDep):
-    return create_template(payload, db)
 
 
 @router.patch("/{category_name}/{reactor_id}", response_model=TemplateRead)
@@ -186,9 +178,6 @@ def update_template(category_name: str, reactor_id: int, payload: TemplateUpdate
     return obj
 
 
-@router_nv.patch("/{category_name}/{reactor_id}", response_model=TemplateRead)
-def update_template_nv(category_name: str, reactor_id: int, payload: TemplateUpdate, db: DbSessionDep):
-    return update_template(category_name, reactor_id, payload, db)
 
 
 @router.delete("/{category_name}/{reactor_id}", status_code=204)
@@ -199,6 +188,3 @@ def delete_template(category_name: str, reactor_id: int, db: DbSessionDep):
     return None
 
 
-@router_nv.delete("/{category_name}/{reactor_id}", status_code=204)
-def delete_template_nv(category_name: str, reactor_id: int, db: DbSessionDep):
-    return delete_template(category_name, reactor_id, db)
