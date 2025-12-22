@@ -11,6 +11,7 @@ from ..schemas.experiment_data import (
     ExperimentDataRead,
     ExperimentDataUpdate,
 )
+from ..utils.db import apply_updates
 
 router = APIRouter()
 
@@ -54,8 +55,7 @@ def create_experiment(payload: ExperimentDataCreate, db: DbSessionDep):
 def update_experiment(exp_id: int, payload: ExperimentDataUpdate, db: DbSessionDep):
     obj = _get_or_404(db, exp_id)
     data = payload.model_dump(exclude_unset=True)
-    for k, v in data.items():
-        setattr(obj, k, v)
+    apply_updates(obj, data)
     db.add(obj)
     db.commit()
     db.refresh(obj)

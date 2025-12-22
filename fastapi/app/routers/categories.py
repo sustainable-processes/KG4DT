@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException
 from ..dependencies import DbSessionDep
 from .. import models as m
 from ..schemas.categories import CategoryCreate, CategoryRead, CategoryUpdate
+from ..utils.db import apply_updates, validate_uniqueness
 
 router = APIRouter()
 
@@ -30,9 +31,7 @@ def get_category(category_id: int, db: DbSessionDep):
 
 @router.post("/", response_model=CategoryRead, status_code=201)
 def create_category(payload: CategoryCreate, db: DbSessionDep):
-    exists = db.query(m.Category).filter(m.Category.name.ilike(payload.name)).first()
-    if exists:
-        raise HTTPException(status_code=409, detail="Category name already exists")
+    validate_uniqueness(db, m.Category, [m.Category.name.ilike(payload.name)], error_message="Category name already exists")
     obj = m.Category(name=payload.name)
     db.add(obj)
     db.commit()
@@ -44,17 +43,11 @@ def create_category(payload: CategoryCreate, db: DbSessionDep):
 def update_category(category_id: int, payload: CategoryUpdate, db: DbSessionDep):
     obj = _get_or_404(db, category_id)
     data = payload.model_dump(exclude_unset=True)
+
     if "name" in data and data["name"] != obj.name:
-        exists = (
-            db.query(m.Category)
-            .filter(m.Category.name.ilike(data["name"]))
-            .filter(m.Category.id != obj.id)
-            .first()
-        )
-        if exists:
-            raise HTTPException(status_code=409, detail="Category name already exists")
-    for k, v in data.items():
-        setattr(obj, k, v)
+        validate_uniqueness(db, m.Category, [m.Category.name.ilike(data["name"])], exclude_id=obj.id, error_message="Category name already exists")
+
+    apply_updates(obj, data)
     db.add(obj)
     db.commit()
     db.refresh(obj)

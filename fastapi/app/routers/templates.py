@@ -21,6 +21,7 @@ from ..utils.graphdb_assembly_utils import (
     list_context_template_names,
     query_context_template,
 )
+from ..utils.db import apply_updates, validate_uniqueness
 
 router = APIRouter()
 
@@ -140,13 +141,12 @@ def _get_by_category_and_reactor_or_404(db: DbSessionDep, category_name: str, re
 @router.post("/", response_model=TemplateRead, status_code=201)
 def create_template(payload: TemplateCreate, db: DbSessionDep):
     # Unique per (category_id, reactor_id)
-    exists = (
-        db.query(m.Template)
-        .filter(m.Template.category_id == payload.category_id, m.Template.reactor_id == payload.reactor_id)
-        .first()
+    validate_uniqueness(
+        db,
+        m.Template,
+        [m.Template.category_id == payload.category_id, m.Template.reactor_id == payload.reactor_id],
+        error_message="Template already exists for this category/reactor"
     )
-    if exists:
-        raise HTTPException(status_code=409, detail="Template already exists for this category/reactor")
     obj = m.Template(category_id=payload.category_id, reactor_id=payload.reactor_id)
     db.add(obj)
     db.commit()
@@ -160,18 +160,19 @@ def create_template(payload: TemplateCreate, db: DbSessionDep):
 def update_template(category_name: str, reactor_id: int, payload: TemplateUpdate, db: DbSessionDep):
     obj = _get_by_category_and_reactor_or_404(db, category_name, reactor_id)
     data = payload.model_dump(exclude_unset=True)
+
     if "category_id" in data or "reactor_id" in data:
         cat_id = data.get("category_id", obj.category_id)
         reac_id = data.get("reactor_id", obj.reactor_id)
-        exists = (
-            db.query(m.Template)
-            .filter(m.Template.category_id == cat_id, m.Template.reactor_id == reac_id, m.Template.id != obj.id)
-            .first()
+        validate_uniqueness(
+            db,
+            m.Template,
+            [m.Template.category_id == cat_id, m.Template.reactor_id == reac_id],
+            exclude_id=obj.id,
+            error_message="Template already exists for this category/reactor"
         )
-        if exists:
-            raise HTTPException(status_code=409, detail="Template already exists for this category/reactor")
-    for k, v in data.items():
-        setattr(obj, k, v)
+
+    apply_updates(obj, data)
     db.add(obj)
     db.commit()
     db.refresh(obj)

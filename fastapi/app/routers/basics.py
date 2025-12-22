@@ -8,6 +8,7 @@ from ..dependencies import DbSessionDep
 from .. import models as m
 from ..schemas.basics import BasicCreate, BasicRead, BasicUpdate
 from ..schemas.types import BasicMatterType, BasicUsage
+from ..utils.db import apply_updates
 
 router = APIRouter()
 
@@ -65,13 +66,13 @@ def create_basic(payload: BasicCreate, db: DbSessionDep):
 def update_basic(basic_id: int, payload: BasicUpdate, db: DbSessionDep):
     obj = _get_basic_or_404(db, basic_id)
     data = payload.model_dump(exclude_unset=True)
-    # Convert enums to str values
+    # Convert enums to str values if present
     if "type" in data and data["type"] is not None:
         data["type"] = data["type"].value
     if "usage" in data and data["usage"] is not None:
         data["usage"] = data["usage"].value
-    for k, v in data.items():
-        setattr(obj, k, v)
+
+    apply_updates(obj, data)
     db.add(obj)
     db.commit()
     db.refresh(obj)

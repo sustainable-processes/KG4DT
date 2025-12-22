@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException, Query
 from ..dependencies import DbSessionDep
 from .. import models as m
 from ..schemas.models import ModelCreate, ModelRead, ModelUpdate, ModelListItem
+from ..utils.db import apply_updates
 
 router = APIRouter()
 
@@ -73,8 +74,7 @@ def create_model(payload: ModelCreate, db: DbSessionDep):
 def update_model(model_id: int, payload: ModelUpdate, db: DbSessionDep):
     obj = _get_or_404(db, model_id)
     data = payload.model_dump(exclude_unset=True)
-    for k, v in data.items():
-        setattr(obj, k, v)
+    apply_updates(obj, data)
     db.add(obj)
     db.commit()
     db.refresh(obj)

@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from ..dependencies import DbSessionDep
 from ..models import User as UserModel
 from ..schemas.users import UserCreate, UserRead, UserUpdate
+from ..utils.db import apply_updates, validate_uniqueness
 
 router = APIRouter()
 
@@ -28,12 +29,9 @@ def get_user(user_id: int, db: DbSessionDep):
 @router.post("/", response_model=UserRead, status_code=201)
 def create_user(payload: UserCreate, db: DbSessionDep):
     # Basic uniqueness check (DB also enforces)
-    exists = db.query(UserModel).filter(UserModel.username == payload.username).first()
-    if exists:
-        raise HTTPException(status_code=409, detail="Username already exists")
-    exists = db.query(UserModel).filter(UserModel.email == payload.email).first()
-    if exists:
-        raise HTTPException(status_code=409, detail="Email already exists")
+    validate_uniqueness(db, UserModel, [UserModel.username == payload.username], error_message="Username already exists")
+    validate_uniqueness(db, UserModel, [UserModel.email == payload.email], error_message="Email already exists")
+
     obj = UserModel(username=payload.username, email=payload.email)
     db.add(obj)
     db.commit()
@@ -47,16 +45,13 @@ def update_user(user_id: int, payload: UserUpdate, db: DbSessionDep):
     if not obj:
         raise HTTPException(status_code=404, detail="User not found")
     data = payload.model_dump(exclude_unset=True)
+
     if "username" in data and data["username"] != obj.username:
-        exists = db.query(UserModel).filter(UserModel.username == data["username"]).first()
-        if exists:
-            raise HTTPException(status_code=409, detail="Username already exists")
+        validate_uniqueness(db, UserModel, [UserModel.username == data["username"]], exclude_id=obj.id, error_message="Username already exists")
     if "email" in data and data["email"] != obj.email:
-        exists = db.query(UserModel).filter(UserModel.email == data["email"]).first()
-        if exists:
-            raise HTTPException(status_code=409, detail="Email already exists")
-    for k, v in data.items():
-        setattr(obj, k, v)
+        validate_uniqueness(db, UserModel, [UserModel.email == data["email"]], exclude_id=obj.id, error_message="Email already exists")
+
+    apply_updates(obj, data)
     db.add(obj)
     db.commit()
     db.refresh(obj)

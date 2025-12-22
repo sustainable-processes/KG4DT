@@ -9,6 +9,7 @@ from ..dependencies import DbSessionDep
 from .. import models as m
 from ..schemas.reactors import ReactorCreate, ReactorRead, ReactorUpdate
 from ..schemas.basics import BasicRead
+from ..utils.db import apply_updates
 
 router = APIRouter()
 
@@ -138,11 +139,12 @@ def create_reactor(payload: ReactorCreate, db: DbSessionDep):
 def update_reactor(reactor_id: int, payload: ReactorUpdate, db: DbSessionDep):
     obj = _get_reactor_or_404(db, reactor_id)
     data = payload.model_dump(exclude_unset=True)
-    # Update reactor block directly if provided
-    if "reactor" in data:
-        obj.reactor = data.pop("reactor") or {}
-    for k, v in data.items():
-        setattr(obj, k, v)
+
+    # Special handling for reactor block to ensure it's not None
+    if "reactor" in data and data["reactor"] is None:
+        data["reactor"] = {}
+
+    apply_updates(obj, data)
     db.add(obj)
     db.commit()
     db.refresh(obj)
