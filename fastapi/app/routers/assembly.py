@@ -21,6 +21,12 @@ class ValidateSpeciesResponse(BaseModel):
     species_id: List[str]
 
 
+class SpeciesRolesResponse(BaseModel):
+    species_roles: List[str]
+    count: int
+    source: str = "kg"
+
+
 _LEADING_COEFF_RE = re.compile(r"^\s*(?:\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)\s*")
 
 
@@ -42,13 +48,13 @@ def _normalize_token(token: str) -> str | None:
     return s
 
 
-@router.get("/species_roles")
+@router.get("/species_roles", response_model=SpeciesRolesResponse)
 async def list_species_roles(
     request: Request,
     limit: Optional[int] = Query(None, ge=0, le=500),
     offset: int = Query(0, ge=0),
     order_dir: str = Query("asc")
-) -> dict:
+) -> SpeciesRolesResponse:
     """List SpeciesRole names from the knowledge graph (GraphDB)."""
     client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
     if not client:
@@ -66,12 +72,14 @@ async def list_species_roles(
     if order_dir == "desc":
         roles_sorted = list(reversed(roles_sorted))
 
+    total_count = len(roles_sorted)
+
     if offset:
         roles_sorted = roles_sorted[offset:]
     if limit is not None:
         roles_sorted = roles_sorted[:limit]
 
-    return {"species_roles": roles_sorted, "count": len(roles_sorted), "source": "kg"}
+    return SpeciesRolesResponse(species_roles=roles_sorted, count=total_count, source="kg")
 
 
 @router.post("/validate_species/", response_model=ValidateSpeciesResponse)

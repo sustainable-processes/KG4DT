@@ -61,6 +61,7 @@ app = FastAPI(
         {"name": "assembly: projects"},
         {"name": "assembly: reactors"},
         {"name": "assembly: templates"},
+        {"name": "assembly: kg_components"},
         {"name": "exploration"},
         {"name": "calibration"},
         {"name": "v1: assembly"},
@@ -74,6 +75,7 @@ app = FastAPI(
         {"name": "v1: categories"},
         {"name": "v1: experiment_data"},
         {"name": "v1: models"},
+        {"name": "v1: kg_components"},
         {"name": "info"},
         {"name": "knowledge graph: model"},
         {"name": "knowledge_graph"},
@@ -161,7 +163,11 @@ for prefix in ["/api/v1", "/api"]:
     app.include_router(v1_categories_router.router, prefix=f"{prefix}/categories", tags=["v1: categories" if "v1" in prefix else "categories"])
     app.include_router(v1_experiment_router.router, prefix=f"{prefix}/experiment_data", tags=["v1: experiment_data" if "v1" in prefix else "experiment_data"])
     app.include_router(v1_models_router.router, prefix=f"{prefix}/models", tags=["v1: models" if "v1" in prefix else "models"])
-    app.include_router(v1_kg_components_router.router, prefix=f"{prefix}/kg_components", tags=["v1: kg_components" if "v1" in prefix else "kg_components"])
+    
+    if prefix == "/api/v1":
+        app.include_router(v1_kg_components_router.router, prefix=f"{prefix}/kg_components", tags=["v1: kg_components"])
+    else:
+        app.include_router(v1_kg_components_router.router, prefix=f"{prefix}/assembly/kg_components", tags=["assembly: kg_components"])
 
 # translation tools
 app.include_router(v1_translation_router.router)

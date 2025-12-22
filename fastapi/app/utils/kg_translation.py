@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict
+from ..schemas.translation import FrontendComponent
 
 
 def translate_descriptor_section(section: Dict[str, Any] | None) -> Dict[str, Any]:
@@ -25,7 +26,7 @@ def translate_descriptor_section(section: Dict[str, Any] | None) -> Dict[str, An
     return result
 
 
-def build_frontend_from_kg_context(ctx_name: str, ctx_data: Dict[str, Any]) -> Dict[str, Any]:
+def build_frontend_from_kg_context(ctx_name: str, ctx_data: Dict[str, Any]) -> Dict[str, FrontendComponent]:
     """Build the frontend JSON for a single KG context entry.
 
     Output shape:
@@ -44,15 +45,10 @@ def build_frontend_from_kg_context(ctx_name: str, ctx_data: Dict[str, Any]) -> D
     structure = translate_descriptor_section(ctx_data.get("st"))
     operation = translate_descriptor_section(ctx_data.get("op"))
 
-    entry = {
-        "source": [],
-        "utility": [],
-        "chemistry": {},
-        "operation": operation,
-        "structure": structure,
-        "phenomenon": {},
-        "destination": [],
-    }
+    entry = FrontendComponent(
+        operation=operation,
+        structure=structure
+    )
     return {ctx_name: entry}
 
 
