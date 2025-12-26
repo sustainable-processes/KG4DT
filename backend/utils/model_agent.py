@@ -286,8 +286,13 @@ class ModelAgent:
                     raise ValueError(f"Invalid dimensions for mass equilibrium parameter {p}: {dims}")
 
         # Stoichiometric coefficient
-        rxns = set([d["stoich"] for d in self.context["chemistry"]["reactions"] if d["stoich"]] + \
-            [r for d in self.context["chemistry"]["reactions"] if not d["stoich"] for r in d["elementary"]])
+        rxns = []
+        for rxn_dict in self.context["chemistry"]["reactions"]:
+            if rxn_dict["elementary"]:
+                rxns.extend(rxn_dict["elementary"])
+            else:
+                rxns.append(rxn_dict["stoich"])
+        rxns = list(set(rxns))
         for r in rxns:
             lhs_r = r.split(" > ")[0]
             rhs_r = r.split(" > ")[1]
@@ -790,6 +795,7 @@ class ModelAgent:
                 rxns.extend(rxn_dict["elementary"])
             else:
                 rxns.append(rxn_dict["stoich"])
+        rxns = list(set(rxns))
         stms = []
         stm2spcs = {}
         for src in reactor_dict["source"]:
@@ -1307,9 +1313,9 @@ class ModelAgent:
             dims = self.entity["var"][var]["dims"]
             dims = sorted(dims, key=lambda d: self.dim2pos[d])
             if set(dims) == set(["Gas", "Stream", "Species"]):
-                pha_dim, phas = "gas", gass
+                pha_dim, phas = "Gas", gass
             elif set(dims) == set(["Solid", "Stream", "Species"]):
-                pha_dim, phas = "sld", slds
+                pha_dim, phas = "Solid", slds
             else:
                 raise ValueError(f"Invalid dimensions for mass equilibrium parameter {var}: {dims}")
             model.add(f"{sym} = np.zeros({len(phas), nstm, nspc}, dtype=np.float64)", 2)
@@ -1320,9 +1326,9 @@ class ModelAgent:
                 head = f"calc_{pheno}_term({', '.join(syms)})"
                 fml = head
                 for pha in phas:
-                    if pha_dim == "gas":
+                    if pha_dim == "Gas":
                         me_spcs = gas2spcs[pha]
-                    if pha_dim == "sld":
+                    if pha_dim == "Solid":
                         me_spcs = sld2spcs[pha]
                     prod = itertools.product([pha], stms, me_spcs)
                     for pha, stm, spc in prod:
@@ -1338,9 +1344,9 @@ class ModelAgent:
                         model.add(f"{ind_sym} = {ind_fml}", 2)
             else:
                 for pha in phas:
-                    if pha_dim == "gas":
+                    if pha_dim == "Gas":
                         me_spcs = gas2spcs[pha]
-                    if pha_dim == "sld":
+                    if pha_dim == "Solid":
                         me_spcs = sld2spcs[pha]
                     prod = itertools.product([pha], stms, me_spcs)
                     for pha, stm, spc in prod:
@@ -1367,11 +1373,11 @@ class ModelAgent:
             dims = self.entity["var"][var]["dims"]
             dims = sorted(dims, key=lambda d: self.dim2pos[d])
             if set(dims) == set(["Stream", "Species"]):
-                pha_dim, pha_dim_short, phas = None, None, None
+                pha_dim, phas = None, None
             elif set(dims) == set(["Gas", "Stream", "Species"]):
-                pha_dim, pha_dim_short, phas = "Gas", "gas", gass
+                pha_dim, phas = "Gas", gass
             elif set(dims) == set(["Solid", "Stream", "Species"]):
-                pha_dim, pha_dim_short, phas = "Solid", "sld", slds
+                pha_dim, phas = "Solid", slds
             else:
                 msg = f"Invalid dimensions for mass transport parameter {var}: {dims}"
                 return False, msg
@@ -1387,9 +1393,9 @@ class ModelAgent:
                 model.add(f"{sym} = np.zeros({len(phas), nstm, nspc}, dtype=np.float64)", 2)
                 fml = MMLExpression(self.entity["law"][law]["fml"]).to_numpy()
                 for pha in phas:
-                    if pha_dim == "gas":
+                    if pha_dim == "Gas":
                         me_spcs = gas2spcs[pha]
-                    if pha_dim == "sld":
+                    if pha_dim == "Solid":
                         me_spcs = sld2spcs[pha]
                     prod = itertools.product([pha], stms, me_spcs)
                     for pha, stm, spc in prod:
