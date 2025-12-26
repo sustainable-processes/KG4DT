@@ -408,10 +408,7 @@ def api_model_simulate():
         if not isinstance(payload, dict):
             return jsonify({"error": "Invalid JSON body; expected an object."}), 400
 
-        context = payload.get("context")
         op_params = payload.get("op_params")
-        if not isinstance(context, dict):
-            return jsonify({"error": "Field 'context' is required and must be an object."}), 400
         if not isinstance(op_params, dict):
             return jsonify({"error": "Field 'op_params' is required and must be an object."}), 400
 
@@ -420,14 +417,9 @@ def api_model_simulate():
         if isinstance(norm_op, tuple):  # (error_json, status)
             return norm_op
 
-        sim_req = {
-            "context": context,
-            "op_params": norm_op,
-        }
-
         # Run simulation
         entity = g.graphdb_handler.query()
-        sim_agent = ModelSimulationAgent(entity, sim_req)
+        sim_agent = ModelSimulationAgent(entity, payload)
         sim_res = sim_agent.simulate_scipy()
 
         return jsonify(sim_res), 200

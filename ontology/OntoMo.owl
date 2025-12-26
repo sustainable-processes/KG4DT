@@ -480,6 +480,14 @@
     
 
 
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ProcessStreamContext -->
+
+    <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ProcessStreamContext">
+        <rdfs:subClassOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Context"/>
+    </owl:Class>
+    
+
+
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#RateVariable -->
 
     <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#RateVariable">
@@ -500,6 +508,14 @@
 
     <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ReactionPhenomenon">
         <rdfs:subClassOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Phenomenon"/>
+    </owl:Class>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ReactorContext -->
+
+    <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ReactorContext">
+        <rdfs:subClassOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Context"/>
     </owl:Class>
     
 
@@ -570,6 +586,14 @@
     
 
 
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#UtilityContext -->
+
+    <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#UtilityContext">
+        <rdfs:subClassOf rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Context"/>
+    </owl:Class>
+    
+
+
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Variable -->
 
     <owl:Class rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Variable">
@@ -618,17 +642,6 @@
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Annular_Microflow">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#FlowPattern"/>
         <relatesToMassTransportPhenomenon rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Engulfment"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Area -->
-
-    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Area">
-        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#StructureDescriptor"/>
-        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#StructureParameter"/>
-        <hasUnit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#m.m"/>
-        <hasSymbol>&lt;math&gt;&lt;mrow&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;/mrow&gt;&lt;/math&gt;</hasSymbol>
     </owl:NamedIndividual>
     
 
@@ -704,6 +717,14 @@
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#OperationParameter"/>
         <hasUnit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#min"/>
         <hasSymbol rdf:parseType="Literal"><math><mrow><msub><mi>t</mi><mtext>b</mtext></msub></mrow></math></hasSymbol>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Byproduct -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Byproduct">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#SpeciesRole"/>
     </owl:NamedIndividual>
     
 
@@ -855,7 +876,7 @@
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Cooling_Stream_Context -->
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Cooling_Stream_Context">
-        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Context"/>
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#UtilityContext"/>
         <hasOperationSection rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Cooling_Stream_Context_Operation_Context"/>
         <hasStructureSection rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Cooling_Stream_Context_Structure_Section"/>
     </owl:NamedIndividual>
@@ -866,7 +887,9 @@
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Cooling_Stream_Context_Operation_Context">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ContextSection"/>
+        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Flow_Rate"/>
         <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Medium"/>
+        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Temperature"/>
     </owl:NamedIndividual>
     
 
@@ -875,7 +898,7 @@
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Cooling_Stream_Context_Structure_Section">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ContextSection"/>
-        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Area"/>
+        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Heat_Transfer_Area"/>
     </owl:NamedIndividual>
     
 
@@ -980,7 +1003,7 @@
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#FedBatch_Reactor_Context -->
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#FedBatch_Reactor_Context">
-        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Context"/>
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ReactorContext"/>
         <hasOperationSection rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#FedBatch_Reactor_Context_Operation_Section"/>
         <hasPhenomenon rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Batch"/>
         <hasStructureSection rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#FedBatch_Reactor_Context_Structure_Section"/>
@@ -993,6 +1016,7 @@
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#FedBatch_Reactor_Context_Operation_Section">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ContextSection"/>
         <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Agitation"/>
+        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Has_Liquid_Input"/>
         <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Has_Solid_Input"/>
         <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Pressure"/>
         <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Temperature"/>
@@ -1177,36 +1201,6 @@
     
 
 
-    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Context -->
-
-    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Context">
-        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Context"/>
-        <hasOperationSection rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Context_Operation_Section"/>
-        <hasStructureSection rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Context_Structure_Section"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Context_Operation_Section -->
-
-    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Context_Operation_Section">
-        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ContextSection"/>
-        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Flow_Rate_Gas"/>
-        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Pressure"/>
-        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Temperature"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Context_Structure_Section -->
-
-    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Context_Structure_Section">
-        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ContextSection"/>
-        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Radius"/>
-    </owl:NamedIndividual>
-    
-
-
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dimension -->
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Dimension">
@@ -1267,6 +1261,45 @@
     
 
 
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Flow_Context -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Flow_Context">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ProcessStreamContext"/>
+        <hasOperationSection rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Flow_Context_Operation_Section"/>
+        <hasStructureSection rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Flow_Context_Structure_Section"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Flow_Context_Operation_Section -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Flow_Context_Operation_Section">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ContextSection"/>
+        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Flow_Rate_Gas"/>
+        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Pressure"/>
+        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Temperature"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Flow_Context_Structure_Section -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Gas_Flow_Context_Structure_Section">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ContextSection"/>
+        <hasDescriptor rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Radius"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Has_Liquid_Input -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Has_Liquid_Input">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#InformationDescriptor"/>
+        <hasDefaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasDefaultValue>
+    </owl:NamedIndividual>
+    
+
+
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Has_Solid_Input -->
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Has_Solid_Input">
@@ -1282,6 +1315,17 @@
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#OperationParameter"/>
         <hasUnit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#cubic_m"/>
         <hasSymbol rdf:parseType="Literal"><math><mrow><msub><mi>V</mi><mtext>H</mtext></msub></mrow></math></hasSymbol>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Heat_Transfer_Area -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Heat_Transfer_Area">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#StructureDescriptor"/>
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#StructureParameter"/>
+        <hasUnit rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#m.m"/>
+        <hasSymbol>&lt;math&gt;&lt;mrow&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;/mrow&gt;&lt;/math&gt;</hasSymbol>
     </owl:NamedIndividual>
     
 
@@ -1336,6 +1380,14 @@
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Instantaneous">
         <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ReactionPhenomenon"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Intermediate -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Intermediate">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#SpeciesRole"/>
     </owl:NamedIndividual>
     
 
@@ -1809,6 +1861,14 @@
     
 
 
+    <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Product -->
+
+    <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Product">
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#SpeciesRole"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#PubChem -->
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#PubChem">
@@ -2101,7 +2161,7 @@
     <!-- https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Stream_Context -->
 
     <owl:NamedIndividual rdf:about="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Stream_Context">
-        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Context"/>
+        <rdf:type rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#ProcessStreamContext"/>
         <hasOperationSection rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Stream_Context_Operation_Section"/>
         <hasStructureSection rdf:resource="https://raw.githubusercontent.com/sustainable-processes/KG4DT/refs/heads/dev-alkyne-hydrogenation/ontology/OntoMo.owl#Stream_Context_Structure_Section"/>
     </owl:NamedIndividual>

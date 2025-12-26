@@ -59,6 +59,13 @@ class Config:
         "InformationDescriptor",
     ]
 
+    # Context template
+    TEMPLATE_CLASSES = [
+        "Reactor",
+        "Utility",
+        "ProcessStream",
+    ]
+
 
 class DebugConfig(Config):
     DEBUG = True

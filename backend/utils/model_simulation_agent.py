@@ -18,7 +18,7 @@ class ModelSimulationAgent:
     def __init__(self, entity, request):
         self.entity = entity
         self.request = request
-        self.model_agent = ModelAgent(entity, request["context"])
+        self.model_agent = ModelAgent(entity, request)
 
     def simulate_scipy(self):
         """Generate and run simulation for data.
@@ -31,7 +31,7 @@ class ModelSimulationAgent:
         for vals in self.request["op_params"]["val"]:
             op_param_dict = {}
             for op_param_ind, val in zip(self.request["op_params"]["ind"], vals):
-                op_param_dict[op_param_ind] = val
+                op_param_dict[tuple(op_param_ind)] = val
             op_param_dicts.append(op_param_dict)
 
         model_str = self.model_agent.to_scipy_model()

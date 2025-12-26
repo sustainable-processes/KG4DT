@@ -26,6 +26,7 @@ class GraphdbHandler:
         self.var_classes =                  config.MODEL_VARIABLE_CLASSES
         self.desc_classes =                 config.DESCRIPTOR_CLASSES
         self.pheno_classes =                config.PHENOMENON_CLASSES
+        self.template_classes =             config.TEMPLATE_CLASSES
 
         self.conn = pygraphdb.connect(self.host, self.port, self.user, self.password, self.db)
         self.cur = self.conn.cursor()
@@ -447,30 +448,32 @@ class GraphdbHandler:
         """
         context_template_dict = {}
         
-        sparql = (
-            f"{self.prefix}"
-            "select ?c ?p ?ss ?os where {"
-            "?c rdf:type ontomo:Context. "
-            "optional{{?c ontomo:hasPhenomenon ?p. }}"
-            "optional{{?c ontomo:hasStructureSection ?ss. }}"
-            "optional{{?c ontomo:hasOperationSection ?os. }}"
-            "}"
-        )
-        sparql_res = self.cur.execute(sparql)
-        for res in sparql_res.split("\r\n")[1:-1]:
-            c, p, ss, os  = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
-            c = c.split("#")[-1].replace("_Context", "")
-            p = p.split("#")[-1]
-            ss = ss.split("#")[-1]
-            os = os.split("#")[-1]
-            if c not in context_template_dict:
-                context_template_dict[c] = {}
-            if p:
-                context_template_dict[c]["accumulation"] = p
-            if ss:
-                context_template_dict[c]["st"] = {}
-            if os:
-                context_template_dict[c]["op"] = {}
+        for t in self.template_classes:
+            sparql = (
+                f"{self.prefix}"
+                "select ?c ?p ?ss ?os where {"
+                f"?c rdf:type ontomo:{t}Context. "
+                "optional{{?c ontomo:hasPhenomenon ?p. }}"
+                "optional{{?c ontomo:hasStructureSection ?ss. }}"
+                "optional{{?c ontomo:hasOperationSection ?os. }}"
+                "}"
+            )
+            sparql_res = self.cur.execute(sparql)
+            for res in sparql_res.split("\r\n")[1:-1]:
+                c, p, ss, os  = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
+                c = c.split("#")[-1].replace("_Context", "")
+                t = t.split("#")[-1].replace("Context", "")
+                p = p.split("#")[-1]
+                ss = ss.split("#")[-1]
+                os = os.split("#")[-1]
+                if c not in context_template_dict:
+                    context_template_dict[c] = {"type": t}
+                if p:
+                    context_template_dict[c]["accumulation"] = p
+                if ss:
+                    context_template_dict[c]["st"] = {}
+                if os:
+                    context_template_dict[c]["op"] = {}
 
         sparql = (
             f"{self.prefix}"
