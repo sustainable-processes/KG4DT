@@ -16,7 +16,7 @@ class ModelCalibrationAgent:
     def __init__(self, entity, request):
         self.entity = entity
         self.request = request
-        self.model_agent = ModelAgent(entity, request["context"])
+        self.model_agent = ModelAgent(entity, request)
     
     def calibrate_scipy(self):
         """Generate and run simulation for data.
