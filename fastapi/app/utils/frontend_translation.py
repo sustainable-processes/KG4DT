@@ -1,36 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Iterable, List
+from typing import Any, Dict, Iterable, List, Optional
 from ..schemas.translation import FrontendPayload, BackendContextBasic, BackendContextDesc, BackendContext
-
-
-def _unique_preserve(seq: Iterable[Any]) -> List[Any]:
-    seen = set()
-    out: List[Any] = []
-    for x in seq:
-        if x is None:
-            continue
-        if x not in seen:
-            seen.add(x)
-            out.append(x)
-    return out
-
-
-def _flatten_phases(phases: Any) -> List[Any]:
-    """Flatten phases to a simple list of species names."""
-    if phases is None:
-        return []
-    if isinstance(phases, list):
-        return [x for x in phases if isinstance(x, (str, int, float))]
-    if isinstance(phases, dict):
-        flat: List[Any] = []
-        for v in phases.values():
-            if isinstance(v, list):
-                flat.extend([x for x in v if isinstance(x, (str, int, float))])
-            elif isinstance(v, (str, int, float)):
-                flat.append(v)
-        return flat
-    return []
 
 
 def build_basic_context(payload: FrontendPayload) -> BackendContextBasic:
@@ -39,44 +10,66 @@ def build_basic_context(payload: FrontendPayload) -> BackendContextBasic:
     species = chemistry.get("species") or []
     reactions = chemistry.get("reactions") or []
 
-    # basic.spc
-    basic_spc = _unique_preserve(
-        [s.get("name") for s in species if isinstance(s, dict) and s.get("name")]
-    )
+    # basic.spc (full objects, preserving order)
+    basic_spc = []
+    seen_spc = set()
+    for s in species:
+        if isinstance(s, dict):
+            sid = s.get("id")
+            if sid not in seen_spc:
+                basic_spc.append(s)
+                seen_spc.add(sid)
 
-    # basic.rxn
-    rxn_flat: List[str] = []
+    # basic.rxn (full objects, preserving order)
+    basic_rxn = []
+    seen_rxn = set()
     for r in reactions:
-        if not isinstance(r, dict):
-            continue
-        elem = r.get("elementary")
-        if isinstance(elem, list):
-            rxn_flat.extend([e for e in elem if isinstance(e, str)])
-        elif isinstance(elem, str):
-            rxn_flat.append(elem)
-    basic_rxn = _unique_preserve(rxn_flat)
+        if isinstance(r, dict):
+            # Use stoich as a proxy for identity if id is missing
+            rid = r.get("id") or r.get("stoich")
+            if rid not in seen_rxn:
+                basic_rxn.append(r)
+                seen_rxn.add(rid)
 
-    # Inputs
+    # Inputs & Utilities
     inputs: Dict[str, Any] = payload.input or {}
+    utilities: Dict[str, Any] = payload.utility or {}
+    
     stm: Dict[str, Any] = {}
     sld: Dict[str, Any] = {}
     gas: Dict[str, Any] = {}
 
-    for name, item in inputs.items():
+    # Combined processing for input and utility
+    combined_items = {**inputs, **utilities}
+    for name, item in combined_items.items():
         if not isinstance(item, dict):
             continue
         typ = (item.get("type") or "").lower()
-        phases = _flatten_phases(item.get("phases"))
+        
+        # Phases mapping: Key = phases, value = array of species ID/name.
+        # Desired output format: "spc": [ {"phase 1": ["water", "solvent"]} ]
+        phases = item.get("phases")
+        spc_entry = []
+        if isinstance(phases, dict):
+            spc_entry = [phases]
+        elif isinstance(phases, list):
+            spc_entry = phases
+        
         rxn_local = []
         chem_local = item.get("chemistry") if isinstance(item.get("chemistry"), dict) else {}
-        if isinstance(chem_local.get("reaction"), list):
-            rxn_local = [x for x in chem_local.get("reaction") if isinstance(x, str)]
+        rxn_raw = chem_local.get("reaction")
+        if isinstance(rxn_raw, list):
+            for r in rxn_raw:
+                if isinstance(r, str):
+                    rxn_local.append({"stoich": r})
+                else:
+                    rxn_local.append(r)
 
-        entry: Dict[str, Any] = {"spc": _unique_preserve(phases)}
+        entry: Dict[str, Any] = {"spc": spc_entry}
         if rxn_local:
-            entry["rxn"] = _unique_preserve(rxn_local)
+            entry["rxn"] = rxn_local
 
-        if typ == "stream":
+        if typ in ["stream", "steam"]:
             stm[name] = entry
         elif typ == "solid":
             sld[name] = entry
@@ -94,23 +87,50 @@ def build_basic_context(payload: FrontendPayload) -> BackendContextBasic:
 
 def build_desc_context(payload: FrontendPayload) -> BackendContextDesc:
     """Build the `context.desc` section from a frontend payload."""
-    pheno = payload.phenomenon or {}
+    # Try to extract from reactor phenomenon
+    reactor = payload.reactor or {}
+    # Find the first vessel or use 'reactor vessel'
+    vessel = reactor.get("reactor vessel")
+    if not vessel and reactor:
+        # Fallback to first available vessel if 'reactor vessel' key is not present
+        vessel = next(iter(reactor.values())) if isinstance(reactor, dict) and reactor else {}
     
-    # Helper to ensure list of strings
-    def _to_list(val: Any) -> List[str]:
-        if isinstance(val, list):
-            return [str(x) for x in val if x]
-        if isinstance(val, str) and val:
-            return [val]
-        return []
+    pheno = vessel.get("phenomenon") if isinstance(vessel, dict) else {}
+    
+    # Fallback to payload.phenomenon
+    if not pheno:
+        pheno = payload.phenomenon or {}
+
+    ac = pheno.get("mass accumulation") or pheno.get("ac")
+    if isinstance(ac, str):
+        ac = ac.capitalize()
+    
+    fp = pheno.get("flow pattern") or pheno.get("fp")
+    if isinstance(fp, str):
+        # well_mixed -> Well_Mixed
+        fp = "_".join(word.capitalize() for word in fp.split("_"))
+
+    # Extract from model
+    model = payload.model or {}
+    mt = model.get("mass_transport") or []
+    me = model.get("mass_equilibrium") or []
+    
+    param_law_raw = model.get("laws") or {}
+    param_law = {}
+    if isinstance(param_law_raw, dict):
+        for k, v in param_law_raw.items():
+            if isinstance(v, list) and v:
+                param_law[k] = v[0]
+            elif isinstance(v, str):
+                param_law[k] = v
 
     return BackendContextDesc(
-        ac=pheno.get("ac"),
-        fp=pheno.get("fp"),
-        mt=_to_list(pheno.get("mt")),
-        me=_to_list(pheno.get("me")),
-        rxn=pheno.get("rxn", {}),
-        param_law=pheno.get("param_law", {})
+        ac=ac,
+        fp=fp,
+        mt=mt,
+        me=me,
+        rxn={},
+        param_law=param_law
     )
 
 
@@ -119,5 +139,15 @@ def translate_frontend_to_backend(payload: FrontendPayload) -> BackendContext:
     return BackendContext(
         type="dynamic",
         basic=build_basic_context(payload),
-        desc=build_desc_context(payload)
+        desc=build_desc_context(payload),
+        info={
+            "st": {},
+            "spc": {},
+            "stm": {},
+            "sld": {},
+            "gas": {},
+            "mt": {},
+            "me": {},
+            "rxn": {}
+        }
     )
