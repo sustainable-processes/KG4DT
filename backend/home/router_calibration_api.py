@@ -408,10 +408,7 @@ def api_model_simulate():
         if not isinstance(payload, dict):
             return jsonify({"error": "Invalid JSON body; expected an object."}), 400
 
-        context = payload.get("context")
         op_params = payload.get("op_params")
-        if not isinstance(context, dict):
-            return jsonify({"error": "Field 'context' is required and must be an object."}), 400
         if not isinstance(op_params, dict):
             return jsonify({"error": "Field 'op_params' is required and must be an object."}), 400
 
@@ -420,14 +417,9 @@ def api_model_simulate():
         if isinstance(norm_op, tuple):  # (error_json, status)
             return norm_op
 
-        sim_req = {
-            "context": context,
-            "op_params": norm_op,
-        }
-
         # Run simulation
         entity = g.graphdb_handler.query()
-        sim_agent = ModelSimulationAgent(entity, sim_req)
+        sim_agent = ModelSimulationAgent(entity, payload)
         sim_res = sim_agent.simulate_scipy()
 
         return jsonify(sim_res), 200
@@ -515,13 +507,10 @@ def api_model_calibrate():
         if not isinstance(payload, dict):
             return jsonify({"error": "Invalid JSON body; expected an object."}), 400
 
-        context = payload.get("context")
         op_params_in = payload.get("op_params")
         reals_in = payload.get("reals")
         cal_params_in = payload.get("cal_params")
 
-        if not isinstance(context, dict):
-            return jsonify({"error": "Field 'context' is required and must be an object."}), 400
         if not isinstance(op_params_in, dict):
             return jsonify({"error": "Field 'op_params' is required and must be an object."}), 400
         if not isinstance(reals_in, dict):
@@ -533,23 +522,19 @@ def api_model_calibrate():
         op_params = _normalize_dataset_section("op_params", op_params_in)
         if isinstance(op_params, tuple):
             return op_params
+        payload["op_params"] = op_params
         reals = _normalize_dataset_section("reals", reals_in)
         if isinstance(reals, tuple):
             return reals
+        payload["reals"] = reals
         cal_params = _normalize_bounds_section("cal_params", cal_params_in)
         if isinstance(cal_params, tuple):
             return cal_params
-
-        cal_req = {
-            "context": context,
-            "op_params": op_params,
-            "reals": reals,
-            "cal_params": cal_params,
-        }
+        payload["cal_params"] = cal_params
 
         # Run calibration
         entity = g.graphdb_handler.query()
-        cal_agent = ModelCalibrationAgent(entity, cal_req)
+        cal_agent = ModelCalibrationAgent(entity, payload)
         cal_res = cal_agent.calibrate_scipy()
 
         return jsonify(cal_res), 200

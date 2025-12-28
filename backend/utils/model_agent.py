@@ -125,8 +125,9 @@ class ModelAgent:
         self.param_dict = param_dict
     
     def validate_rxn(self):
-        spcs = self.context["basic"]["spc"]
-        rxns = self.context["basic"]["rxn"]
+        spcs = [d["id"] for d in self.context["chemistry"]["species"]]
+        rxns = [d["stoich"] for d in self.context["chemistry"]["reactions"]] + \
+            [r for d in self.context["chemistry"]["reactions"] for r in d["elementary"]]
         for rxn in rxns:
             if not re.match(self.rxn_pattern, rxn):
                 raise ValueError(f"invalid format for reaction: {rxn}")
@@ -144,135 +145,155 @@ class ModelAgent:
         param_dict = {}
 
         # Structure
-        if "st" in self.context["info"]:
-            for p in self.context["info"]["st"]:
+        if "structure" in self.context["model"]["information"]:
+            for p in self.context["model"]["information"]["structure"]:
                 if p not in self.entity["var"]:
                     continue
                 dims = self.entity["var"][p]["dims"]
                 if set(dims) == set([]):
-                    v = self.context["info"]["st"][p]
+                    v = self.context["model"]["information"]["structure"][p]
                     param_dict[(p, None, None, None, None)] = v
                 else:
                     raise ValueError(f"Invalid dimensions for structure parameter {p}: {dims}")
         
         # Species
-        if "spc" in self.context["info"]:
-            for p in self.context["info"]["spc"]:
+        if "species" in self.context["model"]["information"]:
+            for p in self.context["model"]["information"]["species"]:
                 if p not in self.entity["var"]:
                     continue
                 dims = self.entity["var"][p]["dims"]
                 if set(dims) == set(["Species"]):
-                    for spc in self.context["info"]["spc"][p]:
-                        v = self.context["info"]["spc"][p][spc]
+                    for spc in self.context["model"]["information"]["species"][p]:
+                        v = self.context["model"]["information"]["species"][p][spc]
                         param_dict[(p, None, None, None, spc)] = v
                 else:
                     raise ValueError(f"Invalid dimensions for species parameter {p}: {dims}")
         
         # Stream
-        if "stm" in self.context["info"]:
-            for p in self.context["info"]["stm"]:
+        if "stream" in self.context["model"]["information"]:
+            for p in self.context["model"]["information"]["stream"]:
                 if p not in self.entity["var"]:
                     continue
                 dims = self.entity["var"][p]["dims"]
                 if set(dims) == set(["Stream"]):
-                    for stm in self.context["info"]["stm"][p]:
-                        v = self.context["info"]["stm"][p][stm]
+                    for stm in self.context["model"]["information"]["stream"][p]:
+                        v = self.context["model"]["information"]["stream"][p][stm]
                         param_dict[(p, None, stm, None, None)] = v
                 else:
                     raise ValueError(f"Invalid dimensions for stream parameter {p}: {dims}")
 
+        # Liquid
+        if "liquid" in self.context["model"]["information"]:
+            for p in self.context["model"]["information"]["liquid"]:
+                if p not in self.entity["var"]:
+                    continue
+                dims = self.entity["var"][p]["dims"]
+                if set(dims) == set(["Stream"]):
+                    for stm in self.context["model"]["information"]["liquid"][p]:
+                        v = self.context["model"]["information"]["liquid"][p][stm]
+                        param_dict[(p, None, stm, None, None)] = v
+                else:
+                    raise ValueError(f"Invalid dimensions for liquid parameter {p}: {dims}")
+
         # Gas
-        if "gas" in self.context["info"]:
-            for p in self.context["info"]["gas"]:
+        if "gas" in self.context["model"]["information"]:
+            for p in self.context["model"]["information"]["gas"]:
                 if p not in self.entity["var"]:
                     continue
                 dims = self.entity["var"][p]["dims"]
                 if set(dims) == set(["Gas"]):
-                    for gas in self.context["info"]["gas"][p]:
-                        v = self.context["info"]["gas"][p][gas]
+                    for gas in self.context["model"]["information"]["gas"][p]:
+                        v = self.context["model"]["information"]["gas"][p][gas]
                         param_dict[(p, gas, None, None, None)] = v
                 else:
                     raise ValueError(f"Invalid dimensions for gas parameter {p}: {dims}")
 
         # Solid
-        if "sld" in self.context["info"]:
-            for p in self.context["info"]["sld"]:
+        if "solid" in self.context["model"]["information"]:
+            for p in self.context["model"]["information"]["solid"]:
                 if p not in self.entity["var"]:
                     continue
                 dims = self.entity["var"][p]["dims"]
                 if set(dims) == set(["Solid"]):
-                    for sld in self.context["info"]["sld"][p]:
-                        v = self.context["info"]["sld"][p][sld]
+                    for sld in self.context["model"]["information"]["solid"][p]:
+                        v = self.context["model"]["information"]["solid"][p][sld]
                         param_dict[(p, sld, None, None, None)] = v
                 else:
                     raise ValueError(f"Invalid dimensions for solid parameter {p}: {dims}")
 
         # Mass transport
-        if "mt" in self.context["info"]:
-            for p in self.context["info"]["mt"]:
+        if "mass_transport" in self.context["model"]["information"]:
+            for p in self.context["model"]["information"]["mass_transport"]:
                 if p not in self.entity["var"]:
                     continue
                 dims = self.entity["var"][p]["dims"]
                 if set(dims) == set([]):
-                    v = self.context["info"]["mt"][p]
+                    v = self.context["model"]["information"]["mass_transport"][p]
                     param_dict[(p, None, None, None, None)] = v
                 elif set(dims) == set(["Species"]):
-                    for spc in self.context["info"]["mt"][p]:
-                        v = self.context["info"]["mt"][p][spc]
+                    for spc in self.context["model"]["information"]["mass_transport"][p]:
+                        v = self.context["model"]["information"]["mass_transport"][p][spc]
                         param_dict[(p, None, None, None, spc)] = v
                 elif set(dims) == set(["Species", "Stream"]):
-                    for stm in self.context["info"]["mt"][p]:
-                        for spc in self.context["info"]["mt"][p][stm]:
-                            v = self.context["info"]["mt"][p][stm][spc]
+                    for stm in self.context["model"]["information"]["mass_transport"][p]:
+                        for spc in self.context["model"]["information"]["mass_transport"][p][stm]:
+                            v = self.context["model"]["information"]["mass_transport"][p][stm][spc]
                             param_dict[(p, None, stm, None, spc)] = v
                 elif set(dims) == set(["Species", "Gas"]):
-                    for gas in self.context["info"]["mt"][p]:
-                        for spc in self.context["info"]["mt"][p][gas]:
-                            v = self.context["info"]["mt"][p][gas][spc]
+                    for gas in self.context["model"]["information"]["mass_transport"][p]:
+                        for spc in self.context["model"]["information"]["mass_transport"][p][gas]:
+                            v = self.context["model"]["information"]["mass_transport"][p][gas][spc]
                             param_dict[(p, gas, None, None, spc)] = v
                 elif set(dims) == set(["Species", "Solid"]):
-                    for sld in self.context["info"]["mt"][p]:
-                        for spc in self.context["info"]["mt"][p][sld]:
-                            v = self.context["info"]["mt"][p][sld][spc]
+                    for sld in self.context["model"]["information"]["mass_transport"][p]:
+                        for spc in self.context["model"]["information"]["mass_transport"][p][sld]:
+                            v = self.context["model"]["information"]["mass_transport"][p][sld][spc]
                             param_dict[(p, sld, None, None, spc)] = v
                 elif set(dims) == set(["Species", "Stream", "Gas"]):
-                    for gas in self.context["info"]["mt"][p]:
-                        for stm in self.context["info"]["mt"][p][gas]:
-                            for spc in self.context["info"]["mt"][p][gas][stm]:
-                                v = self.context["info"]["mt"][p][gas][stm][spc]
+                    for gas in self.context["model"]["information"]["mass_transport"][p]:
+                        for stm in self.context["model"]["information"]["mass_transport"][p][gas]:
+                            for spc in self.context["model"]["information"]["mass_transport"][p][gas][stm]:
+                                v = self.context["model"]["information"]["mass_transport"][p][gas][stm][spc]
                                 param_dict[(p, gas, stm, None, spc)] = v
                 elif set(dims) == set(["Species", "Stream", "Solid"]):
-                    for sld in self.context["info"]["mt"][p]:
-                        for stm in self.context["info"]["mt"][p][sld]:
-                            for spc in self.context["info"]["mt"][p][sld][stm]:
-                                v = self.context["info"]["mt"][p][sld][stm][spc]
+                    for sld in self.context["model"]["information"]["mass_transport"][p]:
+                        for stm in self.context["model"]["information"]["mass_transport"][p][sld]:
+                            for spc in self.context["model"]["information"]["mass_transport"][p][sld][stm]:
+                                v = self.context["model"]["information"]["mass_transport"][p][sld][stm][spc]
                                 param_dict[(p, sld, stm, None, spc)] = v
                 else:
                     raise ValueError(f"Invalid dimensions for mass transport parameter {p}: {dims}")
 
         # Mass equilibrium
-        if "me" in self.context["info"]:
-            for p in self.context["info"]["me"]:
+        if "mass_equilibrium" in self.context["model"]["information"]:
+            for p in self.context["model"]["information"]["mass_equilibrium"]:
                 if p not in self.entity["var"]:
                     continue
                 dims = self.entity["var"][p]["dims"]
                 if set(dims) == set(["Species", "Stream", "Gas"]):
-                    for gas in self.context["info"]["me"][p]:
-                        for stm in self.context["info"]["me"][p][gas]:
-                            for spc in self.context["info"]["me"][p][gas][stm]:
-                                v = self.context["info"]["me"][p][gas][stm][spc]
+                    for gas in self.context["model"]["information"]["mass_equilibrium"][p]:
+                        for stm in self.context["model"]["information"]["mass_equilibrium"][p][gas]:
+                            for spc in self.context["model"]["information"]["mass_equilibrium"][p][gas][stm]:
+                                v = self.context["model"]["information"]["mass_equilibrium"][p][gas][stm][spc]
                                 param_dict[(p, gas, stm, None, spc)] = v
                 elif set(dims) == set(["Species", "Stream", "Solid"]):
-                    for sld in self.context["info"]["me"][p]:
-                        for stm in self.context["info"]["me"][p][sld]:
-                            for spc in self.context["info"]["me"][p][sld][stm]:
-                                v = self.context["info"]["me"][p][sld][stm][spc]
+                    for sld in self.context["model"]["information"]["mass_equilibrium"][p]:
+                        for stm in self.context["model"]["information"]["mass_equilibrium"][p][sld]:
+                            for spc in self.context["model"]["information"]["mass_equilibrium"][p][sld][stm]:
+                                v = self.context["model"]["information"]["mass_equilibrium"][p][sld][stm][spc]
                                 param_dict[(p, sld, stm, None, spc)] = v
                 else:
                     raise ValueError(f"Invalid dimensions for mass equilibrium parameter {p}: {dims}")
 
         # Stoichiometric coefficient
-        for r in self.context["basic"]["rxn"]:
+        rxns = []
+        for rxn_dict in self.context["chemistry"]["reactions"]:
+            if rxn_dict["elementary"]:
+                rxns.extend(rxn_dict["elementary"])
+            else:
+                rxns.append(rxn_dict["stoich"])
+        rxns = list(set(rxns))
+        for r in rxns:
             lhs_r = r.split(" > ")[0]
             rhs_r = r.split(" > ")[1]
             for item in lhs_r.split(" + "):
@@ -293,52 +314,60 @@ class ModelAgent:
                 param_dict[("Stoichiometric_Coefficient", None, None, r, s)] = v
 
         # Reaction
-        if "rxn" in self.context["info"]:
-            for p in self.context["info"]["rxn"]:
+        if "reaction" in self.context["model"]["information"]:
+            for p in self.context["model"]["information"]["reaction"]:
                 if p not in self.entity["var"]:
                     continue
                 dims = self.entity["var"][p]["dims"]
                 if set(dims) == set(["Reaction"]):
-                    for rxn in self.context["info"]["rxn"][p]:
-                        v = self.context["info"]["rxn"][p][rxn]
+                    for rxn in self.context["model"]["information"]["reaction"][p]:
+                        v = self.context["model"]["information"]["reaction"][p][rxn]
                         param_dict[(p, None, None, rxn, None)] = v
                 elif set(dims) == set(["Reaction", "Stream"]):
-                    for stm in self.context["info"]["rxn"][p]:
-                        for rxn in self.context["info"]["rxn"][p][stm]:
-                            v = self.context["info"]["rxn"][p][stm][rxn]
+                    for stm in self.context["model"]["information"]["reaction"][p]:
+                        for rxn in self.context["model"]["information"]["reaction"][p][stm]:
+                            v = self.context["model"]["information"]["reaction"][p][stm][rxn]
                             param_dict[(p, None, stm, rxn, None)] = v
                 elif set(dims) == set(["Species", "Reaction"]):
-                    for rxn in self.context["info"]["rxn"][p]:
-                        for spc in self.context["info"]["rxn"][p][rxn]:
-                            v = self.context["info"]["rxn"][p][rxn][spc]
+                    for rxn in self.context["model"]["information"]["reaction"][p]:
+                        for spc in self.context["model"]["information"]["reaction"][p][rxn]:
+                            v = self.context["model"]["information"]["reaction"][p][rxn][spc]
                             param_dict[(p, None, None, rxn, spc)] = v
                 else:
                     raise ValueError(f"Invalid dimensions for reaction parameter {p}: {dims}")
 
         # Operation
         phenos = []
-        phenos.append(self.context["desc"]["ac"])
-        phenos.append(self.context["desc"]["fp"])
-        phenos.extend(self.context["desc"]["mt"])
-        for rxn in self.context["desc"]["rxn"]:
-            for rxn_pheno in self.context["desc"]["rxn"][rxn]:
-                if rxn_pheno not in phenos:
-                    phenos.append(rxn_pheno)
-        
+        # TODO: multiple reactors
+        reactor_dict = self.context["reactor"][list(self.context["reactor"].keys())[0]]
+        phenos.append(reactor_dict["phenomenon"]["Accumulation"])
+        phenos.append(self.context["model"]["Flow_Pattern"])
+        phenos.extend(self.context["model"]["Mass_Transport"])
+        phenos.extend(self.context["model"]["Mass_Equilibrium"])
+        for rxn_dict in self.context["kinetics"]:
+            for rxn, rxn_phenos in rxn_dict["stoich"].items():
+                for rxn_pheno in rxn_phenos:
+                    if rxn_pheno not in phenos:
+                        phenos.append(rxn_pheno)
+            for rxn, rxn_phenos in rxn_dict["elementary"].items():
+                for rxn_pheno in rxn_phenos:
+                    if rxn_pheno not in phenos:
+                        phenos.append(rxn_pheno)
+
         laws = []
         for law, law_dict in self.entity["law"].items():
             if law_dict["pheno"] in phenos:
                 laws.append(law)
-            if law_dict["pheno"] in self.context["desc"]["mt"]:
+            if law_dict["pheno"] in self.context["model"]["Mass_Transport"]:
                 assoc_gas_law = self.entity["law"][law]["assoc_gas_law"]
-                if assoc_gas_law and self.context["basic"]["gas"]:
+                if assoc_gas_law and [d for d in self.context["input"].values() if d["type"] == "Gas Stream"]:
                     if assoc_gas_law not in laws:
                         laws.append(assoc_gas_law)
                 assoc_sld_law = self.entity["law"][law]["assoc_sld_law"]
-                if assoc_sld_law and self.context["basic"]["sld"]:
+                if assoc_sld_law and reactor_dict["solid"]:
                     if assoc_sld_law not in laws:
                         laws.append(assoc_sld_law)
-        laws.extend(self.context["desc"]["param_law"].values())
+        laws.extend(self.context["model"]["laws"].values())
         
         op_ps = []
         for law in laws:
@@ -351,25 +380,34 @@ class ModelAgent:
             if set(dims) == set([]):
                 param_dict[(p, None, None, None, None)] = None
             elif set(dims) == set(["Stream"]):
-                for stm in self.context["basic"]["stm"]:
+                for src in reactor_dict["source"]:
+                    if src in self.context["input"] and self.context["input"][src]["type"] == "Stream":
+                        param_dict[(p, None, src, None, None)] = None
+                for stm in reactor_dict["liquid"]:
                     param_dict[(p, None, stm, None, None)] = None
             elif set(dims) == set(["Gas"]):
-                for gas in self.context["basic"]["gas"]:
-                    param_dict[(p, gas, None, None, None)] = None
+                for src in reactor_dict["source"]:
+                    if src in self.context["input"] and self.context["input"][src]["type"] == "Gas Flow":
+                        param_dict[(p, src, None, None, None)] = None
             elif set(dims) == set(["Solid"]):
-                for sld in self.context["basic"]["solid"]:
+                for sld in reactor_dict["solid"]:
                     param_dict[(p, sld, None, None, None)] = None
             elif set(dims) == set(["Species", "Stream"]):
-                for stm in self.context["basic"]["stm"]:
-                    for spc in self.context["basic"]["stm"][stm]["spc"]:
-                        param_dict[(p, None, stm, None, spc)] = None
+                for src in reactor_dict["source"]:
+                    if src in self.context["input"] and self.context["input"][src]["type"] == "Stream":
+                        for spc in self.context["input"][src]["operation"]["species"]:
+                            param_dict[(p, None, src, None, spc)] = None
+                for liq in reactor_dict["liquid"]:
+                    for spc in reactor_dict["liquid"][liq]["species"]:
+                        param_dict[(p, None, liq, None, spc)] = None
             elif set(dims) == set(["Species", "Gas"]):
-                for gas in self.context["basic"]["gas"]:
-                    for spc in self.context["basic"]["gas"][gas]["spc"]:
-                        param_dict[(p, gas, None, None, spc)] = None
+                for src in reactor_dict["source"]:
+                    if src in self.context["input"] and self.context["input"][src]["type"] == "Gas Flow":
+                        for spc in self.context["input"][src]["operation"]["species"]:
+                            param_dict[(p, src, None, None, spc)] = None
             elif set(dims) == set(["Species", "Solid"]):
-                for sld in self.context["basic"]["sld"]:
-                    for spc in self.context["basic"]["sld"][sld]["spc"]:
+                for sld in reactor_dict["solid"]:
+                    for spc in reactor_dict["solid"][sld]["species"]:
                         param_dict[(p, sld, None, None, spc)] = None
             else:
                 raise ValueError(f"Invalid dimensions for operation parameter {p}: {dims}")
@@ -590,7 +628,7 @@ class ModelAgent:
         return fml
     
     def process_codes(self, codes):
-        spcs = self.context["basic"]["spc"]
+        spcs = [spc_dict["id"] for spc_dict in self.context["chemistry"]["species"]]
         codes = codes.replace("exp", "np.exp")
         codes = codes.replace("sum", "np.sum")
         codes = codes.replace("maximum", "np.maximum")
@@ -607,11 +645,37 @@ class ModelAgent:
         return codes
     
     def get_out_inds(self):
-        spcs = self.context["basic"]["spc"]
-        rxns = self.context["basic"]["rxn"]
-        stms = list(self.context["basic"]["stm"].keys())
-        slds = list(self.context["basic"]["sld"].keys())
-        gass = list(self.context["basic"]["gas"].keys())
+        # TODO: multiple reactors
+        reactor_dict = self.context["reactor"][list(self.context["reactor"].keys())[0]]
+        spcs = [spc_dict["id"] for spc_dict in self.context["chemistry"]["species"]]
+        rxns = []
+        for rxn_dict in self.context["chemistry"]["reactions"]:
+            if rxn_dict["elementary"]:
+                rxns.extend(rxn_dict["elementary"])
+            else:
+                rxns.append(rxn_dict["stoich"])
+        stms = []
+        stm2spcs = {}
+        for src in reactor_dict["source"]:
+            if self.context["input"][src]["type"] == "Stream":
+                stms.append(src)
+                stm2spcs[src] = self.context["input"][src]["species"]
+        if reactor_dict["operation"]["Has_Liquid_Input"]:
+            for liq in reactor_dict["liquid"]:
+                stms.append(liq)
+                stm2spcs[liq] = reactor_dict["liquid"][liq]["species"]
+        slds = []
+        sld2spcs = {}
+        if reactor_dict["operation"]["Has_Solid_Input"]:
+            for sld in reactor_dict["solid"]:
+                slds.append(sld)
+                sld2spcs[sld] = reactor_dict["solid"][sld]["species"]
+        gass = []
+        gas2spcs = {}
+        for src in reactor_dict["source"]:
+            if self.context["input"][src]["type"] == "Gas Flow":
+                gass.append(src)
+                gas2spcs[src] = self.context["input"][src]["operation"]["species"]
         nspc = len(spcs)
         nrxn = len(rxns)
         nstm = len(stms)
@@ -629,15 +693,15 @@ class ModelAgent:
         for var, var_dict in self.entity["var"].items():
             for law in var_dict["laws"]:
                 law2var[law] = var
-            
-        ac_laws = pheno2law[self.context["desc"]["ac"]]
+        
+        ac_laws = pheno2law[reactor_dict["phenomenon"]["Accumulation"]]
         ac_law = [law for law in ac_laws if law2var[law] != "Concentration"][0]
         ac_vars = self.entity["law"][ac_law]["vars"]
         ac_opt_vars = self.entity["law"][ac_law]["opt_vars"]
         
         # r_t_g, r_t_s
         mt_laws, mt_vars = [], []
-        for mt_pheno in self.context["desc"]["mt"]:
+        for mt_pheno in self.context["model"]["Mass_Transport"]:
             for law in pheno2law[mt_pheno]:
                 if law2var[law] in ac_opt_vars:
                     mt_laws.append(law)
@@ -660,10 +724,10 @@ class ModelAgent:
         else:
             assoc_sld_law = assoc_sld_laws[0] if assoc_sld_laws else None
 
-        if self.context["desc"]["ac"] in ["Batch", "Continuous"]:
+        if reactor_dict["phenomenon"]["Accumulation"] in ["Batch", "Continuous"]:
             ivar = self.entity["law"][ac_law]["int_var"]
         else:
-            raise ValueError(f"Unknown integral variable for {self.context['desc']['ac']}")
+            raise ValueError(f"Unknown integral variable for {reactor_dict['phenomenon']['Accumulation']}")
 
         if assoc_gas_law and ngas:
             gvar = self.entity["law"][assoc_gas_law]["int_var"]
@@ -678,11 +742,11 @@ class ModelAgent:
             out_inds.append([ivar, None, "Overall", None, spc])
         if assoc_gas_law and ngas:
             for gas in gass:
-                for spc in self.context["basic"]["gas"][gas]["spc"]:
+                for spc in gas2spcs[gas]:
                     out_inds.append([gvar, gas, None, None, spc])
         if assoc_sld_law and nsld:
             for sld in slds:
-                for spc in self.context["basic"]["sld"][sld]["spc"]:
+                for spc in sld2spcs[sld]:
                     out_inds.append([svar, sld, None, None, spc])
         return out_inds
 
@@ -721,6 +785,45 @@ class ModelAgent:
         # Validate reaction
         self.validate_rxn()
 
+        # Basic
+        # TODO: multiple reactors
+        reactor_dict = self.context["reactor"][list(self.context["reactor"].keys())[0]]
+        spcs = [spc_dict["id"] for spc_dict in self.context["chemistry"]["species"]]
+        rxns = []
+        for rxn_dict in self.context["chemistry"]["reactions"]:
+            if rxn_dict["elementary"]:
+                rxns.extend(rxn_dict["elementary"])
+            else:
+                rxns.append(rxn_dict["stoich"])
+        rxns = list(set(rxns))
+        stms = []
+        stm2spcs = {}
+        for src in reactor_dict["source"]:
+            if self.context["input"][src]["type"] == "Stream":
+                stms.append(src)
+                stm2spcs[src] = self.context["input"][src]["species"]
+        if reactor_dict["operation"]["Has_Liquid_Input"]:
+            for liq in reactor_dict["liquid"]:
+                stms.append(liq)
+                stm2spcs[liq] = reactor_dict["liquid"][liq]["species"]
+        slds = []
+        sld2spcs = {}
+        if reactor_dict["operation"]["Has_Solid_Input"]:
+            for sld in reactor_dict["solid"]:
+                slds.append(sld)
+                sld2spcs[sld] = reactor_dict["solid"][sld]["species"]
+        gass = []
+        gas2spcs = {}
+        for src in reactor_dict["source"]:
+            if self.context["input"][src]["type"] == "Gas Flow":
+                gass.append(src)
+                gas2spcs[src] = self.context["input"][src]["operation"]["species"]
+        nspc = len(spcs)
+        nrxn = len(rxns)
+        nstm = len(stms)
+        nsld = len(slds)
+        ngas = len(gass)
+
         # Model
         model = ScipyModel()
         # model.add_header(self.context)
@@ -745,8 +848,8 @@ class ModelAgent:
         for var, var_dict in self.entity["var"].items():
             for law in var_dict["laws"]:
                 law2var[law] = var
-            
-        ac_laws = pheno2law[self.context["desc"]["ac"]]
+        
+        ac_laws = pheno2law[reactor_dict["phenomenon"]["Accumulation"]]
         ac_law = [law for law in ac_laws if law2var[law] != "Concentration"][0]
         ac_vars = self.entity["law"][ac_law]["vars"]
         ac_opt_vars = self.entity["law"][ac_law]["opt_vars"]
@@ -761,7 +864,7 @@ class ModelAgent:
         
         # r_t_g, r_t_s
         mt_laws, mt_vars = [], []
-        for mt_pheno in self.context["desc"]["mt"]:
+        for mt_pheno in self.context["model"]["Mass_Transport"]:
             for law in pheno2law[mt_pheno]:
                 if law2var[law] in ac_opt_vars:
                     mt_laws.append(law)
@@ -797,25 +900,25 @@ class ModelAgent:
         me_laws, me_vars = [], []
         for var in mt_vars:
             if var != "Concentration" and self.entity["var"][var]["laws"]:
-                law = self.context["desc"]["param_law"][var]
+                law = self.context["model"]["laws"][var]
                 law_dict = self.entity["law"][law]
-                if "me" in self.context["desc"] and law_dict["pheno"] in self.context["desc"]["me"]:
+                if "Mass_Equilibrium" in self.context["model"] and law_dict["pheno"] in self.context["model"]["Mass_Equilibrium"]:
                     me_laws.append(law)
                     me_vars.extend(law_dict["vars"])
 
         fp_laws, fp_vars = [], []
         # flow_velocity
         for var in ac_vars:
-            for law in pheno2law[self.context["desc"]["fp"]]:
+            for law in pheno2law[self.context["model"]["Flow_Pattern"]]:
                 if law in self.entity["var"][var]["laws"]:
                     fp_laws.append(law)
                     fp_vars.extend(law_dict["vars"])
         # mixing_time
         for var in mt_vars:
             if var != "Concentration" and self.entity["var"][var]["laws"]:
-                law = self.context["desc"]["param_law"][var]
+                law = self.context["model"]["laws"][var]
                 law_dict = self.entity["law"][law]
-                if law_dict["pheno"] == self.context["desc"]["fp"]:
+                if law_dict["pheno"] == self.context["model"]["Flow_Pattern"]:
                     fp_laws.append(law)
                     fp_vars.extend(law_dict["vars"])
         fp_vars = list(set(fp_vars))
@@ -824,21 +927,23 @@ class ModelAgent:
         sub_fp_laws, sub_fp_vars = [], []
         for var in fp_vars:
             if self.entity["var"][var]["laws"]:
-                law = self.context["desc"]["param_law"][var]
+                law = self.context["model"]["laws"][var]
                 law_dict = self.entity["law"][law]
-                if law in pheno2law[self.context["desc"]["fp"]]:
+                if law in pheno2law[self.context["model"]["Flow_Pattern"]]:
                     sub_fp_laws.append(law)
                     sub_fp_vars.extend(law_dict["vars"])
 
         rxn_laws, rxn_vars = {}, {}
-        for rxn, rxn_phenos in self.context["desc"]["rxn"].items():
-            rxn_laws[rxn], rxn_vars[rxn] = [], []
-            for rxn_pheno in rxn_phenos:
-                for law in pheno2law[rxn_pheno]:
-                    rxn_laws[rxn].append(law)
-                    rxn_vars[rxn].extend(self.entity["law"][law]["vars"])
-                    if "Stoichiometric_Coefficient" not in rxn_vars[rxn]:
-                        rxn_vars[rxn].append("Stoichiometric_Coefficient")
+        for rxn_dict in self.context["kinetics"]:
+            rxn_dict = rxn_dict["elementary"] if rxn_dict["elementary"] else rxn_dict["stoich"]
+            for rxn, rxn_phenos in rxn_dict.items():
+                rxn_laws[rxn], rxn_vars[rxn] = [], []
+                for rxn_pheno in rxn_phenos:
+                    for law in pheno2law[rxn_pheno]:
+                        rxn_laws[rxn].append(law)
+                        rxn_vars[rxn].extend(self.entity["law"][law]["vars"])
+                        if "Stoichiometric_Coefficient" not in rxn_vars[rxn]:
+                            rxn_vars[rxn].append("Stoichiometric_Coefficient")
 
         model_vars = []
         model_vars.extend(ac_vars)
@@ -865,17 +970,6 @@ class ModelAgent:
         assert len(fia) <= 1, "Multiple formulas integrated with accumulation"
         fia = fia[0] if fia else None
 
-        # Basic
-        spcs = self.context["basic"]["spc"]
-        rxns = self.context["basic"]["rxn"]
-        stms = list(self.context["basic"]["stm"].keys())
-        slds = list(self.context["basic"]["sld"].keys())
-        gass = list(self.context["basic"]["gas"].keys())
-        nspc = len(spcs)
-        nrxn = len(rxns)
-        nstm = len(stms)
-        nsld = len(slds)
-        ngas = len(gass)
         dim2size = {
             "Species": nspc,
             "Reaction": nrxn,
@@ -1029,8 +1123,8 @@ class ModelAgent:
                         if intcpt:
                             model.add(f"param_dict[{ind}] = [_{sym} + {intcpt} for _{sym} in param_dict[{ind}]]", 1)
                     elif set(dims) == set(["Species", "Gas"]):
-                        for gas in self.context["basic"]["gas"]:
-                            for spc in self.context["basic"]["gas"][gas]["spc"]:
+                        for gas in gass:
+                            for spc in gas2spcs[gas]:
                                 ind = (var, gas, None, None, spc)
                                 if rto:
                                     model.add(f"param_dict[{ind}] = [_{sym} * {rto} for _{sym} in param_dict[{ind}]]", 1)
@@ -1056,7 +1150,7 @@ class ModelAgent:
                             model.add(f"interps[{op_ind}] = interp1d({iul_sym}, param_dict[{op_ind}])", 1)
                         if op_dims == set(["Gas", "Species"]):
                             for gas in gass:
-                                for spc in self.context["basic"]["gas"][gas]["spc"]:
+                                for spc in gas2spcs[gas]:
                                     op_ind = (op_var, gas, None, None, spc)
                                     model.add(f"interps[{op_ind}] = interp1d({iul_sym}, param_dict[{op_ind}])", 1)
         model.add("", 0)
@@ -1079,7 +1173,7 @@ class ModelAgent:
         model.add("", 0)
 
         # Concentration derivative
-        if self.context["desc"]["ac"] in ["Batch", "Continuous"]:
+        if reactor_dict["phenomenon"]["Accumulation"] in ["Batch", "Continuous"]:
             ivar = self.entity["law"][ac_law]["int_var"]
             imml = self.entity["var"][ivar]["sym"]
             isym = MMLExpression(imml).to_numpy()
@@ -1096,7 +1190,7 @@ class ModelAgent:
                             model.add(f"{op_sym} = interps[{op_ind}]({dsym})", 2)
                         if set(op_dims) == set(["Gas", "Species"]):
                             for i, gas in enumerate(gass):
-                                for spc in self.context["basic"]["gas"][gas]["spc"]:
+                                for spc in gas2spcs[gas]:
                                     j = spcs.index(spc)
                                     op_ind = (op_var, gas, None, None, spc)
                                     model.add(f"{op_sym}[{i}][{j}] = interps[{op_ind}]({dsym})", 2)
@@ -1113,7 +1207,7 @@ class ModelAgent:
                 gsym = MMLExpression(gmml).to_numpy()
                 model.add(f"{gsym} = np.zeros({(ngas, nspc)}, dtype=np.float64)", 2)
                 for gas in gass:
-                    for spc in self.context["basic"]["gas"][gas]["spc"]:
+                    for spc in gas2spcs[gas]:
                         model.add(f"{gsym}[{gass.index(gas)}, {spcs.index(spc)}] = {isym}[{i}]", 2)
                         i += 1
             if assoc_sld_law and nsld:
@@ -1122,7 +1216,7 @@ class ModelAgent:
                 ssym = MMLExpression(smml).to_numpy()
                 model.add(f"{ssym} = np.zeros({(nsld, nspc)}, dtype=np.float64)", 2)
                 for sld in slds:
-                    for spc in self.context["basic"]["sld"][sld]["spc"]:
+                    for spc in sld2spcs[sld]:
                         model.add(f"{ssym}[{slds.index(sld)}, {spcs.index(spc)}] = {isym}[{i}]", 2)
                         i += 1
             model.add(f"{isym} = np.array({isym}[:{ivar_num}], dtype=np.float64)", 2)
@@ -1177,8 +1271,8 @@ class ModelAgent:
         sym = MMLExpression(self.entity["var"][var]["sym"]).to_numpy()
         model.add(f"{sym} = np.zeros({nstm, nrxn}, dtype=np.float64)", 2)
         for i, stm in enumerate(stms):
-            for rxn in self.context["basic"]["stm"][stm]["rxn"]:
-                j = self.context["basic"]["rxn"].index(rxn)
+            for rxn in rxns:
+                j = rxns.index(rxn)
                 model.add(f"# stream: {stm}, reaction: {rxn}", 2)
                 fml = []
                 vars = []
@@ -1192,7 +1286,7 @@ class ModelAgent:
                         sub_pheno = sub_law_dict["pheno"]
                         sub_head = f"calc_{sub_pheno.lower().replace('-', '_')}_term({', '.join(sub_syms)})"
                         model.add(f"def {sub_head}:", 2)
-                        codes = self.context["info"]["rxn"][sub_pheno][rxn]
+                        codes = self.context["model"]["information"]["reaction"][sub_pheno][rxn]
                         codes = self.process_codes(codes)
                         for code in codes:
                             model.add(code, 3)
@@ -1219,9 +1313,9 @@ class ModelAgent:
             dims = self.entity["var"][var]["dims"]
             dims = sorted(dims, key=lambda d: self.dim2pos[d])
             if set(dims) == set(["Gas", "Stream", "Species"]):
-                pha_dim, phas = "gas", gass
+                pha_dim, phas = "Gas", gass
             elif set(dims) == set(["Solid", "Stream", "Species"]):
-                pha_dim, phas = "sld", slds
+                pha_dim, phas = "Solid", slds
             else:
                 raise ValueError(f"Invalid dimensions for mass equilibrium parameter {var}: {dims}")
             model.add(f"{sym} = np.zeros({len(phas), nstm, nspc}, dtype=np.float64)", 2)
@@ -1232,11 +1326,14 @@ class ModelAgent:
                 head = f"calc_{pheno}_term({', '.join(syms)})"
                 fml = head
                 for pha in phas:
-                    me_spcs = self.context["basic"][pha_dim][pha]["spc"]
+                    if pha_dim == "Gas":
+                        me_spcs = gas2spcs[pha]
+                    if pha_dim == "Solid":
+                        me_spcs = sld2spcs[pha]
                     prod = itertools.product([pha], stms, me_spcs)
                     for pha, stm, spc in prod:
                         model.add(f"def {head}:", 2)
-                        codes = self.context["info"]["me"][law][pha][stm][spc]
+                        codes = self.context["model"]["information"]["mass_equilibrium"][law][pha][stm][spc]
                         codes = self.process_codes(codes)
                         for code in codes:
                             model.add(code, 3)
@@ -1247,7 +1344,10 @@ class ModelAgent:
                         model.add(f"{ind_sym} = {ind_fml}", 2)
             else:
                 for pha in phas:
-                    me_spcs = self.context["basic"][pha_dim][pha]["spc"]
+                    if pha_dim == "Gas":
+                        me_spcs = gas2spcs[pha]
+                    if pha_dim == "Solid":
+                        me_spcs = sld2spcs[pha]
                     prod = itertools.product([pha], stms, me_spcs)
                     for pha, stm, spc in prod:
                         ind = [phas.index(pha), stms.index(stm), spcs.index(spc)]
@@ -1273,11 +1373,11 @@ class ModelAgent:
             dims = self.entity["var"][var]["dims"]
             dims = sorted(dims, key=lambda d: self.dim2pos[d])
             if set(dims) == set(["Stream", "Species"]):
-                pha_dim, pha_dim_short, phas = None, None, None
+                pha_dim, phas = None, None
             elif set(dims) == set(["Gas", "Stream", "Species"]):
-                pha_dim, pha_dim_short, phas = "Gas", "gas", gass
+                pha_dim, phas = "Gas", gass
             elif set(dims) == set(["Solid", "Stream", "Species"]):
-                pha_dim, pha_dim_short, phas = "Solid", "sld", slds
+                pha_dim, phas = "Solid", slds
             else:
                 msg = f"Invalid dimensions for mass transport parameter {var}: {dims}"
                 return False, msg
@@ -1293,7 +1393,10 @@ class ModelAgent:
                 model.add(f"{sym} = np.zeros({len(phas), nstm, nspc}, dtype=np.float64)", 2)
                 fml = MMLExpression(self.entity["law"][law]["fml"]).to_numpy()
                 for pha in phas:
-                    me_spcs = self.context["basic"][pha_dim_short][pha]["spc"]
+                    if pha_dim == "Gas":
+                        me_spcs = gas2spcs[pha]
+                    if pha_dim == "Solid":
+                        me_spcs = sld2spcs[pha]
                     prod = itertools.product([pha], stms, me_spcs)
                     for pha, stm, spc in prod:
                         ind = [phas.index(pha), stms.index(stm), spcs.index(spc)]
@@ -1313,7 +1416,7 @@ class ModelAgent:
         # Concentration derivative: accumulation
         model.add("# accumulation", 2)
         assoc_gas_law = self.entity["law"][ac_law]["assoc_gas_law"]
-        if assoc_gas_law and self.context["basic"]["gas"]:
+        if assoc_gas_law and gass:
             gas_var = law2var[assoc_gas_law]
             gas_fml = MMLExpression(self.entity["law"][assoc_gas_law]).to_numpy()
             gas_sym = MMLExpression(self.entity["var"][gas_var]).to_numpy()
@@ -1368,7 +1471,7 @@ class ModelAgent:
                     gas_int_init_val = self.entity["law"][assoc_gas_law]["int_init_val"]
                     for i, gas in enumerate(gass):
                         for j, stm in enumerate(stms):
-                            for spc in self.context["basic"]["gas"][gas]["spc"]:
+                            for spc in gas2spcs[gas]:
                                 k = spcs.index(spc)
                                 assoc_isyms.append(gas_isym)
                                 assoc_iinds.append(f"[{i}, {j}, {k}]")
@@ -1397,7 +1500,7 @@ class ModelAgent:
                     sld_int_init_val = self.entity["law"][assoc_sld_law]["int_init_val"]
                     for i, sld in enumerate(slds):
                         for j, stm in enumerate(stms):
-                            for spc in self.context["basic"]["sld"][sld]["spc"]:
+                            for spc in sld2spcs[sld]:
                                 k = spcs.index(spc)
                                 assoc_isyms.append(sld_isym)
                                 assoc_iinds.append(f"[{i}, {j}, {k}]")
@@ -1476,7 +1579,7 @@ class ModelAgent:
             if iul_unit and self.entity["unit"][iul_unit]["rto"]:
                 rto = self.entity["unit"][iul_unit]["rto"]
                 model.add(f"res.t /= {rto}", 3)
-            if self.context["desc"]["ac"] == "Continuous":
+            if reactor_dict["phenomenon"]["Accumulation"] == "Continuous":
                 model.add("res_dict = {"
                     "'x': {'ind': None, 'val': None}, "
                     "'y': {'ind': [], 'val': []}, "
@@ -1495,18 +1598,18 @@ class ModelAgent:
                                 f"{nstm},{nspc},-1)[:,{j}] * q.reshape({nstm}, 1)).sum(axis=0) / q.sum()).round(6).tolist())", 3)
                 if assoc_gas_law and ngas:
                     for i, gas in enumerate(gass):
-                        for j, spc in enumerate(self.context["basic"]["gas"][gas]["spc"]):
+                        for j, spc in enumerate(gas2spcs[gas]):
                             model.add(f"res_dict['y']['ind'].append({(gvar, gas, None, None, spc)})", 3)
                             model.add(f"res_dict['y']['val'].append(res.y[{out_ind}].round(6).tolist())", 3)
                             out_ind += 1
                 if assoc_sld_law and nsld:
                     for i, sld in enumerate(slds):
-                        for j, spc in enumerate(self.context["basic"]["sld"][sld]["spc"]):
+                        for j, spc in enumerate(sld2spcs[sld]):
                             model.add(f"res_dict['y']['ind'].append({(svar, sld, None, None, spc)})", 3)
                             model.add(f"res_dict['y']['val'].append(res.y[{out_ind}].round(6).tolist())", 3)
                             out_ind += 1
                 model.add("return res_dict", 3)
-            if self.context["desc"]["ac"] == "Batch":
+            if reactor_dict["phenomenon"]["Accumulation"] == "Batch":
                 model.add("res_dict = {"
                     "'x': {'ind': None, 'val': None}, "
                     "'y': {'ind': [], 'val': []}, "
@@ -1525,13 +1628,13 @@ class ModelAgent:
                                 f"{nstm},{nspc},-1)[:,{j}].sum(axis=0).round(6).tolist())", 3)
                 if assoc_gas_law and ngas:
                     for i, gas in enumerate(gass):
-                        for j, spc in enumerate(self.context["basic"]["gas"][gas]["spc"]):
+                        for j, spc in enumerate(gas2spcs[gas]):
                             model.add(f"res_dict['y']['ind'].append({(gvar, gas, None, None, spc)})", 3)
                             model.add(f"res_dict['y']['val'].append(res.y[{out_ind}].round(6).tolist())", 3)
                             out_ind += 1
                 if assoc_sld_law and nsld:
                     for i, sld in enumerate(slds):
-                        for j, spc in enumerate(self.context["basic"]["sld"][sld]["spc"]):
+                        for j, spc in enumerate(sld2spcs[sld]):
                             model.add(f"res_dict['y']['ind'].append({(svar, sld, None, None, spc)})", 3)
                             model.add(f"res_dict['y']['val'].append(res.y[{out_ind}].round(6).tolist())", 3)
                             out_ind += 1
