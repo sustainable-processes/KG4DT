@@ -45,9 +45,16 @@ def build_frontend_from_kg_context(ctx_name: str, ctx_data: Dict[str, Any]) -> D
     structure = translate_descriptor_section(ctx_data.get("st"))
     operation = translate_descriptor_section(ctx_data.get("op"))
 
+    phenomenon = {}
+    accumulation = ctx_data.get("accumulation")
+    if accumulation:
+        phenomenon["accumulation"] = accumulation
+
     entry = FrontendComponent(
+        type=ctx_data.get("type"),
         operation=operation,
-        structure=structure
+        structure=structure,
+        phenomenon=phenomenon
     )
     return {ctx_name: entry}
 

@@ -25,7 +25,12 @@ def get_component_translated_by_id(component_id: int, db: DbSessionDep, request:
     if not comp:
         raise HTTPException(status_code=404, detail="KgComponent not found")
 
-    return _translate_by_name(request, comp.name)
+    res = _translate_by_name(request, comp.name)
+    if isinstance(res, dict):
+        res["id"] = comp.id
+        if comp.icon:
+            res["icon"] = comp.icon
+    return res
 
 
 def _normalize_name_for_match(raw: str) -> str:
@@ -69,7 +74,13 @@ def _translate_by_name(request: Request, raw_name: str):
     if matched_key is None:
         raise HTTPException(status_code=404, detail="Context template not found in Knowledge Graph")
 
-    return build_frontend_from_kg_context(matched_key, data[matched_key])
+    translated_dict = build_frontend_from_kg_context(matched_key, data[matched_key])
+
+    return {
+        "name": matched_key,
+        "detail": data[matched_key],
+        "translated": translated_dict[matched_key]
+    }
 
 
 @router.get("/{name}")

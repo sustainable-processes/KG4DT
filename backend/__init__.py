@@ -74,8 +74,8 @@ def create_app(config):
     
     @app.teardown_request
     def teardown_request(exception):
-        handler = g.get("graphdb_handler", None)
-        if handler:
-            handler.close()
+        # We don't close the graphdb_handler_instance here because it's a global singleton
+        # intended to last for the lifetime of the application process.
+        pass
 
     return app

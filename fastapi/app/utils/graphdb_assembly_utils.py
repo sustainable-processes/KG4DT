@@ -45,8 +45,10 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
     # 1) Contexts and their sections/phenomenon
     sparql1 = (
         f"{SPARQL_PREFIX}"
-        "select ?c ?p ?ss ?os where {"
+        "select ?c ?p ?ss ?os ?type where {"
         "?c rdf:type ontomo:Context. "
+        "filter(!contains(str(?c), \"_Operation\") && !contains(str(?c), \"_Structure\"))"
+        "optional{?c rdf:type ?type. filter(?type IN (ontomo:ReactorContext, ontomo:UtilityContext, ontomo:ProcessStreamContext))}"
         "optional{?c ontomo:hasPhenomenon ?p. }"
         "optional{?c ontomo:hasStructureSection ?ss. }"
         "optional{?c ontomo:hasOperationSection ?os. }"
@@ -58,10 +60,16 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
         p_uri = b.get("p", {}).get("value")
         ss_uri = b.get("ss", {}).get("value")
         os_uri = b.get("os", {}).get("value")
+        t_uri = b.get("type", {}).get("value")
 
         c_local = _local_name(c_uri)
         if not c_local:
             continue
+        
+        # Consistent filtering: skip if it's explicitly a section naming pattern
+        if "_Operation" in c_local or "_Structure" in c_local:
+            continue
+
         c_name = c_local.replace("_Context", "")
 
         if c_name not in ctx:
@@ -70,7 +78,10 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
         p_local = _local_name(p_uri)
         ss_local = _local_name(ss_uri)
         os_local = _local_name(os_uri)
+        t_local = _local_name(t_uri)
 
+        if t_local:
+            ctx[c_name]["type"] = t_local.replace("Context", "")
         if p_local:
             ctx[c_name]["accumulation"] = p_local
         if ss_local and "st" not in ctx[c_name]:
@@ -83,6 +94,7 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
         f"{SPARQL_PREFIX}"
         "select ?c ?s ?d ?v ?lb ?ub ?o ?do ?u ?us where {"
         "?c rdf:type ontomo:Context. "
+        "filter(!contains(str(?c), \"_Operation\") && !contains(str(?c), \"_Structure\"))"
         "?s rdf:type ontomo:ContextSection. "
         "?c ontomo:hasStructureSection ?s. "
         "?d rdf:type ontomo:Descriptor. "
@@ -164,6 +176,7 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
         f"{SPARQL_PREFIX}"
         "select ?c ?s ?d ?v ?lb ?ub ?o ?do ?u ?us where {"
         "?c rdf:type ontomo:Context. "
+        "filter(!contains(str(?c), \"_Operation\") && !contains(str(?c), \"_Structure\"))"
         "?s rdf:type ontomo:ContextSection. "
         "?c ontomo:hasOperationSection ?s. "
         "?d rdf:type ontomo:Descriptor. "
@@ -260,12 +273,12 @@ def list_context_template_names(client: GraphDBClient) -> List[str]:
     """
     # Only list Context individuals and exclude any whose IRI contains
     # section-like suffixes to avoid returning entries such as
-    # *_Operation_Section or *_Structure_Section.
+    # *_Operation or *_Structure.
     sparql = (
         f"{SPARQL_PREFIX}"
         "select ?c where { "
         "?c rdf:type ontomo:Context. "
-        "filter(!contains(str(?c), \"_Operation_Section\") && !contains(str(?c), \"_Structure_Section\"))"
+        "filter(!contains(str(?c), \"_Operation\") && !contains(str(?c), \"_Structure\"))"
         " }"
     )
     data = client.select(sparql)
@@ -278,7 +291,7 @@ def list_context_template_names(client: GraphDBClient) -> List[str]:
             continue
         name = c_local.replace("_Context", "")
         # Defensive filter in case the backend returns any section-like names
-        if "_Operation_Section" in name or "_Structure_Section" in name:
+        if "_Operation" in name or "_Structure" in name:
             continue
         if name not in seen:
             seen.add(name)
@@ -302,11 +315,11 @@ def list_context_templates_with_icons(client: GraphDBClient) -> Dict[str, str | 
         f"{SPARQL_PREFIX}"
         "select ?c ?icon ?iconUrl ?iconValue where { "
         "?c rdf:type ontomo:Context. "
+        "filter(!contains(str(?c), \"_Operation\") && !contains(str(?c), \"_Structure\"))"
         # Keep the icon resource and any attached data properties
         "optional{ ?c ontomo:hasIcon ?icon. }"
         "optional{ ?c ontomo:hasIcon/ontomo:hasURL ?iconUrl. }"
         "optional{ ?c ontomo:hasIcon/ontomo:hasValue ?iconValue. }"
-        "filter(!contains(str(?c), \"_Operation_Section\") && !contains(str(?c), \"_Structure_Section\"))"
         " }"
     )
     data = client.select(sparql)
@@ -324,7 +337,7 @@ def list_context_templates_with_icons(client: GraphDBClient) -> Dict[str, str | 
             continue
         name = c_local.replace("_Context", "")
         # Defensive filter as well
-        if "_Operation_Section" in name or "_Structure_Section" in name:
+        if "_Operation" in name or "_Structure" in name:
             continue
         # Initialize entry if first time we see this name
         if name not in result:

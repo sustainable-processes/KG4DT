@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 from ..services.graphdb import GraphDBClient
 from ..utils import graphdb_exploration_utils as gxu
+from ..utils.graphdb_assembly_utils import query_context_template
 
 router = APIRouter()
 
@@ -106,3 +107,21 @@ def validate_species(payload: ValidateSpeciesRequest) -> ValidateSpeciesResponse
                 out.append(sp)
 
     return ValidateSpeciesResponse(species_id=out)
+
+
+@router.get("/context_template")
+def list_context_templates(request: Request):
+    """List all context templates from the Knowledge Graph."""
+    client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
+    if not client:
+        raise HTTPException(status_code=503, detail="Knowledge Graph client is not configured")
+
+    try:
+        data = query_context_template(client)
+        return {
+            "context_templates": data,
+            "count": len(data),
+            "source": "kg"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={"error": "Failed to query context templates", "detail": str(e)})

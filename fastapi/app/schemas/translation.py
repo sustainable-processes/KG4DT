@@ -53,6 +53,7 @@ class TranslationResponse(BaseModel):
 
 class FrontendComponent(BaseModel):
     """Schema for a frontend component (e.g., a reactor or stream)."""
+    type: Optional[str] = None
     source: List[str] = Field(default_factory=list)
     utility: List[str] = Field(default_factory=list)
     chemistry: Dict[str, Any] = Field(default_factory=dict)

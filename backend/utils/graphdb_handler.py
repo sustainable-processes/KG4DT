@@ -74,7 +74,7 @@ class GraphdbHandler:
 
         sparql_res = self.cur.execute(sparql)
         for res in sparql_res.split("\r\n")[1:-1]:
-            dim = res.split("#")[1]
+            dim = res.split("#")[-1]
             dim_dict[dim] = {"cls": "Dimension"}
         dim_dict = dict(sorted(dim_dict.items(), key=lambda x: x[0]))
         return dim_dict
@@ -113,17 +113,17 @@ class GraphdbHandler:
         for res in sparql_res.split("\r\n")[1:-1]:
             l, f, v, d, r, p, ov, dv, ul, iv, mv, agl, asl, fia = re.split(
                 r",(?![a-zA-Z0]\<\/mtext\>)", res)
-            l = l.split("#")[1]
-            v = v.split("#")[1]
-            p = p.split("#")[1] if p else None
-            r = r.split("#")[1] if r else None
-            ov = ov.split("#")[1] if ov else None
-            dv = dv.split("#")[1] if dv else None
-            ul = ul.split("#")[1] if ul else None
-            iv = iv.split("#")[1] if iv else None
-            mv = mv.split("#")[1] if mv else None
-            agl = agl.split("#")[1] if agl else None
-            asl = asl.split("#")[1] if asl else None
+            l = l.split("#")[-1]
+            v = v.split("#")[-1]
+            p = p.split("#")[-1] if p else None
+            r = r.split("#")[-1] if r else None
+            ov = ov.split("#")[-1] if ov else None
+            dv = dv.split("#")[-1] if dv else None
+            ul = ul.split("#")[-1] if ul else None
+            iv = iv.split("#")[-1] if iv else None
+            mv = mv.split("#")[-1] if mv else None
+            agl = agl.split("#")[-1] if agl else None
+            asl = asl.split("#")[-1] if asl else None
             if l not in law_dict:
                 law_dict[l] = {
                     "cls": "Law",
@@ -209,7 +209,7 @@ class GraphdbHandler:
             sparql_res = self.cur.execute(sparql)
             for res in sparql_res.split("\r\n")[1:-1]:
                 s, url = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
-                s = s.split("#")[1]
+                s = s.split("#")[-1]
                 src_dict[s] = {
                     "cls": src_class,
                     "url": url,
@@ -243,10 +243,10 @@ class GraphdbHandler:
             sparql_res = self.cur.execute(sparql)
             for res in sparql_res.split("\r\n")[1:-1]:
                 v, s, u, d, l, val = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
-                v = v.split("#")[1]
-                u = u.split("#")[1] if u else None
-                d = d.split("#")[1] if d else None
-                l = l.split("#")[1] if l else None
+                v = v.split("#")[-1]
+                u = u.split("#")[-1] if u else None
+                d = d.split("#")[-1] if d else None
+                l = l.split("#")[-1] if l else None
                 s = re.sub(r'("*)"', r'\1', s[1:-1])
                 s = re.sub(r" xmlns=[^\>]*", "", s)
                 d = " ".join(d.split("_")[:-1]) if d else d
@@ -341,8 +341,8 @@ class GraphdbHandler:
         sparql_res = self.cur.execute(sparql)
         for res in sparql_res.split("\r\n")[1:-1]:
             u, s, m, r, i = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
-            u = u.split("#")[1]
-            m = m.split("#")[1] if m else None
+            u = u.split("#")[-1]
+            m = m.split("#")[-1] if m else None
             s = re.sub(r'("*)"', r'\1', s[1:-1])
             s = re.sub(r" xmlns=[^\>]*", "", s)
             r = float(r) if r else None
@@ -536,19 +536,30 @@ class GraphdbHandler:
             o = o.split("#")[-1]
             do = do.split("#")[-1]
             u = u.split("#")[-1]
+            if c not in context_template_dict:
+                context_template_dict[c] = {"type": "Unknown"}
+            if "st" not in context_template_dict[c]:
+                context_template_dict[c]["st"] = {}
             if d not in context_template_dict[c]["st"]:
                 context_template_dict[c]["st"][d] = {}
             if v:
                 if v != "true":
                     context_template_dict[c]["st"][d]["type"] = "value"
-                    context_template_dict[c]["st"][d]["default"] = float(v)
+                    try:
+                        context_template_dict[c]["st"][d]["default"] = float(v)
+                    except ValueError:
+                        context_template_dict[c]["st"][d]["default"] = v
                 else:
                     context_template_dict[c]["st"][d]["type"] = "bool"
                     context_template_dict[c]["st"][d]["default"] = True
             elif lb and ub:
                 context_template_dict[c]["st"][d]["type"] = "range"
-                context_template_dict[c]["st"][d]["lower_bound"] = float(lb)
-                context_template_dict[c]["st"][d]["upper_bound"] = float(ub)
+                try:
+                    context_template_dict[c]["st"][d]["lower_bound"] = float(lb)
+                    context_template_dict[c]["st"][d]["upper_bound"] = float(ub)
+                except ValueError:
+                    context_template_dict[c]["st"][d]["lower_bound"] = lb
+                    context_template_dict[c]["st"][d]["upper_bound"] = ub
             elif o:
                 context_template_dict[c]["st"][d]["type"] = "option"
                 if "options" not in context_template_dict[c]["st"][d]:
@@ -594,19 +605,30 @@ class GraphdbHandler:
             o = o.split("#")[-1]
             do = do.split("#")[-1]
             u = u.split("#")[-1]
+            if c not in context_template_dict:
+                context_template_dict[c] = {"type": "Unknown"}
+            if "op" not in context_template_dict[c]:
+                context_template_dict[c]["op"] = {}
             if d not in context_template_dict[c]["op"]:
                 context_template_dict[c]["op"][d] = {}
             if v:
                 if v != "true":
                     context_template_dict[c]["op"][d]["type"] = "value"
-                    context_template_dict[c]["op"][d]["default"] = float(v)
+                    try:
+                        context_template_dict[c]["op"][d]["default"] = float(v)
+                    except ValueError:
+                        context_template_dict[c]["op"][d]["default"] = v
                 else:
                     context_template_dict[c]["op"][d]["type"] = "bool"
                     context_template_dict[c]["op"][d]["default"] = True
             elif lb and ub:
                 context_template_dict[c]["op"][d]["type"] = "range"
-                context_template_dict[c]["op"][d]["lower_bound"] = float(lb)
-                context_template_dict[c]["op"][d]["upper_bound"] = float(ub)
+                try:
+                    context_template_dict[c]["op"][d]["lower_bound"] = float(lb)
+                    context_template_dict[c]["op"][d]["upper_bound"] = float(ub)
+                except ValueError:
+                    context_template_dict[c]["op"][d]["lower_bound"] = lb
+                    context_template_dict[c]["op"][d]["upper_bound"] = ub
             elif o:
                 context_template_dict[c]["op"][d]["type"] = "option"
                 if "options" not in context_template_dict[c]["op"][d]:
