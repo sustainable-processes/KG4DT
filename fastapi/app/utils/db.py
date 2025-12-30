@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict, Type, Iterable
+from datetime import datetime, timezone
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import Column, inspect
@@ -9,10 +10,13 @@ def apply_updates(obj: Any, data: Dict[str, Any]) -> None:
     """
     Generic update pattern: apply key-value pairs from data to obj.
     Only updates attributes that already exist on the object.
+    Also refreshes updated_at if it exists.
     """
     for k, v in data.items():
         if hasattr(obj, k):
             setattr(obj, k, v)
+    if hasattr(obj, "updated_at"):
+        setattr(obj, "updated_at", datetime.now(timezone.utc))
 
 def validate_uniqueness(
     db: Session,

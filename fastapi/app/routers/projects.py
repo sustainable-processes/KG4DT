@@ -96,7 +96,7 @@ def update_project(
         return obj
 
     # If renaming, check for uniqueness
-    if "name" in data:
+    if "name" in data and data["name"] is not None:
         new_name = data["name"]
         if new_name.lower() != obj.name.lower():
             validate_uniqueness(
