@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import Dict, Any
 
 from ..services.graphdb import GraphDBClient
@@ -36,7 +37,7 @@ def _clean_xml_mathml(s: str | None) -> str | None:
     if len(s) >= 2 and s[0] == '"' and s[-1] == '"':
         s = s[1:-1]
     # remove xmlns attributes to match frontend expectations
-    s = s.replace(" xmlns=\"http://www.w3.org/1998/Math/MathML\"", "")
+    s = re.sub(r' xmlns=[^>]*', '', s)
     return s
 
 

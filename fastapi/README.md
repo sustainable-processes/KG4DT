@@ -95,7 +95,7 @@ Translation Engine logic
   - Implementation: `fastapi/app/utils/frontend_translation.py` maps top-level species/reactions to `basic.spc`/`basic.rxn`, and input-level phases to `stm`/`sld`/`gas`. It also populates the `desc` section from phenomena selections.
 - **Knowledge Graph → Frontend**:
   - Purpose: Pre-fill frontend forms with descriptors and parameters derived from KG individuals.
-  - Implementation: `fastapi/app/utils/kg_translation.py` queries KG context templates and translates state/operating parameters into UI-compatible placeholders (Values or Ranges).
+  - Implementation: `fastapi/app/routers/kg_components.py` queries KG context templates and flattens the details directly into the response, pre-filling forms with descriptors and parameters.
 
 Operation parameters (op_param) — logic overview
 - Purpose: determine which OperationParameter variables are needed in a model context and their indexing (global, per-stream, per-gas, per-solid, per-species-in-<index>).

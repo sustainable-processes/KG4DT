@@ -20,7 +20,6 @@ def translate_frontend_json(payload: FrontendPayload) -> TranslationResponse:
 
 
 # ---------------------- KG -> Frontend translation ----------------------
-"""Reusable KG→Frontend translator is implemented in fastapi.app.utils.kg_translation.
-This router keeps only frontend→backend translation endpoint. The KG→Frontend
-endpoint is now exposed under /api/v1/kg_components/{name} and
-/api/assembly/kg_components/{name}."""
+"""KG→Frontend translation logic is now directly handled in the kg_components router
+by flattening the KG context template details. The endpoints are exposed under
+/api/v1/kg_components/{name} and /api/assembly/kg_components/{name}."""

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+from typing import Any
 from fastapi import APIRouter, HTTPException, Request
 
 from ..utils.graphdb_assembly_utils import query_context_template
-from ..utils.kg_translation import build_frontend_from_kg_context
 from ..dependencies import DbSessionDep
 from .. import models as m
 
@@ -12,12 +12,12 @@ router = APIRouter()
 
 
 @router.get("/{component_id:int}")
-def get_component_translated_by_id(component_id: int, db: DbSessionDep, request: Request):
-    """Return translated frontend JSON for a KG context resolved by component ID.
+def get_kg_component_by_id(component_id: int, db: DbSessionDep, request: Request):
+    """Return frontend JSON for a KG context resolved by component ID.
 
     Steps:
     1) Look up `kg_components` by ID – 404 if not found.
-    2) Use its name (with normalization rules) to fetch and translate the KG context.
+    2) Use its name (with normalization rules) to fetch the KG context.
        - If KG client is not configured → 503
        - If KG context cannot be found → 404
     """
@@ -25,11 +25,11 @@ def get_component_translated_by_id(component_id: int, db: DbSessionDep, request:
     if not comp:
         raise HTTPException(status_code=404, detail="KgComponent not found")
 
-    res = _translate_by_name(request, comp.name)
+    res = _get_kg_component_by_name(request, comp.name)
     if isinstance(res, dict):
         res["id"] = comp.id
         if comp.icon:
-            res["icon"] = comp.icon
+            res["icon"] = str(comp.icon).lower()
     return res
 
 
@@ -47,8 +47,8 @@ def _normalize_name_for_match(raw: str) -> str:
     return name.lower().replace("_", " ")
 
 
-def _translate_by_name(request: Request, raw_name: str):
-    """Shared implementation to translate a KG context by (possibly unnormalized) name.
+def _get_kg_component_by_name(request: Request, raw_name: str):
+    """Shared implementation to fetch a KG context by (possibly unnormalized) name.
 
     Applies the same normalization and matching as the name-based endpoint.
     """
@@ -74,24 +74,34 @@ def _translate_by_name(request: Request, raw_name: str):
     if matched_key is None:
         raise HTTPException(status_code=404, detail="Context template not found in Knowledge Graph")
 
-    translated_dict = build_frontend_from_kg_context(matched_key, data[matched_key])
+    # Convert everything to small cap as requested
+    def lowercase_recursive(obj: Any) -> Any:
+        if isinstance(obj, dict):
+            return {str(k).lower(): lowercase_recursive(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [lowercase_recursive(i) for i in obj]
+        elif isinstance(obj, str):
+            return obj.lower()
+        return obj
 
-    return {
+    # Flatten the detail directly into the response and add the name
+    res = {
         "name": matched_key,
-        "detail": data[matched_key],
-        "translated": translated_dict[matched_key]
     }
+    res.update(data[matched_key])
+
+    return lowercase_recursive(res)
 
 
 @router.get("/{name}")
-def get_translated_component(request: Request, name: str):
-    """Return the translated frontend JSON for a KG context by name.
+def get_kg_component_by_name(request: Request, name: str):
+    """Return the frontend JSON for a KG context by name.
 
     Notes:
     - If the path contains "reactor" anywhere, it is normalized to "reactor vessel".
     - Case-insensitive match; underscores/spaces normalized for robustness.
-    - No raw mode is supported; always returns the translated structure.
+    - No raw mode is supported; always returns the mapped structure.
     """
-    return _translate_by_name(request, name)
+    return _get_kg_component_by_name(request, name)
 
 
