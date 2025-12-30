@@ -42,6 +42,7 @@ class GeneralTemplateItem(V1BaseModel):
     id: Optional[int] = None
     name: str
     icon: Optional[str] = None
+    type: Optional[str] = None
 
 
 class AssemblyTemplatesResponse(V1BaseModel):

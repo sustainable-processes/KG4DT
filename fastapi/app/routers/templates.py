@@ -95,7 +95,7 @@ def list_templates(db: DbSessionDep, request: Request):
                         "Inserted %d new kg_components from KG names.", len(to_insert)
                     )
 
-                # Build response using DB ids and icons (None if not set)
+                # Build response using DB ids, icons, and type (None if not set)
                 general_list = []
                 for n in names:
                     comp = comp_by_lower.get(n.lower())
@@ -104,6 +104,7 @@ def list_templates(db: DbSessionDep, request: Request):
                             id=(comp.id if comp else None),
                             name=n,
                             icon=(comp.icon if comp else None),
+                            type=(comp.type if comp else None),
                         )
                     )
             else:
