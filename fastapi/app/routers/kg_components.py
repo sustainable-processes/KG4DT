@@ -28,8 +28,9 @@ def get_kg_component_by_id(component_id: int, db: DbSessionDep, request: Request
     res = _get_kg_component_by_name(request, comp.name)
     if isinstance(res, dict):
         res["id"] = comp.id
-        if comp.icon:
-            res["icon"] = str(comp.icon).lower()
+        res["icon"] = str(comp.icon).lower() if comp.icon else None
+        res["type"] = str(comp.type).lower() if comp.type else None
+        res["tab_type"] = str(comp.tab_type).lower() if comp.tab_type else None
     return res
 
 
@@ -94,7 +95,7 @@ def _get_kg_component_by_name(request: Request, raw_name: str):
 
 
 @router.get("/{name}")
-def get_kg_component_by_name(request: Request, name: str):
+def get_kg_component_by_name(request: Request, name: str, db: DbSessionDep):
     """Return the frontend JSON for a KG context by name.
 
     Notes:
@@ -102,6 +103,25 @@ def get_kg_component_by_name(request: Request, name: str):
     - Case-insensitive match; underscores/spaces normalized for robustness.
     - No raw mode is supported; always returns the mapped structure.
     """
-    return _get_kg_component_by_name(request, name)
+    res = _get_kg_component_by_name(request, name)
+    if isinstance(res, dict):
+        # Try to find corresponding metadata in DB
+        target_norm = _normalize_name_for_match(name)
+        comp = db.query(m.KgComponent).filter(m.KgComponent.name.ilike(target_norm)).first()
+        if not comp:
+             # Fallback to case-insensitive exact name match if normalization fails
+             comp = db.query(m.KgComponent).filter(m.KgComponent.name.ilike(name.strip())).first()
+
+        if comp:
+            res["id"] = comp.id
+            res["icon"] = str(comp.icon).lower() if comp.icon else None
+            res["type"] = str(comp.type).lower() if comp.type else None
+            res["tab_type"] = str(comp.tab_type).lower() if comp.tab_type else None
+        else:
+            res["id"] = None
+            res["icon"] = None
+            res["type"] = None
+            res["tab_type"] = None
+    return res
 
 

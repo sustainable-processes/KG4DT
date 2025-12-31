@@ -15,6 +15,7 @@ class KgComponent(V1Base):
     name: Mapped[str] = mapped_column(String(150), nullable=False)
     icon: Mapped[str | None] = mapped_column(String(255))
     type: Mapped[str | None] = mapped_column(String(50))
+    tab_type: Mapped[str | None] = mapped_column(String(50))
     created_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True), server_default=func.now(), nullable=False
     )

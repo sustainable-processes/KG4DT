@@ -43,6 +43,7 @@ class GeneralTemplateItem(V1BaseModel):
     name: str
     icon: Optional[str] = None
     type: Optional[str] = None
+    tab_type: Optional[str] = None
 
 
 class AssemblyTemplatesResponse(V1BaseModel):
