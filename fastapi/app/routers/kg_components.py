@@ -29,8 +29,8 @@ def get_kg_component_by_id(component_id: int, db: DbSessionDep, request: Request
     if isinstance(res, dict):
         res["id"] = comp.id
         res["icon"] = str(comp.icon).lower() if comp.icon else None
+        res["node_type"] = str(comp.node_type).lower() if comp.node_type else None
         res["type"] = str(comp.type).lower() if comp.type else None
-        res["tab_type"] = str(comp.tab_type).lower() if comp.tab_type else None
     return res
 
 
@@ -115,13 +115,13 @@ def get_kg_component_by_name(request: Request, name: str, db: DbSessionDep):
         if comp:
             res["id"] = comp.id
             res["icon"] = str(comp.icon).lower() if comp.icon else None
+            res["node_type"] = str(comp.node_type).lower() if comp.node_type else None
             res["type"] = str(comp.type).lower() if comp.type else None
-            res["tab_type"] = str(comp.tab_type).lower() if comp.tab_type else None
         else:
             res["id"] = None
             res["icon"] = None
+            res["node_type"] = None
             res["type"] = None
-            res["tab_type"] = None
     return res
 
 

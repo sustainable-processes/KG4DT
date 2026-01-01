@@ -104,8 +104,8 @@ def list_templates(db: DbSessionDep, request: Request):
                             id=(comp.id if comp else None),
                             name=n,
                             icon=(comp.icon if comp else None),
+                            node_type=(comp.node_type if comp else None),
                             type=(comp.type if comp else None),
-                            tab_type=(comp.tab_type if comp else None),
                         )
                     )
             else:
