@@ -59,6 +59,7 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
         p_uri = b.get("p", {}).get("value")
         ss_uri = b.get("ss", {}).get("value")
         os_uri = b.get("os", {}).get("value")
+        t_uri = b.get("type", {}).get("value")
 
         c_local = _local_name(c_uri)
         if not c_local:
@@ -68,17 +69,20 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
         if "_Operation" in c_local or "_Structure" in c_local:
             continue
 
-        c_name = c_local.replace("_Context", "").lower()
+        c_name = c_local.replace("_Context", "")
 
         if c_name not in ctx:
-            ctx[c_name] = {}
+            ctx[c_name] = {"type": "Unknown"}
 
         p_local = _local_name(p_uri)
         ss_local = _local_name(ss_uri)
         os_local = _local_name(os_uri)
+        t_local = _local_name(t_uri)
 
+        if t_local:
+            ctx[c_name]["type"] = t_local.replace("Context", "")
         if p_local:
-            ctx[c_name]["accumulation"] = p_local.lower()
+            ctx[c_name]["accumulation"] = p_local
         if ss_local and "structure" not in ctx[c_name]:
             ctx[c_name]["structure"] = {}
         if os_local and "operation" not in ctx[c_name]:
@@ -117,17 +121,16 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
         c_local = _local_name(c_uri)
         if not c_local:
             continue
-        c_name = c_local.replace("_Context", "").lower()
+        c_name = c_local.replace("_Context", "")
         # ensure context and structure map
         if c_name not in ctx:
-            ctx[c_name] = {}
+            ctx[c_name] = {"type": "Unknown"}
         if "structure" not in ctx[c_name]:
             ctx[c_name]["structure"] = {}
 
         d_local = _local_name(d_uri)
         if not d_local:
             continue
-        d_local = d_local.lower()
 
         entry = ctx[c_name]["structure"].setdefault(d_local, {})
 
@@ -145,22 +148,23 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
                 entry["min"] = float(lb_raw)
                 entry["max"] = float(ub_raw)
             except Exception:
-                pass
+                entry["min"] = lb_raw
+                entry["max"] = ub_raw
         elif o_raw:
             entry.setdefault("options", [])
             opt = _local_name(o_raw) or o_raw
-            entry["options"].append(opt.lower())
+            entry["options"].append(opt)
         else:
             entry["value"] = 0
 
         if do_raw:
-            entry["default_option"] = (_local_name(do_raw) or do_raw).lower()
+            entry["default_option"] = _local_name(do_raw) or do_raw
 
         u_local = _local_name(u_uri)
         if u_local:
-            entry["unit"] = u_local.lower()
+            entry["unit"] = u_local
         if us_raw:
-            entry["unit_symbol"] = _clean_xml_mathml(us_raw).lower()
+            entry["unit_symbol"] = _clean_xml_mathml(us_raw)
 
     # 3) Operation section descriptors
     sparql3 = (
@@ -195,17 +199,16 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
         c_local = _local_name(c_uri)
         if not c_local:
             continue
-        c_name = c_local.replace("_Context", "").lower()
+        c_name = c_local.replace("_Context", "")
         # ensure context and operation map
         if c_name not in ctx:
-            ctx[c_name] = {}
+            ctx[c_name] = {"type": "Unknown"}
         if "operation" not in ctx[c_name]:
             ctx[c_name]["operation"] = {}
 
         d_local = _local_name(d_uri)
         if not d_local:
             continue
-        d_local = d_local.lower()
 
         entry = ctx[c_name]["operation"].setdefault(d_local, {})
 
@@ -223,22 +226,23 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
                 entry["min"] = float(lb_raw)
                 entry["max"] = float(ub_raw)
             except Exception:
-                pass
+                entry["min"] = lb_raw
+                entry["max"] = ub_raw
         elif o_raw:
             entry.setdefault("options", [])
             opt = _local_name(o_raw) or o_raw
-            entry["options"].append(opt.lower())
+            entry["options"].append(opt)
         else:
             entry["value"] = 0
 
         if do_raw:
-            entry["default_option"] = (_local_name(do_raw) or do_raw).lower()
+            entry["default_option"] = _local_name(do_raw) or do_raw
 
         u_local = _local_name(u_uri)
         if u_local:
-            entry["unit"] = u_local.lower()
+            entry["unit"] = u_local
         if us_raw:
-            entry["unit_symbol"] = _clean_xml_mathml(us_raw).lower()
+            entry["unit_symbol"] = _clean_xml_mathml(us_raw)
 
     # Sorting to mimic Flask behavior
     out: Dict[str, Any] = {k: ctx[k] for k in sorted(ctx.keys())}

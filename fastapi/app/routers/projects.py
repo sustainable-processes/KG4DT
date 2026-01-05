@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from datetime import datetime
+import json
 from typing import List
 
-from fastapi import APIRouter, HTTPException, Query
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, HTTPException, Query, Response
 from fastapi.encoders import jsonable_encoder
 
 from ..dependencies import DbSessionDep
@@ -149,22 +150,43 @@ def download_project_by_id(
     # 1. Verify Ownership (Security Best Practice)
     obj = verify_project_ownership(db, project_id, email, ProjectModel, UserModel)
 
-    # 2. Prepare Data (Translation Logic Placeholder)
-    # We use the ProjectRead schema to ensure consistent serialization
-    # In the future, this is where we would 'translate' or aggregate more data
-    data = ProjectRead.model_validate(obj).model_dump()
+    # 2. Prepare Data (Translation Logic)
+    # Extract only the "templates" from the project content
+    content = obj.content or {}
+    templates_data = content.get("templates", {})
 
     # 3. Secure & Consistent Serialization (Backend Best Practice)
-    # jsonable_encoder ensures that datetime objects and other non-serializable 
-    # types are converted to JSON-compatible formats correctly.
-    json_data = jsonable_encoder(data)
+    # jsonable_encoder ensures that any non-serializable types are converted.
+    json_data = jsonable_encoder(templates_data)
 
-    # 4. Forced Download (User Experience)
-    # Setting Content-Disposition header to 'attachment' tells the browser 
-    # to download the file instead of displaying it.
-    filename = f"project_{obj.name}_{project_id}.json".replace(" ", "_")
-    return JSONResponse(
-        content=json_data,
+    # 4. Cleanup Data (Translation Logic)
+    # Remove non-useful fields from within the templates themselves as requested.
+    keys_to_remove = ["icon", "name", "created_date", "number_of_input", "number_of_utility_input"]
+    if isinstance(json_data, dict):
+        # If it's a map of templates, clean each template object.
+        # We iterate over values to avoid accidentally removing a template if its key matches a metadata field.
+        for item in json_data.values():
+            if isinstance(item, dict):
+                for k in keys_to_remove:
+                    item.pop(k, None)
+        # Also clean the top level in case "templates" was a single template object
+        for k in keys_to_remove:
+            json_data.pop(k, None)
+    elif isinstance(json_data, list):
+        for item in json_data:
+            if isinstance(item, dict):
+                for k in keys_to_remove:
+                    item.pop(k, None)
+
+    # 5. Forced Download (User Experience)
+    # Filename includes project name and current datetime
+    now_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{obj.name}_{now_str}.json".replace(" ", "_")
+    
+    # Return pretty-printed JSON
+    return Response(
+        content=json.dumps(json_data, indent=2),
+        media_type="application/json",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'}
     )
 
