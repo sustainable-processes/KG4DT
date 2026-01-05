@@ -14,10 +14,10 @@ from ..utils.graphdb_calibration_utils import (
     normalize_context as gq_normalize_context,
 )
 
-router = APIRouter(tags=["calibration", "knowledge_graph"])  # paths preserved for compatibility
+router = APIRouter()
 
 
-@router.get("/api/model/law")
+@router.get("/law")
 async def get_model_law(request: Request) -> Dict[str, Any]:
     client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
     if not client:
@@ -28,7 +28,7 @@ async def get_model_law(request: Request) -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail={"error": "Failed to query laws from GraphDB", "detail": str(e)})
 
 
-@router.post("/api/model/sym")
+@router.post("/sym")
 async def post_model_symbol(request: Request, body: Dict[str, Any] = Body(..., description="Provide unit or units to resolve symbols")) -> Dict[str, Any]:
     """Resolve symbols for one or more Unit individuals.
 
@@ -81,7 +81,7 @@ async def post_model_symbol(request: Request, body: Dict[str, Any] = Body(..., d
         raise HTTPException(status_code=500, detail={"error": "Failed to resolve symbols", "detail": str(e)})
 
 
-@router.get("/api/knowledge_graph/triplets")
+@router.get("/triplets")
 async def get_knowledge_graph_triplets(request: Request) -> Dict[str, Any]:
     client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
     if not client:
@@ -103,7 +103,7 @@ def _not_implemented(name: str) -> Dict[str, Any]:
     }
 
 
-@router.post("/api/model/op_param")
+@router.post("/op_param")
 async def post_model_op_param(request: Request, body: Dict[str, Any] = Body(..., description="Provide modeling context with 'basic' and 'desc'")) -> Dict[str, Any]:
     client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
     if not client:
@@ -136,7 +136,7 @@ async def post_model_op_param(request: Request, body: Dict[str, Any] = Body(...,
     return {"op_param": entries, "count": len(entries)}
 
 
-@router.post("/api/model/simulate")
+@router.post("/simulate")
 async def post_model_simulate(_: Request, body: Dict[str, Any] = Body(..., description="Simulation request: {'context': {...}, 'op_params': {'ind': [...], 'val': [[...], ...]}}")) -> Dict[str, Any]:
     """Run a lightweight deterministic simulation over a table of experiments.
 
@@ -171,13 +171,13 @@ async def post_model_simulate(_: Request, body: Dict[str, Any] = Body(..., descr
     return result
 
 
-@router.post("/api/model/cal_param")
+@router.post("/calibrate_param")
 async def post_model_calibration_parameter(_: Request, body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
     # Placeholder until query_cal_param logic is ported
-    raise HTTPException(status_code=501, detail=_not_implemented("Calibration parameter discovery (/api/model/cal_param)"))
+    raise HTTPException(status_code=501, detail=_not_implemented("Calibration parameter discovery (/api/calibration/calibrate_param)"))
 
 
-@router.post("/api/model/calibrate")
+@router.post("/calibrate")
 async def post_model_calibrate(_: Request, body: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
     # Placeholder until ModelCalibrationAgent is ported
-    raise HTTPException(status_code=501, detail=_not_implemented("Calibration (/api/model/calibrate)"))
+    raise HTTPException(status_code=501, detail=_not_implemented("Calibration (/api/calibration/calibrate)"))

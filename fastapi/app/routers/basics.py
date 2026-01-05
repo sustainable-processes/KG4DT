@@ -1,24 +1,41 @@
 from __future__ import annotations
 
-from typing import Any, List, Optional
+from typing import List, Optional
 
 from fastapi import APIRouter, HTTPException, Query
-from sqlalchemy.orm import Session
 
 from ..dependencies import DbSessionDep
-from ..models.basic import Basic
-from ..schemas.basic import BasicCreate, BasicUpdate, BasicRead
+from .. import models as m
+from ..schemas.basics import BasicCreate, BasicRead, BasicUpdate
+from ..schemas.types import BasicMatterType, BasicUsage
+from ..utils.db import apply_updates
 
-router = APIRouter(prefix="/models/basics", tags=["basics"])
+router = APIRouter()
 
 
-def _pagination_params(limit: Optional[int] = Query(100, ge=0, le=500), offset: Optional[int] = Query(0, ge=0)) -> tuple[int, int]:
-    return limit or 100, offset or 0
+def _get_basic_or_404(db: DbSessionDep, basic_id: int) -> m.Basic:
+    obj = db.get(m.Basic, basic_id)
+    if not obj:
+        raise HTTPException(status_code=404, detail="Basic not found")
+    return obj
 
 
 @router.get("/", response_model=List[BasicRead])
-def list_basics(db: DbSessionDep, limit: int = Query(100, ge=0, le=500), offset: int = Query(0, ge=0)):
-    q = db.query(Basic).offset(offset)
+def list_basics(
+    db: DbSessionDep,
+    type: Optional[BasicMatterType] = Query(None),
+    usage: Optional[BasicUsage] = Query(None),
+    limit: int = Query(100, ge=0, le=500),
+    offset: int = Query(0, ge=0),
+):
+    q = db.query(m.Basic)
+    if type is not None:
+        q = q.filter(m.Basic.type == type.value)
+    if usage is not None:
+        q = q.filter(m.Basic.usage == usage.value)
+    q = q.order_by(m.Basic.name.asc())
+    if offset:
+        q = q.offset(offset)
     if limit:
         q = q.limit(limit)
     return q.all()
@@ -26,22 +43,18 @@ def list_basics(db: DbSessionDep, limit: int = Query(100, ge=0, le=500), offset:
 
 @router.get("/{basic_id}", response_model=BasicRead)
 def get_basic(basic_id: int, db: DbSessionDep):
-    obj = db.get(Basic, basic_id)
-    if not obj:
-        raise HTTPException(status_code=404, detail="Basic not found")
-    return obj
+    return _get_basic_or_404(db, basic_id)
 
 
 @router.post("/", response_model=BasicRead, status_code=201)
 def create_basic(payload: BasicCreate, db: DbSessionDep):
-    obj = Basic(
+    obj = m.Basic(
         name=payload.name,
-        size=payload.size,
-        substance=payload.substance,
-        time=payload.time,
-        pressure=payload.pressure,
-        temperature=payload.temperature,
+        type=payload.type.value,
+        usage=payload.usage.value,
         structure=payload.structure,
+        phase=payload.phase,
+        operation=payload.operation,
     )
     db.add(obj)
     db.commit()
@@ -51,14 +64,15 @@ def create_basic(payload: BasicCreate, db: DbSessionDep):
 
 @router.patch("/{basic_id}", response_model=BasicRead)
 def update_basic(basic_id: int, payload: BasicUpdate, db: DbSessionDep):
-    obj: Optional[Basic] = db.query(Basic).get(basic_id)
-    if not obj:
-        raise HTTPException(status_code=404, detail="Basic not found")
-
+    obj = _get_basic_or_404(db, basic_id)
     data = payload.model_dump(exclude_unset=True)
-    for k, v in data.items():
-        setattr(obj, k, v)
+    # Convert enums to str values if present
+    if "type" in data and data["type"] is not None:
+        data["type"] = data["type"].value
+    if "usage" in data and data["usage"] is not None:
+        data["usage"] = data["usage"].value
 
+    apply_updates(obj, data)
     db.add(obj)
     db.commit()
     db.refresh(obj)
@@ -67,9 +81,7 @@ def update_basic(basic_id: int, payload: BasicUpdate, db: DbSessionDep):
 
 @router.delete("/{basic_id}", status_code=204)
 def delete_basic(basic_id: int, db: DbSessionDep):
-    obj: Optional[Basic] = db.query(Basic).get(basic_id)
-    if not obj:
-        raise HTTPException(status_code=404, detail="Basic not found")
+    obj = _get_basic_or_404(db, basic_id)
     db.delete(obj)
     db.commit()
     return None

@@ -1,0 +1,11 @@
+Alembic migrations for the FastAPI v2 relational schema.
+
+Commands (from repo root):
+
+  # Create database (if not exists) and run migrations
+  alembic upgrade head
+
+  # Revert last migration
+  alembic downgrade -1
+
+The database URL is configured in alembic.ini. Default: postgresql://postgres:postgres@localhost:5432/kg4dt

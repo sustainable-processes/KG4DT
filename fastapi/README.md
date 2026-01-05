@@ -1,134 +1,101 @@
 KG4DT FastAPI Backend
 
-Overview
-- This folder contains a new FastAPI backend that will gradually reach feature parity with the existing Flask backend (in backend/). 
-- The code here is structured with security, maintainability, and object‑oriented design in mind.
+Overview & Intention
+- This folder contains a modern FastAPI backend designed to reach and exceed feature parity with the legacy Flask backend (in `backend/`).
+- **Intention**: The goal is to provide a robust, high-performance API that leverages Python's type hints for better developer experience, automatic documentation (OpenAPI/Swagger), and improved security. It serves as the primary interface for both Knowledge Graph exploration and relational data management.
+- The code is structured with security, maintainability, and clean architecture principles at its core.
 
-Developer attributes & principles
-- Security-first by default
-  - Validate and sanitize inputs; never trust client data.
-  - Principle of least privilege (scoped DB permissions, minimal network access).
-  - Do not log secrets or sensitive user data. Use structured logs and redaction.
-  - CORS is restrictive by default and configurable via environment variables.
-  - Timeouts, retries, and defensive error handling for external calls (e.g., GraphDB).
-- Best practices for backend engineering
-  - Twelve-Factor App: configuration via environment variables; no hard-coded credentials.
-  - Clear boundaries: routers (API), services (business/infra logic), dependencies (DI), settings (config).
-  - Consistent error handling and typed interfaces for maintainability.
-  - Observability hooks (health checks) to aid deployment and ops.
-- Object-Oriented Programming (OOP)
-  - Encapsulate infra/business logic in classes (e.g., GraphDBClient) for testability and reuse.
-  - Favor composition over inheritance; keep classes small and cohesive.
-  - Write interfaces that allow mocking in tests.
+Developer Attributes & Principles
+- **Security-First by Default**
+  - **Least Privilege**: Ownership is strictly verified for all sensitive resources (Projects, Models, Experiment Data). Users must provide their identifier (email) to access or modify their data.
+  - **Input Validation**: All inputs are validated and sanitized using Pydantic schemas; never trust client data.
+  - **Secure Defaults**: CORS is restrictive by default and configurable via environment variables.
+- **Backend Engineering Best Practices**
+  - **Generic Update Patterns**: Standardized `PATCH` operations using helper utilities to reduce boilerplate and ensure consistent behavior across all resources.
+  - **Decoupled Validation**: Business logic constraints (like uniqueness checks) are separated from the data persistence layer, making the code more modular and testable.
+  - **DRY Routing**: API prefixes and versioning are managed centrally in `main.py`, allowing routers to remain "clean" and focused only on logic.
+  - **Consistent Error Handling**: Structured HTTP exceptions provide clear feedback to the frontend while preventing internal detail leaks.
+- **Object-Oriented Programming (OOP)**
+  - Encapsulate infra/business logic in services (e.g., `GraphDBClient`) for testability and reuse.
+  - Favor composition over inheritance and keep units of code small and cohesive.
 
-Project layout (under this folder)
-- app/
-  - main.py: FastAPI application creation, CORS, startup initialization.
-  - settings.py: Pydantic-based configuration (env-driven).
-  - dependencies.py: Request-scoped dependencies (e.g., DB session).
-  - services/
-    - graphdb.py: GraphDB SPARQL client (minimal wrapper).
-  - routers/
-    - health.py: Health endpoints (basic and deep checks).
-    - model.py: Ontology variable/unit endpoints (GraphDB-backed).
-    - exploration.py: Phenomena exploration endpoints (ac/fp/mt/me, param_law, rxn).
-    - calibration.py: Law/symbol/triplets, op_param, simulate (and placeholders for cal_param/calibrate).
-    - info.py: Aggregated info endpoint.
-  - utils/
-    - graphdb_model_utils.py: SPARQL helpers for variables/units.
-    - graphdb_exploration_utils.py: SPARQL helpers for phenomena queries.
-    - graphdb_calibration_utils.py: Law metadata, op_param derivation, triplets.
-    - simulation.py: Lightweight table simulation helper.
-- requirements.txt: Python dependencies for this FastAPI service.
+Project Layout
+- `app/`
+  - `main.py`: Application entry point, dynamic router inclusion, and CORS configuration.
+  - `settings.py`: Pydantic-based configuration (single source of truth for env vars).
+  - `dependencies.py`: Request-scoped dependencies (e.g., DB session).
+  - `db/`: Database initialization, engine setup, and idempotent startup migrations.
+  - `models/`: SQLAlchemy ORM models (v1 relational schema).
+  - `schemas/`: Pydantic models for request validation and response serialization.
+  - `services/`: External service clients (e.g., GraphDB SPARQL client).
+  - `routers/`: Resource-specific API endpoints (Assembly, Exploration, Calibration, etc.).
+  - `utils/`: 
+    - `db.py`: Shared database utilities (ownership verification, generic updates).
+    - `graphdb_*.py`: SPARQL helpers for specific domain logic.
+- `requirements.txt`: Python dependencies.
 
-Quick start
+API Architecture & Routing
+The API is designed to be resource-centric and intuitive. All endpoints are available under both `/api/` (latest) and `/api/v1/` prefixes.
+
+1. **Assembly (`/api/assembly`)**
+   - Manages the structural components of models.
+   - Sub-groups: `/projects`, `/reactors`, `/templates`, `/species_roles`.
+2. **Exploration (`/api/exploration`)**
+   - Knowledge Graph-backed discovery of phenomena (Accumulation, Flow Patterns, Mass Transfer, etc.).
+3. **Calibration (`/api/calibration`)**
+   - Handles law metadata, symbol resolution, and parameter derivation (OpParams).
+4. **Knowledge Graph & Translation (`/api/v1/kg_components`, `/api/assembly/kg_components`, `/api/v1/translate_frontend_json`)**
+   - **KG Components**: Directly translates Knowledge Graph individuals (like Reactors) into frontend structures. Available at `/api/v1/kg_components` and `/api/assembly/kg_components`.
+   - **Frontend Translation**: Standardizes the conversion of frontend JSON payloads into the `context` format required by backend agents (Simulation/Calibration).
+
+Quick Start
 1) Install dependencies (prefer a virtualenv or Conda environment)
+   ```bash
    pip install -r fastapi/requirements.txt
+   ```
 
 2) Configure environment variables
-   Database (FastAPI has its own DB config, independent of Flask):
-   - FASTAPI_DATABASE_URL
-     or all of the following:
-   - FASTAPI_DB_HOST (default: localhost)
-   - FASTAPI_DB_PORT (default: 5432)
-   - FASTAPI_DB_USER (default: postgres)
-   - FASTAPI_DB_PASSWORD (default: postgres)
-   - FASTAPI_DB_NAME (no default; required if FASTAPI_DATABASE_URL is not set)
+   Create a `fastapi/.env` file (see "Environment configuration" below).
 
-   GraphDB (SPARQL endpoint) for this FastAPI service (prefixed with FASTAPI_):
-   - FASTAPI_GRAPHDB_BASE_URL (default: http://localhost:7200)
-   - FASTAPI_GRAPHDB_REPOSITORY (default: kg4dt)
-   - FASTAPI_GRAPHDB_USERNAME (optional)
-   - FASTAPI_GRAPHDB_PASSWORD (optional)
-   - FASTAPI_GRAPHDB_TIMEOUT_SECONDS (default: 15)
-
-   Optional:
-   - FASTAPI_APP_NAME (default: KG4DT FastAPI)
-   - FASTAPI_DEBUG (default: false)
-   - FASTAPI_CORS_ORIGINS (JSON array or comma-separated list not supported directly; prefer default or override in code if needed)
-   - FASTAPI_DATABASE_ECHO (default: false)
-
-3) Run the development server from the repository root
+3) Run the development server
+   ```bash
    uvicorn app.main:app --reload --port 8001
+   ```
 
-   Notes:
-   - The FastAPI backend maintains its own SQLAlchemy models (fastapi/app/models) and engine/session setup (fastapi/app/db). They are initialized on startup independently of the Flask backend.
-   - The service exposes a basic health endpoint at /health and a deep health check at /health/deep.
+Health Checks
+- `GET /health` → `{"status": "ok"}`
+- `GET /health/deep` → `{ "status": "ok", "database": true, "graphdb": true }`
 
-Health checks
-- GET /health → {"status": "ok"}
-- GET /health/deep → { "status": "ok" | "degraded", "database": bool, "graphdb": bool }
+Future Steps
+- Complete the migration of complex simulation and calibration agents from Flask.
+- Implement full Role-Based Access Control (RBAC) and JWT authentication.
+- Expand unit and integration test coverage for all domain utilities.
+- Implement request IDs and structured logging for better production observability.
 
-Future steps (out of scope for this commit)
-- Gradually port Flask endpoints (router_*.py) into FastAPI routers.
-- Add authentication/authorization middleware and RBAC.
-- Add validation schemas (Pydantic models) for request/response payloads.
-- Implement rate limiting, request IDs, and structured logging.
-- Add unit/integration tests and CI.
-
-
-Environment configuration (.env)
-- Location: Place the FastAPI service env file at fastapi/.env. The app automatically loads this file on startup regardless of where you run uvicorn from.
-- Prefix: All variables for this FastAPI backend should be prefixed with FASTAPI_ to avoid collisions with the Flask app.
-- Recommended keys (copy to fastapi/.env):
-
+Environment Configuration (.env)
+- **Location**: Place the file at `fastapi/.env`.
+- **Prefix**: All variables must be prefixed with `FASTAPI_` to avoid collisions.
+- **Recommended Keys**:
+  ```ini
   FASTAPI_APP_NAME=KG4DT FastAPI
   FASTAPI_DEBUG=false
-  # Database (choose either FASTAPI_DATABASE_URL or the individual parts below)
-  FASTAPI_DATABASE_URL=postgresql://postgres:password@localhost:5432/kg4dt
-  # or
-  FASTAPI_DB_HOST=localhost
-  FASTAPI_DB_PORT=5432
-  FASTAPI_DB_USER=postgres
-  FASTAPI_DB_PASSWORD=postgres
-  FASTAPI_DB_NAME=kg4dt
-
-  # GraphDB
+  FASTAPI_DATABASE_URL=postgresql://user:pass@localhost:5432/kg4dt
   FASTAPI_GRAPHDB_BASE_URL=http://localhost:7200
   FASTAPI_GRAPHDB_REPOSITORY=kg4dt
-  # Optional auth
-  # FASTAPI_GRAPHDB_USERNAME=admin
-  # FASTAPI_GRAPHDB_PASSWORD=secret
-  FASTAPI_GRAPHDB_TIMEOUT_SECONDS=15
+  ```
 
-- Note: Legacy keys like GRAPHDB_HOST/PORT/DB without the FASTAPI_ prefix will be ignored by the FastAPI service. Keep Flask-specific variables in backend/.env if needed.
-- Security: Do not commit real secrets. Prefer creating fastapi/.env from a template like fastapi/.env.example and adding fastapi/.env to .gitignore.
+Shared Logic & Utilities
+- **Ownership Helper**: `verify_project_ownership` ensures that the requesting user (via email) has permissions for the resource.
+- **Update Helper**: `apply_updates` provides a safe way to apply partial updates from `PATCH` requests to SQLAlchemy models.
+- **Uniqueness Helper**: `validate_uniqueness` standardizes how we check for conflicting records before creation or renaming.
 
-
-Single-source configuration (best practice)
-- The FastAPI service now uses a single configuration source: fastapi/app/settings.py.
-- Use get_settings() from that module to access configuration throughout the code. Avoid using os.getenv() or calling load_dotenv() in modules.
-- Benefits: consistent env loading from fastapi/.env, type validation, testability, and no duplicated config logic.
-
-Example usage
-- from fastapi.app.settings import get_settings
-- settings = get_settings()
-- db_url = settings.database_url  # or build parts from settings.db_host, settings.db_port, etc.
-
-Database initialization
-- The DB initializer fastapi.app.db.init_db accepts settings and echo:
-  init_db(echo=settings.database_echo, settings=settings)
-- This ensures all env resolution flows through one place (Settings), avoiding surprises with os.getenv.
+Translation Engine logic
+- **Frontend → Backend Context**:
+  - Purpose: Convert UI-specific JSON (Chemistry, Inputs, Phenomena) into a standardized `context` for simulation/calibration.
+  - Implementation: `fastapi/app/utils/frontend_translation.py` maps top-level species/reactions to `basic.spc`/`basic.rxn`, and input-level phases to `stm`/`sld`/`gas`. It also populates the `desc` section from phenomena selections.
+- **Knowledge Graph → Frontend**:
+  - Purpose: Pre-fill frontend forms with descriptors and parameters derived from KG individuals.
+  - Implementation: `fastapi/app/routers/kg_components.py` queries KG context templates and flattens the details directly into the response, pre-filling forms with descriptors and parameters.
 
 Operation parameters (op_param) — logic overview
 - Purpose: determine which OperationParameter variables are needed in a model context and their indexing (global, per-stream, per-gas, per-solid, per-species-in-<index>).

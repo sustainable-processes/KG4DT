@@ -3,44 +3,45 @@ Exploration API (FastAPI)
 These endpoints mirror the Flask router_exploration_api.py routes and interact with the knowledge graph (GraphDB).
 
 Base path
-- /api/model
+- /api/exploration
+- /api/v1/exploration
 
 Endpoints
-- GET /api/model/pheno
+- GET /api/exploration/pheno
   - Returns a dictionary of phenomena and their relations (cls, fps, mts, mes). Example:
-    curl http://localhost:8001/api/model/pheno
+    curl http://localhost:8001/api/exploration/pheno
 
-- GET /api/model/pheno/ac
+- GET /api/exploration/pheno/ac
   - Returns a sorted list of Accumulation categories (e.g., ["Batch", "Continuous"]).
   - Example:
-    curl http://localhost:8001/api/model/pheno/ac
+    curl http://localhost:8001/api/exploration/pheno/ac
 
-- GET /api/model/pheno/fp?ac=Batch|Continuous|CSTR
+- GET /api/exploration/pheno/fp?ac=Batch|Continuous|CSTR
   - Returns flow patterns for a given accumulation method (case-insensitive).
   - Example:
-    curl "http://localhost:8001/api/model/pheno/fp?ac=Batch"
+    curl "http://localhost:8001/api/exploration/pheno/fp?ac=Batch"
 
-- GET /api/model/pheno/mt?fp=<FlowPattern>
+- GET /api/exploration/pheno/mt?fp=<FlowPattern>
   - Returns mass transport phenomena for a given flow pattern.
   - Example:
-    curl "http://localhost:8001/api/model/pheno/mt?fp=Well_Mixed"
+    curl "http://localhost:8001/api/exploration/pheno/mt?fp=Well_Mixed"
 
-- GET /api/model/pheno/me?mt=<MT>&mt=<MT2>
+- GET /api/exploration/pheno/me?mt=<MT>&mt=<MT2>
   - Returns mass equilibrium phenomena for one or more mass transport phenomena.
   - Example:
-    curl "http://localhost:8001/api/model/pheno/me?mt=Engulfment&mt=Interfacial_Turbulence"
+    curl "http://localhost:8001/api/exploration/pheno/me?mt=Engulfment&mt=Interfacial_Turbulence"
 
-- POST /api/model/pheno/param_law
+- POST /api/exploration/pheno/param_law
   - Provide filters in the JSON body using any of keys: ac, fp, mt, me (string or list).
   - Example:
-    curl -X POST http://localhost:8001/api/model/pheno/param_law \
+    curl -X POST http://localhost:8001/api/exploration/pheno/param_law \
       -H "Content-Type: application/json" \
       -d '{"ac":"Batch","fp":"Well_Mixed","mt":["Mass-Controlled_Gas-Liquid_Mass_Transfer","Solid-Liquid_Mass_Transfer"],"me":["Mass-Controlled_Gas_Dissolution_Equilibrium","Solid_Dissolution_Equilibrium"]}'
 
-- GET /api/model/pheno/rxn
+- GET /api/exploration/pheno/rxn
   - Returns all ReactionPhenomenon names from the knowledge graph. No parameters or body required.
   - Example:
-    curl http://localhost:8001/api/model/pheno/rxn
+    curl http://localhost:8001/api/exploration/pheno/rxn
 
 
 - POST /api/model/info

@@ -8,7 +8,7 @@ from ..services.graphdb import GraphDBClient
 from ..utils import graphdb_exploration_utils as gxu
 from ..schemas.exploration import ParamLawFilters, RxnFilters
 
-router = APIRouter(prefix="/api/model", tags=["exploration"])  # keep paths aligned with Flask
+router = APIRouter()
 
 
 @router.get("/pheno")
@@ -58,7 +58,7 @@ async def get_pheno_mt(fp: str = Query(..., description="Flow pattern name"), re
         raise HTTPException(status_code=503, detail="GraphDB client is not available")
 
     if fp is None or str(fp).strip() == "":
-        raise HTTPException(status_code=400, detail={"error": "Missing required query parameter 'fp' (flow pattern).", "hint": "Example: /api/model/pheno/mt?fp=Annular_Microflow"})
+        raise HTTPException(status_code=400, detail={"error": "Missing required query parameter 'fp' (flow pattern).", "hint": "Example: /api/exploration/pheno/mt?fp=Annular_Microflow"})
 
     data = gxu.query_mt_by_fp(client, fp)
     if isinstance(data, dict) and data.get("error") == "NotImplemented":
@@ -87,7 +87,7 @@ async def get_pheno_me(request: Request, mt: Optional[List[str]] = Query(None, d
     if not mt_list:
         raise HTTPException(status_code=400, detail={
             "error": "Provide one or more 'mt' (mass transport) names via query params.",
-            "hint": {"GET": "/api/model/pheno/me?mt=Engulfment"}
+            "hint": {"GET": "/api/exploration/pheno/me?mt=Engulfment"}
         })
 
     # Delegate and aggregate like Flask if the utility returns a list; otherwise handle NotImplemented

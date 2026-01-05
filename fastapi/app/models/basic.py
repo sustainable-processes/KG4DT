@@ -1,20 +1,33 @@
-from sqlalchemy import Integer, String, Float, JSON
-from sqlalchemy.orm import Mapped, mapped_column
+from __future__ import annotations
 
-from ..db import Base
+from datetime import datetime
+
+from sqlalchemy import BigInteger, CheckConstraint, String, TIMESTAMP, func
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Enum as SAEnum
+
+from . import V1Base
 
 
-class Basic(Base):
-    __tablename__ = "basic"
+BasicMatterType = SAEnum("stream", "solid", "gas", name="basic_matter_type", native_enum=True)
+BasicUsageEnum = SAEnum("inlet", "outlet", "utilities", name="basic_usage", native_enum=True)
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String(255), nullable=False)
-    size: Mapped[float | None] = mapped_column(Float, nullable=True)
-    substance: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    time: Mapped[float | None] = mapped_column(Float, nullable=True)
-    pressure: Mapped[float | None] = mapped_column(Float, nullable=True)
-    temperature: Mapped[float | None] = mapped_column(Float, nullable=True)
-    structure: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
-    def __repr__(self) -> str:
-        return f"<Basic id={self.id} name={self.name!r}>"
+class Basic(V1Base):
+    __tablename__ = "basics"
+    __table_args__ = (
+        CheckConstraint("char_length(name) > 0", name="name_not_empty"),
+    )
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    type: Mapped[str] = mapped_column(BasicMatterType, nullable=True)
+    usage: Mapped[str] = mapped_column(BasicUsageEnum, nullable=False)
+    structure: Mapped[dict | None] = mapped_column(JSONB)
+    phase: Mapped[dict | None] = mapped_column(JSONB)
+    operation: Mapped[dict | None] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+
+    reactors: Mapped[list["Reactor"]] = relationship(secondary="reactor_basic_junction", back_populates="basics")

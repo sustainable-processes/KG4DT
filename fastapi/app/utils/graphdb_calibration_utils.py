@@ -299,6 +299,64 @@ def normalize_context(context: Dict[str, Any]) -> Dict[str, Any]:
     return {"basic": basic_norm, "desc": desc_norm}
 
 
+# ------------------------------
+# Complexity: set-based indices
+# ------------------------------
+def _build_indices(
+    laws: Dict[str, Any],
+    vars_map: Dict[str, Any],
+) -> Tuple[
+    Dict[str, set],  # laws_by_pheno
+    Dict[str, set],  # vars_by_law
+    Dict[str, set],  # opt_vars_by_law
+    Dict[str, set],  # laws_by_var
+    Dict[str, set],  # vars_by_pheno
+    Dict[str, set],  # opt_vars_by_pheno
+]:
+    """Build fast set-based indices for O(1) membership and unions.
+
+    laws_by_pheno: pheno -> set(law)
+    vars_by_law:   law   -> set(var)
+    opt_vars_by_law: law -> set(opt_var)
+    laws_by_var:   var   -> set(law)
+    vars_by_pheno: pheno -> set(var)  (union of vars over pheno's laws)
+    opt_vars_by_pheno: pheno -> set(opt_var) (union of opt_vars over pheno's laws)
+    """
+    laws_by_pheno: Dict[str, set] = {}
+    vars_by_law: Dict[str, set] = {}
+    opt_vars_by_law: Dict[str, set] = {}
+    for law, ld in laws.items():
+        p = ld.get("pheno")
+        if p:
+            laws_by_pheno.setdefault(p, set()).add(law)
+        vars_by_law[law] = set(ld.get("vars", []) or [])
+        opt_vars_by_law[law] = set(ld.get("opt_vars", []) or [])
+
+    laws_by_var: Dict[str, set] = {}
+    for v, vd in vars_map.items():
+        laws_by_var[v] = set(vd.get("laws", []) or [])
+
+    vars_by_pheno: Dict[str, set] = {}
+    opt_vars_by_pheno: Dict[str, set] = {}
+    for p, law_set in laws_by_pheno.items():
+        vagg: set = set()
+        voagg: set = set()
+        for l in law_set:
+            vagg |= vars_by_law.get(l, set())
+            voagg |= opt_vars_by_law.get(l, set())
+        vars_by_pheno[p] = vagg
+        opt_vars_by_pheno[p] = voagg
+
+    return (
+        laws_by_pheno,
+        vars_by_law,
+        opt_vars_by_law,
+        laws_by_var,
+        vars_by_pheno,
+        opt_vars_by_pheno,
+    )
+
+
 def query_op_param(client: GraphDBClient, context: Dict[str, Any]) -> List[List[Optional[str]]]:
     """Derive Operation Parameters for a given modeling context.
 
@@ -327,93 +385,83 @@ def query_op_param(client: GraphDBClient, context: Dict[str, Any]) -> List[List[
     laws = query_law(client)
     vars_map = gq_query_var(client)
 
-    # Collect vars by descriptor relationships (parity with Flask logic)
+    # Build set-based indices for fast membership and unions
+    (
+        laws_by_pheno,
+        vars_by_law,
+        opt_vars_by_law,
+        laws_by_var,
+        vars_by_pheno,
+        opt_vars_by_pheno,
+    ) = _build_indices(laws, vars_map)
+
+    # Accumulation-derived sets
     ac_vars: set[str] = set()
     ac_opt_vars: set[str] = set()
     if ac:
-        for law_dict in laws.values():
-            if law_dict.get("pheno") == ac:
-                for v in law_dict.get("vars", []):
-                    ac_vars.add(v)
-                for v in law_dict.get("opt_vars", []):
-                    ac_opt_vars.add(v)
+        ac_vars = set(vars_by_pheno.get(ac, set()))
+        ac_opt_vars = set(opt_vars_by_pheno.get(ac, set()))
 
+    # FP vars influenced by AC vars: intersect AC var laws with FP laws
     fp_vars: set[str] = set()
     if fp and ac_vars:
-        for law_name, law_dict in laws.items():
-            # if any ac_var has this law in its var.laws, and law is FP
-            try:
-                if any(law_name in (vars_map.get(var, {}).get("laws") or []) for var in ac_vars):
-                    if law_dict.get("pheno") == fp:
-                        for v in law_dict.get("vars", []):
-                            fp_vars.add(v)
-            except Exception:
-                continue
+        ac_var_laws = set().union(*(laws_by_var.get(v, set()) for v in ac_vars)) if ac_vars else set()
+        fp_laws = set(laws_by_pheno.get(fp, set()))
+        fp_laws_from_ac = ac_var_laws & fp_laws
+        if fp_laws_from_ac:
+            fp_vars = set().union(*(vars_by_law.get(l, set()) for l in fp_laws_from_ac))
 
+    # MT vars influenced by AC optional vars
     mt_vars: set[str] = set()
     if mts and ac_opt_vars:
-        for law_name, law_dict in laws.items():
-            try:
-                if any(law_name in (vars_map.get(var, {}).get("laws") or []) for var in ac_opt_vars):
-                    if law_dict.get("pheno") in mts:
-                        for v in law_dict.get("vars", []):
-                            mt_vars.add(v)
-            except Exception:
-                continue
+        ac_opt_var_laws = set().union(*(laws_by_var.get(v, set()) for v in ac_opt_vars)) if ac_opt_vars else set()
+        mt_laws = set().union(*(laws_by_pheno.get(m, set()) for m in mts)) if mts else set()
+        mt_laws_from_ac_opt = ac_opt_var_laws & mt_laws
+        if mt_laws_from_ac_opt:
+            mt_vars = set().union(*(vars_by_law.get(l, set()) for l in mt_laws_from_ac_opt))
 
+    # ME vars influenced by MT vars
     me_vars: set[str] = set()
     if mts and mes and mt_vars:
-        for law_name, law_dict in laws.items():
-            try:
-                if any(law_name in (vars_map.get(var, {}).get("laws") or []) for var in mt_vars):
-                    if law_dict.get("pheno") in mes:
-                        for v in law_dict.get("vars", []):
-                            me_vars.add(v)
-            except Exception:
-                continue
+        mt_var_laws = set().union(*(laws_by_var.get(v, set()) for v in mt_vars)) if mt_vars else set()
+        me_laws = set().union(*(laws_by_pheno.get(m, set()) for m in mes)) if mes else set()
+        me_laws_from_mt = mt_var_laws & me_laws
+        if me_laws_from_mt:
+            me_vars = set().union(*(vars_by_law.get(l, set()) for l in me_laws_from_mt))
 
+    # Associated gas/solid vars via candidate MT laws
     assoc_gas_vars: set[str] = set()
-    if mts and gass and ac_opt_vars:
-        for law_name, law_dict in laws.items():
-            try:
-                if any(law_name in (vars_map.get(var, {}).get("laws") or []) for var in ac_opt_vars):
-                    if law_dict.get("pheno") in mts:
-                        agl = law_dict.get("assoc_gas_law")
-                        if agl and agl in laws and basic.get("gas"):
-                            for v in laws[agl].get("vars", []):
-                                assoc_gas_vars.add(v)
-            except Exception:
-                continue
-
     assoc_sld_vars: set[str] = set()
-    if mts and slds and ac_opt_vars:
-        for law_name, law_dict in laws.items():
-            try:
-                if any(law_name in (vars_map.get(var, {}).get("laws") or []) for var in ac_opt_vars):
-                    if law_dict.get("pheno") in mts:
-                        asl = law_dict.get("assoc_sld_law")
-                        if asl and asl in laws and basic.get("sld"):
-                            for v in laws[asl].get("vars", []):
-                                assoc_sld_vars.add(v)
-            except Exception:
-                continue
+    if mts and ac_opt_vars:
+        ac_opt_var_laws = set().union(*(laws_by_var.get(v, set()) for v in ac_opt_vars)) if ac_opt_vars else set()
+        mt_laws = set().union(*(laws_by_pheno.get(m, set()) for m in mts)) if mts else set()
+        candidate_mt_laws = ac_opt_var_laws & mt_laws
+        if candidate_mt_laws:
+            if gass:
+                for l in candidate_mt_laws:
+                    agl = laws.get(l, {}).get("assoc_gas_law")
+                    if agl and agl in vars_by_law:
+                        assoc_gas_vars |= vars_by_law.get(agl, set())
+            if slds:
+                for l in candidate_mt_laws:
+                    asl = laws.get(l, {}).get("assoc_sld_law")
+                    if asl and asl in vars_by_law:
+                        assoc_sld_vars |= vars_by_law.get(asl, set())
 
+    # Vars directly referenced by param_law map
     param_law_vars: set[str] = set()
-    for l in param_law_map.values():
-        if l in laws:
-            for v in laws[l].get("vars", []):
-                param_law_vars.add(v)
+    if param_law_map:
+        chosen_laws = set(v for v in param_law_map.values() if v in vars_by_law)
+        if chosen_laws:
+            param_law_vars = set().union(*(vars_by_law.get(l, set()) for l in chosen_laws))
 
+    # Reaction variable sets (base + 2-hop neighborhood via laws)
     rxn_var_dict: Dict[str, set[str]] = {r: set() for r in rxn_dict}
     for rxn, rxn_phenos in rxn_dict.items():
-        for law_name, law_meta in laws.items():
-            if law_meta.get("pheno") in rxn_phenos:
-                for v in law_meta.get("vars", []):
-                    rxn_var_dict[rxn].add(v)
-                    # include variables of the laws that this variable participates in
-                    for var_law in (vars_map.get(v, {}).get("laws") or []):
-                        for vv in laws.get(var_law, {}).get("vars", []):
-                            rxn_var_dict[rxn].add(vv)
+        base_vars = set().union(*(vars_by_pheno.get(p, set()) for p in rxn_phenos)) if rxn_phenos else set()
+        neighbor_laws = set().union(*(laws_by_var.get(v, set()) for v in base_vars)) if base_vars else set()
+        neighbor_vars = set().union(*(vars_by_law.get(l, set()) for l in neighbor_laws)) if neighbor_laws else set()
+        rxn_var_dict[rxn] = base_vars | neighbor_vars
 
     desc_vars: set[str] = set()
     desc_vars.update(ac_vars)
