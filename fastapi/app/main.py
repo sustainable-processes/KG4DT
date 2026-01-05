@@ -153,6 +153,7 @@ for prefix in ["/api/v1/assembly", "/api/assembly"]:
     v = "v1: " if "v1" in prefix else ""
     app.include_router(assembly_router.router, prefix=prefix, tags=[f"{v}assembly"])
     app.include_router(v1_projects_router.router, prefix=f"{prefix}/projects", tags=[f"{v}assembly: projects"])
+    app.include_router(v1_projects_router.download_router, prefix=f"{prefix}/download/projects", tags=[f"{v}assembly: projects"])
     app.include_router(v1_reactors_router.router, prefix=f"{prefix}/reactors", tags=[f"{v}assembly: reactors"])
     app.include_router(v1_templates_router.router, prefix=f"{prefix}/templates", tags=[f"{v}assembly: templates"])
 

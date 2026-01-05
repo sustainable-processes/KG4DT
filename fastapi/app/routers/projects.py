@@ -3,6 +3,8 @@ from __future__ import annotations
 from typing import List
 
 from fastapi import APIRouter, HTTPException, Query
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 
 from ..dependencies import DbSessionDep
 from ..models import Project as ProjectModel
@@ -129,5 +131,41 @@ def delete_project_by_id(
     db.delete(obj)
     db.commit()
     return None
+
+
+download_router = APIRouter()
+
+
+@download_router.get("/{project_id}")
+def download_project_by_id(
+    project_id: int,
+    db: DbSessionDep,
+    email: str = Query(..., min_length=1),
+):
+    """
+    Download a project as a JSON file.
+    Verifies ownership before allowing download.
+    """
+    # 1. Verify Ownership (Security Best Practice)
+    obj = verify_project_ownership(db, project_id, email, ProjectModel, UserModel)
+
+    # 2. Prepare Data (Translation Logic Placeholder)
+    # We use the ProjectRead schema to ensure consistent serialization
+    # In the future, this is where we would 'translate' or aggregate more data
+    data = ProjectRead.model_validate(obj).model_dump()
+
+    # 3. Secure & Consistent Serialization (Backend Best Practice)
+    # jsonable_encoder ensures that datetime objects and other non-serializable 
+    # types are converted to JSON-compatible formats correctly.
+    json_data = jsonable_encoder(data)
+
+    # 4. Forced Download (User Experience)
+    # Setting Content-Disposition header to 'attachment' tells the browser 
+    # to download the file instead of displaying it.
+    filename = f"project_{obj.name}_{project_id}.json".replace(" ", "_")
+    return JSONResponse(
+        content=json_data,
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+    )
 
 

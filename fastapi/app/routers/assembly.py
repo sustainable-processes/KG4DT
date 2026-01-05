@@ -67,7 +67,22 @@ async def list_species_roles(
 
 @router.post("/validate_species/", response_model=ValidateSpeciesResponse)
 def validate_species(payload: ValidateSpeciesRequest) -> ValidateSpeciesResponse:
-    """Validate and augment species_id using reaction expressions."""
+    """
+    Validate and augment species_id using reaction expressions.
+
+    Input (POST /validate_species/)
+    {
+      "species_id": ["A", "B"],
+      "stoichiometric": [
+        "A + 2 B > C",
+        "C + D > 3 E"
+      ]
+    }
+    Output
+    {
+      "species_id": ["A", "B", "C", "D", "E"]
+    }
+    """
     out: List[str] = []
     seen = set()
 
