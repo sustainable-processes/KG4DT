@@ -28,25 +28,7 @@ class SpeciesRolesResponse(BaseModel):
     source: str = "kg"
 
 
-_LEADING_COEFF_RE = re.compile(r"^\s*(?:\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)\s*")
-
-
-def _normalize_token(token: str) -> str | None:
-    """Normalize a stoichiometric token to a species name."""
-    if token is None:
-        return None
-    s = token.strip()
-    if not s:
-        return None
-    if s.startswith("(") and s.endswith(")"):
-        s = s[1:-1].strip()
-    s = _LEADING_COEFF_RE.sub("", s, count=1)
-    s = s.strip()
-    if not s:
-        return None
-    if not re.match(r"^[A-Za-z][A-Za-z0-9_]*$", s):
-        return None
-    return s
+RXN_PATTERN = r"^((\d+ )?.+ \+ )*(\d+ )?.+ > ((\d+ )?.+ \+ )*(\d+ )?.+$"
 
 
 @router.get("/species_roles", response_model=SpeciesRolesResponse)
@@ -85,10 +67,11 @@ async def list_species_roles(
 
 @router.post("/validate_species/", response_model=ValidateSpeciesResponse)
 def validate_species(payload: ValidateSpeciesRequest) -> ValidateSpeciesResponse:
-    """Validate and augment species_id using stoichiometric expressions."""
+    """Validate and augment species_id using reaction expressions."""
     out: List[str] = []
     seen = set()
 
+    # Initialize with existing species
     for s in payload.species_id:
         if isinstance(s, str):
             s_norm = s.strip()
@@ -96,15 +79,34 @@ def validate_species(payload: ValidateSpeciesRequest) -> ValidateSpeciesResponse
                 seen.add(s_norm)
                 out.append(s_norm)
 
-    for expr in payload.stoichiometric or []:
-        if not isinstance(expr, str):
+    # Reaction Extraction & Discovery
+    for rxn in payload.stoichiometric or []:
+        if not isinstance(rxn, str):
             continue
-        parts = re.split(r"[=+]", expr)
-        for part in parts:
-            sp = _normalize_token(part)
-            if sp and sp not in seen:
-                seen.add(sp)
-                out.append(sp)
+        
+        # Pattern Matching for simulation accuracy
+        if not re.match(RXN_PATTERN, rxn):
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Invalid reaction format: '{rxn}'. Expected format like '2 A + B > 3 C'"
+            )
+        
+        # Consistency Check / Extraction
+        try:
+            lhs, rhs = rxn.split(" > ")
+            lhs_spcs = [s.strip().split(" ")[-1] for s in lhs.split(" + ")]
+            rhs_spcs = [s.strip().split(" ")[-1] for s in rhs.split(" + ")]
+            
+            for sp in lhs_spcs + rhs_spcs:
+                if sp and sp not in seen:
+                    # Strict Verification: if not in seen, it is a "discovery"
+                    seen.add(sp)
+                    out.append(sp)
+        except Exception as e:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Error parsing reaction '{rxn}': {str(e)}"
+            )
 
     return ValidateSpeciesResponse(species_id=out)
 
