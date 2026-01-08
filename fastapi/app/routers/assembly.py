@@ -142,3 +142,21 @@ def list_context_templates(request: Request):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail={"error": "Failed to query context templates", "detail": str(e)})
+
+
+@router.get("/pheno/rxn")
+async def get_rxn(request: Request):
+    """Return ReactionPhenomenon names from the knowledge graph.
+
+    This GET endpoint accepts no parameters or body and simply lists reactions
+    discovered in GraphDB.
+    """
+    client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
+    if not client:
+        raise HTTPException(status_code=503, detail="GraphDB client is not available")
+
+    data = gxu.query_rxn(client)
+    if isinstance(data, dict) and data.get("error") == "NotImplemented":
+        raise HTTPException(status_code=501, detail=data)
+    # Always return 200 with the list (possibly empty)
+    return data

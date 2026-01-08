@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Query, Request, Body
 
 from ..services.graphdb import GraphDBClient
 from ..utils import graphdb_exploration_utils as gxu
-from ..schemas.exploration import ParamLawFilters, RxnFilters
+from ..schemas.exploration import ParamLawFilters
 
 router = APIRouter()
 
@@ -148,21 +148,5 @@ async def post_param_law(request: Request, filters: ParamLawFilters = Body(..., 
 
 
 
-@router.get("/pheno/rxn")
-async def get_rxn(request: Request):
-    """Return ReactionPhenomenon names from the knowledge graph.
-
-    This GET endpoint accepts no parameters or body and simply lists reactions
-    discovered in GraphDB. Use the POST variant for filtered queries if needed.
-    """
-    client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
-    if not client:
-        raise HTTPException(status_code=503, detail="GraphDB client is not available")
-
-    data = gxu.query_rxn(client)
-    if isinstance(data, dict) and data.get("error") == "NotImplemented":
-        raise HTTPException(status_code=501, detail=data)
-    # Always return 200 with the list (possibly empty)
-    return data
 
 

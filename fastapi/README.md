@@ -39,7 +39,7 @@ The API is designed to be resource-centric and intuitive. All endpoints are avai
 
 1. **Assembly (`/api/assembly`)**
    - Manages the structural components of models.
-   - Sub-groups: `/projects`, `/reactors`, `/templates`, `/species_roles`.
+   - Sub-groups: `/projects`, `/reactors`, `/templates`, `/species_roles`, `/pheno/rxn`.
 2. **Exploration (`/api/exploration`)**
    - Knowledge Graph-backed discovery of phenomena (Accumulation, Flow Patterns, Mass Transfer, etc.).
 3. **Calibration (`/api/calibration`)**

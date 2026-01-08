@@ -27,33 +27,6 @@ class ParamLawFilters(BaseModel):
         }
     }
 
-
-class RxnFilters(BaseModel):
-    """Optional JSON body schema for GET /api/model/pheno/rxn.
-
-    All fields are optional. If no fields provided, the API returns all reactions.
-    """
-
-    ac: Optional[Union[str, List[str]]] = Field(default=None, description="Accumulation filter(s)")
-    fp: Optional[Union[str, List[str]]] = Field(default=None, description="Flow pattern filter(s)")
-    mt: Optional[Union[str, List[str]]] = Field(default=None, description="Mass transport filter(s)")
-    me: Optional[Union[str, List[str]]] = Field(default=None, description="Mass equilibrium filter(s)")
-    param: Optional[Union[str, List[str]]] = Field(default=None, description="Parameter/variable filter(s)")
-    law: Optional[Union[str, List[str]]] = Field(default=None, description="Law name filter(s)")
-    param_law: Optional[Any] = Field(default=None, description="Parameter-to-law mapping candidate(s)")
-
-    model_config = {
-        "json_schema_extra": {
-            "example": {
-                "ac": "Batch",
-                "fp": ["Well_Mixed"],
-                "mt": ["Engulfment"],
-                "me": ["Gas_Dissolution_Equilibrium"],
-            }
-        }
-    }
-
-
 class InfoContext(BaseModel):
     """Optional JSON body for GET /api/model/info.
 
