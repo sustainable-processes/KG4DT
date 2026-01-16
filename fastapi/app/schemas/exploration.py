@@ -28,15 +28,21 @@ class ParamLawFilters(BaseModel):
     }
 
 class InfoContext(BaseModel):
-    """Optional JSON body for GET /api/model/info.
+    """JSON body for /api/model/info.
 
-    Currently unused for filtering, but accepted for forward compatibility.
+    Used to specify the modeling context (species, phenomena, etc.) to retrieve
+    relevant parameters for simulation or calibration.
     """
 
-    context: Optional[Dict[str, Any]] = Field(default=None, description="Context object reserved for future use")
+    basic: Optional[Dict[str, Any]] = Field(default=None, description="Basic entities (stm, gas, sld, spc)")
+    desc: Optional[Dict[str, Any]] = Field(default=None, description="Phenomena descriptors (ac, fp, mt, me, rxn, param_law)")
+    context: Optional[Dict[str, Any]] = Field(default=None, description="Wrapped context object (for backward compatibility)")
 
     model_config = {
         "json_schema_extra": {
-            "example": {"context": {}}
+            "example": {
+                "basic": {"stm": {"S1": {"spc": ["A"]}}},
+                "desc": {"ac": "Batch", "fp": "Well_Mixed"}
+            }
         }
     }

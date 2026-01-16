@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, Tuple, Set
 
 from ..services.graphdb import GraphDBClient
+from .graphdb_model_utils import query_var as _query_var, query_unit as _query_unit
 
 # RDF prefixes matching backend/config.py
 PREFIX_RDF = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
@@ -198,17 +199,28 @@ def _local(name_or_uri: Optional[str]) -> Optional[str]:
 
 
 def _query_laws_basic(client: GraphDBClient) -> Dict[str, Dict[str, Any]]:
-    """Return minimal law metadata required for param_law computation.
+    """Return minimal law metadata required for param_law and query_info computation.
 
-    Output: { law_name: {"pheno": <phenomenon or None>, "vars": set([...])} }
+    Output: { 
+        law_name: {
+            "pheno": <phenomenon or None>, 
+            "vars": List[str],
+            "opt_vars": List[str],
+            "assoc_gas_law": <law_name or None>,
+            "assoc_sld_law": <law_name or None>,
+        } 
+    }
     """
     laws: Dict[str, Dict[str, Any]] = {}
     sparql = (
         f"{PREFIX}"
-        "select ?l ?v ?p where {"
+        "select ?l ?v ?p ?ov ?agl ?asl where {"
         "?l rdf:type ontomo:Law. "
-        "?l ontomo:hasModelVariable ?v. "
+        "optional{?l ontomo:hasModelVariable ?v}. "
         "optional{?l ontomo:isAssociatedWith ?p}. "
+        "optional{?l ontomo:hasOptionalModelVariable ?ov}. "
+        "optional{?l ontomo:hasAssociatedGasLaw ?agl}. "
+        "optional{?l ontomo:hasAssociatedSolidLaw ?asl}. "
         "}"
     )
     data = client.select(sparql)
@@ -216,16 +228,36 @@ def _query_laws_basic(client: GraphDBClient) -> Dict[str, Dict[str, Any]]:
         l = _local(b.get("l", {}).get("value"))
         v = _local(b.get("v", {}).get("value"))
         p = _local(b.get("p", {}).get("value"))
-        if not l or not v:
+        ov = _local(b.get("ov", {}).get("value"))
+        agl = _local(b.get("agl", {}).get("value"))
+        asl = _local(b.get("asl", {}).get("value"))
+        
+        if not l:
             continue
         if l not in laws:
-            laws[l] = {"pheno": p, "vars": set()}
-        laws[l]["vars"].add(v)
-        if p is not None and laws[l]["pheno"] is None:
+            laws[l] = {
+                "pheno": p, 
+                "vars": set(), 
+                "opt_vars": set(),
+                "assoc_gas_law": agl,
+                "assoc_sld_law": asl
+            }
+        if v:
+            laws[l]["vars"].add(v)
+        if ov:
+            laws[l]["opt_vars"].add(ov)
+        if p and not laws[l]["pheno"]:
             laws[l]["pheno"] = p
-    # convert sets to lists
-    for k in list(laws.keys()):
+        if agl and not laws[l]["assoc_gas_law"]:
+            laws[l]["assoc_gas_law"] = agl
+        if asl and not laws[l]["assoc_sld_law"]:
+            laws[l]["assoc_sld_law"] = asl
+
+    # convert sets to sorted lists for stability
+    for k in laws:
         laws[k]["vars"] = sorted(list(laws[k]["vars"]))
+        laws[k]["opt_vars"] = sorted(list(laws[k]["opt_vars"]))
+        
     return laws
 
 
@@ -234,6 +266,8 @@ def _normalize_list(val: Any) -> List[str]:
         return []
     if isinstance(val, list):
         return [str(x).strip() for x in val if x is not None and str(x).strip() != ""]
+    if isinstance(val, dict):
+        return [str(x).strip() for x in val.keys() if x is not None and str(x).strip() != ""]
     s = str(val).strip()
     return [s] if s else []
 
@@ -297,8 +331,6 @@ def query_param_law(client: GraphDBClient, desc: Dict[str, Any]) -> Dict[str, An
     me_list = _normalize_list(desc.get("me"))
 
     # Base datasets
-    from .graphdb_model_utils import query_var as _query_var
-
     vars_dict = _query_var(client)  # var -> {laws: [...], ...}
     laws_dict = _query_laws_basic(client)  # law -> {pheno, vars}
 
@@ -376,25 +408,207 @@ def query_rxn(client: GraphDBClient, filters: Optional[Dict[str, Any]] = None) -
 
 
 def query_info(client: GraphDBClient, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    """Return a minimal information block similar to Flask /api/model/info.
-
-    Currently returns:
-      - pheno: full phenomena dictionary
-      - rxn: list of ReactionPhenomenon names
-    The context parameter is accepted for parity and future use.
+    """Return a flat list of model parameters based on the provided context.
+    
+    Restructured for frontend friendliness: returns {"parameters": [...]}
+    where each parameter is a flat object with a standardized 5-tuple index.
     """
-    try:
-        pheno = query_pheno(client)
-    except Exception:
-        pheno = {}
-    try:
-        rxn = query_rxn(client)
-    except Exception:
-        rxn = []
-    return {
-        "pheno": pheno,
-        "rxn": rxn,
-    }
+    if context is None:
+        context = {}
+    
+    basic = context.get("basic", {})
+    desc = context.get("desc", {})
+
+    spcs = _normalize_list(basic.get("spc"))
+    rxn_names = _normalize_list(basic.get("rxn"))  # actually this is usually from desc.rxn keys
+    stms = _normalize_list(basic.get("stm"))
+    gass = _normalize_list(basic.get("gas"))
+    slds = _normalize_list(basic.get("sld"))
+
+    ac = desc.get("ac")
+    fp = desc.get("fp")
+    mts = _normalize_list(desc.get("mt"))
+    mes = _normalize_list(desc.get("me"))
+    param_law = desc.get("param_law", {})
+    rxn_dict = desc.get("rxn", {})
+
+    vars_dict = _query_var(client)
+    units_dict = _query_unit(client)
+    laws = _query_laws_basic(client)
+
+    # 1. Resolve which variables are active based on phenomena selection (Logic from PhenomenonService)
+    ac_vars = set()
+    ac_opt_vars = set()
+    for l_dict in laws.values():
+        if l_dict["pheno"] == ac:
+            ac_vars.update(l_dict["vars"])
+            ac_opt_vars.update(l_dict["opt_vars"])
+    
+    fp_vars = set()
+    if fp:
+        for l_name, l_dict in laws.items():
+            if any(l_name in vars_dict.get(v, {}).get("laws", []) for v in ac_vars):
+                if l_dict["pheno"] == fp:
+                    fp_vars.update(l_dict["vars"])
+    
+    mt_vars = set()
+    for l_name, l_dict in laws.items():
+        if any(l_name in vars_dict.get(v, {}).get("laws", []) for v in ac_opt_vars):
+            if l_dict["pheno"] in mts:
+                mt_vars.update(l_dict["vars"])
+
+    me_vars = set()
+    for l_name, l_dict in laws.items():
+        if any(l_name in vars_dict.get(v, {}).get("laws", []) for v in mt_vars):
+            if l_dict["pheno"] in mes:
+                me_vars.update(l_dict["vars"])
+
+    assoc_gas_vars = set()
+    assoc_sld_vars = set()
+    for l_name, l_dict in laws.items():
+        for ac_opt_var in ac_opt_vars:
+            if l_name in vars_dict.get(ac_opt_var, {}).get("laws", []):
+                if l_dict["pheno"] in mts:
+                    agl = l_dict.get("assoc_gas_law")
+                    if agl and agl in laws and gass:
+                        assoc_gas_vars.update(laws[agl]["vars"])
+                    asl = l_dict.get("assoc_sld_law")
+                    if asl and asl in laws and slds:
+                        assoc_sld_vars.update(laws[asl]["vars"])
+
+    param_law_vars = set()
+    for l_name in param_law.values():
+        if l_name in laws:
+            param_law_vars.update(laws[l_name]["vars"])
+    
+    rxn_var_dict = {r: set() for r in rxn_dict}
+    for r, r_phenos in rxn_dict.items():
+        pheno_list = _normalize_list(r_phenos)
+        for l_name, l_dict in laws.items():
+            if l_dict["pheno"] in pheno_list:
+                for v in l_dict["vars"]:
+                    rxn_var_dict[r].add(v)
+                    for v_law in vars_dict.get(v, {}).get("laws", []):
+                        if v_law in laws:
+                            rxn_var_dict[r].update(laws[v_law]["vars"])
+
+    # Collect all active desc_vars
+    desc_vars = set()
+    desc_vars.update(ac_vars)
+    desc_vars.update(fp_vars)
+    desc_vars.update(mt_vars)
+    desc_vars.update(me_vars)
+    desc_vars.update(assoc_gas_vars)
+    desc_vars.update(assoc_sld_vars)
+    desc_vars.update(param_law_vars)
+    for r_vars in rxn_var_dict.values():
+        desc_vars.update(r_vars)
+
+    parameters = []
+
+    def add_param(category, name, gas=None, stm=None, rxn=None, spc=None):
+        vd = vars_dict.get(name)
+        if not vd: return
+        
+        # Determine Display Name & Units
+        sym = vd.get("sym") or name
+        unit_name = vd.get("unit")
+        unit_sym = units_dict.get(unit_name, {}).get("sym") if unit_name else None
+        
+        # Build Label
+        parts = [sym]
+        if gas: parts.append(gas)
+        if stm: parts.append(f"({stm})")
+        if rxn: parts.append(f"[{rxn}]")
+        if spc: parts.append(spc)
+        label = " - ".join(parts)
+        
+        # Stable ID
+        pid = f"{category}_{name}_{gas}_{stm}_{rxn}_{spc}".lower().replace(" ", "_").replace("+", "plus").replace(">", "to")
+        
+        parameters.append({
+            "id": pid,
+            "category": category,
+            "name": name,
+            "display_name": sym,
+            "index": {
+                "gas_or_solid": gas,
+                "stream": stm,
+                "reaction": rxn,
+                "species": spc
+            },
+            "full_index": [name, gas, stm, rxn, spc],
+            "label": label,
+            "value": vd.get("val"),
+            "unit": unit_sym or unit_name,
+            "type": vd.get("cls")
+        })
+
+    # 2. Iterate and build parameters (Mapping logic from PhenomenonService)
+    for v_name in sorted(desc_vars):
+        vd = vars_dict.get(v_name, {})
+        if not vd or vd.get("laws"): continue # Skip intermediate variables
+        
+        v_cls = vd.get("cls")
+        v_dims = set(vd.get("dims", []))
+
+        # st: StructureParameter, dims: []
+        if v_cls == "StructureParameter" and not v_dims:
+            add_param("st", v_name)
+        
+        # spc: PhysicsParameter, dims: ["Species"]
+        elif v_cls == "PhysicsParameter" and v_dims == {"Species"}:
+            for s in spcs: add_param("spc", v_name, spc=s)
+            
+        # stm: PhysicsParameter, dims: ["Stream"]
+        elif v_cls == "PhysicsParameter" and v_dims == {"Stream"}:
+            for st in stms: add_param("stm", v_name, stm=st)
+
+        # gas: PhysicsParameter, dims: ["Gas"]
+        elif v_cls == "PhysicsParameter" and v_dims == {"Gas"}:
+            for g in gass: add_param("gas", v_name, gas=g)
+
+        # sld: PhysicsParameter, dims: ["Solid"]
+        elif v_cls == "PhysicsParameter" and v_dims == {"Solid"}:
+            for s in slds: add_param("sld", v_name, gas=s)
+
+        # mt/me: MassTransportParameter / PhysicsParameter with Gas/Stream/Species or Solid/Stream/Species
+        elif v_cls in ["MassTransportParameter", "PhysicsParameter"]:
+            if v_dims == {"Gas", "Stream", "Species"}:
+                for g in gass:
+                    for st in stms:
+                        # Find species in this gas context (basic.gas[g].spc)
+                        g_spcs = _normalize_list(basic.get("gas", {}).get(g, {}).get("spc"))
+                        for s in g_spcs:
+                            cat = "mt" if v_cls == "MassTransportParameter" else "me"
+                            add_param(cat, v_name, gas=g, stm=st, spc=s)
+            elif v_dims == {"Solid", "Stream", "Species"}:
+                for sld in slds:
+                    for st in stms:
+                        s_spcs = _normalize_list(basic.get("sld", {}).get(sld, {}).get("spc"))
+                        for s in s_spcs:
+                            cat = "mt" if v_cls == "MassTransportParameter" else "me"
+                            add_param(cat, v_name, gas=sld, stm=st, spc=s)
+            elif not v_dims and v_cls == "MassTransportParameter":
+                add_param("mt", v_name)
+
+        # rxn: ReactionParameter, dims: ["Reaction", "Stream"] or ["Reaction"] or ["Reaction", "Species"]
+        if v_cls == "ReactionParameter":
+            for r in rxn_dict:
+                if v_name in rxn_var_dict.get(r, set()):
+                    if "Stream" in v_dims:
+                        for st in stms: add_param("rxn", v_name, stm=st, rxn=r)
+                    elif "Species" in v_dims:
+                        if v_name == "Stoichiometric_Coefficient":
+                            continue
+                        lhs = r.split(" > ")[0]
+                        lhs_spcs = [s.split(" ")[-1].strip() for s in lhs.split(" + ")]
+                        for spc in lhs_spcs:
+                            add_param("rxn", v_name, rxn=r, spc=spc)
+                    else:
+                        add_param("rxn", v_name, rxn=r)
+
+    return {"parameters": parameters}
 
 
 def query_species_roles(client: GraphDBClient) -> List[str]:

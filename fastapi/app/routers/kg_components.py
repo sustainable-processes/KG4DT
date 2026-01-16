@@ -91,7 +91,10 @@ def _get_kg_component_by_name(request: Request, raw_name: str):
     }
     res.update(data[matched_key])
 
-    return lowercase_recursive(res)
+    res = lowercase_recursive(res)
+    if isinstance(res, dict) and "name" in res:
+        res["label"] = str(res["name"]).replace("_", " ").capitalize()
+    return res
 
 
 @router.get("/{name}")
