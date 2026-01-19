@@ -513,8 +513,10 @@ def query_op_param(client: GraphDBClient, context: Dict[str, Any]) -> List[List[
             # Unknown dimensioning; default to global to avoid omission
             op_param_entries.append([var, None, None, None, None])
 
-    # Deterministic sort
+    # Deterministic sort: minimal entries (only name, rest null) come first, then others.
+    # Within each group, sort by all indices ascending.
     op_param_entries.sort(key=lambda x: (
+        not (x[1] is None and x[2] is None and x[3] is None and x[4] is None),
         str(x[0]),
         str(x[1]) if x[1] is not None else "",
         str(x[2]) if x[2] is not None else "",

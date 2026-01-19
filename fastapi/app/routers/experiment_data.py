@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import csv
 import io
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, HTTPException, Query, File, UploadFile, Form
 
@@ -30,11 +30,13 @@ def list_experiment_data(
     db: DbSessionDep,
     email: str = Query(..., min_length=1),
     project_id: int = Query(..., ge=1),
+    model_id: int = Query(..., ge=1),
 ):
     verify_project_ownership(db, project_id, email, m.Project, m.User)
     return (
         db.query(m.ExperimentData)
         .filter(m.ExperimentData.project_id == project_id)
+        .filter(m.ExperimentData.model_id == model_id)
         .order_by(m.ExperimentData.id.desc())
         .all()
     )
@@ -57,8 +59,8 @@ def get_experiment(
 
 @router.post("/", response_model=ExperimentDataRead, status_code=201)
 def create_experiment(
-    payload: ExperimentDataCreate,
     db: DbSessionDep,
+    payload: ExperimentDataCreate,
     email: str = Query(..., min_length=1),
 ):
     # Verify ownership of the project
@@ -77,6 +79,7 @@ def create_experiment(
     obj = m.ExperimentData(
         project_id=payload.project_id,
         model_id=payload.model_id,
+        name=payload.name,
         data=payload.data or {},
     )
     db.add(obj)
@@ -88,10 +91,11 @@ def create_experiment(
 @router.post("/upload", response_model=ExperimentDataRead, status_code=201)
 async def upload_experiment_data(
     db: DbSessionDep,
-    project_id: int = Form(...),
-    model_id: int = Form(...),
     file: UploadFile = File(...),
     email: str = Query(..., min_length=1),
+    project_id: int = Form(..., ge=1),
+    model_id: int = Form(..., ge=1),
+    name: Optional[str] = Form(None, max_length=100),
 ):
     """Upload a CSV file and save its content as ExperimentData.
 
@@ -114,36 +118,53 @@ async def upload_experiment_data(
     try:
         contents = await file.read()
         decoded = contents.decode("utf-8")
-        # Use io.StringIO to make the string behave like a file for csv.DictReader
-        reader = csv.DictReader(io.StringIO(decoded))
-        data_list = []
+        # Use csv.reader to get rows as lists for structured storage
+        reader = csv.reader(io.StringIO(decoded))
+        header_row = next(reader, None)
+        if not header_row:
+            raise ValueError("CSV file is empty")
+
+        # Convert simple headers to 5-tuple format for robustness/consistency
+        op_param = [[col.strip(), None, None, None, None] for col in header_row]
+
+        rows = []
         for row in reader:
-            # Optionally convert numeric values
-            processed_row = {}
-            for k, v in row.items():
-                if v is not None:
+            if not any(field.strip() for field in row if field):
+                continue  # Skip empty rows
+            processed_row = []
+            for v in row:
+                if v is not None and str(v).strip() != "":
                     v_str = str(v).strip()
                     try:
-                        # Try to convert to float/int if possible
                         if "." in v_str:
-                            processed_row[k] = float(v_str)
+                            processed_row.append(float(v_str))
                         else:
-                            processed_row[k] = int(v_str)
+                            processed_row.append(int(v_str))
                     except ValueError:
-                        processed_row[k] = v_str
+                        processed_row.append(v_str)
                 else:
-                    processed_row[k] = v
-            data_list.append(processed_row)
+                    processed_row.append(None)
+
+            # Ensure row length matches header length
+            if len(processed_row) < len(op_param):
+                processed_row.extend([None] * (len(op_param) - len(processed_row)))
+            elif len(processed_row) > len(op_param):
+                processed_row = processed_row[: len(op_param)]
+
+            rows.append(processed_row)
+
+        data_content = {"op_param": op_param, "rows": rows}
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to parse CSV: {str(e)}")
 
-    if not data_list:
-        raise HTTPException(status_code=400, detail="CSV file is empty or invalid")
+    if not rows:
+        raise HTTPException(status_code=400, detail="CSV file has no data rows")
 
     obj = m.ExperimentData(
         project_id=project_id,
         model_id=model_id,
-        data=data_list,
+        name=name,
+        data=data_content,
     )
     db.add(obj)
     db.commit()

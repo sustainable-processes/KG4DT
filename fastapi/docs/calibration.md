@@ -111,6 +111,52 @@ Endpoints
 7) POST /api/calibration/calibrate
 - Placeholder (501). Expects JSON body. Depends on ModelCalibrationAgent migration.
 
+8) POST /api/calibration/experiment_data/
+- Create a new experiment data record.
+- Body (JSON): `project_id` (int), `model_id` (int), `name` (string, optional), `data` (ExperimentDataContent object).
+- `ExperimentDataContent` structure:
+  ```json
+  {
+    "op_param": [ ["ParameterName", "Index1", "Index2", "Index3", "Index4"] ],
+    "rows": [ ["Value1", "Value2"] ]
+  }
+  ```
+- Query parameter: `email` (string) for ownership verification.
+- Example:
+  ```bash
+  curl -X POST "http://localhost:8001/api/calibration/experiment_data/?email=user@example.com" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "project_id": 1,
+      "model_id": 2,
+      "name": "Exp 1",
+      "data": {
+        "op_param": [
+          ["Experiment_No", null, null, null, null],
+          ["Batch_Time", null, null, null, null]
+        ],
+        "rows": [
+          [1, 152],
+          [2, 311]
+        ]
+      }
+    }'
+  ```
+
+9) POST /api/calibration/experiment_data/upload
+- Upload a CSV file and save its content as ExperimentData.
+- The CSV is parsed into the structured `ExperimentDataContent` format.
+- Form fields: `project_id` (int), `model_id` (int), `name` (string, optional), `file` (CSV file).
+- Query parameter: `email` (string) for ownership verification.
+- Example:
+  ```bash
+  curl -X POST "http://localhost:8001/api/calibration/experiment_data/upload?email=user@example.com" \
+    -F "project_id=1" \
+    -F "model_id=2" \
+    -F "name=Exp 1 Upload" \
+    -F "file=@data.csv"
+  ```
+
 Configuration
 - Ensure FASTAPI_GRAPHDB_* variables are set in fastapi/.env and GraphDB is running with the expected repository.
 

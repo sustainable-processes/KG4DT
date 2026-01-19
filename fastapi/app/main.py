@@ -64,20 +64,19 @@ app = FastAPI(
         {"name": "assembly: kg_components"},
         {"name": "exploration"},
         {"name": "exploration: models"},
-        {"name": "exploration: experiment data"},
         {"name": "calibration"},
+        {"name": "calibration: experiment data"},
         {"name": "v1: assembly"},
         {"name": "v1: assembly: projects"},
         {"name": "v1: assembly: reactors"},
         {"name": "v1: assembly: templates"},
         {"name": "v1: exploration"},
         {"name": "v1: exploration: models"},
-        {"name": "v1: exploration: experiment data"},
         {"name": "v1: calibration"},
+        {"name": "v1: calibration: experiment data"},
         {"name": "v1: users"},
         {"name": "v1: basics"},
         {"name": "v1: categories"},
-        {"name": "v1: experiment_data"},
         {"name": "v1: kg_components"},
         {"name": "knowledge graph: model"},
         {"name": "knowledge_graph"},
@@ -147,7 +146,7 @@ for prefix in ["/api/v1", "/api"]:
     app.include_router(info_router.router, prefix=f"{prefix}/exploration", tags=[f"{v}exploration"])
     app.include_router(calibration_router.router, prefix=f"{prefix}/calibration", tags=[f"{v}calibration"])
     app.include_router(v1_models_router.router, prefix=f"{prefix}/exploration/models", tags=[f"{v}exploration: models"])
-    app.include_router(v1_experiment_router.router, prefix=f"{prefix}/exploration/experiment_data", tags=[f"{v}exploration: experiment data"])
+    app.include_router(v1_experiment_router.router, prefix=f"{prefix}/calibration/experiment_data", tags=[f"{v}calibration: experiment data"])
 
 app.include_router(health_router.router)
 app.include_router(model_router.router)
@@ -166,7 +165,6 @@ for prefix in ["/api/v1", "/api"]:
     app.include_router(v1_users_router.router, prefix=f"{prefix}/users", tags=["v1: users" if "v1" in prefix else "users"])
     app.include_router(v1_basics_router.router, prefix=f"{prefix}/basics", tags=["v1: basics" if "v1" in prefix else "basics"])
     app.include_router(v1_categories_router.router, prefix=f"{prefix}/categories", tags=["v1: categories" if "v1" in prefix else "categories"])
-    app.include_router(v1_experiment_router.router, prefix=f"{prefix}/experiment_data", tags=["v1: experiment_data" if "v1" in prefix else "experiment_data"])
     
     if prefix == "/api/v1":
         app.include_router(v1_kg_components_router.router, prefix=f"{prefix}/kg_components", tags=["v1: kg_components"])

@@ -50,19 +50,6 @@ Endpoints
   - Example:
     curl -X POST http://localhost:8001/api/exploration/info -H "Content-Type: application/json" -d '{"context": {}}'
 
-- POST /api/exploration/experiment_data/upload
-  - Upload a CSV file and save its content as ExperimentData.
-  - The CSV is parsed into JSON and stored in the database.
-  - Form fields: `project_id` (int), `model_id` (int), `file` (CSV file).
-  - Query parameter: `email` (string) for ownership verification.
-  - Example:
-    ```bash
-    curl -X POST "http://localhost:8001/api/exploration/experiment_data/upload?email=user@example.com" \
-      -F "project_id=1" \
-      -F "model_id=2" \
-      -F "file=@data.csv"
-    ```
-
 Configuration
 - Ensure GraphDB is reachable and repository is configured in fastapi/.env:
   FASTAPI_GRAPHDB_BASE_URL=http://localhost:7200
