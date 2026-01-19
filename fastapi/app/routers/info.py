@@ -8,25 +8,10 @@ from ..services.graphdb import GraphDBClient
 from ..utils import graphdb_exploration_utils as gxu
 from ..schemas.exploration import InfoContext
 
-router = APIRouter(prefix="/api/model", tags=["info"])  # keep base aligned with Flask
+router = APIRouter()
 
 
 
-
-@router.get("/info")
-async def get_model_info(request: Request):
-    """Return model/ontology information using default (empty) context.
-
-    This matches the Flask behavior where GET /api/model/info is supported.
-    """
-    client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
-    if not client:
-        raise HTTPException(status_code=503, detail="GraphDB client is not available")
-    try:
-        data = gxu.query_info(client, {})
-        return data
-    except Exception as e:
-        raise HTTPException(status_code=500, detail={"error": "Failed to assemble model info", "detail": str(e)})
 
 
 @router.post("/info")

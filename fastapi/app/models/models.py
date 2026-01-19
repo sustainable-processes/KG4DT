@@ -60,11 +60,13 @@ class ExperimentData(V1Base):
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     project_id: Mapped[int] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    model_id: Mapped[int] = mapped_column(ForeignKey("models.id", ondelete="CASCADE"), nullable=False)
     data: Mapped[dict] = mapped_column(JSONB, server_default="{}", nullable=False)
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
 
     project: Mapped[Project] = relationship(back_populates="experiments")  # type: ignore
+    model: Mapped[Model] = relationship(back_populates="experiments")  # type: ignore
 
 
 class Model(V1Base):
@@ -80,6 +82,7 @@ class Model(V1Base):
     updated_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
 
     project: Mapped[Project] = relationship(back_populates="models")  # type: ignore
+    experiments: Mapped[list[ExperimentData]] = relationship(back_populates="model", cascade="all, delete-orphan")  # type: ignore
 
 
 class Reactor(V1Base):

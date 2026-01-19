@@ -22,3 +22,4 @@ class Model(V1Base):
     updated_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
 
     project: Mapped["Project"] = relationship(back_populates="models")
+    experiments: Mapped[list["ExperimentData"]] = relationship(back_populates="model", cascade="all, delete-orphan")

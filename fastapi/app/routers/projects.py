@@ -151,25 +151,25 @@ def download_project_by_id(
     obj = verify_project_ownership(db, project_id, email, ProjectModel, UserModel)
 
     # 2. Prepare Data (Translation Logic)
-    # Extract only the "templates" from the project content
+    # Extract only the "tabContent" from the project content
     content = obj.content or {}
-    templates_data = content.get("templates", {})
+    tab_content_data = content.get("tabContent", {})
 
     # 3. Secure & Consistent Serialization (Backend Best Practice)
     # jsonable_encoder ensures that any non-serializable types are converted.
-    json_data = jsonable_encoder(templates_data)
+    json_data = jsonable_encoder(tab_content_data)
 
     # 4. Cleanup Data (Translation Logic)
-    # Remove non-useful fields from within the templates themselves as requested.
+    # Remove non-useful fields from within the tab content itself as requested.
     keys_to_remove = ["icon", "name", "created_date", "number_of_input", "number_of_utility_input"]
     if isinstance(json_data, dict):
-        # If it's a map of templates, clean each template object.
-        # We iterate over values to avoid accidentally removing a template if its key matches a metadata field.
+        # If it's a map of items, clean each object.
+        # We iterate over values to avoid accidentally removing an item if its key matches a metadata field.
         for item in json_data.values():
             if isinstance(item, dict):
                 for k in keys_to_remove:
                     item.pop(k, None)
-        # Also clean the top level in case "templates" was a single template object
+        # Also clean the top level in case "tabContent" was a single object
         for k in keys_to_remove:
             json_data.pop(k, None)
     elif isinstance(json_data, list):

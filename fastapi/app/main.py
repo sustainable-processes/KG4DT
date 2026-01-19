@@ -64,6 +64,7 @@ app = FastAPI(
         {"name": "assembly: kg_components"},
         {"name": "exploration"},
         {"name": "exploration: models"},
+        {"name": "exploration: experiment data"},
         {"name": "calibration"},
         {"name": "v1: assembly"},
         {"name": "v1: assembly: projects"},
@@ -71,13 +72,13 @@ app = FastAPI(
         {"name": "v1: assembly: templates"},
         {"name": "v1: exploration"},
         {"name": "v1: exploration: models"},
+        {"name": "v1: exploration: experiment data"},
         {"name": "v1: calibration"},
         {"name": "v1: users"},
         {"name": "v1: basics"},
         {"name": "v1: categories"},
         {"name": "v1: experiment_data"},
         {"name": "v1: kg_components"},
-        {"name": "info"},
         {"name": "knowledge graph: model"},
         {"name": "knowledge_graph"},
     ],
@@ -143,12 +144,13 @@ from .routers import kg_components as v1_kg_components_router  # noqa: E402
 for prefix in ["/api/v1", "/api"]:
     v = "v1: " if "v1" in prefix else ""
     app.include_router(exploration_router.router, prefix=f"{prefix}/exploration", tags=[f"{v}exploration"])
+    app.include_router(info_router.router, prefix=f"{prefix}/exploration", tags=[f"{v}exploration"])
     app.include_router(calibration_router.router, prefix=f"{prefix}/calibration", tags=[f"{v}calibration"])
     app.include_router(v1_models_router.router, prefix=f"{prefix}/exploration/models", tags=[f"{v}exploration: models"])
+    app.include_router(v1_experiment_router.router, prefix=f"{prefix}/exploration/experiment_data", tags=[f"{v}exploration: experiment data"])
 
 app.include_router(health_router.router)
 app.include_router(model_router.router)
-app.include_router(info_router.router)
 
 # Assembly endpoints (versioned and unversioned)
 for prefix in ["/api/v1/assembly", "/api/assembly"]:

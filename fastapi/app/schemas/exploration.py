@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 
 class ParamLawFilters(BaseModel):
-    """JSON body schema for /api/model/pheno/param_law (POST).
+    """JSON body schema for /api/exploration/pheno/param_law (POST).
 
     Accepts phenomenon selections to constrain parameter-to-law mapping.
     Values can be a single string or a list of strings.
@@ -28,7 +28,7 @@ class ParamLawFilters(BaseModel):
     }
 
 class InfoContext(BaseModel):
-    """JSON body for /api/model/info.
+    """JSON body for /api/exploration/info (or /api/v1/exploration/info).
 
     Used to specify the modeling context (species, phenomena, etc.) to retrieve
     relevant parameters for simulation or calibration.
