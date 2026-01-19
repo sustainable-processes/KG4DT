@@ -227,258 +227,201 @@ class PhenomenonService:
                 rxns.add(rxn)
         return sorted(rxns)
 
+    def _normalize_list(self, val):
+        if val is None:
+            return []
+        if isinstance(val, list):
+            return [str(x).strip() for x in val if x is not None and str(x).strip() != ""]
+        if isinstance(val, dict):
+            return [str(x).strip() for x in val.keys() if x is not None and str(x).strip() != ""]
+        s = str(val).strip()
+        return [s] if s else []
+
     def query_info(self, context):
         """
-        Build a best-effort "information" object from the ontology based on provided filters.
-        filters: dict with optional keys {ac, fp, mt, me, param_law, rxn}.
-        Returns a dict shaped like:
-          {
-            "st": { <ReactorParameter>: <value>, ... },
-            "mt": { <MolecularTransportParameter>: <value>, ... },
-            "rxn": { <ReactionName>: { <ReactionParameter>: <value>, ... }, ... }
-          }
-        Only sections with content are included.
+        Build a flat list of model parameters based on the provided context.
+        Returns: {"parameters": [...]}
         """
+        if context is None:
+            context = {}
+        
         basic = context.get("basic", {})
         desc = context.get("desc", {})
 
-        spcs = basic.get("spc", [])
-        rxns = basic.get("rxn", [])
-        stms = basic.get("stm", [])
-        gass = basic.get("gas", [])
-        slds = basic.get("sld", [])
+        spcs = self._normalize_list(basic.get("spc"))
+        rxn_names = self._normalize_list(basic.get("rxn"))
+        stms = self._normalize_list(basic.get("stm"))
+        gass = self._normalize_list(basic.get("gas"))
+        slds = self._normalize_list(basic.get("sld"))
 
-        ac = desc.get("ac", None)
-        fp = desc.get("fp", None)
-        mts = desc.get("mt", [])
-        mes = desc.get("me", [])
+        ac = desc.get("ac")
+        fp = desc.get("fp")
+        mts = self._normalize_list(desc.get("mt"))
+        mes = self._normalize_list(desc.get("me"))
         param_law = desc.get("param_law", {})
         rxn_dict = desc.get("rxn", {})
 
         laws = self.h.query_law("mainpage")
-        vars = self.h.query_var()
+        vars_dict = self.h.query_var()
+        units_dict = self.h.query_unit()
 
+        # 1. Resolve active variables
         ac_vars, ac_opt_vars = set(), set()
-        for law_dict in laws.values():
-            if law_dict["pheno"] == ac:
-                for var in law_dict["vars"]:
-                    ac_vars.add(var)
-                for var in law_dict["opt_vars"]:
-                    ac_opt_vars.add(var)
+        for l_dict in laws.values():
+            if l_dict["pheno"] == ac:
+                ac_vars.update(l_dict["vars"])
+                ac_opt_vars.update(l_dict["opt_vars"])
         
         fp_vars = set()
-        for law, law_dict in laws.items():
-            if any([law in vars[var]["laws"] for var in ac_vars]):
-                if law_dict["pheno"] == fp:
-                    for var in law_dict["vars"]:
-                        fp_vars.add(var)
+        if fp:
+            for l_name, l_dict in laws.items():
+                if any(l_name in vars_dict.get(v, {}).get("laws", []) for v in ac_vars):
+                    if l_dict["pheno"] == fp:
+                        fp_vars.update(l_dict["vars"])
         
         mt_vars = set()
-        for law, law_dict in laws.items():
-            if any([law in vars[var]["laws"] for var in ac_opt_vars]):
-                if law_dict["pheno"] in mts:
-                    for var in law_dict["vars"]:
-                        mt_vars.add(var)
+        for l_name, l_dict in laws.items():
+            if any(l_name in vars_dict.get(v, {}).get("laws", []) for v in ac_opt_vars):
+                if l_dict["pheno"] in mts:
+                    mt_vars.update(l_dict["vars"])
 
         me_vars = set()
-        for law, law_dict in laws.items():
-            if any([law in vars[var]["laws"] for var in mt_vars]):
-                if law_dict["pheno"] in mes:
-                    for var in law_dict["vars"]:
-                        me_vars.add(var)
+        for l_name, l_dict in laws.items():
+            if any(l_name in vars_dict.get(v, {}).get("laws", []) for v in mt_vars):
+                if l_dict["pheno"] in mes:
+                    me_vars.update(l_dict["vars"])
+
+        assoc_gas_vars = set()
+        assoc_sld_vars = set()
+        for l_name, l_dict in laws.items():
+            for ac_opt_var in ac_opt_vars:
+                if l_name in vars_dict.get(ac_opt_var, {}).get("laws", []):
+                    if l_dict["pheno"] in mts:
+                        agl = l_dict.get("assoc_gas_law")
+                        if agl and agl in laws and gass:
+                            assoc_gas_vars.update(laws[agl]["vars"])
+                        asl = l_dict.get("assoc_sld_law")
+                        if asl and asl in laws and slds:
+                            assoc_sld_vars.update(laws[asl]["vars"])
 
         param_law_vars = set()
-        for law in param_law.values():
-            law_dict = laws[law]
-            for var in law_dict["vars"]:
-                param_law_vars.add(var)
+        for l_name in param_law.values():
+            if l_name in laws:
+                param_law_vars.update(laws[l_name]["vars"])
         
-        rxn_var_dict = {rxn: set() for rxn in rxn_dict}
-        for rxn, rxn_phenos in rxn_dict.items():
-            for law, law_dict in laws.items():
-                if law_dict["pheno"] in rxn_phenos:
-                    for var in law_dict["vars"]:
-                        rxn_var_dict[rxn].add(var)
-                        for var_law in vars[var]["laws"]:
-                            for var_law_var in laws[var_law]["vars"]:
-                                rxn_var_dict[rxn].add(var_law_var)
-        
+        rxn_var_dict = {r: set() for r in rxn_dict}
+        for r, r_phenos in rxn_dict.items():
+            pheno_list = self._normalize_list(r_phenos)
+            for l_name, l_dict in laws.items():
+                if l_dict["pheno"] in pheno_list:
+                    for v in l_dict["vars"]:
+                        rxn_var_dict[r].add(v)
+                        for v_law in vars_dict.get(v, {}).get("laws", []):
+                            if v_law in laws:
+                                rxn_var_dict[r].update(laws[v_law]["vars"])
+
         desc_vars = set()
         desc_vars.update(ac_vars)
         desc_vars.update(fp_vars)
         desc_vars.update(mt_vars)
         desc_vars.update(me_vars)
+        desc_vars.update(assoc_gas_vars)
+        desc_vars.update(assoc_sld_vars)
         desc_vars.update(param_law_vars)
-        for rxn_vars in rxn_var_dict.values():
-            desc_vars.update(rxn_vars)
-        desc_vars = sorted(desc_vars)
+        for r_vars in rxn_var_dict.values():
+            desc_vars.update(r_vars)
 
-        info = {}
-        # structure parameter
-        info["st"] = {}
-        for desc_var in desc_vars:
-            if vars[desc_var]["laws"]:
-                continue
-            if vars[desc_var]["cls"] == "StructureParameter":
-                if set(vars[desc_var]["dims"]) == set([]):
-                    info["st"][desc_var] = None
-        
-        # species parameter
-        info["spc"] = {}
-        for desc_var in desc_vars:
-            if vars[desc_var]["laws"]:
-                continue
-            if vars[desc_var]["cls"] == "PhysicsParameter":
-                if set(vars[desc_var]["dims"]) == set(["Species"]):
-                    info["spc"][desc_var] = {}
-                    for spc in spcs:
-                        info["spc"][desc_var][spc] = None
+        parameters = []
 
-        # stream
-        info["stm"] = {}
-        for desc_var in desc_vars:
-            if vars[desc_var]["laws"]:
-                continue
-            if vars[desc_var]["cls"] == "PhysicsParameter":
-                if set(vars[desc_var]["dims"]) == set(["Stream"]):
-                    info["stm"][desc_var] = {}
-                    for stm in stms:
-                        info["stm"][desc_var][stm] = None
+        def add_param(category, name, gas=None, stm=None, rxn=None, spc=None):
+            vd = vars_dict.get(name)
+            if not vd: return
+            
+            sym = vd.get("sym") or name
+            unit_name = vd.get("unit")
+            unit_sym = units_dict.get(unit_name, {}).get("sym") if unit_name else None
+            
+            parts = [sym]
+            if gas: parts.append(gas)
+            if stm: parts.append(f"({stm})")
+            if rxn: parts.append(f"[{rxn}]")
+            if spc: parts.append(spc)
+            label = " - ".join(parts)
+            
+            pid = f"{category}_{name}_{gas}_{stm}_{rxn}_{spc}".lower().replace(" ", "_").replace("+", "plus").replace(">", "to")
+            
+            parameters.append({
+                "id": pid,
+                "category": category,
+                "name": name,
+                "display_name": sym,
+                "index": {
+                    "gas_or_solid": gas,
+                    "stream": stm,
+                    "reaction": rxn,
+                    "species": spc
+                },
+                "full_index": [name, gas, stm, rxn, spc],
+                "label": label,
+                "value": vd.get("val"),
+                "unit": unit_sym or unit_name,
+                "type": vd.get("cls")
+            })
 
-        # gas
-        info["gas"] = {}
-        for desc_var in desc_vars:
-            if vars[desc_var]["laws"]:
-                continue
-            if vars[desc_var]["cls"] == "PhysicsParameter":
-                if set(vars[desc_var]["dims"]) == set(["Gas"]):
-                    info["gas"][desc_var] = {}
-                    for gas in gass:
-                        info["gas"][desc_var][gas] = None
-        
-        # solid
-        info["sld"] = {}
-        for desc_var in desc_vars:
-            if vars[desc_var]["laws"]:
-                continue
-            if vars[desc_var]["cls"] == "PhysicsParameter":
-                if set(vars[desc_var]["dims"]) == set(["Solid"]):
-                    info["sld"][desc_var] = {}
+        # 2. Iterate and build parameters
+        for v_name in sorted(desc_vars):
+            vd = vars_dict.get(v_name, {})
+            if not vd or vd.get("laws"): continue
+            
+            v_cls = vd.get("cls")
+            v_dims = set(vd.get("dims", []))
+
+            if v_cls == "StructureParameter" and not v_dims:
+                add_param("st", v_name)
+            elif v_cls == "PhysicsParameter" and v_dims == {"Species"}:
+                for s in spcs: add_param("spc", v_name, spc=s)
+            elif v_cls == "PhysicsParameter" and v_dims == {"Stream"}:
+                for st in stms: add_param("stm", v_name, stm=st)
+            elif v_cls == "PhysicsParameter" and v_dims == {"Gas"}:
+                for g in gass: add_param("gas", v_name, gas=g)
+            elif v_cls == "PhysicsParameter" and v_dims == {"Solid"}:
+                for s in slds: add_param("sld", v_name, gas=s)
+            elif v_cls in ["MassTransportParameter", "PhysicsParameter"]:
+                if v_dims == {"Gas", "Stream", "Species"}:
+                    for g in gass:
+                        for st in stms:
+                            g_data = basic.get("gas", {}).get(g)
+                            g_spcs = self._normalize_list(g_data.get("spc") if isinstance(g_data, dict) else [])
+                            for s in g_spcs:
+                                cat = "mt" if v_cls == "MassTransportParameter" else "me"
+                                add_param(cat, v_name, gas=g, stm=st, spc=s)
+                elif v_dims == {"Solid", "Stream", "Species"}:
                     for sld in slds:
-                        info["sld"][desc_var][sld] = None
+                        for st in stms:
+                            sld_data = basic.get("sld", {}).get(sld)
+                            sld_spcs = self._normalize_list(sld_data.get("spc") if isinstance(sld_data, dict) else [])
+                            for s in sld_spcs:
+                                cat = "mt" if v_cls == "MassTransportParameter" else "me"
+                                add_param(cat, v_name, gas=sld, stm=st, spc=s)
+                elif not v_dims and v_cls == "MassTransportParameter":
+                    add_param("mt", v_name)
 
-        # mass transport parameter
-        info["mt"] = {}
-        for desc_var in desc_vars:
-            if vars[desc_var]["laws"]:
-                continue
-            if vars[desc_var]["cls"] == "MassTransportParameter":
-                if set(vars[desc_var]["dims"]) == set([]):
-                    info["mt"][desc_var] = None
-                if set(vars[desc_var]["dims"]) == set(["Gas", "Stream", "Species"]):
-                    info["mt"][desc_var] = {}
-                    for gas in gass:
-                        if not basic["gas"][gas]:
-                            continue
-                        info["mt"][desc_var][gas] = {}
-                        for stm in stms:
-                            info["mt"][desc_var][gas][stm] = {}
-                            for spc in basic["gas"][gas]["spc"]:
-                                info["mt"][desc_var][gas][stm][spc] = None
-                if set(vars[desc_var]["dims"]) == set(["Solid", "Stream", "Species"]):
-                    info["mt"][desc_var] = {}
-                    for sld in slds:
-                        if not basic["sld"][sld]:
-                            continue
-                        info["mt"][desc_var][sld] = {}
-                        for stm in stms:
-                            info["mt"][desc_var][sld][stm] = {}
-                            for spc in basic["sld"][sld]["spc"]:
-                                info["mt"][desc_var][sld][stm][spc] = None
-
-        # mass equilibrium parameter
-        info["me"] = {}
-        for desc_var in desc_vars:
-            if vars[desc_var]["laws"]:
-                continue
-            if vars[desc_var]["cls"] == "PhysicsParameter":
-                if set(vars[desc_var]["dims"]) == set(["Gas", "Stream", "Species"]):
-                    info["me"][desc_var] = {}
-                    for gas in gass:
-                        if not basic["gas"][gas]:
-                            continue
-                        info["me"][desc_var][gas] = {}
-                        for stm in stms:
-                            info["me"][desc_var][gas][stm] = {}
-                            for spc in basic["gas"][gas]["spc"]:
-                                info["me"][desc_var][gas][stm][spc] = None
-                if set(vars[desc_var]["dims"]) == set(["Solid", "Stream", "Species"]):
-                    info["me"][desc_var] = {}
-                    for sld in slds:
-                        if not basic["sld"][sld]:
-                            continue
-                        info["me"][desc_var][sld] = {}
-                        for stm in stms:
-                            info["me"][desc_var][sld][stm] = {}
-                            for spc in basic["sld"][sld]["spc"]:
-                                info["me"][desc_var][sld][stm][spc] = None
-        for var, var_dict in vars.items():
-            if set(var_dict["dims"]) == set(["Solid", "Stream", "Species"]):
-                for law in var_dict["laws"]:
-                    law_dict = laws[law]
-                    if law_dict["pheno"] not in mes:
-                        continue
-                    if law_dict["fml"]["detail_formula"] and "specifically defined" \
-                        in law_dict["fml"]["detail_formula"]:
-                        if law not in info["me"]:
-                            info["me"][law] = {}
-                        for sld in slds:
-                            if sld not in info["me"][law]:
-                                info["me"][law][sld] = {}
-                            for stm in stms:
-                                if stm not in info["me"][law][sld]:
-                                    info["me"][law][sld][stm] = {}
-                                for spc in basic["sld"][sld]["spc"]:
-                                    info["me"][law][sld][stm][spc] = None
-
-        # reaction parameter
-        info["rxn"] = {}
-        for desc_var in desc_vars:
-            if vars[desc_var]["laws"]:
-                continue
-            if vars[desc_var]["cls"] == "ReactionParameter":
-                if set(vars[desc_var]["dims"]) == set(["Stream", "Reaction"]):
-                    info["rxn"][desc_var] = {}
-                    for stm in stms:
-                        info["rxn"][desc_var][stm] = {}
-                        for rxn in rxns:
-                            if desc_var not in rxn_var_dict[rxn]:
+            if v_cls == "ReactionParameter":
+                for r in rxn_dict:
+                    if v_name in rxn_var_dict.get(r, set()):
+                        if "Stream" in v_dims:
+                            for st in stms: add_param("rxn", v_name, stm=st, rxn=r)
+                        elif "Species" in v_dims:
+                            if v_name == "Stoichiometric_Coefficient":
                                 continue
-                            info["rxn"][desc_var][stm][rxn] = None
-                if set(vars[desc_var]["dims"]) == set(["Reaction", "Species"]):
-                    if desc_var == "Stoichiometric_Coefficient":
-                        continue
-                    info["rxn"][desc_var] = {}
-                    for rxn in rxns:
-                        if desc_var not in rxn_var_dict[rxn]:
-                            continue
-                        info["rxn"][desc_var][rxn] = {}
-                        lhs = rxn.split(" > ")[0]
-                        lhs_spcs = [s.split(" ")[-1] for s in lhs.split(" + ")]
-                        for spc in lhs_spcs:
-                            info["rxn"][desc_var][rxn][spc] = None
-        for rxn, rxn_phenos in rxn_dict.items():
-            for var, var_dict in vars.items():
-                for law in var_dict["laws"]:
-                    law_dict = laws[law]
-                    if law_dict["pheno"] in rxn_phenos:
-                        if law_dict["fml"]["detail_formula"] and "specifically defined" \
-                            in law_dict["fml"]["detail_formula"]:
-                            if law_dict["pheno"] not in info["rxn"]:
-                                info["rxn"][law_dict["pheno"]] = {}
-                            info["rxn"][law_dict["pheno"]][rxn] = None
+                            lhs = r.split(" > ")[0]
+                            lhs_spcs = [s.split(" ")[-1].strip() for s in lhs.split(" + ")]
+                            for spc in lhs_spcs:
+                                add_param("rxn", v_name, rxn=r, spc=spc)
+                        else:
+                            add_param("rxn", v_name, rxn=r)
 
-        return info
+        return {"parameters": parameters}
 
     def query_param_law(self, desc):
         """

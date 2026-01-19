@@ -355,3 +355,42 @@ def api_model_rxn():
             "detail": str(e)
         }), 500
 
+
+@blueprint.route("/api/exploration/info", methods=["POST"])
+def api_exploration_info():
+    """Return model/ontology information using a provided JSON context.
+    
+    Expected body format:
+    {
+      "context": { "basic": {...}, "desc": {...} }
+    }
+    OR
+    {
+      "basic": {...},
+      "desc": {...}
+    }
+    """
+    try:
+        if not request.is_json:
+            return jsonify({"error": "Unsupported Media Type. Use Content-Type: application/json."}), 415
+        
+        body = request.get_json(silent=True) or {}
+        context = {}
+        
+        if "context" in body and isinstance(body["context"], dict):
+            context = body["context"]
+        else:
+            if "basic" in body:
+                context["basic"] = body["basic"]
+            if "desc" in body:
+                context["desc"] = body["desc"]
+        
+        info = g.graphdb_handler.query_info(context)
+        return jsonify(info), 200
+        
+    except Exception as e:
+        return jsonify({
+            "error": "Failed to assemble model info",
+            "detail": str(e)
+        }), 500
+
