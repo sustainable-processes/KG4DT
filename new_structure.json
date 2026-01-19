@@ -1,0 +1,203 @@
+{
+  "gas": {},
+  "me": [
+    {
+      "name": "Henry's_Constant",
+      "index": [
+          {
+          "gas_or_solid": "Hydrogen gas",
+          "stream": "Batch stream",
+          "reaction": null,
+          "species": "H2"
+        }
+      ],
+      "input": [
+          {
+          "name": "H2",
+          "value": null,
+          "unit": "Pa*m3/mol",
+          "type": "PhysicsParameter"
+        }
+      ]
+    },
+    {
+      "name": "Solid_Dissolution_Saturated_Concentration_Law_with_Solid_Dissolution_Equilibrium_over_Mass",
+      "index": [
+        {
+        "gas_or_solid": "RDY solid",
+        "stream": "Batch stream",
+        "reaction": null,
+        "species": "RDY"
+      }],
+      "input": [
+          {
+          "name": "RDY",
+          "value": null,
+          "unit": "Pa*m3/mol",
+          "type": "PhysicsParameter"
+        }
+      ]
+    }
+  ],
+  "mt": [
+    {
+      "name": "Gas-Liquid_Volumetric_Mass_Transfer_Coefficient",
+      "index": [
+          {
+          "gas_or_solid": "Hydrogen gas",
+          "stream": "Batch stream",
+          "reaction": null,
+          "species": "H2"
+        }
+      ],
+      "input": [
+          {
+          "name": "H2",
+          "value": null,
+          "unit": "Pa*m3/mol",
+          "type": "PhysicsParameter"
+        }
+      ]
+    }
+  ],
+  "rxn":[
+    {
+      "name": "Activation_Energy",
+      "index": [
+        {
+          "gas_or_solid": null,
+          "stream": "Batch stream",
+          "reaction": "RDY + 2 cat-H > RYE + cat2",
+          "species": null
+        },
+        {
+          "gas_or_solid": null,
+          "stream": "Batch stream",
+          "reaction": "REA + catX-RDEt > 2 H2 + dimer + catX",
+          "species": null
+        }
+      ],
+      "input": [
+        {
+          "name": "RDY + 2 cat-H > RYE + cat2",
+          "value": null,
+          "unit": "J/mol",
+          "type": "ReactionParameter"
+        },
+        {
+          "name": "REA + catX-RDEt > 2 H2 + dimer + catX",
+          "value": null,
+          "unit": "J/mol",
+          "type": "ReactionParameter"
+        }
+      ]
+    },
+    {
+      "name": "Partial_Order",
+      "index": [
+        {
+          "gas_or_solid": null,
+          "stream": "Batch stream",
+          "reaction": "2 cat-H > H2 + cat2",
+          "species": null
+        },
+        {
+          "gas_or_solid": null,
+          "stream": "Batch stream",
+          "reaction": "H2 + cat2 > 2 cat-H",
+          "species": null
+        }
+      ],
+      "input": [
+        [
+          {
+            "name": "cat-H",
+            "value": null,
+            "unit": null,
+            "type": "ReactionParameter"
+          }
+        ],
+        [
+          {
+            "name": "H2",
+            "value": null,
+            "unit": null,
+            "type": "ReactionParameter"
+          },
+          {
+            "name": "cat2",
+            "value": null,
+            "unit": null,
+            "type": "ReactionParameter"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Pre-exponential_Factor",
+      "index": [
+        [
+          {
+            "gas_or_solid": null,
+            "stream": "Batch stream",
+            "reaction": null,
+            "species": null
+          }
+        ]
+      ],
+      "input": [
+        [
+          {
+            "name": "RDY + 2 cat-H > RYE + cat2",
+            "value": null,
+            "unit": null,
+            "type": "ReactionParameter"
+          },
+          {
+            "name": "REA + catX-RDEt > 2 H2 + dimer + catX",
+            "value": null,
+            "unit": null,
+            "type": "ReactionParameter"
+          },
+          {
+            "name": "RYA + 2 cat-H > REA + cat2",
+            "value": null,
+            "unit": null,
+            "type": "ReactionParameter"
+          }
+        ]
+      ]
+    }
+  ],
+  "stream": [],
+  "solid": [],
+  "structure": [],
+  "species": [
+    {
+      "index": [
+        {
+          "gas_or_solid": null,
+          "stream": null,
+          "reaction": null,
+          "species": null
+        }
+      ],
+      "input": [
+        [
+          {
+            "name": "H2",
+            "value": null,
+            "unit": "Pa*m3/mol",
+            "type": "SpeciesParameter"
+          },
+          {
+            "name": "RDEt",
+            "value": null,
+            "unit": "Pa*m3/mol",
+            "type": "SpeciesParameter"
+          }
+        ]
+      ]
+    }
+  ]
+}

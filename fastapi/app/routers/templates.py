@@ -48,7 +48,8 @@ def list_templates(db: DbSessionDep, request: Request):
     tutorials_list: List[ReactorTile] = []
 
     for category_name, reactor_id, reactor_name, icon in rows:
-        item = ReactorTile(id=reactor_id, name=reactor_name, icon=icon)
+        formatted_name = str(reactor_name).replace("_", " ").capitalize()
+        item = ReactorTile(id=reactor_id, name=formatted_name, icon=icon)
         if str(category_name).strip().lower() == "templates":
             templates_list.append(item)
         elif str(category_name).strip().lower() == "tutorials":
@@ -99,10 +100,11 @@ def list_templates(db: DbSessionDep, request: Request):
                 general_list = []
                 for n in names:
                     comp = comp_by_lower.get(n.lower())
+                    formatted_name = str(n).replace("_", " ").capitalize()
                     general_list.append(
                         GeneralTemplateItem(
                             id=(comp.id if comp else None),
-                            name=n,
+                            name=formatted_name,
                             icon=(comp.icon if comp else None),
                             node_type=(comp.node_type if comp else None),
                             type=(comp.type if comp else None),
