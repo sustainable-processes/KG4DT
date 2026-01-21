@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Body, HTTPException, Request
 
+from ..schemas.experiment_data import ExperimentDataContent
 from ..services.graphdb import GraphDBClient
 from ..utils.graphdb_calibration_utils import (
     query_law as gq_query_law,
@@ -103,8 +104,8 @@ def _not_implemented(name: str) -> Dict[str, Any]:
     }
 
 
-@router.post("/op_param")
-async def post_model_op_param(request: Request, body: Dict[str, Any] = Body(..., description="Provide modeling context with 'basic' and 'desc'")) -> Dict[str, Any]:
+@router.post("/op_param", response_model=ExperimentDataContent)
+async def post_model_op_param(request: Request, body: Dict[str, Any] = Body(..., description="Provide modeling context with 'basic' and 'desc'")):
     client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
     if not client:
         raise HTTPException(status_code=503, detail="GraphDB client is not available")
@@ -133,7 +134,7 @@ async def post_model_op_param(request: Request, body: Dict[str, Any] = Body(...,
     if not entries:
         raise HTTPException(status_code=404, detail={"error": "No operation parameters derived for the specified context.", "context": context_norm})
 
-    return {"op_param": entries, "count": len(entries)}
+    return {"op_param": entries, "rows": []}
 
 
 @router.post("/simulate")

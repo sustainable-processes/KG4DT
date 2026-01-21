@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import Any, Dict, List, Optional, Tuple, Set
 
 from ..services.graphdb import GraphDBClient
@@ -405,6 +406,58 @@ def query_rxn(client: GraphDBClient, filters: Optional[Dict[str, Any]] = None) -
             rxns.append(name)
     rxns = sorted(set(rxns))
     return rxns
+
+
+def query_rxn_formulas(client: GraphDBClient, rxn_names: List[str]) -> str:
+    """Return a combined MathML formula for the selected reaction phenomena.
+
+    The formulas for each phenomenon are joined together (multiplied).
+    """
+    if not rxn_names:
+        return ""
+
+    # Use FILTER IN for multiple names
+    names_str = ", ".join([f'"{n}"' for n in rxn_names])
+    sparql = (
+        f"{PREFIX}"
+        "SELECT ?p ?f WHERE {"
+        "  ?p rdf:type ontomo:ReactionPhenomenon."
+        "  ?l ontomo:isAssociatedWith ?p."
+        "  ?l ontomo:hasFormula ?f."
+        "  BIND(STRAFTER(STR(?p), '#') AS ?localName)"
+        f"  FILTER(?localName IN ({names_str}))"
+        "}"
+    )
+
+    res = client.select(sparql)
+    formulas: List[str] = []
+
+    # Map name -> formula
+    name_to_formula: Dict[str, str] = {}
+    for b in res.get("results", {}).get("bindings", []):
+        p_uri = b.get("p", {}).get("value")
+        f_val = b.get("f", {}).get("value")
+        name = _extract_local_name(p_uri)
+        if name and f_val:
+            name_to_formula[name] = f_val
+
+    # Reconstruct in requested order and combine
+    for name in rxn_names:
+        if name in name_to_formula:
+            f = name_to_formula[name]
+            # Extract content from <math> if present
+            match = re.search(r"<math[^>]*>(.*)</math>", f, re.DOTALL)
+            if match:
+                formulas.append(match.group(1))
+            else:
+                formulas.append(f)
+
+    if not formulas:
+        return ""
+
+    # Wrap multiple formulas in <mrow> and then in <math>
+    combined_content = "".join(formulas)
+    return f"<math><mrow>{combined_content}</mrow></math>"
 
 
 def query_info(client: GraphDBClient, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:

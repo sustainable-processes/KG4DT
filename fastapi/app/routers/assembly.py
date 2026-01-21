@@ -3,12 +3,13 @@ from __future__ import annotations
 import re
 from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException, Query, Request
+from fastapi import APIRouter, Body, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 
 from ..services.graphdb import GraphDBClient
 from ..utils import graphdb_exploration_utils as gxu
 from ..utils.graphdb_assembly_utils import query_context_template
+from ..utils.mml_expression import MMLExpression
 
 router = APIRouter()
 
@@ -26,6 +27,11 @@ class SpeciesRolesResponse(BaseModel):
     species_roles: List[str]
     count: int
     source: str = "kg"
+
+
+class RxnFormulaResponse(BaseModel):
+    formula: str
+    translated_formula: Optional[str] = Field(None, description="Human-readable version of the formula (NumPy-like)")
 
 
 RXN_PATTERN = r"^((\d+ )?.+ \+ )*(\d+ )?.+ > ((\d+ )?.+ \+ )*(\d+ )?.+$"
@@ -160,3 +166,21 @@ async def get_rxn(request: Request):
         raise HTTPException(status_code=501, detail=data)
     # Always return 200 with the list (possibly empty)
     return data
+
+
+@router.post("/pheno/rxn/formula", response_model=RxnFormulaResponse)
+async def get_rxn_formula(
+    request: Request,
+    rxn_names: List[str] = Body(..., description="List of ReactionPhenomenon names to combine formulas for")
+) -> RxnFormulaResponse:
+    """Return a combined MathML formula for selected reaction phenomena."""
+    client: GraphDBClient | None = getattr(request.app.state, "graphdb", None)
+    if not client:
+        raise HTTPException(status_code=503, detail="GraphDB client is not available")
+
+    try:
+        formula = gxu.query_rxn_formulas(client, rxn_names)
+        translated = MMLExpression.translate(formula)
+        return RxnFormulaResponse(formula=formula, translated_formula=translated)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={"error": "Failed to query reaction formulas", "detail": str(e)})

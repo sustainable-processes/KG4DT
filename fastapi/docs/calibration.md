@@ -31,6 +31,7 @@ Endpoints
 
 4) POST /api/calibration/op_param
 - Derive candidate operation parameters for the given modeling context. Send JSON in the body.
+- Returns a structured object matching `ExperimentDataContent`: `{"op_param": [...], "rows": []}`.
 - Example:
   curl -X POST http://localhost:8001/api/calibration/op_param \
     -H "Content-Type: application/json" \
