@@ -21,6 +21,7 @@ def get_kg_component_by_id(component_id: int, db: DbSessionDep, request: Request
        - If KG client is not configured → 503
        - If KG context cannot be found → 404
     """
+
     comp = db.get(m.KgComponent, component_id)
     if not comp:
         raise HTTPException(status_code=404, detail="KgComponent not found")
@@ -28,9 +29,6 @@ def get_kg_component_by_id(component_id: int, db: DbSessionDep, request: Request
     res = _get_kg_component_by_name(request, comp.name)
     if isinstance(res, dict):
         res["id"] = comp.id
-        res["icon"] = str(comp.icon).lower() if comp.icon else None
-        res["node_type"] = str(comp.node_type).lower() if comp.node_type else None
-        res["type"] = str(comp.type).lower() if comp.type else None
     return res
 
 
@@ -63,7 +61,7 @@ def _get_kg_component_by_name(request: Request, raw_name: str):
 
     matched_key = None
     for k in data.keys():
-        k_norm = k.lower().replace("_", " ")
+        k_norm = k.replace("_", " ")
         if k_norm == target_norm:
             matched_key = k
             break
@@ -75,23 +73,13 @@ def _get_kg_component_by_name(request: Request, raw_name: str):
     if matched_key is None:
         raise HTTPException(status_code=404, detail="Context template not found in Knowledge Graph")
 
-    # Convert everything to small cap as requested
-    def lowercase_recursive(obj: Any) -> Any:
-        if isinstance(obj, dict):
-            return {str(k).lower(): lowercase_recursive(v) for k, v in obj.items()}
-        elif isinstance(obj, list):
-            return [lowercase_recursive(i) for i in obj]
-        elif isinstance(obj, str):
-            return obj.lower()
-        return obj
-
     # Flatten the detail directly into the response and add the name
     res = {
         "name": matched_key,
     }
     res.update(data[matched_key])
 
-    res = lowercase_recursive(res)
+    # res = lowercase_recursive(res)
     if isinstance(res, dict) and "name" in res:
         res["label"] = str(res["name"]).replace("_", " ").capitalize()
     return res
@@ -117,9 +105,6 @@ def get_kg_component_by_name(request: Request, name: str, db: DbSessionDep):
 
         if comp:
             res["id"] = comp.id
-            res["icon"] = str(comp.icon).lower() if comp.icon else None
-            res["node_type"] = str(comp.node_type).lower() if comp.node_type else None
-            res["type"] = str(comp.type).lower() if comp.type else None
         else:
             res["id"] = None
             res["icon"] = None
