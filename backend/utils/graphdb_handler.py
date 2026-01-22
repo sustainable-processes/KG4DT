@@ -460,9 +460,10 @@ class GraphdbHandler:
         for t in self.template_classes:
             sparql = (
                 f"{self.prefix}"
-                "select ?c ?p ?ss ?os where {"
+                "select ?c ?d ?v ?p ?ss ?os where {"
                 f"?c rdf:type ontomo:{t}Context. "
                 "filter(!contains(str(?c), \"_Operation\") && !contains(str(?c), \"_Structure\"))"
+                "optional{{?c ontomo:hasDescriptor ?d. ?d ontomo:hasDefaultValue ?v. }}"
                 "optional{{?c ontomo:hasPhenomenon ?p. }}"
                 "optional{{?c ontomo:hasStructureSection ?ss. }}"
                 "optional{{?c ontomo:hasOperationSection ?os. }}"
@@ -470,14 +471,21 @@ class GraphdbHandler:
             )
             sparql_res = self.cur.execute(sparql)
             for res in sparql_res.split("\r\n")[1:-1]:
-                c, p, ss, os  = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
+                c, d, v, p, ss, os  = re.split(r",(?![a-zA-Z0]\<\/mtext\>)", res)
                 c = c.split("#")[-1].replace("_Context", "")
                 t = t.split("#")[-1].replace("Context", "")
+                d = d.split("#")[-1]
+                v = v.split("#")[-1]
                 p = p.split("#")[-1]
                 ss = ss.split("#")[-1]
                 os = os.split("#")[-1]
                 if c not in context_template_dict:
                     context_template_dict[c] = {"type": t}
+                if d and d not in context_template_dict[c]:
+                    context_template_dict[c][d] = {}
+                if v:
+                    context_template_dict[c][d]["type"] = "bool"
+                    context_template_dict[c][d]["default"] = bool(v)
                 if p:
                     context_template_dict[c]["accumulation"] = p
                 if ss:
