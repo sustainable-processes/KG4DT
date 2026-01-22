@@ -63,7 +63,7 @@ class Config:
     TEMPLATE_CLASSES = [
         "Reactor",
         "Utility",
-        "ProcessStream",
+        "Stream",
     ]
 
 
