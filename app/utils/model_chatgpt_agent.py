@@ -20,8 +20,8 @@ class ModelChatGPTAgent:
                 if not formula: continue
                 formula = re.sub(r"\n", "", formula)
                 formula = re.sub(r"\> *\<", "><", formula)
-                phenomenon_type_assertation = " - **" + phenomenon.replace("_", " ") + "** is a reaction kinetics phenomenon."
-                formula_assertation = " - The **" + phenomenon.replace("_", " ") + "** formula is " + formula
+                phenomenon_type_assertation = "<" + phenomenon.replace("_", " ") + "> <Is-A> <ReactionKineticsPhenomenon>"
+                formula_assertation = "<" + phenomenon.replace("_", " ") + "> <hasFormula> " + formula
                 if phenomenon_type_assertation not in phenomenon_context: phenomenon_context.append(phenomenon_type_assertation)
                 if formula_assertation not in formula_context: formula_context.append(formula_assertation)
 
@@ -43,11 +43,11 @@ class ModelChatGPTAgent:
                 formula = [law_dict["formula"]["concise_formula"] for law_dict in self.entity["law"].values() if law_dict["phenomenon"] == phenomenon][0]
                 formula = re.sub(r"\n", "", formula)
                 formula = re.sub(r"\> *\<", "><", formula)
-                phenomenon_type_assertation = " - **" + phenomenon.replace("_", " ") + "** is a molecular transport phenomenon."
-                phenomenon_assertation = " - " + descriptor.replace("_", " ") + " has molecular transport phenomenon **" + phenomenon.replace("_", " ") + "**."
-                formula_assertation = " - The **" + phenomenon.replace("_", " ") + "** formula in " + descriptor.replace("_", " ") + " is " + formula
+                phenomenon_type_assertation = "<" + phenomenon + "> <Is-A> <MolecularTransportPhenomenon>"
+                # phenomenon_assertation = "<" + descriptor.replace("_", " ") + " has molecular transport phenomenon **" + phenomenon.replace("_", " ") + "**."
+                formula_assertation = "<" + phenomenon + " in " + descriptor + "> <hasFormula> " + formula
                 if phenomenon_type_assertation not in phenomenon_context: phenomenon_context.append(phenomenon_type_assertation)
-                if phenomenon_assertation not in phenomenon_context: phenomenon_context.append(phenomenon_assertation)
+                # if phenomenon_assertation not in phenomenon_context: phenomenon_context.append(phenomenon_assertation)
                 if formula_assertation not in formula_context: formula_context.append(formula_assertation)
         for law, law_dict in self.entity["law"].items():
             rule = law_dict["rule"]
@@ -56,11 +56,11 @@ class ModelChatGPTAgent:
                 if self.entity["context_descriptor"][descriptor]["class"] != "StructureContextDescriptor": continue
                 for phenomenon in self.entity["rule"][rule]["phenomena"]:
                     if self.entity["phenomenon"][phenomenon]["class"] == "MolecularTransportPhenomenon":
-                        type_assertation = " - **" + phenomenon.replace("_", " ") + "** is a molecular transport phenomenon."
-                        assertation = " - " + descriptor.replace("_", " ") + " has molecular transport phenomenon **" + phenomenon.replace("_", " ") + "**."
+                        type_assertation = "<" + phenomenon + "> <Is-A> <MolecularTransportPhenomenon>"
+                        assertation = "<" + phenomenon + "> <IsAssociatedWith> " + descriptor
                         if type_assertation not in phenomenon_context: phenomenon_context.append(type_assertation)
                         if assertation not in phenomenon_context: phenomenon_context.append(assertation)
-        
+        print("\n".join(phenomenon_context + formula_context))
         return "\n".join(phenomenon_context + formula_context)
 
     def query(self):
@@ -68,7 +68,6 @@ class ModelChatGPTAgent:
         client = OpenAI(api_key=self.model_chatgpt_request["api_key"])
         content = "Known:\n" + context + "\n" + \
             "Reaction kinetics phenomena can be combined to describe a single reaction.\n" + \
-            "Do not consider Arrhenius when the reaction is proceeded in a water bath.\n" + \
             "Usually do not consider **Instantenous** phenomenon.\n" + \
             "Answer in short length.\n" + \
             self.model_chatgpt_request["query"]
