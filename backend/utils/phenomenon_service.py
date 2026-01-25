@@ -242,97 +242,174 @@ class PhenomenonService:
         Build a flat list of model parameters based on the provided context.
         Returns: {"parameters": [...]}
         """
-        if context is None:
-            context = {}
+        entity = self.h.query()
+
+        # 1. Resolve active variables
+        # TODO: multiple reactors
+        reactor_dict = context["reactor"][list(context["reactor"].keys())[0]]
+        spcs = [spc_dict["id"] for spc_dict in context["chemistry"]["species"]]
+        rxns = []
+        for rxn_dict in context["chemistry"]["reactions"]:
+            if rxn_dict["elementary"]:
+                rxns.extend(rxn_dict["elementary"])
+            else:
+                rxns.append(rxn_dict["stoich"])
+        rxns = list(set(rxns))
+        stms = []
+        stm2spcs = {}
+        for src in reactor_dict["source"]:
+            if context["input"][src]["type"] == "Stream":
+                stms.append(src)
+                stm2spcs[src] = context["input"][src]["species"]
+        if reactor_dict["operation"]["Has_Liquid_Input"]:
+            for liq in reactor_dict["liquid"]:
+                stms.append(liq)
+                stm2spcs[liq] = reactor_dict["liquid"][liq]["species"]
+        slds = []
+        sld2spcs = {}
+        if reactor_dict["operation"]["Has_Solid_Input"]:
+            for sld in reactor_dict["solid"]:
+                slds.append(sld)
+                sld2spcs[sld] = reactor_dict["solid"][sld]["species"]
+        gass = []
+        gas2spcs = {}
+        for src in reactor_dict["source"]:
+            if context["input"][src]["type"] == "Gas Flow":
+                gass.append(src)
+                gas2spcs[src] = context["input"][src]["operation"]["species"]
+
+        # Law
+        pheno2law = {}
+        for pheno in entity["pheno"]:
+            pheno2law[pheno] = []
+            for law, law_dict in entity["law"].items():
+                if law_dict["pheno"] == pheno:
+                    pheno2law[pheno].append(law)
+        law2var = {}
+        for var, var_dict in entity["var"].items():
+            for law in var_dict["laws"]:
+                law2var[law] = var
         
-        basic = context.get("basic", {})
-        desc = context.get("desc", {})
+        ac_laws = pheno2law[reactor_dict["phenomenon"]["Accumulation"]]
+        ac_law = [law for law in ac_laws if law2var[law] != "Concentration"][0]
+        ac_vars = entity["law"][ac_law]["vars"]
+        ac_opt_vars = entity["law"][ac_law]["opt_vars"]
 
-        spcs = self._normalize_list(basic.get("spc"))
-        rxn_names = self._normalize_list(basic.get("rxn"))
-        stms = self._normalize_list(basic.get("stm"))
-        gass = self._normalize_list(basic.get("gas"))
-        slds = self._normalize_list(basic.get("sld"))
+        conc_laws = [law for law in ac_laws if law2var[law] == "Concentration"]
+        if conc_laws:
+            conc_law = conc_laws[0]
+            conc_vars = entity["law"][conc_law]["vars"]
+        else:
+            conc_law = None
+            conc_vars = []
+        
+        # r_t_g, r_t_s
+        mt_laws, mt_vars = [], []
+        for mt_pheno in context["model"]["Mass_Transport"]:
+            for law in pheno2law[mt_pheno]:
+                if law2var[law] in ac_opt_vars:
+                    mt_laws.append(law)
+                    mt_vars.extend(entity["law"][law]["vars"])
+        
+        assoc_gas_laws, assoc_sld_laws = [], []
+        assoc_gas_vars, assoc_sld_vars = [], []
+        for mt_law in mt_laws:
+            assoc_gas_law = entity["law"][mt_law]["assoc_gas_law"]
+            if assoc_gas_law and assoc_gas_law not in assoc_gas_laws:
+                assoc_gas_laws.append(assoc_gas_law)
+            assoc_sld_law = entity["law"][mt_law]["assoc_sld_law"]
+            if assoc_sld_law and assoc_sld_law not in assoc_sld_laws:
+                assoc_sld_laws.append(assoc_sld_law)
+        if len(assoc_gas_laws) > 1:
+            raise ValueError("Multiple associated gas law associated with mass transport.")
+        else:
+            if assoc_gas_laws:
+                assoc_gas_law = assoc_gas_laws[0]
+                assoc_gas_vars.extend(entity["law"][assoc_gas_law]["vars"])
+            else:
+                assoc_gas_law = None
+        if len(assoc_sld_laws) > 1:
+            raise ValueError("Multiple associated solid law associated with mass transport.")
+        else:
+            if assoc_sld_laws:
+                assoc_sld_law = assoc_sld_laws[0]
+                assoc_sld_vars.extend(entity["law"][assoc_sld_law]["vars"])
+            else:
+                assoc_sld_law = None
 
-        ac = desc.get("ac")
-        fp = desc.get("fp")
-        mts = self._normalize_list(desc.get("mt"))
-        mes = self._normalize_list(desc.get("me"))
-        param_law = desc.get("param_law", {})
-        rxn_dict = desc.get("rxn", {})
+        # c_g_star, c_s_star
+        me_laws, me_vars = [], []
+        for var in mt_vars:
+            if var != "Concentration" and entity["var"][var]["laws"]:
+                law = context["model"]["laws"][var]
+                law_dict = entity["law"][law]
+                if "Mass_Equilibrium" in context["model"] and law_dict["pheno"] in context["model"]["Mass_Equilibrium"]:
+                    me_laws.append(law)
+                    me_vars.extend(law_dict["vars"])
 
-        laws = self.h.query_law("mainpage")
+        fp_laws, fp_vars = [], []
+        # flow_velocity
+        for var in ac_vars:
+            for law in pheno2law[context["model"]["Flow_Pattern"]]:
+                if law in entity["var"][var]["laws"]:
+                    fp_laws.append(law)
+                    fp_vars.extend(law_dict["vars"])
+        # mixing_time
+        for var in mt_vars:
+            if var != "Concentration" and entity["var"][var]["laws"]:
+                law = context["model"]["laws"][var]
+                law_dict = entity["law"][law]
+                if law_dict["pheno"] == context["model"]["Flow_Pattern"]:
+                    fp_laws.append(law)
+                    fp_vars.extend(law_dict["vars"])
+        fp_vars = list(set(fp_vars))
+
+        # film_thickness
+        sub_fp_laws, sub_fp_vars = [], []
+        for var in fp_vars:
+            if entity["var"][var]["laws"]:
+                law = context["model"]["laws"][var]
+                law_dict = entity["law"][law]
+                if law in pheno2law[context["model"]["Flow_Pattern"]]:
+                    sub_fp_laws.append(law)
+                    sub_fp_vars.extend(law_dict["vars"])
+
+        rxn_laws, rxn_vars = {}, {}
+        for rxn_dict in context["kinetics"]:
+            rxn_dict = rxn_dict["elementary"] if rxn_dict["elementary"] else rxn_dict["stoich"]
+            for rxn, rxn_phenos in rxn_dict.items():
+                rxn_laws[rxn], rxn_vars[rxn] = [], []
+                for rxn_pheno in rxn_phenos:
+                    for law in pheno2law[rxn_pheno]:
+                        rxn_laws[rxn].append(law)
+                        rxn_vars[rxn].extend(entity["law"][law]["vars"])
+                        if "Stoichiometric_Coefficient" not in rxn_vars[rxn]:
+                            rxn_vars[rxn].append("Stoichiometric_Coefficient")
+
+        model_vars = []
+        model_vars.extend(ac_vars)
+        model_vars.extend(mt_vars)
+        model_vars.extend(me_vars)
+        model_vars.extend(fp_vars)
+        model_vars.extend(sub_fp_vars)
+        model_vars.extend(assoc_gas_vars)
+        model_vars.extend(assoc_sld_vars)
+        model_vars.extend(conc_vars)
+        for rxn in rxn_vars:
+            for var in rxn_vars[rxn]:
+                if var not in model_vars:
+                    model_vars.append(var)
+        # definition
+        for var in model_vars:
+            for law in entity["var"][var]["laws"]:
+                if not entity["law"][law]["pheno"]:
+                    model_vars.extend(entity["law"][law]["vars"])
+        model_vars = list(set(model_vars))
+
         vars_dict = self.h.query_var()
         units_dict = self.h.query_unit()
 
-        # 1. Resolve active variables
-        ac_vars, ac_opt_vars = set(), set()
-        for l_dict in laws.values():
-            if l_dict["pheno"] == ac:
-                ac_vars.update(l_dict["vars"])
-                ac_opt_vars.update(l_dict["opt_vars"])
-        
-        fp_vars = set()
-        if fp:
-            for l_name, l_dict in laws.items():
-                if any(l_name in vars_dict.get(v, {}).get("laws", []) for v in ac_vars):
-                    if l_dict["pheno"] == fp:
-                        fp_vars.update(l_dict["vars"])
-        
-        mt_vars = set()
-        for l_name, l_dict in laws.items():
-            if any(l_name in vars_dict.get(v, {}).get("laws", []) for v in ac_opt_vars):
-                if l_dict["pheno"] in mts:
-                    mt_vars.update(l_dict["vars"])
-
-        me_vars = set()
-        for l_name, l_dict in laws.items():
-            if any(l_name in vars_dict.get(v, {}).get("laws", []) for v in mt_vars):
-                if l_dict["pheno"] in mes:
-                    me_vars.update(l_dict["vars"])
-
-        assoc_gas_vars = set()
-        assoc_sld_vars = set()
-        for l_name, l_dict in laws.items():
-            for ac_opt_var in ac_opt_vars:
-                if l_name in vars_dict.get(ac_opt_var, {}).get("laws", []):
-                    if l_dict["pheno"] in mts:
-                        agl = l_dict.get("assoc_gas_law")
-                        if agl and agl in laws and gass:
-                            assoc_gas_vars.update(laws[agl]["vars"])
-                        asl = l_dict.get("assoc_sld_law")
-                        if asl and asl in laws and slds:
-                            assoc_sld_vars.update(laws[asl]["vars"])
-
-        param_law_vars = set()
-        for l_name in param_law.values():
-            if l_name in laws:
-                param_law_vars.update(laws[l_name]["vars"])
-        
-        rxn_var_dict = {r: set() for r in rxn_dict}
-        for r, r_phenos in rxn_dict.items():
-            pheno_list = self._normalize_list(r_phenos)
-            for l_name, l_dict in laws.items():
-                if l_dict["pheno"] in pheno_list:
-                    for v in l_dict["vars"]:
-                        rxn_var_dict[r].add(v)
-                        for v_law in vars_dict.get(v, {}).get("laws", []):
-                            if v_law in laws:
-                                rxn_var_dict[r].update(laws[v_law]["vars"])
-
-        desc_vars = set()
-        desc_vars.update(ac_vars)
-        desc_vars.update(fp_vars)
-        desc_vars.update(mt_vars)
-        desc_vars.update(me_vars)
-        desc_vars.update(assoc_gas_vars)
-        desc_vars.update(assoc_sld_vars)
-        desc_vars.update(param_law_vars)
-        for r_vars in rxn_var_dict.values():
-            desc_vars.update(r_vars)
-
         parameters = []
-
         def add_param(category, name, gas=None, stm=None, rxn=None, spc=None):
             vd = vars_dict.get(name)
             if not vd: return
@@ -369,7 +446,7 @@ class PhenomenonService:
             })
 
         # 2. Iterate and build parameters
-        for v_name in sorted(desc_vars):
+        for v_name in sorted(model_vars):
             vd = vars_dict.get(v_name, {})
             if not vd or vd.get("laws"): continue
             
@@ -390,16 +467,14 @@ class PhenomenonService:
                 if v_dims == {"Gas", "Stream", "Species"}:
                     for g in gass:
                         for st in stms:
-                            g_data = basic.get("gas", {}).get(g)
-                            g_spcs = self._normalize_list(g_data.get("spc") if isinstance(g_data, dict) else [])
+                            g_spcs = gas2spcs[src]
                             for s in g_spcs:
                                 cat = "mt" if v_cls == "MassTransportParameter" else "me"
                                 add_param(cat, v_name, gas=g, stm=st, spc=s)
                 elif v_dims == {"Solid", "Stream", "Species"}:
                     for sld in slds:
                         for st in stms:
-                            sld_data = basic.get("sld", {}).get(sld)
-                            sld_spcs = self._normalize_list(sld_data.get("spc") if isinstance(sld_data, dict) else [])
+                            sld_spcs = sld2spcs[sld]
                             for s in sld_spcs:
                                 cat = "mt" if v_cls == "MassTransportParameter" else "me"
                                 add_param(cat, v_name, gas=sld, stm=st, spc=s)
@@ -408,7 +483,7 @@ class PhenomenonService:
 
             if v_cls == "ReactionParameter":
                 for r in rxn_dict:
-                    if v_name in rxn_var_dict.get(r, set()):
+                    if v_name in rxn_vars.get(r, set()):
                         if "Stream" in v_dims:
                             for st in stms: add_param("rxn", v_name, stm=st, rxn=r)
                         elif "Species" in v_dims:
