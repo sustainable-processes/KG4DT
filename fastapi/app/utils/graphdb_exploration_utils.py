@@ -430,8 +430,6 @@ def query_rxn_formulas(client: GraphDBClient, rxn_names: List[str]) -> str:
     )
 
     res = client.select(sparql)
-    formulas: List[str] = []
-
     # Map name -> formula
     name_to_formula: Dict[str, str] = {}
     for b in res.get("results", {}).get("bindings", []):
@@ -439,24 +437,32 @@ def query_rxn_formulas(client: GraphDBClient, rxn_names: List[str]) -> str:
         f_val = b.get("f", {}).get("value")
         name = _extract_local_name(p_uri)
         if name and f_val:
-            name_to_formula[name] = f_val
+            # Strip inline xmlns attributes for cleaner downstream rendering
+            cleaned = re.sub(r'\sxmlns="[^"]+"', "", f_val)
+            name_to_formula[name] = cleaned
 
     # Reconstruct in requested order and combine
+    ordered_formulas: List[str] = []
+    ordered_originals: List[str] = []
     for name in rxn_names:
         if name in name_to_formula:
             f = name_to_formula[name]
+            ordered_originals.append(f)
             # Extract content from <math> if present
             match = re.search(r"<math[^>]*>(.*)</math>", f, re.DOTALL)
             if match:
-                formulas.append(match.group(1))
+                ordered_formulas.append(match.group(1))
             else:
-                formulas.append(f)
+                ordered_formulas.append(f)
 
-    if not formulas:
+    if not ordered_formulas:
         return ""
 
+    if len(ordered_formulas) == 1:
+        return ordered_originals[0]
+
     # Wrap multiple formulas in <mrow> and then in <math>
-    combined_content = "".join(formulas)
+    combined_content = "<mo>×</mo>".join(ordered_formulas)
     return f"<math><mrow>{combined_content}</mrow></math>"
 
 
@@ -468,6 +474,305 @@ def query_info(client: GraphDBClient, context: Optional[Dict[str, Any]] = None) 
     """
     if context is None:
         context = {}
+
+    if isinstance(context, dict) and any(key in context for key in ("reactor", "chemistry", "model")):
+        vars_dict = _query_var(client)
+        units_dict = _query_unit(client)
+        laws = _query_laws_basic(client)
+        pheno_dict = query_pheno(client)
+
+        reactor_block = context.get("reactor") or {}
+        reactor_key = next(iter(reactor_block.keys()), None) if isinstance(reactor_block, dict) else None
+        if not reactor_key:
+            return {"parameters": []}
+        reactor_dict = reactor_block.get(reactor_key, {})
+
+        spcs = [
+            spc_dict.get("id")
+            for spc_dict in context.get("chemistry", {}).get("species", []) or []
+            if isinstance(spc_dict, dict) and spc_dict.get("id")
+        ]
+
+        rxns: List[str] = []
+        for rxn_dict in context.get("chemistry", {}).get("reactions", []) or []:
+            if not isinstance(rxn_dict, dict):
+                continue
+            elementary = rxn_dict.get("elementary")
+            if elementary:
+                rxns.extend(elementary)
+            else:
+                stoich = rxn_dict.get("stoich")
+                if stoich:
+                    rxns.append(stoich)
+        rxns = list(set(rxns))
+
+        stms: List[str] = []
+        stm2spcs: Dict[str, Any] = {}
+        for src in reactor_dict.get("source", []) or []:
+            src_info = context.get("input", {}).get(src, {})
+            if isinstance(src_info, dict) and src_info.get("type") == "Stream":
+                stms.append(src)
+                stm2spcs[src] = src_info.get("species", [])
+
+        if reactor_dict.get("operation", {}).get("Has_Liquid_Input"):
+            for liq, liq_dict in (reactor_dict.get("liquid") or {}).items():
+                stms.append(liq)
+                if isinstance(liq_dict, dict):
+                    stm2spcs[liq] = liq_dict.get("species", [])
+
+        slds: List[str] = []
+        sld2spcs: Dict[str, Any] = {}
+        if reactor_dict.get("operation", {}).get("Has_Solid_Input"):
+            for sld, sld_dict in (reactor_dict.get("solid") or {}).items():
+                slds.append(sld)
+                if isinstance(sld_dict, dict):
+                    sld2spcs[sld] = sld_dict.get("species", [])
+
+        gass: List[str] = []
+        gas2spcs: Dict[str, Any] = {}
+        for src in reactor_dict.get("source", []) or []:
+            src_info = context.get("input", {}).get(src, {})
+            if isinstance(src_info, dict) and src_info.get("type") == "Gas Flow":
+                gass.append(src)
+                op_info = src_info.get("operation", {})
+                if isinstance(op_info, dict):
+                    gas2spcs[src] = op_info.get("species", [])
+
+        pheno2law: Dict[str, List[str]] = {}
+        for pheno in pheno_dict.keys():
+            pheno2law[pheno] = []
+            for law, law_dict in laws.items():
+                if law_dict.get("pheno") == pheno:
+                    pheno2law[pheno].append(law)
+
+        law2var: Dict[str, str] = {}
+        for var, var_dict in vars_dict.items():
+            for law in var_dict.get("laws", []) or []:
+                law2var[law] = var
+
+        ac_pheno = reactor_dict.get("phenomenon", {}).get("Accumulation")
+        ac_laws = pheno2law.get(ac_pheno, [])
+        ac_law = None
+        for law in ac_laws:
+            if law2var.get(law) != "Concentration":
+                ac_law = law
+                break
+        ac_vars = laws.get(ac_law, {}).get("vars", []) if ac_law else []
+        ac_opt_vars = laws.get(ac_law, {}).get("opt_vars", []) if ac_law else []
+
+        conc_laws = [law for law in ac_laws if law2var.get(law) == "Concentration"]
+        conc_vars = laws.get(conc_laws[0], {}).get("vars", []) if conc_laws else []
+
+        mt_laws: List[str] = []
+        mt_vars: List[str] = []
+        for mt_pheno in context.get("model", {}).get("Mass_Transport", []) or []:
+            for law in pheno2law.get(mt_pheno, []):
+                if law2var.get(law) in ac_opt_vars:
+                    mt_laws.append(law)
+                    mt_vars.extend(laws.get(law, {}).get("vars", []))
+
+        assoc_gas_laws: List[str] = []
+        assoc_sld_laws: List[str] = []
+        assoc_gas_vars: List[str] = []
+        assoc_sld_vars: List[str] = []
+        for mt_law in mt_laws:
+            assoc_gas_law = laws.get(mt_law, {}).get("assoc_gas_law")
+            if assoc_gas_law and assoc_gas_law not in assoc_gas_laws:
+                assoc_gas_laws.append(assoc_gas_law)
+            assoc_sld_law = laws.get(mt_law, {}).get("assoc_sld_law")
+            if assoc_sld_law and assoc_sld_law not in assoc_sld_laws:
+                assoc_sld_laws.append(assoc_sld_law)
+
+        if len(assoc_gas_laws) > 1:
+            raise ValueError("Multiple associated gas law associated with mass transport.")
+        if assoc_gas_laws:
+            assoc_gas_law = assoc_gas_laws[0]
+            assoc_gas_vars.extend(laws.get(assoc_gas_law, {}).get("vars", []))
+
+        if len(assoc_sld_laws) > 1:
+            raise ValueError("Multiple associated solid law associated with mass transport.")
+        if assoc_sld_laws:
+            assoc_sld_law = assoc_sld_laws[0]
+            assoc_sld_vars.extend(laws.get(assoc_sld_law, {}).get("vars", []))
+
+        me_laws: List[str] = []
+        me_vars: List[str] = []
+        for var in mt_vars:
+            if var != "Concentration" and vars_dict.get(var, {}).get("laws"):
+                law = context.get("model", {}).get("laws", {}).get(var)
+                if not law:
+                    continue
+                law_dict = laws.get(law, {})
+                if "Mass_Equilibrium" in context.get("model", {}) and law_dict.get("pheno") in context["model"].get("Mass_Equilibrium", []):
+                    me_laws.append(law)
+                    me_vars.extend(law_dict.get("vars", []))
+
+        fp_laws: List[str] = []
+        fp_vars: List[str] = []
+        fp_pheno = context.get("model", {}).get("Flow_Pattern")
+        for var in ac_vars:
+            for law in pheno2law.get(fp_pheno, []):
+                if law in vars_dict.get(var, {}).get("laws", []):
+                    fp_laws.append(law)
+                    fp_vars.extend(laws.get(law, {}).get("vars", []))
+        for var in mt_vars:
+            if var != "Concentration" and vars_dict.get(var, {}).get("laws"):
+                law = context.get("model", {}).get("laws", {}).get(var)
+                if not law:
+                    continue
+                law_dict = laws.get(law, {})
+                if law_dict.get("pheno") == fp_pheno:
+                    fp_laws.append(law)
+                    fp_vars.extend(law_dict.get("vars", []))
+        fp_vars = list(set(fp_vars))
+
+        sub_fp_laws: List[str] = []
+        sub_fp_vars: List[str] = []
+        for var in fp_vars:
+            if vars_dict.get(var, {}).get("laws"):
+                law = context.get("model", {}).get("laws", {}).get(var)
+                if not law:
+                    continue
+                if law in pheno2law.get(fp_pheno, []):
+                    sub_fp_laws.append(law)
+                    sub_fp_vars.extend(laws.get(law, {}).get("vars", []))
+
+        rxn_laws: Dict[str, List[str]] = {}
+        rxn_vars: Dict[str, List[str]] = {}
+        for rxn_entry in context.get("kinetics", []) or []:
+            if not isinstance(rxn_entry, dict):
+                continue
+            rxn_map = rxn_entry.get("elementary") if rxn_entry.get("elementary") else rxn_entry.get("stoich")
+            if not isinstance(rxn_map, dict):
+                continue
+            for rxn, rxn_phenos in rxn_map.items():
+                rxn_laws[rxn], rxn_vars[rxn] = [], []
+                for rxn_pheno in rxn_phenos or []:
+                    for law in pheno2law.get(rxn_pheno, []):
+                        rxn_laws[rxn].append(law)
+                        rxn_vars[rxn].extend(laws.get(law, {}).get("vars", []))
+                        if "Stoichiometric_Coefficient" not in rxn_vars[rxn]:
+                            rxn_vars[rxn].append("Stoichiometric_Coefficient")
+
+        model_vars: List[str] = []
+        model_vars.extend(ac_vars)
+        model_vars.extend(mt_vars)
+        model_vars.extend(me_vars)
+        model_vars.extend(fp_vars)
+        model_vars.extend(sub_fp_vars)
+        model_vars.extend(assoc_gas_vars)
+        model_vars.extend(assoc_sld_vars)
+        model_vars.extend(conc_vars)
+        for rxn in rxn_vars:
+            for var in rxn_vars[rxn]:
+                if var not in model_vars:
+                    model_vars.append(var)
+
+        for var in list(model_vars):
+            for law in vars_dict.get(var, {}).get("laws", []) or []:
+                if not laws.get(law, {}).get("pheno"):
+                    model_vars.extend(laws.get(law, {}).get("vars", []))
+        model_vars = list(set(model_vars))
+
+        parameters: List[Dict[str, Any]] = []
+
+        def add_param(category, name, gas=None, stm=None, rxn=None, spc=None):
+            vd = vars_dict.get(name)
+            if not vd:
+                return
+
+            sym = vd.get("sym") or name
+            unit_name = vd.get("unit")
+            unit_sym = units_dict.get(unit_name, {}).get("sym") if unit_name else None
+
+            parts = [sym]
+            if gas:
+                parts.append(gas)
+            if stm:
+                parts.append(f"({stm})")
+            if rxn:
+                parts.append(f"[{rxn}]")
+            if spc:
+                parts.append(spc)
+            label = " - ".join(parts)
+
+            pid = f"{category}_{name}_{gas}_{stm}_{rxn}_{spc}".lower().replace(" ", "_").replace("+", "plus").replace(">", "to")
+
+            parameters.append({
+                "id": pid,
+                "category": category,
+                "name": name,
+                "display_name": sym,
+                "index": {
+                    "gas_or_solid": gas,
+                    "stream": stm,
+                    "reaction": rxn,
+                    "species": spc
+                },
+                "full_index": [name, gas, stm, rxn, spc],
+                "label": label,
+                "value": vd.get("val"),
+                "unit": unit_sym or unit_name,
+                "type": vd.get("cls")
+            })
+
+        for v_name in sorted(model_vars):
+            vd = vars_dict.get(v_name, {})
+            if not vd or vd.get("laws"):
+                continue
+
+            v_cls = vd.get("cls")
+            v_dims = set(vd.get("dims", []))
+
+            if v_cls == "StructureParameter" and not v_dims:
+                add_param("st", v_name)
+            elif v_cls == "PhysicsParameter" and v_dims == {"Species"}:
+                for s in spcs:
+                    add_param("spc", v_name, spc=s)
+            elif v_cls == "PhysicsParameter" and v_dims == {"Stream"}:
+                for st in stms:
+                    add_param("stm", v_name, stm=st)
+            elif v_cls == "PhysicsParameter" and v_dims == {"Gas"}:
+                for g in gass:
+                    add_param("gas", v_name, gas=g)
+            elif v_cls == "PhysicsParameter" and v_dims == {"Solid"}:
+                for s in slds:
+                    add_param("sld", v_name, gas=s)
+            elif v_cls in ["MassTransportParameter", "PhysicsParameter"]:
+                if v_dims == {"Gas", "Stream", "Species"}:
+                    for g in gass:
+                        for st in stms:
+                            g_spcs = gas2spcs.get(g, [])
+                            for s in g_spcs:
+                                cat = "mt" if v_cls == "MassTransportParameter" else "me"
+                                add_param(cat, v_name, gas=g, stm=st, spc=s)
+                elif v_dims == {"Solid", "Stream", "Species"}:
+                    for sld in slds:
+                        for st in stms:
+                            sld_spcs = sld2spcs.get(sld, [])
+                            for s in sld_spcs:
+                                cat = "mt" if v_cls == "MassTransportParameter" else "me"
+                                add_param(cat, v_name, gas=sld, stm=st, spc=s)
+                elif not v_dims and v_cls == "MassTransportParameter":
+                    add_param("mt", v_name)
+
+            if v_cls == "ReactionParameter":
+                for r in rxn_vars:
+                    if v_name in rxn_vars.get(r, set()):
+                        if "Stream" in v_dims:
+                            for st in stms:
+                                add_param("rxn", v_name, stm=st, rxn=r)
+                        elif "Species" in v_dims:
+                            if v_name == "Stoichiometric_Coefficient":
+                                continue
+                            lhs = r.split(" > ")[0]
+                            lhs_spcs = [s.split(" ")[-1].strip() for s in lhs.split(" + ")]
+                            for spc in lhs_spcs:
+                                add_param("rxn", v_name, rxn=r, spc=spc)
+                        else:
+                            add_param("rxn", v_name, rxn=r)
+
+        return {"parameters": parameters}
     
     basic = context.get("basic", {})
     desc = context.get("desc", {})

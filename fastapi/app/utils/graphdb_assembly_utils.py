@@ -12,6 +12,16 @@ def _local_name(uri: str | None) -> str | None:
     return uri.split("#")[-1]
 
 
+def _normalize_context_type(type_local: str | None) -> str | None:
+    if not type_local:
+        return None
+    if type_local == "ProcessStreamContext":
+        return "Stream"
+    if type_local.endswith("Context"):
+        return type_local.replace("Context", "")
+    return type_local
+
+
 def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
     """Query context templates from GraphDB.
 
@@ -21,11 +31,12 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
       {
         "<contextname>": {
           "accumulation": <str>,
-          "structure": {
+          "st": {
             "<descriptor>": {
+              "type": <"value"|"bool"|"range"|"option">,
               "default": <float|bool>,
-              "min": <float>,
-              "max": <float>,
+              "lower_bound": <float>,
+              "upper_bound": <float>,
               "options": [<str>, ...],
               "default_option": <str>,
               "unit": <str>,
@@ -33,7 +44,7 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
             },
             ...
           },
-          "operation": { ... }
+          "op": { ... }
         },
         ...
       }
@@ -44,10 +55,11 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
     # 1) Contexts and their sections/phenomenon
     sparql1 = (
         f"{SPARQL_PREFIX}"
-        "select ?c ?p ?ss ?os ?type where {"
+        "select ?c ?d ?v ?p ?ss ?os ?type where {"
         "?c rdf:type ontomo:Context. "
         "filter(!contains(str(?c), \"_Operation\") && !contains(str(?c), \"_Structure\"))"
         "optional{?c rdf:type ?type. filter(?type IN (ontomo:ReactorContext, ontomo:UtilityContext, ontomo:ProcessStreamContext))}"
+        "optional{?c ontomo:hasDescriptor ?d. ?d ontomo:hasDefaultValue ?v. }"
         "optional{?c ontomo:hasPhenomenon ?p. }"
         "optional{?c ontomo:hasStructureSection ?ss. }"
         "optional{?c ontomo:hasOperationSection ?os. }"
@@ -56,6 +68,8 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
     data1 = client.select(sparql1)
     for b in data1.get("results", {}).get("bindings", []):
         c_uri = b.get("c", {}).get("value")
+        d_uri = b.get("d", {}).get("value")
+        v_raw = b.get("v", {}).get("value")
         p_uri = b.get("p", {}).get("value")
         ss_uri = b.get("ss", {}).get("value")
         os_uri = b.get("os", {}).get("value")
@@ -74,19 +88,26 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
         if c_name not in ctx:
             ctx[c_name] = {"type": "Unknown"}
 
+        d_local = _local_name(d_uri)
+        if d_local and d_local not in ctx[c_name]:
+            ctx[c_name][d_local] = {}
+        if v_raw and d_local:
+            ctx[c_name][d_local]["type"] = "bool"
+            ctx[c_name][d_local]["default"] = bool(v_raw)
+
         p_local = _local_name(p_uri)
         ss_local = _local_name(ss_uri)
         os_local = _local_name(os_uri)
         t_local = _local_name(t_uri)
 
         if t_local:
-            ctx[c_name]["type"] = t_local.replace("Context", "")
+            ctx[c_name]["type"] = _normalize_context_type(t_local) or ctx[c_name]["type"]
         if p_local:
             ctx[c_name]["accumulation"] = p_local
-        if ss_local and "structure" not in ctx[c_name]:
-            ctx[c_name]["structure"] = {}
-        if os_local and "operation" not in ctx[c_name]:
-            ctx[c_name]["operation"] = {}
+        if ss_local and "st" not in ctx[c_name]:
+            ctx[c_name]["st"] = {}
+        if os_local and "op" not in ctx[c_name]:
+            ctx[c_name]["op"] = {}
 
     # 2) Structure section descriptors
     sparql2 = (
@@ -125,37 +146,40 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
         # ensure context and structure map
         if c_name not in ctx:
             ctx[c_name] = {"type": "Unknown"}
-        if "structure" not in ctx[c_name]:
-            ctx[c_name]["structure"] = {}
+        if "st" not in ctx[c_name]:
+            ctx[c_name]["st"] = {}
 
         d_local = _local_name(d_uri)
         if not d_local:
             continue
 
-        entry = ctx[c_name]["structure"].setdefault(d_local, {})
+        entry = ctx[c_name]["st"].setdefault(d_local, {})
 
         if v_raw:
             if v_raw == "true":
+                entry["type"] = "bool"
                 entry["default"] = True
             else:
+                entry["type"] = "value"
                 try:
                     entry["default"] = float(v_raw)
                 except Exception:
                     entry["default"] = v_raw
-                entry["value"] = 0
         elif lb_raw and ub_raw:
+            entry["type"] = "range"
             try:
-                entry["min"] = float(lb_raw)
-                entry["max"] = float(ub_raw)
+                entry["lower_bound"] = float(lb_raw)
+                entry["upper_bound"] = float(ub_raw)
             except Exception:
-                entry["min"] = lb_raw
-                entry["max"] = ub_raw
+                entry["lower_bound"] = lb_raw
+                entry["upper_bound"] = ub_raw
         elif o_raw:
+            entry["type"] = "option"
             entry.setdefault("options", [])
             opt = _local_name(o_raw) or o_raw
             entry["options"].append(opt)
         else:
-            entry["value"] = 0
+            entry["type"] = "value"
 
         if do_raw:
             entry["default_option"] = _local_name(do_raw) or do_raw
@@ -203,37 +227,40 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
         # ensure context and operation map
         if c_name not in ctx:
             ctx[c_name] = {"type": "Unknown"}
-        if "operation" not in ctx[c_name]:
-            ctx[c_name]["operation"] = {}
+        if "op" not in ctx[c_name]:
+            ctx[c_name]["op"] = {}
 
         d_local = _local_name(d_uri)
         if not d_local:
             continue
 
-        entry = ctx[c_name]["operation"].setdefault(d_local, {})
+        entry = ctx[c_name]["op"].setdefault(d_local, {})
 
         if v_raw:
             if v_raw == "true":
+                entry["type"] = "bool"
                 entry["default"] = True
             else:
+                entry["type"] = "value"
                 try:
                     entry["default"] = float(v_raw)
                 except Exception:
                     entry["default"] = v_raw
-                entry["value"] = 0
         elif lb_raw and ub_raw:
+            entry["type"] = "range"
             try:
-                entry["min"] = float(lb_raw)
-                entry["max"] = float(ub_raw)
+                entry["lower_bound"] = float(lb_raw)
+                entry["upper_bound"] = float(ub_raw)
             except Exception:
-                entry["min"] = lb_raw
-                entry["max"] = ub_raw
+                entry["lower_bound"] = lb_raw
+                entry["upper_bound"] = ub_raw
         elif o_raw:
+            entry["type"] = "option"
             entry.setdefault("options", [])
             opt = _local_name(o_raw) or o_raw
             entry["options"].append(opt)
         else:
-            entry["value"] = 0
+            entry["type"] = "value"
 
         if do_raw:
             entry["default_option"] = _local_name(do_raw) or do_raw
@@ -247,7 +274,7 @@ def query_context_template(client: GraphDBClient) -> Dict[str, Any]:
     # Sorting to mimic Flask behavior
     out: Dict[str, Any] = {k: ctx[k] for k in sorted(ctx.keys())}
     for c_name, cval in out.items():
-        # At this level, keys include: accumulation (str), structure (dict), operation (dict)
+        # At this level, keys include: accumulation (str), st (dict), op (dict)
         for k in list(cval.keys()):
             v = cval[k]
             if isinstance(v, list):

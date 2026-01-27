@@ -9,7 +9,6 @@ from pydantic import BaseModel, Field
 from ..services.graphdb import GraphDBClient
 from ..utils import graphdb_exploration_utils as gxu
 from ..utils.graphdb_assembly_utils import query_context_template
-from ..utils.mml_expression import MMLExpression
 
 router = APIRouter()
 
@@ -31,7 +30,6 @@ class SpeciesRolesResponse(BaseModel):
 
 class RxnFormulaResponse(BaseModel):
     formula: str
-    translated_formula: Optional[str] = Field(None, description="Human-readable version of the formula (NumPy-like)")
 
 
 RXN_PATTERN = r"^((\d+ )?.+ \+ )*(\d+ )?.+ > ((\d+ )?.+ \+ )*(\d+ )?.+$"
@@ -180,7 +178,6 @@ async def get_rxn_formula(
 
     try:
         formula = gxu.query_rxn_formulas(client, rxn_names)
-        translated = MMLExpression.translate(formula)
-        return RxnFormulaResponse(formula=formula, translated_formula=translated)
+        return RxnFormulaResponse(formula=formula)
     except Exception as e:
         raise HTTPException(status_code=500, detail={"error": "Failed to query reaction formulas", "detail": str(e)})

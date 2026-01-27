@@ -124,8 +124,30 @@ async def upload_experiment_data(
         if not header_row:
             raise ValueError("CSV file is empty")
 
-        # Convert simple headers to 5-tuple format for robustness/consistency
-        op_param = [[col.strip(), None, None, None, None] for col in header_row]
+        # Convert formatted headers to 5-tuple format for robustness/consistency
+        # Supported format: Name - Gas - (Stream) - [Reaction] - Species
+        op_param = []
+        for col in header_row:
+            col = col.strip()
+            parts = [p.strip() for p in col.split(" - ")]
+            name = parts[0]
+            gas = None
+            stm = None
+            rxn = None
+            spc = None
+
+            for p in parts[1:]:
+                if p.startswith("(") and p.endswith(")"):
+                    stm = p[1:-1].strip()
+                elif p.startswith("[") and p.endswith("]"):
+                    rxn = p[1:-1].strip()
+                else:
+                    # Heuristic for bare strings: first is gas, second is species
+                    if gas is None and stm is None and rxn is None:
+                        gas = p
+                    else:
+                        spc = p
+            op_param.append([name, gas, stm, rxn, spc])
 
         rows = []
         for row in reader:

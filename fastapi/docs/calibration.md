@@ -147,6 +147,10 @@ Endpoints
 9) POST /api/calibration/experiment_data/upload
 - Upload a CSV file and save its content as ExperimentData.
 - The CSV is parsed into the structured `ExperimentDataContent` format.
+- **CSV Header Format**: Supports both flat headers and structured headers using labels (e.g., `Initial_Mass - (Batch stream) - cat2`).
+  - `(...)` denotes a Stream.
+  - `[...]` denotes a Reaction.
+  - Bare strings after the name are mapped to Gas/Solid and then Species.
 - Form fields: `project_id` (int), `model_id` (int), `name` (string, optional), `file` (CSV file).
 - Query parameter: `email` (string) for ownership verification.
 - Example:
