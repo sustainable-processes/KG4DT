@@ -38,8 +38,8 @@ class SoluteSolubilityAgent():
         solv_compounds = pool.map(self.get_compound, solution["solvents"])
         solu_compounds = pool.map(self.get_compound, solution["solutes"])
         pool.close()
-        solv_smis = [compound.canonical_smiles if isinstance(compound, pcp.Compound) else "-" for compound in solv_compounds]
-        solu_smis = [compound.canonical_smiles if isinstance(compound, pcp.Compound) else "-" for compound in solu_compounds]
+        solv_smis = [compound.connectivity_smiles if isinstance(compound, pcp.Compound) else "-" for compound in solv_compounds]
+        solu_smis = [compound.connectivity_smiles if isinstance(compound, pcp.Compound) else "-" for compound in solu_compounds]
         if "temperature" not in solution:
             temperature = 298
         else:
@@ -52,7 +52,6 @@ class SoluteSolubilityAgent():
             .replace("{ref_solv}", none_span).replace("{ref_s}", none_span).replace("{ref_t}", none_span) \
             .replace("{h_sub}", none_span).replace("{c_pg}", none_span).replace("{c_ps}", none_span) \
             .replace("#", "%23")
-        print(url)
         soup = BeautifulSoup(requests.get(url).text, features="lxml")
         solubility = [tr.find_all("td")[11].text for tr in soup.find_all("tr")[1:]]
         solubility = [

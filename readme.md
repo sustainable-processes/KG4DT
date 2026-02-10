@@ -9,6 +9,7 @@
 </p>
 
 ## Local Deployment
+All required packages are summarised in `requirements.txt`
 ### GraphDB
 [Download Graphdb Free Version](https://email.ontotext.com/e3t/Ctc/GD+113/cGJhF04/MW_yJT37MwtW6Y7wmj6bTsFDW3wqskQ5fYyv9N1HNy_43qgyTW95jsWP6lZ3q0VD3K397YPl19N3s8WmnlnGXWW7kVjn83DrmjDN3bMZmnmyTDDN84-mP-XghhSW8QRJK_3lnKqnW1kv7by4Zl7ZHW4BtV7k13XjDGMBmf6rd_KjVW44j5Rh8QcBKDW55dJ855hD0QjW8zGhHN98nlbjW5RVt872HmMX4W2z-z3w2kQgDSW8z7MhS4g5VFWW6c6Jdt7XN7HbW5dKdpK7sFScXW5rmxtb2cWHQXVqYYX21qkg7VW1RSGKz5v5CSvW5SgDKd7CjMStW3tyfCz1hslHLW5ck34P14gF61W5qYMT1162KtNW7GChRF17hyxSVYJDkh2zwfT-W22_RVn2jhWDbW8mdT878lMQR2W5KZmGK5nvCrYW8B1zp01GF7BgdHGSfK04)  
 Put the downloaded zip file under the `graphdb/dist` folder

@@ -77,7 +77,8 @@ class PhysicalPropertyAgent():
             compound = compound[0]
             property_res[name]["canonical_smiles"] = compound.canonical_smiles
             property_res[name]["property"] = {}
-            soup = BeautifulSoup(requests.get(self.wikipedia_url.replace("{name}", name)).text, features="lxml")
+            headers = {'User-Agent': 'CoolBot/0.0 (https://example.org/coolbot/; coolbot@example.org)'}
+            soup = BeautifulSoup(requests.get(self.wikipedia_url.replace("{name}", name), headers=headers).text, features="lxml")
             trs = [tr for tr in soup.find_all("tr") if len(tr.find_all("td", recursive=False)) == 2]
             wikipedia_res = {}
             for tr in trs:
