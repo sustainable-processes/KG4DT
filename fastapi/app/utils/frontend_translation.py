@@ -1,7 +1,104 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from typing import Any, Dict, Iterable, List, Optional
 from ..schemas.translation import FrontendPayload, BackendContextBasic, BackendContextDesc, BackendContext
+
+_INFO_REQUIRED_KEYS = {"type", "reactor", "input", "utility", "chemistry", "kinetics", "model"}
+
+
+def _normalize_list(val: Any) -> List[str]:
+    if val is None:
+        return []
+    if isinstance(val, list):
+        return [str(x).strip() for x in val if x is not None and str(x).strip() != ""]
+    if isinstance(val, dict):
+        return [str(x).strip() for x in val.keys() if x is not None and str(x).strip() != ""]
+    s = str(val).strip()
+    return [s] if s else []
+
+
+@dataclass
+class InfoContextView:
+    """Parsed view of the frontend context for query_info."""
+
+    spcs: List[str] = field(default_factory=list)
+    stms: List[str] = field(default_factory=list)
+    gass: List[str] = field(default_factory=list)
+    slds: List[str] = field(default_factory=list)
+    stm2spcs: Dict[str, List[str]] = field(default_factory=dict)
+    gas2spcs: Dict[str, List[str]] = field(default_factory=dict)
+    sld2spcs: Dict[str, List[str]] = field(default_factory=dict)
+    rxn_phenos: Dict[str, List[str]] = field(default_factory=dict)
+    ac_pheno: Optional[str] = None
+    fp_pheno: Optional[str] = None
+    mt_phenos: List[str] = field(default_factory=list)
+    me_phenos: List[str] = field(default_factory=list)
+    model_laws: Dict[str, str] = field(default_factory=dict)
+
+    @staticmethod
+    def is_frontend_context(context: Dict[str, Any]) -> bool:
+        if not isinstance(context, dict):
+            return False
+        return _INFO_REQUIRED_KEYS.issubset(context.keys())
+
+    @classmethod
+    def from_frontend_context(cls, context: Dict[str, Any]) -> "InfoContextView":
+        view = cls()
+
+        reactor_block = context.get("reactor") or {}
+        reactor_key = next(iter(reactor_block.keys()), None) if isinstance(reactor_block, dict) else None
+        reactor_dict = reactor_block.get(reactor_key, {}) if reactor_key else {}
+
+        view.spcs = [
+            spc_dict.get("id")
+            for spc_dict in context.get("chemistry", {}).get("species", []) or []
+            if isinstance(spc_dict, dict) and spc_dict.get("id")
+        ]
+
+        for src in reactor_dict.get("source", []) or []:
+            src_info = context.get("input", {}).get(src, {})
+            if isinstance(src_info, dict) and src_info.get("type") == "Stream":
+                view.stms.append(src)
+                view.stm2spcs[src] = _normalize_list(src_info.get("species"))
+
+        if reactor_dict.get("operation", {}).get("Has_Liquid_Input"):
+            for liq, liq_dict in (reactor_dict.get("liquid") or {}).items():
+                view.stms.append(liq)
+                if isinstance(liq_dict, dict):
+                    view.stm2spcs[liq] = _normalize_list(liq_dict.get("species"))
+
+        if reactor_dict.get("operation", {}).get("Has_Solid_Input"):
+            for sld, sld_dict in (reactor_dict.get("solid") or {}).items():
+                view.slds.append(sld)
+                if isinstance(sld_dict, dict):
+                    view.sld2spcs[sld] = _normalize_list(sld_dict.get("species"))
+
+        for src in reactor_dict.get("source", []) or []:
+            src_info = context.get("input", {}).get(src, {})
+            if isinstance(src_info, dict) and src_info.get("type") == "Gas Flow":
+                view.gass.append(src)
+                op_info = src_info.get("operation", {})
+                if isinstance(op_info, dict):
+                    view.gas2spcs[src] = _normalize_list(op_info.get("species"))
+
+        view.ac_pheno = reactor_dict.get("phenomenon", {}).get("Accumulation")
+        model = context.get("model", {}) if isinstance(context.get("model"), dict) else {}
+        view.fp_pheno = model.get("Flow_Pattern")
+        view.mt_phenos = _normalize_list(model.get("Mass_Transport"))
+        view.me_phenos = _normalize_list(model.get("Mass_Equilibrium"))
+        view.model_laws = {k: v for k, v in (model.get("laws") or {}).items() if v}
+
+        for rxn_entry in context.get("kinetics", []) or []:
+            if not isinstance(rxn_entry, dict):
+                continue
+            rxn_map = rxn_entry.get("elementary") if rxn_entry.get("elementary") else rxn_entry.get("stoich")
+            if not isinstance(rxn_map, dict):
+                continue
+            for rxn, rxn_phenos in rxn_map.items():
+                view.rxn_phenos[rxn] = _normalize_list(rxn_phenos)
+
+        return view
 
 
 def build_basic_context(payload: FrontendPayload) -> BackendContextBasic:

@@ -4,6 +4,7 @@ import re
 from typing import Any, Dict, List, Optional, Tuple, Set
 
 from ..services.graphdb import GraphDBClient
+from .frontend_translation import InfoContextView
 from .graphdb_model_utils import query_var as _query_var, query_unit as _query_unit
 
 # RDF prefixes matching backend/config.py
@@ -43,7 +44,7 @@ def query_ac(client: GraphDBClient) -> List[str]:
 # The following functions provide scaffolding for more complex queries.
 # They return structured 501-style responses to indicate that the functionality
 # is not yet implemented in the FastAPI service. This keeps the API surface
-# compatible with the Flask version and allows incremental migration.
+# compatible with the new JSON version and allows incremental migration.
 
 def query_pheno(client: GraphDBClient) -> Dict[str, Any]:
     """Query Phenomena and their relations.
@@ -58,11 +59,11 @@ def query_pheno(client: GraphDBClient) -> Dict[str, Any]:
         },
         ...
       }
-    Mirrors Flask PhenomenonService.query_pheno output.
+
     """
     pheno: Dict[str, Dict[str, Any]] = {}
 
-    # Iterate across the same classes used by the Flask backend
+    # Iterate across the same classes
     pheno_classes: List[str] = [
         "Accumulation",
         "FlowPattern",
@@ -273,6 +274,15 @@ def _normalize_list(val: Any) -> List[str]:
     return [s] if s else []
 
 
+def _build_law_to_var(vars_dict: Dict[str, Dict[str, Any]]) -> Dict[str, str]:
+    law2var: Dict[str, str] = {}
+    for var in sorted(vars_dict.keys()):
+        for law in vars_dict[var].get("laws", []) or []:
+            if law not in law2var:
+                law2var[law] = var
+    return law2var
+
+
 # ------------------------------
 # Complexity: set-based indices
 # ------------------------------
@@ -475,99 +485,33 @@ def query_info(client: GraphDBClient, context: Optional[Dict[str, Any]] = None) 
     if context is None:
         context = {}
 
-    if isinstance(context, dict) and any(key in context for key in ("reactor", "chemistry", "model")):
+    if isinstance(context, dict) and InfoContextView.is_frontend_context(context):
+        view = InfoContextView.from_frontend_context(context)
+
         vars_dict = _query_var(client)
         units_dict = _query_unit(client)
         laws = _query_laws_basic(client)
-        pheno_dict = query_pheno(client)
 
-        reactor_block = context.get("reactor") or {}
-        reactor_key = next(iter(reactor_block.keys()), None) if isinstance(reactor_block, dict) else None
-        if not reactor_key:
+        if not view.ac_pheno:
             return {"parameters": []}
-        reactor_dict = reactor_block.get(reactor_key, {})
 
-        spcs = [
-            spc_dict.get("id")
-            for spc_dict in context.get("chemistry", {}).get("species", []) or []
-            if isinstance(spc_dict, dict) and spc_dict.get("id")
-        ]
+        law2var = _build_law_to_var(vars_dict)
+        laws_by_pheno, vars_by_law, _, _ = _build_indices(laws, vars_dict)
 
-        rxns: List[str] = []
-        for rxn_dict in context.get("chemistry", {}).get("reactions", []) or []:
-            if not isinstance(rxn_dict, dict):
-                continue
-            elementary = rxn_dict.get("elementary")
-            if elementary:
-                rxns.extend(elementary)
-            else:
-                stoich = rxn_dict.get("stoich")
-                if stoich:
-                    rxns.append(stoich)
-        rxns = list(set(rxns))
-
-        stms: List[str] = []
-        stm2spcs: Dict[str, Any] = {}
-        for src in reactor_dict.get("source", []) or []:
-            src_info = context.get("input", {}).get(src, {})
-            if isinstance(src_info, dict) and src_info.get("type") == "Stream":
-                stms.append(src)
-                stm2spcs[src] = src_info.get("species", [])
-
-        if reactor_dict.get("operation", {}).get("Has_Liquid_Input"):
-            for liq, liq_dict in (reactor_dict.get("liquid") or {}).items():
-                stms.append(liq)
-                if isinstance(liq_dict, dict):
-                    stm2spcs[liq] = liq_dict.get("species", [])
-
-        slds: List[str] = []
-        sld2spcs: Dict[str, Any] = {}
-        if reactor_dict.get("operation", {}).get("Has_Solid_Input"):
-            for sld, sld_dict in (reactor_dict.get("solid") or {}).items():
-                slds.append(sld)
-                if isinstance(sld_dict, dict):
-                    sld2spcs[sld] = sld_dict.get("species", [])
-
-        gass: List[str] = []
-        gas2spcs: Dict[str, Any] = {}
-        for src in reactor_dict.get("source", []) or []:
-            src_info = context.get("input", {}).get(src, {})
-            if isinstance(src_info, dict) and src_info.get("type") == "Gas Flow":
-                gass.append(src)
-                op_info = src_info.get("operation", {})
-                if isinstance(op_info, dict):
-                    gas2spcs[src] = op_info.get("species", [])
-
-        pheno2law: Dict[str, List[str]] = {}
-        for pheno in pheno_dict.keys():
-            pheno2law[pheno] = []
-            for law, law_dict in laws.items():
-                if law_dict.get("pheno") == pheno:
-                    pheno2law[pheno].append(law)
-
-        law2var: Dict[str, str] = {}
-        for var, var_dict in vars_dict.items():
-            for law in var_dict.get("laws", []) or []:
-                law2var[law] = var
-
-        ac_pheno = reactor_dict.get("phenomenon", {}).get("Accumulation")
-        ac_laws = pheno2law.get(ac_pheno, [])
-        ac_law = None
-        for law in ac_laws:
-            if law2var.get(law) != "Concentration":
-                ac_law = law
-                break
+        ac_laws = laws_by_pheno.get(view.ac_pheno, set())
+        ac_law = next((law for law in ac_laws if law2var.get(law) != "Concentration"), None)
         ac_vars = laws.get(ac_law, {}).get("vars", []) if ac_law else []
         ac_opt_vars = laws.get(ac_law, {}).get("opt_vars", []) if ac_law else []
 
-        conc_laws = [law for law in ac_laws if law2var.get(law) == "Concentration"]
-        conc_vars = laws.get(conc_laws[0], {}).get("vars", []) if conc_laws else []
+        conc_law = next((law for law in ac_laws if law2var.get(law) == "Concentration"), None)
+        conc_vars = laws.get(conc_law, {}).get("vars", []) if conc_law else []
 
         mt_laws: List[str] = []
         mt_vars: List[str] = []
-        for mt_pheno in context.get("model", {}).get("Mass_Transport", []) or []:
-            for law in pheno2law.get(mt_pheno, []):
-                if law2var.get(law) in ac_opt_vars:
+        ac_opt_set = set(ac_opt_vars)
+        for mt_pheno in view.mt_phenos:
+            for law in laws_by_pheno.get(mt_pheno, set()):
+                if law2var.get(law) in ac_opt_set:
                     mt_laws.append(law)
                     mt_vars.extend(laws.get(law, {}).get("vars", []))
 
@@ -585,74 +529,55 @@ def query_info(client: GraphDBClient, context: Optional[Dict[str, Any]] = None) 
 
         if len(assoc_gas_laws) > 1:
             raise ValueError("Multiple associated gas law associated with mass transport.")
-        if assoc_gas_laws:
-            assoc_gas_law = assoc_gas_laws[0]
-            assoc_gas_vars.extend(laws.get(assoc_gas_law, {}).get("vars", []))
+        if assoc_gas_laws and view.gass:
+            assoc_gas_vars.extend(laws.get(assoc_gas_laws[0], {}).get("vars", []))
 
         if len(assoc_sld_laws) > 1:
             raise ValueError("Multiple associated solid law associated with mass transport.")
-        if assoc_sld_laws:
-            assoc_sld_law = assoc_sld_laws[0]
-            assoc_sld_vars.extend(laws.get(assoc_sld_law, {}).get("vars", []))
+        if assoc_sld_laws and view.slds:
+            assoc_sld_vars.extend(laws.get(assoc_sld_laws[0], {}).get("vars", []))
 
-        me_laws: List[str] = []
         me_vars: List[str] = []
         for var in mt_vars:
-            if var != "Concentration" and vars_dict.get(var, {}).get("laws"):
-                law = context.get("model", {}).get("laws", {}).get(var)
-                if not law:
-                    continue
-                law_dict = laws.get(law, {})
-                if "Mass_Equilibrium" in context.get("model", {}) and law_dict.get("pheno") in context["model"].get("Mass_Equilibrium", []):
-                    me_laws.append(law)
-                    me_vars.extend(law_dict.get("vars", []))
+            if var == "Concentration" or not vars_dict.get(var, {}).get("laws"):
+                continue
+            law = view.model_laws.get(var)
+            if not law:
+                continue
+            law_dict = laws.get(law, {})
+            if law_dict.get("pheno") in view.me_phenos:
+                me_vars.extend(law_dict.get("vars", []))
 
-        fp_laws: List[str] = []
         fp_vars: List[str] = []
-        fp_pheno = context.get("model", {}).get("Flow_Pattern")
+        fp_laws = laws_by_pheno.get(view.fp_pheno, set()) if view.fp_pheno else set()
         for var in ac_vars:
-            for law in pheno2law.get(fp_pheno, []):
-                if law in vars_dict.get(var, {}).get("laws", []):
-                    fp_laws.append(law)
-                    fp_vars.extend(laws.get(law, {}).get("vars", []))
+            var_laws = set(vars_dict.get(var, {}).get("laws", []))
+            for law in var_laws & fp_laws:
+                fp_vars.extend(vars_by_law.get(law, set()))
         for var in mt_vars:
-            if var != "Concentration" and vars_dict.get(var, {}).get("laws"):
-                law = context.get("model", {}).get("laws", {}).get(var)
-                if not law:
-                    continue
-                law_dict = laws.get(law, {})
-                if law_dict.get("pheno") == fp_pheno:
-                    fp_laws.append(law)
-                    fp_vars.extend(law_dict.get("vars", []))
+            if var == "Concentration" or not vars_dict.get(var, {}).get("laws"):
+                continue
+            law = view.model_laws.get(var)
+            if law and laws.get(law, {}).get("pheno") == view.fp_pheno:
+                fp_vars.extend(laws.get(law, {}).get("vars", []))
         fp_vars = list(set(fp_vars))
 
-        sub_fp_laws: List[str] = []
         sub_fp_vars: List[str] = []
         for var in fp_vars:
-            if vars_dict.get(var, {}).get("laws"):
-                law = context.get("model", {}).get("laws", {}).get(var)
-                if not law:
-                    continue
-                if law in pheno2law.get(fp_pheno, []):
-                    sub_fp_laws.append(law)
-                    sub_fp_vars.extend(laws.get(law, {}).get("vars", []))
+            if not vars_dict.get(var, {}).get("laws"):
+                continue
+            law = view.model_laws.get(var)
+            if law and law in fp_laws:
+                sub_fp_vars.extend(laws.get(law, {}).get("vars", []))
 
-        rxn_laws: Dict[str, List[str]] = {}
         rxn_vars: Dict[str, List[str]] = {}
-        for rxn_entry in context.get("kinetics", []) or []:
-            if not isinstance(rxn_entry, dict):
-                continue
-            rxn_map = rxn_entry.get("elementary") if rxn_entry.get("elementary") else rxn_entry.get("stoich")
-            if not isinstance(rxn_map, dict):
-                continue
-            for rxn, rxn_phenos in rxn_map.items():
-                rxn_laws[rxn], rxn_vars[rxn] = [], []
-                for rxn_pheno in rxn_phenos or []:
-                    for law in pheno2law.get(rxn_pheno, []):
-                        rxn_laws[rxn].append(law)
-                        rxn_vars[rxn].extend(laws.get(law, {}).get("vars", []))
-                        if "Stoichiometric_Coefficient" not in rxn_vars[rxn]:
-                            rxn_vars[rxn].append("Stoichiometric_Coefficient")
+        for rxn, rxn_phenos in view.rxn_phenos.items():
+            rxn_vars[rxn] = []
+            for rxn_pheno in rxn_phenos:
+                for law in laws_by_pheno.get(rxn_pheno, set()):
+                    rxn_vars[rxn].extend(laws.get(law, {}).get("vars", []))
+                    if "Stoichiometric_Coefficient" not in rxn_vars[rxn]:
+                        rxn_vars[rxn].append("Stoichiometric_Coefficient")
 
         model_vars: List[str] = []
         model_vars.extend(ac_vars)
@@ -727,29 +652,29 @@ def query_info(client: GraphDBClient, context: Optional[Dict[str, Any]] = None) 
             if v_cls == "StructureParameter" and not v_dims:
                 add_param("st", v_name)
             elif v_cls == "PhysicsParameter" and v_dims == {"Species"}:
-                for s in spcs:
+                for s in view.spcs:
                     add_param("spc", v_name, spc=s)
             elif v_cls == "PhysicsParameter" and v_dims == {"Stream"}:
-                for st in stms:
+                for st in view.stms:
                     add_param("stm", v_name, stm=st)
             elif v_cls == "PhysicsParameter" and v_dims == {"Gas"}:
-                for g in gass:
+                for g in view.gass:
                     add_param("gas", v_name, gas=g)
             elif v_cls == "PhysicsParameter" and v_dims == {"Solid"}:
-                for s in slds:
+                for s in view.slds:
                     add_param("sld", v_name, gas=s)
             elif v_cls in ["MassTransportParameter", "PhysicsParameter"]:
                 if v_dims == {"Gas", "Stream", "Species"}:
-                    for g in gass:
-                        for st in stms:
-                            g_spcs = gas2spcs.get(g, [])
+                    for g in view.gass:
+                        for st in view.stms:
+                            g_spcs = view.gas2spcs.get(g, [])
                             for s in g_spcs:
                                 cat = "mt" if v_cls == "MassTransportParameter" else "me"
                                 add_param(cat, v_name, gas=g, stm=st, spc=s)
                 elif v_dims == {"Solid", "Stream", "Species"}:
-                    for sld in slds:
-                        for st in stms:
-                            sld_spcs = sld2spcs.get(sld, [])
+                    for sld in view.slds:
+                        for st in view.stms:
+                            sld_spcs = view.sld2spcs.get(sld, [])
                             for s in sld_spcs:
                                 cat = "mt" if v_cls == "MassTransportParameter" else "me"
                                 add_param(cat, v_name, gas=sld, stm=st, spc=s)
@@ -760,7 +685,7 @@ def query_info(client: GraphDBClient, context: Optional[Dict[str, Any]] = None) 
                 for r in rxn_vars:
                     if v_name in rxn_vars.get(r, set()):
                         if "Stream" in v_dims:
-                            for st in stms:
+                            for st in view.stms:
                                 add_param("rxn", v_name, stm=st, rxn=r)
                         elif "Species" in v_dims:
                             if v_name == "Stoichiometric_Coefficient":
@@ -972,7 +897,6 @@ def query_info(client: GraphDBClient, context: Optional[Dict[str, Any]] = None) 
 def query_species_roles(client: GraphDBClient) -> List[str]:
     """Return a sorted list of SpeciesRole names from the knowledge graph.
 
-    Mirrors Flask GraphdbHandler.query_role, but uses SPARQLWrapper JSON via GraphDBClient.
     """
     sparql = (
         f"{PREFIX}"

@@ -27,6 +27,17 @@ async def post_model_info(request: Request, body: InfoContext = Body(..., descri
     context: Dict[str, Any] = {}
     if body.context and isinstance(body.context, dict):
         context = body.context
+    elif any(getattr(body, key, None) is not None for key in ("type", "reactor", "input", "utility", "chemistry", "kinetics", "model")):
+        # Assemble new frontend JSON format (ensure required top-level keys exist)
+        context = {
+            "type": body.type or "",
+            "reactor": body.reactor or {},
+            "input": body.input or {},
+            "utility": body.utility or {},
+            "chemistry": body.chemistry or {},
+            "kinetics": body.kinetics or [],
+            "model": body.model or {},
+        }
     else:
         # Use basic and desc directly if present
         if body.basic:

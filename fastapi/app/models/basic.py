@@ -10,7 +10,7 @@ from sqlalchemy import Enum as SAEnum
 from . import V1Base
 
 
-BasicMatterType = SAEnum("stream", "solid", "gas", name="basic_matter_type", native_enum=True)
+BasicMatterType = SAEnum("stream", "solid", "gas", "Stream", "Solid", "Gas", "Gas Flow", name="basic_matter_type", native_enum=True)
 BasicUsageEnum = SAEnum("inlet", "outlet", "utilities", name="basic_usage", native_enum=True)
 
 

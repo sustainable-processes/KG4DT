@@ -57,6 +57,7 @@ app = FastAPI(
     debug=settings.debug,
     openapi_tags=[
         {"name": "health"},
+        {"name": "molecules"},
         {"name": "assembly"},
         {"name": "assembly: projects"},
         {"name": "assembly: reactors"},
@@ -77,6 +78,7 @@ app = FastAPI(
         {"name": "v1: users"},
         {"name": "v1: basics"},
         {"name": "v1: categories"},
+        {"name": "v1: molecules"},
         {"name": "v1: kg_components"},
         {"name": "knowledge graph: model"},
         {"name": "knowledge_graph"},
@@ -138,6 +140,7 @@ from .routers import models as v1_models_router  # noqa: E402
 # translation tools
 from .routers import translation as v1_translation_router  # noqa: E402
 from .routers import kg_components as v1_kg_components_router  # noqa: E402
+from .routers import molecules as molecules_router  # noqa: E402
 
 # Exploration and Calibration (versioned and unversioned)
 for prefix in ["/api/v1", "/api"]:
@@ -165,6 +168,7 @@ for prefix in ["/api/v1", "/api"]:
     app.include_router(v1_users_router.router, prefix=f"{prefix}/users", tags=["v1: users" if "v1" in prefix else "users"])
     app.include_router(v1_basics_router.router, prefix=f"{prefix}/basics", tags=["v1: basics" if "v1" in prefix else "basics"])
     app.include_router(v1_categories_router.router, prefix=f"{prefix}/categories", tags=["v1: categories" if "v1" in prefix else "categories"])
+    app.include_router(molecules_router.router, prefix=prefix, tags=["v1: molecules" if "v1" in prefix else "molecules"])
     
     if prefix == "/api/v1":
         app.include_router(v1_kg_components_router.router, prefix=f"{prefix}/kg_components", tags=["v1: kg_components"])
